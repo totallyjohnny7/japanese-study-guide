@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz 19 — Ch5 Vocab</title>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--surface:#111111;--card:#161616;--border:#2a2a2a;--accent:#d4a843;--accent2:#f0c85a;--green:#4ecf7a;--red:#e85454;--yellow:#f0c85a;--text:#e0ddd5;--muted:#5a5548;--dim:#3a3528;--blue:#5ba8e8;--gold-glow:rgba(212,168,67,0.15);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 20% 20%,rgba(212,168,67,0.03) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(212,168,67,0.02) 0%,transparent 50%);pointer-events:none;}
+.app{position:relative;z-index:1;padding:16px 16px 40px;max-width:520px;margin:0 auto;}
+.header{text-align:center;margin-bottom:20px;}
+.header h1{font-size:28px;font-weight:700;background:linear-gradient(135deg,#f0c85a,#d4a843,#8b6d1e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:"Cormorant Garamond",serif;letter-spacing:2px;}
+.header p{color:var(--muted);font-size:11px;margin-top:3px;letter-spacing:3px;text-transform:uppercase;}
+
+/* Mode selector */
+.modes{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;justify-content:center;}
+.mode-btn{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans';transition:all .2s;white-space:nowrap;}
+.mode-btn.active{background:linear-gradient(135deg,#8b6d1e,var(--accent));color:#fff;border-color:var(--accent);box-shadow:0 0 12px rgba(212,168,67,0.15);}
+.mode-btn .pct{font-size:9px;opacity:.7;display:block;margin-top:1px;}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
+.btn{border:none;color:#fff;padding:9px 18px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans';transition:all .2s;}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.1);}
+.btn:active{transform:scale(.97);}
+.btn:disabled{opacity:.4;cursor:default;transform:none;}
+
+.progress-bar{height:4px;background:var(--surface);border-radius:4px;margin-bottom:14px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .4s;}
+
+.draw-canvas{width:100%;max-width:380px;height:240px;border-radius:12px;border:2px solid #8b6d1e;cursor:crosshair;touch-action:none;background:#050508;}
+
+.handwritten{font-family:'Klee One',cursive;font-size:64px;color:#fff;line-height:1.2;padding:14px;background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.12);border-radius:12px;min-height:100px;display:flex;align-items:center;justify-content:center;}
+.your-img{border-radius:12px;border:1px solid var(--border);max-width:150px;max-height:100px;}
+
+.answer-input{width:100%;background:#0a0a0a;border:2px solid var(--border);border-radius:10px;color:#ffffff;padding:12px;font-size:18px;font-weight:500;font-family:'Noto Sans JP','DM Sans';outline:none;caret-color:var(--accent2);}
+.answer-input:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.15);background:#0d0d0d;}
+.answer-input::placeholder{color:#5a5548;}
+
+.result-row{display:flex;justify-content:space-between;align-items:center;background:var(--card);padding:10px 14px;border-radius:10px;margin-bottom:5px;}
+
+.dialogue-line{padding:10px 14px;border-radius:10px;margin-bottom:6px;max-width:85%;}
+.dialogue-line.a{background:rgba(124,111,247,.1);border:1px solid rgba(212,168,67,0.12);align-self:flex-start;margin-right:auto;}
+.dialogue-line.b{background:rgba(0,201,160,.08);border:1px solid rgba(0,201,160,.15);align-self:flex-end;margin-left:auto;}
+.dialogue-speaker{font-size:10px;color:var(--muted);margin-bottom:2px;font-weight:700;}
+
+.tag{display:inline-block;padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700;margin-left:6px;}
+
+textarea.imp-area{width:100%;height:120px;background:#0a0a0a;border:2px solid var(--border);border-radius:10px;color:#ffffff;padding:10px;font-size:12px;font-family:monospace;resize:vertical;}
+textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.15);outline:none;}
+
+.hidden{display:none!important;}
+.center{text-align:center;}
+.mt6{margin-top:6px;}.mt8{margin-top:8px;}.mt12{margin-top:12px;}.mt16{margin-top:16px;}
+.mb8{margin-bottom:8px;}.w100{width:100%;}
+.flex-between{display:flex;justify-content:space-between;align-items:center;}
+.gap8{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+
+@keyframes slideUp{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.slide-up{animation:slideUp .3s ease;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:#8b6d1e;border-radius:3px;}
+
+/* ═══ KANA IME ═══ */
+.ime-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;flex-wrap:wrap;}
+.ime-bar label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;}
+.ime-toggle{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.ime-toggle button{padding:6px 12px;font-size:11px;font-weight:700;border:none;cursor:pointer;font-family:'DM Sans';transition:all .2s;color:var(--muted);background:var(--card);}
+.ime-toggle button.active{background:var(--accent);color:#fff;}
+.ime-preview{font-size:11px;color:var(--accent2);font-family:'Noto Sans JP';min-width:40px;text-align:center;}
+.ime-hint{font-size:9px;color:var(--muted);margin-left:auto;}
+.kana-pad{display:none;margin-bottom:10px;}
+.kana-pad.open{display:block;}
+.kana-pad-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.kana-pad-header button{background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:'DM Sans';}
+.kana-pad-header button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.kana-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-width:320px;margin:0 auto;}
+.kana-key{padding:8px 2px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:16px;font-family:'Noto Sans JP';text-align:center;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.kana-key:hover,.kana-key:active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.kana-key.small{font-size:13px;color:var(--muted);}
+.kana-key.fn{font-size:11px;font-weight:700;font-family:'DM Sans';color:var(--accent2);}
+@media(max-width:600px){
+  .kana-grid{grid-template-columns:repeat(5,1fr);gap:3px;max-width:100%;}
+  .kana-key{padding:10px 2px;font-size:18px;}
+  .ime-bar{gap:6px;padding:6px 10px;}
+  .ime-hint{display:none;}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header">
+  <h1>Quiz 19 — Ch5 Vocab</h1>
+  <p>Write · Listen · Read · Speak</p>
+</div>
+
+<!-- Voice Toggle -->
+<div id="voiceBar" style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px">
+  <span style="font-size:12px;color:var(--muted);font-weight:600">🔊 VOICE</span>
+  <label style="position:relative;width:40px;height:22px;flex-shrink:0;cursor:pointer">
+    <input type="checkbox" checked onchange="toggleVoice(this.checked)" style="opacity:0;width:0;height:0">
+    <span style="position:absolute;inset:0;background:var(--border);border-radius:22px;transition:.3s" id="voiceSlider"></span>
+    <span style="position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:var(--muted);border-radius:50%;transition:.3s" id="voiceKnob"></span>
+  </label>
+  <span id="voiceLabel" style="font-size:11px;color:var(--accent);font-weight:700">ON</span>
+  <span style="font-size:10px;color:var(--muted);margin-left:6px">Press V to toggle</span>
+</div>
+
+<!-- Mode Selector -->
+<div class="modes">
+  <button class="mode-btn active" onclick="setMode('write')" id="m_write">✍️ Writing<span class="pct">Homework 20%</span></button>
+  <button class="mode-btn" onclick="setMode('dictation')" id="m_dictation">👂 Dictation<span class="pct">Quizzes 20%</span></button>
+  <button class="mode-btn" onclick="setMode('reading')" id="m_reading">📖 Reading<span class="pct">Exams 40%</span></button>
+  <button class="mode-btn" onclick="setMode('oral')" id="m_oral">🗣️ Oral<span class="pct">Oral 10%</span></button>
+  <button class="mode-btn" onclick="setMode('mix')" id="m_mix">🎲 Mixed Quiz<span class="pct">Everything</span></button>
+</div>
+
+<!-- Main content area -->
+<div id="mainArea"></div>
+
+<!-- Data hardcoded -->
+</div>
+
+<script>
+// ═══ DEFAULT DATA ═══
+let DATA = {"vocab":[{"english":"On, above, over","japanese":"うえ","reading":"On, above, over"},{"english":"Behind, in back of","japanese":"うしろ","reading":"Behind, in back of"},{"english":"Under, beneath","japanese":"した","reading":"Under, beneath"},{"english":"Outside","japanese":"そと","reading":"Outside"},{"english":"Near, in the vicinity of","japanese":"ちかく","reading":"Near, in the vicinity of"},{"english":"Next to","japanese":"となり","reading":"Next to"},{"english":"In, inside","japanese":"なか","reading":"In, inside"},{"english":"To the left, left side","japanese":"ひだり","reading":"To the left, left side"},{"english":"In front of, in the front","japanese":"まえ","reading":"In front of, in the front"},{"english":"To the right","japanese":"みぎ","reading":"To the right"},{"english":"Next to, at the side of","japanese":"よこ","reading":"Next to, at the side of"},{"english":"Chair","japanese":"いす","reading":"Chair"},{"english":"Dog","japanese":"いぬ","reading":"Dog"},{"english":"Picture","japanese":"え","reading":"Picture"},{"english":"Japanese-style closet","japanese":"おしいれ","reading":"Japanese-style closet"},{"english":"School cafeteria","japanese":"がくしょく","reading":"School cafeteria"},{"english":"Student union","japanese":"がくせいかいかん","reading":"Student union"},{"english":"River","japanese":"かわ","reading":"River"},{"english":"Tree","japanese":"き","reading":"Tree"},{"english":"Classroom","japanese":"きょうしつ","reading":"Classroom"},{"english":"Car","japanese":"くるま","reading":"Car"},{"english":"Cell phone","japanese":"けいたい（でんわ）","reading":"Cell phone"},{"english":"Chalkboard","japanese":"こくばん","reading":"Chalkboard"},{"english":"Computer","japanese":"コンピュータ","reading":"Computer"},{"english":"Bicycle","japanese":"じてんしゃ","reading":"Bicycle"},{"english":"Photograph","japanese":"しゃしん","reading":"Photograph"},{"english":"Sofa","japanese":"ソファ","reading":"Sofa"},{"english":"Gym","japanese":"たいいくかん","reading":"Gym"},{"english":"Chest, drawers","japanese":"たんす","reading":"Chest, drawers"},{"english":"Desk","japanese":"つくえ","reading":"Desk"},{"english":"Table","japanese":"テーブル","reading":"Table"},{"english":"Telephone","japanese":"でんわ","reading":"Telephone"},{"english":"Door","japanese":"ドア","reading":"Door"},{"english":"Toilet, restroom","japanese":"トイレ","reading":"Toilet, restroom"},{"english":"Clock, watch","japanese":"とけい","reading":"Clock, watch"},{"english":"Place","japanese":"ところ","reading":"Place"},{"english":"Cat","japanese":"ねこ","reading":"Cat"},{"english":"Bus","japanese":"バス","reading":"Bus"},{"english":"Video","japanese":"ビデオ","reading":"Video"},{"english":"Person","japanese":"ひと","reading":"Person"},{"english":"Futon","japanese":"ふとん","reading":"Futon"},{"english":"Bed","japanese":"ベッド","reading":"Bed"},{"english":"Room","japanese":"へや","reading":"Room"},{"english":"Bookshelf","japanese":"ほんだな","reading":"Bookshelf"},{"english":"Window","japanese":"まど","reading":"Window"},{"english":"Thing (tangible)","japanese":"もの","reading":"Thing (tangible)"},{"english":"Mountain","japanese":"やま","reading":"Mountain"},{"english":"Room (as in computer room)","japanese":"ルーム","reading":"Room (as in computer room)"},{"english":"Computer lab","japanese":"コンピュータ・ルーム","reading":"Computer lab"},{"english":"Media center","japanese":"メディアセンター","reading":"Media center"},{"english":"Kitchen","japanese":"キッチン","reading":"Kitchen"},{"english":"Many, a lot","japanese":"たくさん","reading":"Many, a lot"},{"english":"That person (polite)","japanese":"あのかた","reading":"That person (polite)"},{"english":"The inner part of a building","japanese":"奥","reading":"The inner part of a building"},{"english":"This side (closer)","japanese":"手前","reading":"This side (closer)"},{"english":"To take (time), it costs","japanese":"かかります","reading":"To take (time), it costs"},{"english":"That [+noun] over there","japanese":"あの","reading":"That [+noun] over there"},{"english":"This [+noun]","japanese":"この","reading":"This [+noun]"},{"english":"That [+noun]","japanese":"その","reading":"That [+noun]"},{"english":"Which [+noun]?","japanese":"どの","reading":"Which [+noun]?"},{"english":"Bright","japanese":"あかるい","reading":"Bright"},{"english":"Dark","japanese":"くらい","reading":"Dark"},{"english":"Cramped, narrow","japanese":"せまい","reading":"Cramped, narrow"},{"english":"Fast, quick","japanese":"はやい","reading":"Fast, quick"},{"english":"Spacious, wide","japanese":"ひろい","reading":"Spacious, wide"},{"english":"Quiet","japanese":"しずか（な）","reading":"Quiet"},{"english":"From","japanese":"から","reading":"From"},{"english":"By means of, by, with","japanese":"で","reading":"By means of, by, with"},{"english":"Until, to","japanese":"まで","reading":"Until, to"},{"english":"About (duration or quantity)","japanese":"～ぐらい／くらい","reading":"About (duration or quantity)"},{"english":"~ hours","japanese":"～じかん","reading":"~ hours"},{"english":"But","japanese":"でも","reading":"But"},{"english":"Please come in","japanese":"あがってください","reading":"Please come in"},{"english":"On foot","japanese":"あるいて","reading":"On foot"},{"english":"Welcome! Come in","japanese":"いらっしゃい","reading":"Welcome! Come in"},{"english":"Thank you (before entering someone's house)","japanese":"おじゃまします","reading":"Thank you (before entering someone's house)"},{"english":"Excuse me, anyone home?","japanese":"ごめんください","reading":"Excuse me, anyone home?"},{"english":"How long, how much, how many","japanese":"どのぐらい／どのくらい","reading":"How long, how much, how many"}],"dialogues":[],"readings":[]};
+
+const $=id=>document.getElementById(id);
+const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
+let voiceEnabled=true;let jpVoice=null;let voicesReady=false;
+function loadVoices(){const v=speechSynthesis.getVoices();jpVoice=v.find(x=>x.lang==='ja-JP'&&x.localService)||v.find(x=>x.lang==='ja-JP')||v.find(x=>x.lang.startsWith('ja'))||null;voicesReady=v.length>0;}
+if(typeof speechSynthesis!=='undefined'){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+const speakJP=t=>{if(!voiceEnabled||typeof speechSynthesis==='undefined')return;if(!voicesReady)loadVoices();speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=0.85;if(jpVoice)u.voice=jpVoice;try{speechSynthesis.speak(u)}catch(e){}let rt=setInterval(()=>{if(!speechSynthesis.speaking){clearInterval(rt);return}speechSynthesis.pause();speechSynthesis.resume()},10000);u.onend=()=>clearInterval(rt);u.onerror=()=>clearInterval(rt);};
+const esc=s=>s.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+let mode='write';
+let canvas,ctx,drawing=false,lastPos=null,hasStrokes=false;
+
+// ═══ MODE SWITCHING ═══
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  $('m_'+m).classList.add('active');
+  render();
+}
+
+// ═══ RENDER DISPATCH ═══
+function render(){
+  const a=$('mainArea');
+  switch(mode){
+    case 'write': renderWrite(a); break;
+    case 'dictation': renderDictation(a); break;
+    case 'reading': renderReading(a); break;
+    case 'oral': renderOral(a); break;
+    case 'mix': renderMix(a); break;
+  }
+}
+
+// ═══════════════════════════
+// ✍️ WRITING QUIZ
+// ═══════════════════════════
+let wCards=[],wIdx=0,wScore=0,wResults=[];
+
+function renderWrite(el){
+  wCards=shuffle(DATA.vocab);wIdx=0;wScore=0;wResults=[];
+  showWriteCard(el);
+}
+
+function showWriteCard(el){
+  if(wIdx>=wCards.length)return showWriteResults(el);
+  const c=wCards[wIdx];
+  el.innerHTML=`
+    <div class="flex-between mb8">
+      <span style="color:var(--muted);font-size:12px">${wIdx+1}/${wCards.length}</span>
+      <span style="color:var(--green);font-size:12px;font-weight:700">${wScore} correct</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${((wIdx+1)/wCards.length)*100}%"></div></div>
+    <div class="card center">
+      <div style="color:var(--muted);font-size:11px;margin-bottom:6px">Write the Japanese for:</div>
+      <div style="font-size:34px;font-weight:700;color:#fff">${esc(c.english)}</div>
+      <button class="btn mt8" style="background:var(--surface);border:1px solid var(--border);font-size:11px" onclick="speakJP('${c.japanese}')">🔊 Hear it</button>
+    </div>
+    <div id="wDraw" style="display:flex;flex-direction:column;align-items:center;gap:10px">
+      <div style="color:var(--dim);font-size:10px">Draw with mouse, finger, or stylus ↓</div>
+      <canvas id="wCanvas" class="draw-canvas"></canvas>
+      <div class="gap8">
+        <button class="btn" style="background:#1a1a1a" onclick="wClear()">🗑️ Clear</button>
+        <button class="btn" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" id="wCheck" onclick="wCheckAnswer()" disabled>✅ Check</button>
+      </div>
+    </div>
+    <div id="wCompare" class="hidden"></div>`;
+  setTimeout(()=>initDrawCanvas('wCanvas','wCheck'),50);
+}
+
+function wClear(){clearDrawCanvas('wCanvas','wCheck');}
+
+function getStrokeChars(text){
+  return [...text].filter(ch=>{
+    const cp=ch.codePointAt(0);
+    return (cp>=0x3040&&cp<=0x309F)||(cp>=0x30A0&&cp<=0x30FF)||(cp>=0x4E00&&cp<=0x9FFF)||(cp>=0x3400&&cp<=0x4DBF);
+  });
+}
+
+function getStrokeOrderHTML(text){
+  const chars=getStrokeChars(text);
+  if(!chars.length) return '';
+  const boxes=chars.map(ch=>{
+    const hex=ch.codePointAt(0).toString(16).padStart(5,'0');
+    return `<div style="display:inline-flex;flex-direction:column;align-items:center;margin:4px">
+      <div id="so_${hex}" style="width:94px;height:94px;background:var(--surface);border-radius:10px;border:1px solid var(--border);padding:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative">
+        <div style="color:var(--dim);font-size:10px;animation:pulse 1.2s infinite">loading</div>
+      </div>
+      <div style="font-size:11px;color:var(--accent2);margin-top:3px;font-weight:600">${ch}</div>
+    </div>`;
+  }).join('');
+  return `<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+    <div style="font-size:10px;color:var(--muted);text-align:center;margin-bottom:6px;font-weight:700;letter-spacing:2px">STROKE ORDER</div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">${boxes}</div>
+  </div>`;
+}
+
+function loadStrokeOrderSVGs(text){
+  const chars=getStrokeChars(text);
+  chars.forEach(ch=>{
+    const hex=ch.codePointAt(0).toString(16).padStart(5,'0');
+    const container=document.getElementById('so_'+hex);
+    if(!container) return;
+    const url=`https://raw.githubusercontent.com/KanjiVG/kanjivg/master/kanji/${hex}.svg`;
+    fetch(url).then(r=>{
+      if(!r.ok) throw new Error('not found');
+      return r.text();
+    }).then(svg=>{
+      // Recolor SVG for dark mode: strokes white, numbers accent
+      // Strip everything before <svg to remove XML declaration, DOCTYPE, and internal DTD subset
+      let s=svg.substring(svg.indexOf('<svg'));
+      // Recolor strokes and fills for dark mode
+      s=s.replace(/stroke\s*:\s*#?000(000)?/gi,'stroke:#d8d8e8')
+        .replace(/stroke="#?000(000)?"/gi,'stroke="#d8d8e8"')
+        .replace(/fill\s*:\s*#?000(000)?/gi,'fill:#d8d8e8')
+        .replace(/fill="#?000(000)?"/gi,'fill="#d8d8e8"');
+      // Make number labels use accent color
+      s=s.replace(/<text([^>]*)>/gi,'<text$1 fill="#f0c85a" style="fill:#f0c85a;font-weight:bold">');
+      // Set viewBox and size
+      s=s.replace(/<svg/,'<svg style="width:100%;height:100%"');
+      container.innerHTML=s;
+    }).catch(()=>{
+      // Fallback: show the character itself
+      container.innerHTML=`<div style="font-size:48px;font-family:'Klee One';color:var(--accent2)">${ch}</div>`;
+    });
+  });
+}
+
+function wCheckAnswer(){
+  const c=wCards[wIdx];
+  speakJP(c.japanese);
+  const img=document.getElementById('wCanvas').toDataURL('image/png');
+  $('wDraw').classList.add('hidden');
+  $('wCompare').classList.remove('hidden');
+  const strokeHTML=getStrokeOrderHTML(c.japanese);
+  $('wCompare').innerHTML=`
+    <div class="card slide-up">
+      <div style="display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap">
+        <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">YOUR DRAWING</div><img src="${img}" class="your-img"></div>
+        <div style="font-size:24px;color:var(--dim)">→</div>
+        <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">CORRECT</div><div class="handwritten">${c.japanese}</div><div style="color:var(--accent2);font-size:13px;margin-top:4px">${c.reading}</div></div>
+      </div>
+      ${strokeHTML}
+      <div style="color:var(--muted);font-size:11px;text-align:center;margin:14px 0 6px">Did you get it right?</div>
+      <div class="gap8"><button class="btn" style="background:var(--green);padding:11px 28px" onclick="wGrade(true)">✅ Got it</button><button class="btn" style="background:var(--red);padding:11px 28px" onclick="wGrade(false)">❌ Missed</button></div>
+    </div>`;
+  setTimeout(()=>loadStrokeOrderSVGs(c.japanese),50);
+}
+
+function wGrade(ok){
+  if(ok)wScore++;
+  wResults.push({english:wCards[wIdx].english,expected:wCards[wIdx].japanese,correct:ok});
+  wIdx++;
+  showWriteCard($('mainArea'));
+}
+
+function showWriteResults(el){
+  const pct=Math.round((wScore/wCards.length)*100);
+  el.innerHTML=`
+    <div class="center" style="margin-bottom:20px">
+      <div style="font-size:48px">${pct>=80?'🎉':pct>=50?'📝':'💪'}</div>
+      <div style="font-size:32px;font-weight:700">${wScore}/${wCards.length}</div>
+      <div style="color:var(--muted);font-size:14px">${pct}%</div>
+    </div>
+    ${wResults.map(r=>`<div class="result-row" style="border-left:3px solid ${r.correct?'var(--green)':'var(--red)'}"><div><span style="color:#fff;font-size:13px">${esc(r.english)}</span><span style="color:var(--dim);font-size:11px;margin-left:8px">→ ${r.expected}</span></div><div style="color:${r.correct?'var(--green)':'var(--red)'}">${r.correct?'✓':'✗'}</div></div>`).join('')}
+    <button class="btn w100 mt16" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="renderWrite($('mainArea'))">🔄 Restart</button>`;
+}
+
+// ═══════════════════════════
+// 👂 DICTATION
+// ═══════════════════════════
+let dCards=[],dIdx=0,dScore=0,dResults=[];
+
+function renderDictation(el){
+  dCards=shuffle(DATA.vocab);dIdx=0;dScore=0;dResults=[];
+  showDictCard(el);
+}
+
+function showDictCard(el){
+  if(dIdx>=dCards.length)return showDictResults(el);
+  const c=dCards[dIdx];
+  el.innerHTML=`
+    <div class="flex-between mb8">
+      <span style="color:var(--muted);font-size:12px">${dIdx+1}/${dCards.length}</span>
+      <span style="color:var(--green);font-size:12px;font-weight:700">${dScore} correct</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${((dIdx+1)/dCards.length)*100}%"></div></div>
+    <div class="card center">
+      <div style="color:var(--muted);font-size:11px;margin-bottom:8px">Listen and type what you hear:</div>
+      <button class="btn" style="background:linear-gradient(135deg,#8b6d1e,var(--accent));font-size:18px;padding:16px 36px" onclick="speakJP('${c.japanese}')">🔊 Play</button>
+      <div style="color:var(--dim);font-size:10px;margin-top:8px">Click multiple times to replay</div>
+    </div>
+    <div class="card">
+      <input class="answer-input" id="dAnswer" placeholder="Type what you heard in Japanese..." style="font-size:20px;text-align:center" onkeydown="if(event.key==='Enter')dCheck()">
+      <button class="btn w100 mt12" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="dCheck()">Check Answer</button>
+    </div>
+    <div id="dFeedback"></div>`;
+  setTimeout(()=>{$('dAnswer').focus();speakJP(c.japanese);},100);
+}
+
+function dCheck(){
+  const c=dCards[dIdx];
+  const ans=($('dAnswer').value||'').trim();
+  const ok=ans===c.japanese||ans===c.reading;
+  if(ok)dScore++;
+  dResults.push({expected:c.japanese,given:ans,english:c.english,correct:ok});
+  $('dFeedback').innerHTML=`
+    <div class="card slide-up center">
+      <div style="font-size:40px;margin-bottom:6px">${ok?'✅':'❌'}</div>
+      ${!ok?`<div style="margin-bottom:8px"><span style="color:var(--muted);font-size:11px">You typed: </span><span style="color:var(--red);font-size:18px">${esc(ans)||'(empty)'}</span></div>`:''}
+      <div><span style="color:var(--muted);font-size:11px">Answer: </span><span class="jp" style="color:var(--accent2);font-size:24px;font-weight:700;font-family:'Klee One'">${c.japanese}</span></div>
+      <div style="color:var(--muted);font-size:12px;margin-top:4px">${c.reading} — "${c.english}"</div>
+      <button class="btn mt12" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="dIdx++;showDictCard($('mainArea'))">${dIdx+1>=dCards.length?'🏁 Results':'Next →'}</button>
+    </div>`;
+}
+
+function showDictResults(el){
+  const pct=Math.round((dScore/dCards.length)*100);
+  el.innerHTML=`
+    <div class="center" style="margin-bottom:20px">
+      <div style="font-size:48px">${pct>=80?'🎉':pct>=50?'📝':'💪'}</div>
+      <div style="font-size:32px;font-weight:700">${dScore}/${dCards.length}</div>
+      <div style="color:var(--muted)">${pct}%</div>
+    </div>
+    ${dResults.map(r=>`<div class="result-row" style="border-left:3px solid ${r.correct?'var(--green)':'var(--red)'}"><div><span style="color:#fff;font-size:13px">${r.expected}</span><span style="color:var(--dim);font-size:11px;margin-left:6px">${esc(r.english)}</span></div><div style="color:${r.correct?'var(--green)':'var(--red)'}; font-size:12px">${r.correct?'✓':'✗ '+esc(r.given)}</div></div>`).join('')}
+    <button class="btn w100 mt16" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="renderDictation($('mainArea'))">🔄 Restart</button>`;
+}
+
+// ═══════════════════════════
+// 📖 READING COMPREHENSION
+// ═══════════════════════════
+let rIdx=0,rQIdx=0,rScore=0,rResults=[];
+
+function renderReading(el){
+  if(!DATA.readings.length){el.innerHTML='<div class="card center" style="color:var(--muted)">No readings loaded. Import data with readings!</div>';return;}
+  rIdx=0;rQIdx=0;rScore=0;rResults=[];
+  showReading(el);
+}
+
+function showReading(el){
+  if(rIdx>=DATA.readings.length)return showReadResults(el);
+  const r=DATA.readings[rIdx];
+  el.innerHTML=`
+    <div class="card">
+      <div style="color:var(--accent2);font-size:13px;font-weight:700;margin-bottom:10px">${esc(r.title)}</div>
+      <div class="jp" style="font-size:22px;line-height:1.9;color:#fff;font-family:'Noto Sans JP';letter-spacing:1px">${esc(r.text)}</div>
+      <button class="btn mt12" style="background:var(--surface);border:1px solid var(--border);font-size:11px" onclick="speakJP(\`${r.text.replace(/`/g,"'")}\`)">🔊 Listen</button>
+    </div>
+    <div id="rQuestions"></div>
+    <div class="center mt8"><span style="color:var(--muted);font-size:11px">Passage ${rIdx+1}/${DATA.readings.length}</span></div>`;
+  showReadQuestion();
+}
+
+function showReadQuestion(){
+  const r=DATA.readings[rIdx];
+  if(rQIdx>=r.questions.length){rIdx++;rQIdx=0;return showReading($('mainArea'));}
+  const q=r.questions[rQIdx];
+  $('rQuestions').innerHTML=`
+    <div class="card slide-up">
+      <div style="color:var(--yellow);font-size:12px;font-weight:700;margin-bottom:8px">Question ${rQIdx+1}/${r.questions.length}</div>
+      <div style="font-size:16px;color:#fff;margin-bottom:12px">${esc(q.q)}</div>
+      <input class="answer-input" id="rAnswer" placeholder="Your answer..." onkeydown="if(event.key==='Enter')rCheck()">
+      <button class="btn w100 mt8" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="rCheck()">Submit</button>
+    </div>`;
+  setTimeout(()=>$('rAnswer').focus(),50);
+}
+
+function rCheck(){
+  const q=DATA.readings[rIdx].questions[rQIdx];
+  const ans=($('rAnswer').value||'').trim();
+  const ok=ans.toLowerCase().includes(q.a.toLowerCase())||q.a.toLowerCase().includes(ans.toLowerCase());
+  if(ok)rScore++;
+  rResults.push({q:q.q,expected:q.a,given:ans,correct:ok});
+  $('rQuestions').innerHTML=`
+    <div class="card slide-up center">
+      <div style="font-size:36px;margin-bottom:6px">${ok?'✅':'❌'}</div>
+      ${!ok?`<div style="margin-bottom:6px"><span style="color:var(--muted);font-size:11px">You said: </span><span style="color:var(--red)">${esc(ans)||'(empty)'}</span></div>`:''}
+      <div><span style="color:var(--muted);font-size:11px">Answer: </span><span style="color:var(--green);font-weight:600">${esc(q.a)}</span></div>
+      <button class="btn mt12" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="rQIdx++;showReadQuestion()">Next →</button>
+    </div>`;
+}
+
+function showReadResults(el){
+  const total=rResults.length;const pct=total?Math.round((rScore/total)*100):0;
+  el.innerHTML=`
+    <div class="center" style="margin-bottom:20px">
+      <div style="font-size:48px">${pct>=80?'🎉':pct>=50?'📝':'💪'}</div>
+      <div style="font-size:32px;font-weight:700">${rScore}/${total}</div>
+      <div style="color:var(--muted)">${pct}% Reading Comprehension</div>
+    </div>
+    ${rResults.map(r=>`<div class="result-row" style="border-left:3px solid ${r.correct?'var(--green)':'var(--red)'}"><div style="flex:1"><span style="color:#fff;font-size:12px">${esc(r.q)}</span><br><span style="color:var(--dim);font-size:11px">Answer: ${esc(r.expected)}</span></div><div style="color:${r.correct?'var(--green)':'var(--red)'}; font-size:12px;margin-left:8px">${r.correct?'✓':'✗'}</div></div>`).join('')}
+    <button class="btn w100 mt16" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="renderReading($('mainArea'))">🔄 Restart</button>`;
+}
+
+// ═══════════════════════════
+// 🗣️ ORAL PRACTICE
+// ═══════════════════════════
+let oIdx=0,oLine=0,oRevealed=false;
+
+function renderOral(el){
+  if(!DATA.dialogues.length){el.innerHTML='<div class="card center" style="color:var(--muted)">No dialogues loaded. Import data with dialogues!</div>';return;}
+  oIdx=0;oLine=0;oRevealed=false;
+  showOral(el);
+}
+
+function showOral(el){
+  if(oIdx>=DATA.dialogues.length){el.innerHTML=`<div class="card center"><div style="font-size:48px;margin-bottom:8px">🎉</div><div style="font-size:18px;font-weight:700">All dialogues practiced!</div><button class="btn mt16" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="renderOral($('mainArea'))">🔄 Again</button></div>`;return;}
+  const d=DATA.dialogues[oIdx];
+  let html=`<div class="card"><div style="color:var(--accent2);font-size:14px;font-weight:700;margin-bottom:14px">${esc(d.title)} <span class="tag" style="background:rgba(212,168,67,0.12);color:var(--accent2)">Dialogue ${oIdx+1}/${DATA.dialogues.length}</span></div>`;
+
+  // Show lines up to current, with reveal logic
+  d.lines.forEach((line,i)=>{
+    const isActive=i===oLine;
+    const isPast=i<oLine;
+    const isFuture=i>oLine;
+    const cls=line.speaker==='A'?'a':'b';
+
+    if(isPast){
+      html+=`<div class="dialogue-line ${cls}"><div class="dialogue-speaker">${esc(line.speaker)}</div><div class="jp" style="font-size:18px;font-family:'Noto Sans JP';color:#fff">${esc(line.jp)}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${esc(line.en)}</div></div>`;
+    } else if(isActive){
+      html+=`<div class="dialogue-line ${cls}" style="border-width:2px;box-shadow:0 0 12px rgba(212,168,67,0.12)"><div class="dialogue-speaker">${esc(line.speaker)} — YOUR TURN</div>`;
+      if(oRevealed){
+        html+=`<div class="jp" style="font-size:20px;font-family:'Klee One';color:#fff">${esc(line.jp)}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${esc(line.en)}</div>`;
+      } else {
+        html+=`<div style="font-size:14px;color:var(--yellow);margin-bottom:4px">${esc(line.en)}</div><div style="color:var(--dim);font-size:12px">Try saying it in Japanese first!</div>`;
+      }
+      html+=`</div>`;
+    } else {
+      html+=`<div class="dialogue-line ${cls}" style="opacity:.3"><div class="dialogue-speaker">${esc(line.speaker)}</div><div style="color:var(--dim)">• • •</div></div>`;
+    }
+  });
+
+  html+=`</div><div class="gap8 mt8">`;
+  if(!oRevealed){
+    html+=`<button class="btn" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="oReveal()">👀 Reveal Answer</button>`;
+    html+=`<button class="btn" style="background:var(--surface);border:1px solid var(--border)" onclick="oHear()">🔊 Hear it</button>`;
+  } else {
+    html+=`<button class="btn" style="background:var(--surface);border:1px solid var(--border)" onclick="oHear()">🔊 Hear it</button>`;
+    html+=`<button class="btn" style="background:var(--green)" onclick="oNext()">Next Line →</button>`;
+  }
+  html+=`</div>`;
+  el.innerHTML=html;
+}
+
+function oReveal(){oRevealed=true;showOral($('mainArea'));}
+function oHear(){const line=DATA.dialogues[oIdx].lines[oLine];speakJP(line.jp);}
+function oNext(){
+  oLine++;oRevealed=false;
+  if(oLine>=DATA.dialogues[oIdx].lines.length){oIdx++;oLine=0;}
+  showOral($('mainArea'));
+}
+
+// ═══════════════════════════
+// 🎲 MIXED QUIZ
+// ═══════════════════════════
+let mQuestions=[],mIdx=0,mScore=0,mResults=[];
+
+function renderMix(el){
+  mQuestions=[];mScore=0;mResults=[];
+  // Generate random questions from all data
+  // Type 1: EN → JP (from vocab)
+  DATA.vocab.forEach(v=>mQuestions.push({type:'en2jp',q:`What is "${v.english}" in Japanese?`,a:v.japanese,hint:v.reading}));
+  // Type 2: JP → EN (from vocab)
+  DATA.vocab.forEach(v=>mQuestions.push({type:'jp2en',q:`What does "${v.japanese}" mean?`,a:v.english,hint:v.reading}));
+  // Type 3: Reading comprehension
+  DATA.readings.forEach(r=>r.questions.forEach(q=>mQuestions.push({type:'reading',q:q.q,a:q.a,context:r.text,title:r.title})));
+  // Type 4: Dialogue fill-in
+  DATA.dialogues.forEach(d=>d.lines.forEach(l=>mQuestions.push({type:'dialogue',q:`In "${d.title}", how do you say: "${l.en}"`,a:l.jp,hint:'dialogue'})));
+
+  mQuestions=shuffle(mQuestions).slice(0,20); // Cap at 20
+  mIdx=0;
+  showMixQ(el);
+}
+
+function showMixQ(el){
+  if(mIdx>=mQuestions.length)return showMixResults(el);
+  const q=mQuestions[mIdx];
+  const tagColor=q.type==='en2jp'?'var(--accent)':q.type==='jp2en'?'var(--green)':q.type==='reading'?'var(--yellow)':'var(--blue)';
+  const tagLabel=q.type==='en2jp'?'Vocab':q.type==='jp2en'?'Translate':q.type==='reading'?'Reading':'Dialogue';
+
+  let contextHTML='';
+  if(q.context)contextHTML=`<div class="card" style="padding:14px;margin-bottom:10px"><div style="color:var(--yellow);font-size:10px;font-weight:700;margin-bottom:4px">${esc(q.title||'')}</div><div class="jp" style="font-family:'Noto Sans JP';font-size:16px;line-height:1.8;color:var(--text)">${esc(q.context)}</div></div>`;
+
+  el.innerHTML=`
+    <div class="flex-between mb8">
+      <span style="color:var(--muted);font-size:12px">${mIdx+1}/${mQuestions.length} <span class="tag" style="background:${tagColor}20;color:${tagColor}">${tagLabel}</span></span>
+      <span style="color:var(--green);font-size:12px;font-weight:700">${mScore} correct</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${((mIdx+1)/mQuestions.length)*100}%"></div></div>
+    ${contextHTML}
+    <div class="card">
+      <div style="font-size:16px;color:#fff;margin-bottom:12px;line-height:1.5">${esc(q.q)}</div>
+      <input class="answer-input" id="mAnswer" placeholder="Your answer..." onkeydown="if(event.key==='Enter')mCheck()">
+      <button class="btn w100 mt8" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="mCheck()">Submit</button>
+    </div>
+    <div id="mFeedback"></div>`;
+  setTimeout(()=>$('mAnswer').focus(),50);
+}
+
+function mCheck(){
+  const q=mQuestions[mIdx];
+  const ans=($('mAnswer').value||'').trim();
+  const aLow=ans.toLowerCase(), eLow=q.a.toLowerCase();
+  const ok=ans===q.a||aLow===eLow||aLow.includes(eLow)||eLow.includes(aLow)||(q.hint&&ans===q.hint);
+  if(ok)mScore++;
+  mResults.push({q:q.q,expected:q.a,given:ans,correct:ok,type:q.type});
+  $('mFeedback').innerHTML=`
+    <div class="card slide-up center">
+      <div style="font-size:36px;margin-bottom:6px">${ok?'✅':'❌'}</div>
+      ${!ok?`<div style="margin-bottom:6px"><span style="color:var(--muted);font-size:11px">You: </span><span style="color:var(--red)">${esc(ans)||'(empty)'}</span></div>`:''}
+      <div><span style="color:var(--muted);font-size:11px">Answer: </span><span style="color:var(--green);font-weight:700;font-size:18px;font-family:'Klee One'">${esc(q.a)}</span></div>
+      <button class="btn mt12" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="mIdx++;showMixQ($('mainArea'))">${mIdx+1>=mQuestions.length?'🏁 Results':'Next →'}</button>
+    </div>`;
+}
+
+function showMixResults(el){
+  const pct=mQuestions.length?Math.round((mScore/mQuestions.length)*100):0;
+  el.innerHTML=`
+    <div class="center" style="margin-bottom:20px">
+      <div style="font-size:48px">${pct>=80?'🎉':pct>=50?'📝':'💪'}</div>
+      <div style="font-size:32px;font-weight:700">${mScore}/${mQuestions.length}</div>
+      <div style="color:var(--muted)">${pct}% Mixed Quiz</div>
+    </div>
+    ${mResults.map(r=>`<div class="result-row" style="border-left:3px solid ${r.correct?'var(--green)':'var(--red)'}"><div style="flex:1"><span style="color:#fff;font-size:12px">${esc(r.q)}</span><br><span style="color:var(--dim);font-size:10px">→ ${esc(r.expected)}</span></div><div style="color:${r.correct?'var(--green)':'var(--red)'}; font-size:12px;margin-left:6px">${r.correct?'✓':'✗'}</div></div>`).join('')}
+    <button class="btn w100 mt16" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="renderMix($('mainArea'))">🔄 New Quiz</button>`;
+}
+
+// ═══ CANVAS HELPERS ═══
+
+// Perfect Freehand drawing engine
+const PF=(()=>{function lerp(a,b,t){return a+(b-a)*t}function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1])}function add(a,b){return[a[0]+b[0],a[1]+b[1]]}function sub(a,b){return[a[0]-b[0],a[1]-b[1]]}function mul(a,s){return[a[0]*s,a[1]*s]}function per(a){return[-a[1],a[0]]}function uni(a){const l=Math.hypot(a[0],a[1]);return l===0?[0,0]:[a[0]/l,a[1]/l]}
+function getStroke(inp,opt={}){const{size=8,thinning=.5,smoothing=.5,streamline=.5,simulatePressure=true,start={taper:0,cap:true},end={taper:0,cap:true},last=false}=opt;if(!inp.length)return[];const pts=inp.map(p=>({x:p[0],y:p[1],pressure:p[2]??0.5}));if(pts.length===1){const r=size/2,c=[pts[0].x,pts[0].y],circle=[];for(let i=0;i<=8;i++){const a=(i/8)*Math.PI*2;circle.push([c[0]+Math.cos(a)*r,c[1]+Math.sin(a)*r])}return circle}const sp=[{point:[pts[0].x,pts[0].y],pressure:pts[0].pressure,vector:[1,1],distance:0,runningLength:0}];let rl=0,prev=sp[0];const st=1-streamline;for(let i=1;i<pts.length;i++){const curr=[lerp(prev.point[0],pts[i].x,st),lerp(prev.point[1],pts[i].y,st)];const d=dist(curr,prev.point);if(d<1)continue;rl+=d;const vec=uni(sub(curr,prev.point));const np={point:curr,pressure:pts[i].pressure,vector:vec,distance:d,runningLength:rl};sp.push(np);prev=np}if(sp.length<2)return[];const tl=rl,lp=[],rp=[],ts=start.taper===true?tl:start.taper||0,te=end.taper===true?tl:end.taper||0;for(let i=0;i<sp.length;i++){const s=sp[i];let pr=s.pressure;if(simulatePressure){const v=s.distance?Math.min(s.distance/size,1):0;pr=Math.min(1,1-v*.6)}let r=size/2*lerp(1,pr,thinning);if(ts>0&&s.runningLength<ts)r*=s.runningLength/ts;if(te>0&&s.runningLength>tl-te)r*=(tl-s.runningLength)/te;r=Math.max(r,.5);const p=per(s.vector);lp.push(add(s.point,mul(p,r)));rp.push(sub(s.point,mul(p,r)))}const sc=[],ec=[];if(start.cap&&ts===0){const f=sp[0],r=size/2,p=per(f.vector);for(let i=0;i<=8;i++){const a=Math.PI+(i/8)*Math.PI;sc.push(add(f.point,[Math.cos(a)*r*p[0]-Math.sin(a)*r*p[1],Math.sin(a)*r*p[0]+Math.cos(a)*r*p[1]]))}}if(end.cap&&te===0){const l=sp[sp.length-1],r=size/2,p=per(l.vector);for(let i=0;i<=8;i++){const a=(i/8)*Math.PI;ec.push(add(l.point,[Math.cos(a)*r*p[0]-Math.sin(a)*r*p[1],Math.sin(a)*r*p[0]+Math.cos(a)*r*p[1]]))}}return[...lp,...ec,...rp.reverse(),...sc]}return{getStroke}})();
+function getSvgPathFromStroke(s){if(!s.length)return'';const d=[`M ${s[0][0]} ${s[0][1]}`];for(let i=1;i<s.length;i++){const m=[(s[i][0]+s[(i+1)%s.length][0])/2,(s[i][1]+s[(i+1)%s.length][1])/2];d.push(`Q ${s[i][0]} ${s[i][1]} ${m[0]} ${m[1]}`)}d.push('Z');return d.join(' ')}
+const canvasState={};
+function initDrawCanvas(canvasId,checkBtnId){const canvas=$(canvasId),dpr=devicePixelRatio||1,rect=canvas.getBoundingClientRect();canvas.width=rect.width*dpr;canvas.height=rect.height*dpr;const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);const state={strokes:[],currentPoints:[],drawing:false};canvasState[canvasId]=state;$(checkBtnId).disabled=true;ctx.fillStyle='#050508';ctx.fillRect(0,0,rect.width,rect.height);const opts={size:10,thinning:.5,smoothing:.5,streamline:.4,simulatePressure:true,start:{taper:12,cap:true},end:{taper:6,cap:true},last:true};function redraw(){ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.restore();ctx.fillStyle='#050508';ctx.fillRect(0,0,rect.width,rect.height);ctx.fillStyle='#d4a843';for(const pts of state.strokes){const o=PF.getStroke(pts,opts);ctx.fill(new Path2D(getSvgPathFromStroke(o)))}if(state.currentPoints.length>0){const o=PF.getStroke(state.currentPoints,{...opts,last:false});ctx.fill(new Path2D(getSvgPathFromStroke(o)))}}function gp(e){const r=canvas.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top,e.pressure||.5]}canvas.addEventListener('pointerdown',e=>{e.preventDefault();canvas.setPointerCapture(e.pointerId);state.drawing=true;state.currentPoints=[gp(e)];redraw()});canvas.addEventListener('pointermove',e=>{if(!state.drawing)return;e.preventDefault();state.currentPoints.push(gp(e));redraw();$(checkBtnId).disabled=false});canvas.addEventListener('pointerup',e=>{if(!state.drawing)return;e.preventDefault();state.drawing=false;if(state.currentPoints.length>0){state.strokes.push([...state.currentPoints]);state.currentPoints=[];redraw()}});canvas.addEventListener('pointerleave',e=>{if(!state.drawing)return;state.drawing=false;if(state.currentPoints.length>0){state.strokes.push([...state.currentPoints]);state.currentPoints=[];redraw()}})}
+function clearDrawCanvas(canvasId,checkBtnId){function clearDrawCanvas(canvasId,checkBtnId){
+  const c=$(canvasId);const x=c.getContext('2d');const r=c.getBoundingClientRect();
+  x.save();x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,c.width,c.height);x.restore();
+  x.fillStyle='#050508';x.fillRect(0,0,r.width,r.height);
+  hasStrokes=false;$(checkBtnId).disabled=true;
+}
+
+// ═══ IMPORT ═══
+function toggleImp(){$('impSection').classList.toggle('hidden');}
+function showTemplate(){$('templateArea').classList.toggle('hidden');}
+
+// File upload handler
+function handleFileUpload(file){
+  if(!file) return;
+  const status=$('fileStatus');
+  status.classList.remove('hidden');
+  status.style.background='rgba(124,111,247,.12)';
+  status.style.color='var(--accent2)';
+  status.textContent='⏳ Reading ' + file.name + '...';
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      const d = JSON.parse(e.target.result);
+      applyData(d, file.name);
+    } catch(err){
+      status.style.background='rgba(255,95,109,.12)';
+      status.style.color='var(--red)';
+      status.textContent='❌ Invalid JSON in ' + file.name + ' — check format';
+    }
+  };
+  reader.onerror = function(){
+    status.style.background='rgba(255,95,109,.12)';
+    status.style.color='var(--red)';
+    status.textContent='❌ Failed to read file';
+  };
+  reader.readAsText(file);
+}
+
+// Paste fallback
+function loadDataFromTextarea(){
+  try{
+    const d=JSON.parse($('jsonInput').value);
+    applyData(d, 'pasted data');
+    $('jsonInput').value='';
+  }catch(e){alert('Invalid JSON — check format and try again.');}
+}
+
+// Core data loader — feeds all 5 modes
+function applyData(d, sourceName){
+  let loaded = [];
+  if(d.vocab && Array.isArray(d.vocab) && d.vocab.length){ DATA.vocab = d.vocab; loaded.push(d.vocab.length + ' vocab'); }
+  if(d.dialogues && Array.isArray(d.dialogues) && d.dialogues.length){ DATA.dialogues = d.dialogues; loaded.push(d.dialogues.length + ' dialogues'); }
+  if(d.readings && Array.isArray(d.readings) && d.readings.length){ DATA.readings = d.readings; loaded.push(d.readings.length + ' readings'); }
+
+  const status=$('fileStatus');
+  status.classList.remove('hidden');
+  if(loaded.length){
+    status.style.background='rgba(0,201,160,.12)';
+    status.style.color='var(--green)';
+    status.textContent='✅ Loaded: ' + loaded.join(', ') + ' — all 5 modes updated!';
+    // Auto-collapse after short delay
+    setTimeout(()=>{ $('impSection').classList.add('hidden'); status.classList.add('hidden'); }, 2200);
+    render();
+  } else {
+    status.style.background='rgba(255,200,87,.12)';
+    status.style.color='var(--yellow)';
+    status.textContent='⚠️ No vocab, dialogues, or readings found in file';
+  }
+  // Reset file input so same file can be re-uploaded
+  $('fileInput').value='';
+}
+
+// Drag-and-drop
+(function(){
+  const dz=$('dropZone');
+  if(!dz) return;
+  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();dz.style.borderColor='var(--accent)';dz.style.background='rgba(212,168,67,0.06)';}));
+  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();dz.style.borderColor='var(--border)';dz.style.background='var(--bg)';}));
+  dz.addEventListener('drop',e=>{
+    const file=e.dataTransfer.files[0];
+    if(file) handleFileUpload(file);
+  });
+})();
+
+// ═══ INIT ═══
+render();
+function toggleVoice(on){voiceEnabled=on;const lbl=document.getElementById("voiceLabel");const sl=document.getElementById("voiceSlider");const kn=document.getElementById("voiceKnob");if(lbl)lbl.textContent=on?"ON":"OFF";if(lbl)lbl.style.color=on?"var(--accent)":"var(--red)";if(sl)sl.style.background=on?"var(--accent)":"var(--border)";if(kn){kn.style.transform=on?"translateX(18px)":"none";kn.style.background=on?"var(--text)":"var(--muted)";}if(!on&&speechSynthesis)speechSynthesis.cancel();}document.addEventListener("keydown",function(e){if(e.target.tagName==="INPUT"||e.target.tagName==="TEXTAREA")return;if(e.key==="v"||e.key==="V"){toggleVoice(!voiceEnabled);const cb=document.querySelector("#voiceBar input[type=checkbox]");if(cb)cb.checked=voiceEnabled;}});setTimeout(function(){toggleVoice(true);},100);
+
+// ═══ KANA IME ENGINE ═══
+const ROMAJI_MAP={a:'あ',i:'い',u:'う',e:'え',o:'お',
+ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',
+sa:'さ',si:'し',shi:'し',su:'す',se:'せ',so:'そ',
+ta:'た',ti:'ち',chi:'ち',tu:'つ',tsu:'つ',te:'て',to:'と',
+na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',
+ha:'は',hi:'ひ',hu:'ふ',fu:'ふ',he:'へ',ho:'ほ',
+ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',
+ya:'や',yu:'ゆ',yo:'よ',
+ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',
+wa:'わ',wi:'ゐ',we:'ゑ',wo:'を',
+nn:'ん',
+ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',
+za:'ざ',zi:'じ',ji:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',
+da:'だ',di:'ぢ',du:'づ',de:'で',do:'ど',
+ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',
+pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',
+kya:'きゃ',kyu:'きゅ',kyo:'きょ',
+sha:'しゃ',shu:'しゅ',sho:'しょ',
+sya:'しゃ',syu:'しゅ',syo:'しょ',
+cha:'ちゃ',chu:'ちゅ',cho:'ちょ',
+tya:'ちゃ',tyu:'ちゅ',tyo:'ちょ',
+nya:'にゃ',nyu:'にゅ',nyo:'にょ',
+hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ',
+mya:'みゃ',myu:'みゅ',myo:'みょ',
+rya:'りゃ',ryu:'りゅ',ryo:'りょ',
+gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',
+ja:'じゃ',ju:'じゅ',jo:'じょ',
+jya:'じゃ',jyu:'じゅ',jyo:'じょ',
+bya:'びゃ',byu:'びゅ',byo:'びょ',
+pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ',
+// small
+xa:'ぁ',xi:'ぃ',xu:'ぅ',xe:'ぇ',xo:'ぉ',
+xya:'ゃ',xyu:'ゅ',xyo:'ょ',xtu:'っ',xtsu:'っ',
+// long vowel
+'-':'ー'};
+
+// Double consonant → っ
+const DOUBLE_CONSONANTS='ksztcgdbpfhjmnrwy';
+
+let imeMode='hiragana'; // 'hiragana','katakana','off'
+let imeBuffer='';
+
+function hiraganaToKatakana(s){
+  return [...s].map(c=>{const cp=c.codePointAt(0);return(cp>=0x3041&&cp<=0x3096)?String.fromCodePoint(cp+0x60):c;}).join('');
+}
+
+function processIME(input){
+  if(imeMode==='off')return;
+  const el=input;
+  const val=el.value;
+  const pos=el.selectionStart;
+  // Find the romaji tail (ASCII letters at cursor position)
+  let start=pos;
+  while(start>0&&/[a-zA-Z-]/.test(val[start-1]))start--;
+  const raw=val.substring(start,pos).toLowerCase();
+  if(!raw)return;
+
+  // Try longest match first
+  for(let len=Math.min(raw.length,4);len>=1;len--){
+    const chunk=raw.substring(raw.length-len);
+    // Check double consonant
+    if(len>=2&&chunk[0]===chunk[1]&&DOUBLE_CONSONANTS.includes(chunk[0])&&len===2){
+      const kana=imeMode==='katakana'?'ッ':'っ';
+      const before=val.substring(0,pos-2);
+      const after=val.substring(pos);
+      el.value=before+kana+chunk[1]+after;
+      el.selectionStart=el.selectionEnd=before.length+kana.length+1;
+      return;
+    }
+    if(ROMAJI_MAP[chunk]){
+      let kana=ROMAJI_MAP[chunk];
+      if(imeMode==='katakana')kana=hiraganaToKatakana(kana);
+      const prefixLen=raw.length-len;
+      const before=val.substring(0,start+prefixLen);
+      const after=val.substring(pos);
+      el.value=before+kana+after;
+      el.selectionStart=el.selectionEnd=before.length+kana.length;
+      return;
+    }
+  }
+  // n followed by non-vowel/y → ん
+  if(raw.length>=2&&raw[raw.length-2]==='n'&&!'aiueony'.includes(raw[raw.length-1])){
+    const kana=imeMode==='katakana'?'ン':'ん';
+    const before=val.substring(0,pos-2);
+    const after=val.substring(pos);
+    el.value=before+kana+raw[raw.length-1]+after;
+    el.selectionStart=el.selectionEnd=before.length+kana.length+1;
+  }
+}
+
+function setIMEMode(m){
+  imeMode=m;
+  document.querySelectorAll('.ime-toggle button').forEach(b=>{
+    b.classList.toggle('active',b.dataset.mode===m);
+  });
+  const label=document.getElementById('imeLabel');
+  if(label)label.textContent=m==='hiragana'?'ひらがな':m==='katakana'?'カタカナ':'OFF';
+}
+
+function injectIMEBar(){
+  // Find the first .answer-input container or insert before modes
+  const existing=document.getElementById('imeBarWrap');
+  if(existing)return;
+  const header=document.querySelector('.header');
+  if(!header)return;
+  const bar=document.createElement('div');
+  bar.id='imeBarWrap';
+  bar.innerHTML=`<div class="ime-bar">
+    <label>入力 IME</label>
+    <div class="ime-toggle">
+      <button data-mode="hiragana" class="active" onclick="setIMEMode('hiragana')">あ Hira</button>
+      <button data-mode="katakana" onclick="setIMEMode('katakana')">ア Kata</button>
+      <button data-mode="off" onclick="setIMEMode('off')">ABC Off</button>
+    </div>
+    <span id="imeLabel" style="font-size:14px;font-family:'Noto Sans JP';color:var(--accent);font-weight:700">ひらがな</span>
+    <button onclick="toggleKanaPad()" style="background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:6px;font-size:10px;cursor:pointer;font-family:'DM Sans'">⌨️ Pad</button>
+    <span class="ime-hint">Type romaji → auto kana</span>
+  </div>
+  <div class="kana-pad" id="kanaPad"></div>`;
+  header.after(bar);
+  buildKanaPad();
+}
+
+// ═══ VISUAL KANA PAD (for mobile) ═══
+const HIRA_ROWS=[
+  ['あ','い','う','え','お'],
+  ['か','き','く','け','こ'],
+  ['さ','し','す','せ','そ'],
+  ['た','ち','つ','て','と'],
+  ['な','に','ぬ','ね','の'],
+  ['は','ひ','ふ','へ','ほ'],
+  ['ま','み','む','め','も'],
+  ['や','','ゆ','','よ'],
+  ['ら','り','る','れ','ろ'],
+  ['わ','を','ん','ー','']
+];
+const HIRA_DAKUTEN=[
+  ['が','ぎ','ぐ','げ','ご'],
+  ['ざ','じ','ず','ぜ','ぞ'],
+  ['だ','ぢ','づ','で','ど'],
+  ['ば','び','ぶ','べ','ぼ'],
+  ['ぱ','ぴ','ぷ','ぺ','ぽ']
+];
+const HIRA_COMBO=[
+  ['きゃ','きゅ','きょ','しゃ','しゅ'],
+  ['しょ','ちゃ','ちゅ','ちょ','にゃ'],
+  ['にゅ','にょ','ひゃ','ひゅ','ひょ'],
+  ['みゃ','みゅ','みょ','りゃ','りゅ'],
+  ['りょ','ぎゃ','ぎゅ','ぎょ','じゃ'],
+  ['じゅ','じょ','びゃ','びゅ','びょ'],
+  ['ぴゃ','ぴゅ','ぴょ','っ','']
+];
+
+let kanaPadTab='basic';
+function buildKanaPad(){
+  const pad=document.getElementById('kanaPad');
+  if(!pad)return;
+  pad.innerHTML=`<div class="kana-pad-header">
+    <div style="display:flex;gap:4px">
+      <button class="${kanaPadTab==='basic'?'active':''}" onclick="setKanaPadTab('basic')">基本 Basic</button>
+      <button class="${kanaPadTab==='dakuten'?'active':''}" onclick="setKanaPadTab('dakuten')">濁点 Dakuten</button>
+      <button class="${kanaPadTab==='combo'?'active':''}" onclick="setKanaPadTab('combo')">拗音 Combo</button>
+    </div>
+    <div style="display:flex;gap:4px">
+      <button class="fn" onclick="kanaBackspace()" style="color:var(--red)">⌫</button>
+      <button class="fn" onclick="kanaSpace()">␣</button>
+    </div>
+  </div>
+  <div class="kana-grid" id="kanaGrid"></div>`;
+  renderKanaGrid();
+}
+
+function setKanaPadTab(tab){
+  kanaPadTab=tab;
+  buildKanaPad();
+  document.getElementById('kanaPad').classList.add('open');
+}
+
+function renderKanaGrid(){
+  const grid=document.getElementById('kanaGrid');
+  if(!grid)return;
+  let rows=kanaPadTab==='basic'?HIRA_ROWS:kanaPadTab==='dakuten'?HIRA_DAKUTEN:HIRA_COMBO;
+  const isKata=imeMode==='katakana';
+  let h='';
+  rows.forEach(row=>{
+    row.forEach(ch=>{
+      if(!ch){h+='<div></div>';return;}
+      let display=isKata?hiraganaToKatakana(ch):ch;
+      h+=`<button class="kana-key" onclick="insertKana('${display}')" type="button">${display}</button>`;
+    });
+  });
+  // Add special keys
+  h+=`<button class="kana-key fn" onclick="kanaBackspace()" type="button">⌫</button>`;
+  h+=`<button class="kana-key fn" onclick="kanaSpace()" type="button">␣</button>`;
+  h+=`<button class="kana-key fn" onclick="insertKana('。')" type="button">。</button>`;
+  h+=`<button class="kana-key fn" onclick="insertKana('、')" type="button">、</button>`;
+  h+=`<button class="kana-key fn" onclick="insertKana('？')" type="button">？</button>`;
+  grid.innerHTML=h;
+}
+
+function toggleKanaPad(){
+  const pad=document.getElementById('kanaPad');
+  if(!pad)return;
+  pad.classList.toggle('open');
+  if(pad.classList.contains('open'))renderKanaGrid();
+}
+
+function getActiveInput(){
+  return document.querySelector('.answer-input:focus')||document.querySelector('.answer-input');
+}
+
+function insertKana(ch){
+  const inp=getActiveInput();
+  if(!inp)return;
+  const pos=inp.selectionStart||inp.value.length;
+  inp.value=inp.value.substring(0,pos)+ch+inp.value.substring(pos);
+  inp.selectionStart=inp.selectionEnd=pos+ch.length;
+  inp.focus();
+}
+
+function kanaBackspace(){
+  const inp=getActiveInput();
+  if(!inp||!inp.value)return;
+  const pos=inp.selectionStart||inp.value.length;
+  if(pos===0)return;
+  inp.value=inp.value.substring(0,pos-1)+inp.value.substring(pos);
+  inp.selectionStart=inp.selectionEnd=pos-1;
+  inp.focus();
+}
+
+function kanaSpace(){
+  insertKana(' ');
+}
+
+// Hook IME into all answer inputs
+document.addEventListener('input',function(e){
+  if(e.target.classList.contains('answer-input')&&imeMode!=='off'){
+    processIME(e.target);
+  }
+});
+
+// Re-inject IME bar when mode changes (since DOM gets rebuilt)
+const _origRender=typeof render==='function'?render:null;
+if(_origRender){
+  render=function(){
+    _origRender();
+    setTimeout(injectIMEBar,100);
+  };
+}
+
+// Initial injection
+setTimeout(injectIMEBar,200);
+
+</script>
+</body>
+</html>
