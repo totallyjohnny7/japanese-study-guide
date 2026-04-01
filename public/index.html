@@ -256,6 +256,86 @@ body::before {
   box-sizing: border-box;
   overflow: visible;
 }
+.rich-body {
+  padding: 16px 18px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.rich-body h3 {
+  margin: 0 0 10px 0;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--gold);
+  background: rgba(212,168,67,0.08);
+  border-left: 3px solid var(--gold-dark);
+  border-radius: 0 6px 6px 0;
+}
+.rich-body h4 {
+  margin: 14px 0 6px 0;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  background: rgba(255,255,255,0.04);
+  border-left: 2px solid var(--border);
+  border-radius: 0 4px 4px 0;
+}
+.rich-body p { margin: 6px 0; font-size: 13px; line-height: 1.7; color: var(--text); }
+.rich-body table { margin: 8px 0 14px 0; }
+.pl-keyterm {
+  display: inline-block;
+  background: rgba(212,168,67,0.12);
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(212,168,67,0.3);
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.pl-head {
+  display: block;
+  color: var(--gold-bright);
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 10px;
+  padding: 4px 8px;
+  background: rgba(212,168,67,0.07);
+  border-left: 2px solid var(--gold-dark);
+  border-radius: 0 4px 4px 0;
+}
+.expansion {
+  padding: 16px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.expansion h4 {
+  margin: 0;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--gold);
+  background: rgba(212,168,67,0.08);
+  border-left: 3px solid var(--gold-dark);
+  border-radius: 0 4px 4px 0;
+  text-transform: uppercase;
+}
+.expansion h5 {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+.expansion p { margin: 0; font-size: 13px; line-height: 1.7; color: var(--text); }
+.expansion table { margin-top: 0; }
 .study-content .trap {
   background: rgba(212,168,67,0.1);
   border: 2px solid var(--gold-dark);
@@ -726,6 +806,7 @@ body::before {
   right: 20px;
   width: 380px;
   max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 120px);
   background: var(--card);
   border: 1px solid var(--gold-dark);
   border-radius: 14px;
@@ -733,8 +814,9 @@ body::before {
   z-index: 9001;
   display: none;
   overflow: hidden;
+  flex-direction: column;
 }
-.float-search-panel.open { display: block; animation: slideUp 0.2s ease; }
+.float-search-panel.open { display: flex; animation: slideUp 0.2s ease; }
 .float-search-header {
   display: flex;
   align-items: center;
@@ -764,8 +846,9 @@ body::before {
 }
 .float-search-close:hover { color: var(--text); }
 .float-search-results {
-  max-height: 400px;
+  flex: 1;
   overflow-y: auto;
+  min-height: 0;
 }
 .float-search-results::-webkit-scrollbar { width: 4px; }
 .float-search-results::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
@@ -806,7 +889,7 @@ body::before {
 .fsr-hint { padding: 8px 14px; text-align: center; color: var(--muted); font-size: 10px; background: var(--surface); border-top: 1px solid var(--border); }
 
 @media (max-width: 600px) {
-  .float-search-panel { bottom: 70px; right: 10px; left: 10px; width: auto; }
+  .float-search-panel { bottom: 70px; right: 10px; left: 10px; width: auto; max-height: calc(100vh - 110px); }
   .float-search-btn { bottom: 14px; right: 14px; width: 46px; height: 46px; font-size: 20px; }
 }
 
@@ -1014,14 +1097,14 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Writing System -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
     <!-- LAYER 1: What Is It -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Japanese is the only major language that mixes <b>three completely different writing systems</b> in a single sentence. Kanji carry meaning, Hiragana handle grammar and native words, and Katakana mark foreign imports &mdash; and you need all three from day one.</p>
 
     <!-- LAYER 2: Rules Table -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table &mdash; When to Use Each Script</h4>
+    <h4 style="">2. Rules Table &mdash; When to Use Each Script</h4>
     <table>
       <thead><tr><th>Script</th><th>Use For</th><th>Example</th><th>Why This Script</th></tr></thead>
       <tbody>
@@ -1039,7 +1122,7 @@ body::before {
     </table>
 
     <!-- LAYER 3: Contrast Examples -->
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples &mdash; Same Sentence, Different Scripts</h4>
+    <h4 style="">3. Contrast Examples &mdash; Same Sentence, Different Scripts</h4>
     <table>
       <thead><tr><th>Sentence</th><th>Script Breakdown</th><th>Why Each Part Uses That Script</th></tr></thead>
       <tbody>
@@ -1057,14 +1140,14 @@ body::before {
     </table>
 
     <!-- LAYER 4: Mnemonic -->
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>KHK = "Kanji Holds Knowledge, Hiragana Holds Grammar, Katakana Holds Imports"</b><br>
       Think of a Japanese sentence as a <b>sandwich</b>: Kanji = the meat (content), Hiragana = the bread (holds everything together), Katakana = the foreign cheese (imported topping).
     </div>
 
     <!-- LAYER 5: TRAP warnings -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Writing foreign words in hiragana.<br>
       ❌ WRONG: <span lang="ja">こーひー</span> (coffee in hiragana)<br>
@@ -1085,7 +1168,7 @@ body::before {
     </div>
 
     <!-- LAYER 6: Decision Tree Diagram -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">6. Decision Tree &mdash; "Which Script Do I Use?"</h4>
+    <h4 style="">6. Decision Tree &mdash; "Which Script Do I Use?"</h4>
     <div style="max-width:100%;overflow-x:auto;margin-bottom:14px">
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-family:monospace;min-width:320px">
         <!-- Start -->
@@ -1128,7 +1211,7 @@ body::before {
     </div>
 
     <!-- LAYER 7: Cheat Sheet Table -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Script</th><th>Looks Like</th><th>Used For</th><th>Count</th><th>Learn By</th></tr></thead>
       <tbody>
@@ -1183,14 +1266,14 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Hiragana Basics -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
     <!-- LAYER 1: What Is It -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Hiragana is the foundational phonetic alphabet of Japanese &mdash; 46 base characters representing every possible syllable (mora) in the language. Master these first, because every Japanese word can be written in hiragana.</p>
 
     <!-- LAYER 2: Rules Table &mdash; Vowel Mouth Shapes & Stroke Order -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table &mdash; The 5 Vowels: Mouth Shape Guide</h4>
+    <h4 style="">2. Rules Table &mdash; The 5 Vowels: Mouth Shape Guide</h4>
     <table>
       <thead><tr><th>Vowel</th><th>Hiragana</th><th>Sound</th><th>Mouth Shape</th><th>English Approximation</th><th>Common Mistake</th></tr></thead>
       <tbody>
@@ -1202,7 +1285,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">Stroke Order Rules</h4>
+    <h4 style="">Stroke Order Rules</h4>
     <table>
       <thead><tr><th>Rule</th><th>Meaning</th><th>Example</th></tr></thead>
       <tbody>
@@ -1214,7 +1297,7 @@ body::before {
     </table>
 
     <!-- LAYER 3: Contrast Examples -->
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples &mdash; Irregular Sounds</h4>
+    <h4 style="">3. Contrast Examples &mdash; Irregular Sounds</h4>
     <table>
       <thead><tr><th>Expected</th><th>Actual</th><th>Why</th></tr></thead>
       <tbody>
@@ -1226,7 +1309,7 @@ body::before {
     </table>
 
     <!-- LAYER 4: Mnemonic -->
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"Ah, we (i) ooze (u) energy (e) oh!" &mdash; a-i-u-e-o</b><br>
       The 5 vowels in order. Every consonant row follows this same vowel order: ka-ki-ku-ke-ko, sa-shi-su-se-so, etc.<br><br>
@@ -1235,7 +1318,7 @@ body::before {
     </div>
 
     <!-- LAYER 5: TRAP warnings -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Rounding lips for Japanese "u"<br>
       ❌ WRONG: Puckering lips like English "oo" in "food"<br>
@@ -1257,7 +1340,7 @@ body::before {
     <!-- LAYER 6: Not applicable for basic chart (no decision tree needed) -->
 
     <!-- LAYER 7: Cheat Sheet Table -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet &mdash; Rows A through H</h4>
+    <h4 style="">7. Cheat Sheet &mdash; Rows A through H</h4>
     <table>
       <thead><tr><th>Row</th><th>a</th><th>i</th><th>u</th><th>e</th><th>o</th><th>Watch Out</th></tr></thead>
       <tbody>
@@ -1376,14 +1459,14 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Voiced Sounds -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
     <!-- LAYER 1: What Is It -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Dakuten (゛) and handakuten (゜) are tiny marks added to hiragana to change voiceless consonants into voiced ones. Think of it like adding vibration to your throat &mdash; "ka" becomes "ga," "sa" becomes "za," and so on. Handakuten only applies to the H-row, turning "ha" into "pa."</p>
 
     <!-- LAYER 2: Rules Table -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table &mdash; Complete Dakuten/Handakuten Grid</h4>
+    <h4 style="">2. Rules Table &mdash; Complete Dakuten/Handakuten Grid</h4>
     <table>
       <thead><tr><th>Base Row</th><th>Mark</th><th>Result</th><th>a</th><th>i</th><th>u</th><th>e</th><th>o</th></tr></thead>
       <tbody>
@@ -1396,7 +1479,7 @@ body::before {
     </table>
 
     <!-- LAYER 3: Contrast Examples -->
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples &mdash; Voiceless vs Voiced Minimal Pairs</h4>
+    <h4 style="">3. Contrast Examples &mdash; Voiceless vs Voiced Minimal Pairs</h4>
     <table>
       <thead><tr><th>Voiceless</th><th>Meaning</th><th>Voiced</th><th>Meaning</th><th>Only Difference</th></tr></thead>
       <tbody>
@@ -1408,7 +1491,7 @@ body::before {
     </table>
 
     <!-- LAYER 4: Mnemonic -->
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"Dakuten = Double dots = Deeper voice"</b><br>
       The two dots (゛) make the sound <b>d</b>eeper/louder. Put your hand on your throat: voiceless (k, s, t, h) = no vibration. Voiced (g, z, d, b) = vibration.<br><br>
@@ -1417,7 +1500,7 @@ body::before {
     </div>
 
     <!-- LAYER 5: TRAP warnings -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: <span lang="ja">じ</span> vs <span lang="ja">ぢ</span> &mdash; identical pronunciation!<br>
       Both say "ji" but <span lang="ja">じ</span> is used 95% of the time.<br>
@@ -1441,7 +1524,7 @@ body::before {
     </div>
 
     <!-- LAYER 6: Decision Tree -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">6. Decision Tree &mdash; "Which Mark Do I Add?"</h4>
+    <h4 style="">6. Decision Tree &mdash; "Which Mark Do I Add?"</h4>
     <div style="max-width:100%;overflow-x:auto;margin-bottom:14px">
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-family:monospace;min-width:300px">
         <div style="background:#2d6a6f;color:white;padding:8px 16px;border-radius:20px;text-align:center;font-weight:bold">Is the base character from K, S, T, or H row?</div>
@@ -1479,7 +1562,7 @@ body::before {
     </div>
 
     <!-- LAYER 7: Cheat Sheet Table -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Transformation</th><th>Mark</th><th>Rows Affected</th><th>Remember</th></tr></thead>
       <tbody>
@@ -1562,14 +1645,14 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Special Sounds -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
     <!-- LAYER 1: What Is It -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Japanese has three "modifier" mechanics that change how sounds behave: <b>combined sounds</b> (glides), <b>double consonants</b> (small <span lang="ja">っ</span>), and <b>long vowels</b>. These affect timing (mora count) and can completely change a word's meaning.</p>
 
     <!-- LAYER 2: Rules Table -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table &mdash; Combined Sound Rules</h4>
+    <h4 style="">2. Rules Table &mdash; Combined Sound Rules</h4>
     <table>
       <thead><tr><th>Feature</th><th>How It Works</th><th>Symbol</th><th>Beat Count</th><th>Example</th></tr></thead>
       <tbody>
@@ -1585,7 +1668,7 @@ body::before {
     </table>
 
     <!-- LAYER 3: Contrast Examples -->
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples &mdash; Minimal Pairs</h4>
+    <h4 style="">3. Contrast Examples &mdash; Minimal Pairs</h4>
     <table>
       <thead><tr><th>Without Modifier</th><th>Meaning</th><th>With Modifier</th><th>Meaning</th><th>What Changed</th></tr></thead>
       <tbody>
@@ -1597,7 +1680,7 @@ body::before {
     </table>
 
     <!-- LAYER 4: Mnemonic -->
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"Small = Squeeze"</b><br>
       Every time you see a <b>small character</b>, something gets squeezed:<br>
@@ -1607,7 +1690,7 @@ body::before {
     </div>
 
     <!-- LAYER 5: TRAP warnings -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Mixing up long "o" and long "e" spelling<br>
       ❌ WRONG: <span lang="ja">せんせえ</span> for "sensee"<br>
@@ -1623,7 +1706,7 @@ body::before {
     </div>
 
     <!-- LAYER 7: Cheat Sheet Table -->
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Modifier</th><th>Looks Like</th><th>Does What</th><th>Key Rule</th></tr></thead>
       <tbody>
@@ -2687,12 +2770,12 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Long Vowels -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Long vowels stretch a vowel sound for exactly one extra beat (mora). Missing or adding a long vowel changes the meaning of a word entirely. The tricky part: the <b>spelling</b> doesn't always match the <b>sound</b>.</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table &mdash; Long Vowel Spelling Rules</h4>
+    <h4 style="">2. Rules Table &mdash; Long Vowel Spelling Rules</h4>
     <table>
       <thead><tr><th>Sound</th><th>Spelled With</th><th>Example</th><th>Reading</th><th>Exception Spelled With</th><th>Exception Example</th></tr></thead>
       <tbody>
@@ -2704,7 +2787,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">Exceptions List &mdash; Words That Use <span lang="ja">おお</span> Instead of <span lang="ja">おう</span></h4>
+    <h4 style="">Exceptions List &mdash; Words That Use <span lang="ja">おお</span> Instead of <span lang="ja">おう</span></h4>
     <table>
       <thead><tr><th>Word</th><th>Reading</th><th>Meaning</th></tr></thead>
       <tbody>
@@ -2717,7 +2800,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples</h4>
+    <h4 style="">3. Contrast Examples</h4>
     <table>
       <thead><tr><th>Short Vowel</th><th>Meaning</th><th>Long Vowel</th><th>Meaning</th></tr></thead>
       <tbody>
@@ -2728,7 +2811,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"E cheats with I, O cheats with U"</b><br>
       The two "cheater" vowels: long "e" is spelled with <span lang="ja">い</span> and long "o" is spelled with <span lang="ja">う</span>. They don't use their own letter &mdash; they cheat by borrowing from a neighbor.<br><br>
@@ -2736,7 +2819,7 @@ body::before {
       <span lang="ja">おおきい</span> (big), <span lang="ja">とおい</span> (far), <span lang="ja">こおり</span> (ice), <span lang="ja">おおさか</span> (Osaka), <span lang="ja">とおり</span> (street).
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP: Spelling long "o" with <span lang="ja">お</span> by default<br>
       ❌ WRONG: <span lang="ja">がっこお</span> for school<br>
@@ -2744,7 +2827,7 @@ body::before {
       <i>Only the ~6 exception words above use <span lang="ja">おお</span>.</i>
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Long Sound</th><th>Default Spelling</th><th>Rare Spelling</th><th>Memory Aid</th></tr></thead>
       <tbody>
@@ -2780,12 +2863,12 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Small っ -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">The small <span lang="ja">っ</span> (chiisai tsu) creates a double consonant by inserting a one-beat pause before the next consonant. It is NOT pronounced as "tsu" &mdash; it is a moment of held silence that makes the next consonant pop harder.</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table</h4>
+    <h4 style="">2. Rules Table</h4>
     <table>
       <thead><tr><th>Rule</th><th>Detail</th></tr></thead>
       <tbody>
@@ -2797,7 +2880,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples &mdash; Minimal Pairs</h4>
+    <h4 style="">3. Contrast Examples &mdash; Minimal Pairs</h4>
     <table>
       <thead><tr><th>Without <span lang="ja">っ</span></th><th>Beats</th><th>Meaning</th><th>With <span lang="ja">っ</span></th><th>Beats</th><th>Meaning</th></tr></thead>
       <tbody>
@@ -2809,14 +2892,14 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"The tiny <span lang="ja">っ</span> is a speed bump"</b><br>
       Imagine driving: you hit a speed bump (<span lang="ja">っ</span>) and your car pauses before continuing. The word <span lang="ja">きって</span> = ki &rarr; [speed bump] &rarr; te.<br><br>
       <b>Physical trick:</b> Clap on each beat. For <span lang="ja">きって</span>, clap 3 times: ki [silent clap] te.
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Pronouncing small <span lang="ja">っ</span> as "tsu"<br>
       ❌ WRONG: Saying <span lang="ja">きって</span> as "ki-tsu-te"<br>
@@ -2830,7 +2913,7 @@ body::before {
       <i>Size matters! Always check if your <span lang="ja">っ</span> is small enough.</i>
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Feature</th><th>Detail</th></tr></thead>
       <tbody>
@@ -2874,12 +2957,12 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Glides -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Glides (combination sounds) fuse an i-column character with a <b>small</b> <span lang="ja">ゃ</span>, <span lang="ja">ゅ</span>, or <span lang="ja">ょ</span> into a single beat. The "i" vowel disappears and gets replaced by the ya/yu/yo sound. They are one of the most common sources of reading errors.</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table</h4>
+    <h4 style="">2. Rules Table</h4>
     <table>
       <thead><tr><th>Rule</th><th>Detail</th></tr></thead>
       <tbody>
@@ -2891,7 +2974,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples &mdash; Size Matters!</h4>
+    <h4 style="">3. Contrast Examples &mdash; Size Matters!</h4>
     <table>
       <thead><tr><th>Small (Glide = 1 beat)</th><th>Reading</th><th>Big (Separate = 2 beats)</th><th>Reading</th><th>Meaning Difference</th></tr></thead>
       <tbody>
@@ -2902,14 +2985,14 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"Small = Swallowed"</b><br>
       The small <span lang="ja">ゃゅょ</span> gets "swallowed" by the preceding character &mdash; they share one beat. The big version stands on its own and gets its own beat.<br><br>
       <b>"Hospital vs Beauty Salon" test:</b> If you mix up <span lang="ja">びょういん</span> and <span lang="ja">びよういん</span>, you might go to the wrong place. This is the #1 example Japanese teachers use to show why size matters.
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Writing full-size <span lang="ja">や/ゆ/よ</span> instead of small<br>
       ❌ WRONG: <span lang="ja">きよう</span> (ki-you, today = different word)<br>
@@ -2922,7 +3005,7 @@ body::before {
       ✅ RIGHT: Only i-column characters combine: <span lang="ja">き、し、ち、に、ひ、み、り</span> (+ voiced versions)
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Feature</th><th>Detail</th></tr></thead>
       <tbody>
@@ -3067,12 +3150,12 @@ body::before {
 
   </div>
   <!-- 7-LAYER EXPANSION: Katakana -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Katakana is the angular, sharp-edged phonetic script used for foreign loanwords, foreign names, onomatopoeia, and emphasis. It has the same 46 base sounds as hiragana but with different shapes, plus a special long vowel dash (<span lang="ja">ー</span>) that hiragana does not use.</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table &mdash; Katakana-Specific Rules</h4>
+    <h4 style="">2. Rules Table &mdash; Katakana-Specific Rules</h4>
     <table>
       <thead><tr><th>Rule</th><th>Detail</th><th>Example</th></tr></thead>
       <tbody>
@@ -3084,7 +3167,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Confusable Pairs Diagram</h4>
+    <h4 style="">3. Confusable Pairs Diagram</h4>
     <table>
       <thead><tr><th>Pair</th><th>Character 1</th><th>Character 2</th><th>How to Tell Apart</th></tr></thead>
       <tbody>
@@ -3096,7 +3179,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b><span lang="ja">シ</span> vs <span lang="ja">ツ</span>: "She smiles sideways, TSUnami crashes down"</b><br>
       <span lang="ja">シ</span> (shi) looks like a smiling face turned sideways &mdash; the dots are horizontal like eyes, curve is a smile going UP.<br>
@@ -3106,7 +3189,7 @@ body::before {
       <span lang="ja">ソ</span> (so) &mdash; the stroke falls downward (think "SO = SOmething falling down").
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Using <span lang="ja">ー</span> (long vowel dash) in hiragana<br>
       ❌ WRONG: <span lang="ja">せんせー</span><br>
@@ -3118,7 +3201,7 @@ body::before {
       ✅ TIP: Focus on stroke DIRECTION. Horizontal dots = <span lang="ja">シ</span>. Vertical dots = <span lang="ja">ツ</span>.
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Feature</th><th>Katakana Rule</th><th>Hiragana Rule</th></tr></thead>
       <tbody>
@@ -3407,12 +3490,12 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Ch3 Verbs -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Japanese verbs belong to one of three groups that determine how they conjugate. In polite speech (Ch 3 scope), you use the <span lang="ja">〜ます</span> form. Knowing a verb's group is critical because it affects <b>every single conjugation</b> you'll learn from here on (te-form, past tense, potential, etc.).</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table &mdash; Verb Group Identification</h4>
+    <h4 style="">2. Rules Table &mdash; Verb Group Identification</h4>
     <table>
       <thead><tr><th>Group</th><th>Also Called</th><th>Dictionary Form Ending</th><th>How to Identify (ます form)</th><th>Ch3 Examples</th></tr></thead>
       <tbody>
@@ -3422,7 +3505,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">Polite Conjugation Table</h4>
+    <h4 style="">Polite Conjugation Table</h4>
     <table>
       <thead><tr><th>Form</th><th>Affirmative</th><th>Negative</th><th>Example (<span lang="ja">のむ</span>)</th></tr></thead>
       <tbody>
@@ -3431,7 +3514,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples</h4>
+    <h4 style="">3. Contrast Examples</h4>
     <table>
       <thead><tr><th>Sentence</th><th>Meaning</th><th>Verb Group</th></tr></thead>
       <tbody>
@@ -3441,7 +3524,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"The Impostor List" &mdash; U-verbs disguised as Ru-verbs</b><br>
       These look like they end in -iru/-eru but are actually Group 1:<br>
@@ -3449,7 +3532,7 @@ body::before {
       Memory trick: <b>"Kaeru Hairu Shiru Kiru Hashiru"</b> &mdash; "The returning entering knowing cutting runner" is always a U-verb.
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Assuming all -iru/-eru verbs are Ru-verbs<br>
       ❌ WRONG: Treating <span lang="ja">かえる</span> (return) as Group 2<br>
@@ -3466,7 +3549,7 @@ body::before {
       ✅ RIGHT: <span lang="ja">たべません<b>でした</b></span> (past negative = ません + でした)
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">6. Decision Tree &mdash; "What Group Is This Verb?"</h4>
+    <h4 style="">6. Decision Tree &mdash; "What Group Is This Verb?"</h4>
     <div style="max-width:100%;overflow-x:auto;margin-bottom:14px">
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-family:monospace;min-width:320px">
         <div style="background:#2d6a6f;color:white;padding:8px 16px;border-radius:20px;text-align:center;font-weight:bold">Is it <span lang="ja">する</span> or <span lang="ja">くる</span> (or a する compound)?</div>
@@ -3503,7 +3586,7 @@ body::before {
       </div>
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Group</th><th>Affirmative</th><th>Negative</th><th>Past Aff.</th><th>Past Neg.</th></tr></thead>
       <tbody>
@@ -3716,12 +3799,12 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Frequency Adverbs -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Frequency adverbs tell how often something happens. The critical rule in Japanese is that some adverbs <b>require negative verb forms</b>. Using <span lang="ja">あまり</span> or <span lang="ja">ぜんぜん</span> with an affirmative verb is a grammar error.</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table &mdash; Complete Frequency Spectrum</h4>
+    <h4 style="">2. Rules Table &mdash; Complete Frequency Spectrum</h4>
     <table>
       <thead><tr><th>Frequency</th><th>Japanese</th><th>English</th><th>%</th><th>Verb Form Required</th><th>Position</th></tr></thead>
       <tbody>
@@ -3734,7 +3817,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples</h4>
+    <h4 style="">3. Contrast Examples</h4>
     <table>
       <thead><tr><th>Correct</th><th>Meaning</th><th>Incorrect</th><th>Why Wrong</th></tr></thead>
       <tbody>
@@ -3744,7 +3827,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"Amari and Zenzen are NEGATIVE people"</b><br>
       Think of <span lang="ja">あまり</span> and <span lang="ja">ぜんぜん</span> as two grumpy, negative people who REFUSE to hang out with positive verbs. They will only work with <span lang="ja">〜ません</span>.<br><br>
@@ -3752,7 +3835,7 @@ body::before {
       <b>I</b>tsumo, <b>T</b>aitei, <b>Y</b>oku, <b>T</b>okidoki, <b>A</b>mari, <b>Z</b>enzen = 100% down to 0%.
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ THE BIG TRAP: Using <span lang="ja">あまり/ぜんぜん</span> with affirmative verbs<br>
       ❌ WRONG: <span lang="ja">ぜんぜん たべます</span> (I eat not at all??? Nonsense)<br>
@@ -3760,7 +3843,7 @@ body::before {
       <i>Rule: <span lang="ja">あまり</span>/<span lang="ja">ぜんぜん</span> = negative adverb &rarr; MUST pair with negative verb.</i>
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Adverb</th><th>Verb Form</th><th>Memory</th></tr></thead>
       <tbody>
@@ -4068,12 +4151,12 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Demonstratives -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">The Ko-So-A-Do system is how Japanese points at things. Every demonstrative word starts with one of four prefixes based on distance from the speaker and listener. This is a <b>grid system</b> &mdash; once you learn the pattern, you can predict dozens of words.</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Full Ko-So-A-Do Grid</h4>
+    <h4 style="">2. Full Ko-So-A-Do Grid</h4>
     <table>
       <thead><tr><th>Category</th><th style="background:#3498db">こ- (Near Speaker)</th><th style="background:#e74c3c">そ- (Near Listener)</th><th style="background:#27ae60">あ- (Far from Both)</th><th style="background:#f39c12">ど- (Question)</th></tr></thead>
       <tbody>
@@ -4084,7 +4167,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples &mdash; これ vs この</h4>
+    <h4 style="">3. Contrast Examples &mdash; これ vs この</h4>
     <table>
       <thead><tr><th>Correct</th><th>Translation</th><th>Incorrect</th><th>Why Wrong</th></tr></thead>
       <tbody>
@@ -4094,7 +4177,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"Ko = Close, So = So-so (middle), A = Away, Do = Don't know"</b><br>
       <b>こ</b> = <b>C</b>lose to me (ko- sounds like "close")<br>
@@ -4103,7 +4186,7 @@ body::before {
       <b>ど</b> = <b>D</b>on't know (question)
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Using <span lang="ja">これ</span> to modify a noun<br>
       ❌ WRONG: <span lang="ja">これほん</span> or <span lang="ja">これのほん</span><br>
@@ -4115,7 +4198,7 @@ body::before {
       <i>The system is based on proximity to speaker vs listener, not absolute distance.</i>
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Need to...</th><th>Use</th><th>Pattern</th></tr></thead>
       <tbody>
@@ -4217,12 +4300,12 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Adjectives -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Japanese has two completely different kinds of adjectives that conjugate differently. <b>い-adjectives</b> change their ending to conjugate; <b>な-adjectives</b> behave more like nouns and use <span lang="ja">じゃありません</span> for negation. The trap is that some な-adjectives <i>look</i> like い-adjectives.</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table &mdash; Adjective Conjugation (Non-Past)</h4>
+    <h4 style="">2. Rules Table &mdash; Adjective Conjugation (Non-Past)</h4>
     <table>
       <thead><tr><th>Function</th><th>い-adjective</th><th>な-adjective</th></tr></thead>
       <tbody>
@@ -4232,7 +4315,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">The <span lang="ja">いい</span> (good) Irregular</h4>
+    <h4 style="">The <span lang="ja">いい</span> (good) Irregular</h4>
     <table>
       <thead><tr><th>Form</th><th>Regular い-adj pattern</th><th><span lang="ja">いい</span> (IRREGULAR)</th></tr></thead>
       <tbody>
@@ -4242,7 +4325,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples</h4>
+    <h4 style="">3. Contrast Examples</h4>
     <table>
       <thead><tr><th>い-adjective</th><th>な-adjective (looks like い!)</th></tr></thead>
       <tbody>
@@ -4251,7 +4334,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"KiYuRi" &mdash; the Fake-い Club</b><br>
       <b>Ki</b>rei (<span lang="ja">きれい</span> pretty), <b>Yu</b>umei (<span lang="ja">ゆうめい</span> famous), <b>Ri</b>ppa (<span lang="ja">りっぱ</span> splendid).<br>
@@ -4259,7 +4342,7 @@ body::before {
       <b>"いい is WEIRD"</b>: <span lang="ja">いい</span> is the only adjective that changes its stem when conjugated. Affirmative = <span lang="ja">いい</span>. Everything else = <span lang="ja">よ-</span>.
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Treating <span lang="ja">きれい</span> as an い-adjective<br>
       ❌ WRONG: <span lang="ja">きれいくありません</span><br>
@@ -4273,7 +4356,7 @@ body::before {
       <i><span lang="ja">いい</span> changes to <span lang="ja">よ-</span> in all forms except basic affirmative.</i>
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">6. Decision Tree &mdash; "い-adj or な-adj?"</h4>
+    <h4 style="">6. Decision Tree &mdash; "い-adj or な-adj?"</h4>
     <div style="max-width:100%;overflow-x:auto;margin-bottom:14px">
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-family:monospace;min-width:320px">
         <div style="background:#2d6a6f;color:white;padding:8px 16px;border-radius:20px;text-align:center;font-weight:bold">Does the word end in い?</div>
@@ -4300,7 +4383,7 @@ body::before {
       </div>
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Task</th><th>い-adj</th><th>な-adj</th><th><span lang="ja">いい</span> (irregular)</th></tr></thead>
       <tbody>
@@ -5439,7 +5522,7 @@ body::before {
   
   <!-- Study Content -->
   <div class="study-content" id="study_ch6">
-    class="card" data-section="ch6-vocabulary">
+<div class="card" data-section="ch6-vocabulary">
   <div class="card-header">CHAPTER 6 VOCABULARY &mdash; LEISURE TIME &amp; ACTIVITIES</div>
   <div class="card-body" style="display:block"><div style="padding:12px 14px;overflow-x:auto">
     <table>
@@ -5518,14 +5601,23 @@ body::before {
   <div class="card-body">
     <div class="pl">
       <b>KEY TERM</b>: time_traveling_descriptors (temporal inflection)<br><br>
-      <b>い-adjectives:</b> Drop the final い.<br>
-      • Affirmative: + <b>かったです</b> (たのしい ➔ たのしかったです)<br>
-      • Negative: + <b>くなかったです</b> (たのしくなかったです)<br><br>
-      <b>な-adjectives &amp; Nouns:</b> Change です.<br>
-      • Affirmative: ➔ <b>でした</b> (にぎやかでした)<br>
-      • Negative: ➔ <b>じゃなかったです</b> (にぎやかじゃなかったです)
-      <div class="trap">⚠️ BIGGEST TRAP: The past tense of いい (good) is <b>よかったです</b>. NEVER say "いかったです" — that is a rookie mistake. Negative past is <b>よくなかったです</b>.<br><br>
-      ⚠️ TRAP 2: きれい looks like an い-adj, but it's a な-adj! Past tense is <b>きれいでした</b>, NOT "きれかったです".</div>
+      <b>What it is:</b><br>
+      Adjectives in past tense describe how something <i>was</i>. The same rules you know for present tense apply — but now the ending shifts to signal the past.<br><br>
+      <b>Why it matters:</b><br>
+      You need this for reviews ("the movie was boring"), memories ("the trip was fun"), and storytelling. Without past adjectives, you can only describe the present.<br><br>
+      <b>How — い-adjectives:</b><br>
+      Drop the final い, then add the past ending.<br>
+      • ✅ Affirm: <span lang="ja">〜<b>かったです</b></span> (たのしい → たのし<b>かったです</b>)<br>
+      • ✅ Neg: <span lang="ja">〜<b>くなかったです</b></span> (たのし<b>くなかったです</b>)<br><br>
+      <b>How — な-adjectives &amp; Nouns:</b><br>
+      The adjective stem stays the same; only です changes.<br>
+      • ✅ Affirm: <span lang="ja">〜<b>でした</b></span> (にぎやか<b>でした</b>)<br>
+      • ✅ Neg: <span lang="ja">〜<b>じゃなかったです</b></span> (にぎやか<b>じゃなかったです</b>)<br><br>
+      <b>When to use it:</b><br>
+      Anytime you describe a past state — reviews, memories, weather reports, diary entries. If the adjective describes something that existed or happened in the past, conjugate it.<br><br>
+      <b>The irregular + sneaky な trap:</b>
+      <div class="trap">⚠️ <b>いい</b> (good) is fully irregular: past = <b>よかったです</b>, neg past = <b>よくなかったです</b>. NEVER "いかったです" — this is the #1 exam mistake.<br><br>
+      ⚠️ <b>きれい</b> ends in い but is a な-adj! Past = <b>きれいでした</b> (NOT "きれかったです").</div>
     </div>
     <div class="pv">
       <table style="width: 90%; margin: 0 auto;">
@@ -5563,12 +5655,12 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Adjective Past Tense -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">Adjective past tense lets you describe how things <b>were</b>. い-adjectives change their ending; な-adjectives change <span lang="ja">です</span>. The irregular <span lang="ja">いい</span> changes to <span lang="ja">よ-</span> in all past forms.</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Complete 2x2 Conjugation Grid</h4>
+    <h4 style="">2. Complete 2x2 Conjugation Grid</h4>
     <h5 style="margin:8px 0 4px 0;color:#2980b9;">い-adjectives (e.g., <span lang="ja">たのしい</span> = fun)</h5>
     <table>
       <thead><tr><th></th><th>Affirmative</th><th>Negative</th></tr></thead>
@@ -5594,7 +5686,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples</h4>
+    <h4 style="">3. Contrast Examples</h4>
     <table>
       <thead><tr><th>い-adj pattern</th><th>な-adj pattern</th><th>Why different</th></tr></thead>
       <tbody>
@@ -5603,7 +5695,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"い-adjectives do their own work, な-adjectives make です do the work"</b><br>
       &bull; い-adj past: The adjective itself changes (<span lang="ja">たのしい &rarr; たのしかった</span>)<br>
@@ -5612,7 +5704,7 @@ body::before {
       Affirmative present = lazy, stays <span lang="ja">いい</span>. Any conjugation = transforms to <span lang="ja">よ-</span>.
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Past of <span lang="ja">いい</span><br>
       ❌ WRONG: <span lang="ja">いかったです</span><br>
@@ -5625,7 +5717,7 @@ body::before {
       ✅ RIGHT: <span lang="ja">きれいでした</span> (な-adj pattern)
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Type</th><th>Past Aff. Formula</th><th>Past Neg. Formula</th></tr></thead>
       <tbody>
@@ -5643,19 +5735,24 @@ body::before {
   <div class="card-body">
     <div class="pl">
       <b>KEY TERM</b>: frankenstein_verbs (sequential conjunction)<br><br>
-      The て-form connects verb phrases ("and then"). The final verb determines the tense.<br>
-      <i>Ex:</i> <span lang="ja">しんぶんをよん<b>で</b>、がっこうにいきます。</span><br><br>
-      <b>る-verbs &amp; Irregular:</b> Drop ます, add て.<br>
-      • たべます ➔ たべて | きます ➔ きて | します ➔ して<br><br>
-      <b>う-verbs (Look at sound before ます):</b><br>
-      • し ➔ して (はなして)<br>
-      • き ➔ いて (きいて) | ぎ ➔ いで (およいで)<br>
-      • い/ち/り ➔ って (まって)<br>
-      • み/び/に ➔ んで (よんで)<br><br>
-      <b>Adjective て-form (connecting adjs):</b><br>
-      • い-adj: ➔ <b>くて</b> (ひろくて) | いい ➔ <b>よくて</b><br>
-      • な-adj: ➔ <b>で</b> (にぎやかで)
-      <div class="trap">⚠️ TRAP: いきます (to go) is an EXCEPTION. Based on the rules (き), it should be "いきて", but it is actually <b>いって</b>. Memorize this now.</div>
+      <b>What it is:</b><br>
+      The て-form is the connector form of Japanese verbs. It lets you chain actions ("I ate breakfast <i>and then</i> went to school") and make polite requests (〜てください). It is NOT a complete sentence on its own — it always leads to something else.<br><br>
+      <b>Why it matters:</b><br>
+      て-form unlocks dozens of future grammar patterns: 〜ている (ongoing action), 〜てもいい (permission), 〜てから (after doing), 〜てみる (try doing). Learning it now is an investment in everything from Ch7 onward.<br><br>
+      <b>How — Group 2 &amp; Irregular (easy):</b><br>
+      Drop ます, add て.<br>
+      • <span lang="ja">たべます → たべ<b>て</b></span> | <span lang="ja">きます → き<b>て</b></span> | <span lang="ja">します → し<b>て</b></span><br><br>
+      <b>How — Group 1 (look at sound before ます):</b><br>
+      • し → <b>して</b> (はなします → はなして)<br>
+      • き → <b>いて</b> (ききます → きいて) | ぎ → <b>いで</b> (およぎます → およいで)<br>
+      • い/ち/り → <b>って</b> (まちます → まって)<br>
+      • み/び/に → <b>んで</b> (よみます → よんで)<br><br>
+      <b>When to use it:</b><br>
+      • Chain 2+ actions in order: <span lang="ja">〜て、〜ます</span><br>
+      • Make a request: <span lang="ja">〜てください</span> (please do…)<br>
+      • Final verb sets the tense for the whole chain.<br><br>
+      <b>The one exception you must memorize:</b>
+      <div class="trap">⚠️ <span lang="ja"><b>いきます</b></span> (to go) breaks the き→いて rule. Expected: <span lang="ja">いいて</span> ❌ — Actual: <span lang="ja"><b>いって</b></span> ✅. This is the single most-tested exception in Nakama.</div>
     </div>
     <div class="pv">
       <div style="overflow-x:auto">
@@ -5736,12 +5833,12 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Te-Form (THE BIG ONE) -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0">The <span lang="ja">て</span>-form is the Swiss Army knife of Japanese grammar. It connects actions in sequence ("I ate breakfast <b>and then</b> went to school"), makes requests (<span lang="ja">〜てください</span>), and enables dozens of grammar patterns. Mastering the conjugation rules for Group 1 verbs is the single most important skill in this course.</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table &mdash; Complete て-Form Rules</h4>
+    <h4 style="">2. Rules Table &mdash; Complete て-Form Rules</h4>
     <table>
       <thead><tr><th>Group</th><th>Sound before ます</th><th>て-form ending</th><th>Example (ます &rarr; て)</th></tr></thead>
       <tbody>
@@ -5759,7 +5856,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast Examples</h4>
+    <h4 style="">3. Contrast Examples</h4>
     <table>
       <thead><tr><th>Verb</th><th>Correct て-form</th><th>Common Wrong Answer</th><th>Why Wrong</th></tr></thead>
       <tbody>
@@ -5769,7 +5866,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic &mdash; The て-Form Song</h4>
+    <h4 style="">4. Mnemonic &mdash; The て-Form Song</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>Sing to the tune of "Santa Claus Is Coming to Town":</b><br><br>
       <span lang="ja">い、ち、り</span> &rarr; <b>って</b><br>
@@ -5780,7 +5877,7 @@ body::before {
       <b>The いく Exception: "いく is a rebel &mdash; it goes って instead of いて"</b>
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: <span lang="ja">いきます &rarr; いいて</span><br>
       ❌ WRONG: <span lang="ja">いいて</span> (following き&rarr;いて rule)<br>
@@ -5797,7 +5894,7 @@ body::before {
       ✅ RIGHT: <span lang="ja">およいで</span> &mdash; voiced consonant (ぎ) = voiced ending (で)
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">6. Decision Tree &mdash; て-Form Flowchart</h4>
+    <h4 style="">6. Decision Tree &mdash; て-Form Flowchart</h4>
     <div style="max-width:100%;overflow-x:auto;margin-bottom:14px">
       <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-family:monospace;min-width:340px">
         <div style="background:#2d6a6f;color:white;padding:8px 16px;border-radius:20px;text-align:center;font-weight:bold">What group is the verb?</div>
@@ -5822,7 +5919,7 @@ body::before {
       </div>
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Before ます</th><th>て-form</th><th>Mnemonic</th></tr></thead>
       <tbody>
@@ -5842,16 +5939,25 @@ body::before {
   <div class="card-header">PARTICLES と AND に (Ch 6 Additions)</div>
   <div class="card-body">
     <div class="pl">
-      <b>KEY TERM</b>: social_butterflies (association and direction)<br><br>
-      <b>と uses:</b><br>
-      1. "With" (together with someone): <span lang="ja">ともだち<b>と</b> べんきょうしました。</span><br>
-      2. "And" (connecting NOUNS only): <span lang="ja">そうじ<b>と</b> せんたくをしました。</span><br><br>
-      <b>に new uses:</b><br>
-      1. Recipient/Target: <span lang="ja">せんせい<b>に</b> ききます。</span> (Ask the teacher).<br>
-      2. Purpose of movement: [Destination] に [Verb Stem] に いく.<br>
-      <i>Ex:</i> <span lang="ja">たいいくかん<b>に</b> およぎ<b>に</b> いきます。</span> (Go to the gym to swim).
-      <div class="trap">⚠️ TRAP 1: Never use と to connect verbs. "そうじとせんたくをした" is okay (two nouns), but you must use て-form to connect actions.<br>
-      ⚠️ TRAP 2: と vs に with verbs like あいます/はなします. <br>・せんせいに はなします = I speak TO the teacher (one-way).<br>・せんせいと はなします = I converse WITH the teacher (two-way).</div>
+      <b>KEY TERM</b>: social_butterflies (association &amp; direction)<br><br>
+      <b>What と does:</b><br>
+      と connects people or things in a mutual or listed way.<br>
+      1. <i>Togetherness</i> — do something WITH someone: <span lang="ja">ともだち<b>と</b> えいがを みました。</span> ("Watched a movie with a friend.")<br>
+      2. <i>Listing nouns</i> — A and B: <span lang="ja">そうじ<b>と</b> せんたくをしました。</span> ("Did cleaning and laundry.")<br><br>
+      <b>What に adds in Ch 6:</b><br>
+      に already marks location/time. Ch 6 adds two new uses:<br>
+      1. <i>Recipient/Target</i> — action aimed AT someone: <span lang="ja">せんせい<b>に</b> ききます。</span> ("Ask the teacher.")<br>
+      2. <i>Purpose of movement</i> — go somewhere TO do something:<br>
+      &nbsp;&nbsp;[Place] <b>に</b> [Verb stem] <b>に</b> いく/きます<br>
+      &nbsp;&nbsp;<span lang="ja">たいいくかん<b>に</b> およぎ<b>に</b> いきます。</span> ("Go to the gym to swim.")<br><br>
+      <b>When to use と vs に with people:</b><br>
+      と = <i>mutual</i> (both sides act): はなします with と → "converse together"<br>
+      に = <i>one-way</i> (you act toward them): はなします with に → "speak TO them"<br><br>
+      <b>Why this matters:</b><br>
+      Japanese particles encode the direction of action that English leaves implicit. Swapping と/に changes the whole relationship — "I talked TO my teacher" vs "I talked WITH my teacher" are different social dynamics.
+      <div class="trap">⚠️ TRAP 1: と lists NOUNS only — never use it to chain verbs. Use て-form instead: <span lang="ja">そうじして、せんたくしました</span> ✓ &nbsp; <span lang="ja">そうじとせんたくしました</span> ✗<br>
+      ⚠️ TRAP 2: Purpose に uses the <i>verb stem</i> (not て-form, not dictionary form). <span lang="ja">たべ<b>に</b>いく</span> ✓ &nbsp; <span lang="ja">たべて<b>に</b>いく</span> ✗<br>
+      ⚠️ TRAP 3: あいます always takes に (not と): <span lang="ja">ともだち<b>に</b>あいます</span> ✓ — "meet" in Japanese is one-directional.</div>
     </div>
     <div class="pv">
       <div style="overflow-x:auto">
@@ -5906,19 +6012,46 @@ body::before {
 <!-- SECTION: TE-FORM ADJECTIVES -->
 <div class="card" data-section="te-form-adjectives">
   <div class="card-header">&#12390;-FORM FOR ADJECTIVES &amp; NOUNS (CONNECTING DESCRIPTIONS)</div>
-  <div class="card-body" style="flex-direction: column;">
-    <div style="padding: 14px; font-size: 12.5px; line-height: 1.75;">
-      <b>Use &#12390;-form to connect multiple adjectives/nouns in one sentence.</b><br><br>
-      <table>
-        <thead><tr><th>Type</th><th>Formation</th><th>Example</th><th>Meaning</th></tr></thead>
-        <tbody>
-          <tr><td>&#12356;-adjective</td><td>Drop &#12356; &rarr; add &#12367;&#12390;</td><td class="ja">&#12362;&#12362;&#12365;<b>&#12367;&#12390;</b>&#12289;&#12365;&#12428;&#12356;&#12391;&#12377;</td><td>big AND pretty</td></tr>
-          <tr><td>&#12394;-adjective</td><td>Stem + &#12391;</td><td class="ja">&#12375;&#12378;&#12363;<b>&#12391;</b>&#12289;&#12365;&#12428;&#12356;&#12391;&#12377;</td><td>quiet AND pretty</td></tr>
-          <tr><td>Noun</td><td>Noun + &#12391;</td><td class="ja">&#12364;&#12367;&#12379;&#12356;<b>&#12391;</b>&#12289;&#12395;&#12411;&#12435;&#12376;&#12435;&#12391;&#12377;</td><td>student AND Japanese</td></tr>
-        </tbody>
-      </table>
-      <div class="trap">&#9888;&#65039; TRAP: Only the FINAL adjective/verb in the chain carries the tense.<br>
-      &#10004; <span class="ja">&#12362;&#12362;&#12365;&#12367;&#12390;&#12289;&#12365;&#12428;&#12356;<b>&#12391;&#12375;&#12383;</b></span> (was big and pretty) &mdash; past tense on LAST item only</div>
+  <div class="card-body">
+    <div class="pl">
+      <b>KEY TERM</b>: description_chain (connecting adjectives like a list)<br><br>
+      <b>What it is:</b><br>
+      て-form for adjectives/nouns lets you describe something with multiple qualities in one smooth sentence — instead of two separate sentences.<br>
+      <i>Without it:</i> "This room is big. It is quiet." (two sentences)<br>
+      <i>With it:</i> <span lang="ja">このへやは ひろ<b>くて</b>、しずかです。</span> ("This room is big and quiet.")<br><br>
+      <b>How to form:</b><br>
+      • い-adj: drop い → add <b>くて</b> &nbsp; (<span lang="ja">おおき<b>い</b> → おおき<b>くて</b></span>)<br>
+      • な-adj: stem + <b>で</b> &nbsp; (<span lang="ja">しずか → しずか<b>で</b></span>)<br>
+      • Noun: noun + <b>で</b> &nbsp; (<span lang="ja">がくせい → がくせい<b>で</b></span>)<br><br>
+      <b>When to use it:</b><br>
+      • Stacking descriptions: <span lang="ja">やすくて、おいしい。</span> (cheap and tasty)<br>
+      • Describing a person/thing with multiple traits<br>
+      • Combining noun + adjective: <span lang="ja">にほんじんで、やさしいです。</span><br><br>
+      <b>Why tense only goes on the last word:</b><br>
+      In Japanese, only the final predicate carries tense. Everything before it is in "neutral" て-form — it inherits tense from the end. This is true for verbs AND adjectives.
+      <div class="trap">⚠️ TRAP 1: Only the LAST word in the chain carries tense. <span lang="ja">おおきくて、きれい<b>でした</b></span> = "was big and pretty" — not でした on each part.<br>
+      ⚠️ TRAP 2: いい (good) is irregular. て-form = <span lang="ja">よ<b>くて</b></span>, NOT いくて.<br>
+      ⚠️ TRAP 3: な-adj て-form ends in で, which looks like the で particle — they are different things.</div>
+    </div>
+    <div class="pv">
+      <div style="overflow-x:auto">
+      <div style="min-width:380px;max-width:680px;margin:0 auto;font-family:'Noto Sans JP',sans-serif;">
+        <div style="text-align:center;font-weight:bold;font-size:14px;margin-bottom:12px">て-FORM ADJECTIVE CONNECTIONS</div>
+        <table>
+          <thead><tr><th>Type</th><th>Formation</th><th>Example</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>い-adjective</td><td>Drop い → add くて</td><td class="ja">おおき<b>くて</b>、きれいです</td><td>big AND pretty</td></tr>
+            <tr><td>な-adjective</td><td>Stem + で</td><td class="ja">しずか<b>で</b>、きれいです</td><td>quiet AND pretty</td></tr>
+            <tr><td>Noun</td><td>Noun + で</td><td class="ja">がくせい<b>で</b>、にほんじんです</td><td>student AND Japanese</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:12px;padding:10px 14px;background:rgba(212,168,67,0.07);border-left:3px solid var(--gold-dark);border-radius:0 6px 6px 0;font-size:12px;line-height:1.8">
+          <b style="color:var(--gold)">TENSE RULE:</b> Tense lives only on the <b>final</b> word.<br>
+          <span lang="ja">おおきくて、きれい<b>でした</b></span> = "was big and pretty" ✓<br>
+          <span lang="ja" style="color:#e55">おおき<b>かったくて</b></span> = ✗ (never put past tense on a chained adjective)
+        </div>
+      </div>
+      </div>
     </div>
   </div>
 </div>
@@ -5928,13 +6061,28 @@ body::before {
   <div class="card-body">
     <div class="pl">
       <b>KEY TERM</b>: shooting_your_shot (polite solicitation)<br><br>
-      To invite someone, take the negative polite form and add か.<br>
-      <b>Pattern:</b> [Verb] ませんか = "Why don't we ~?" / "Won't you ~?"<br>
-      <i>Ex:</i> <span lang="ja">いっしょに ピクニックに いき<b>ませんか</b>。</span><br><br>
-      <b>Accepting:</b> <span lang="ja">ええ、いき<b>ましょう</b>。</span> (Yes, let's go.)<br><br>
-      <b>Declining (The Japanese Way):</b> Flat out saying "no" is rude. Soften the blow.<br>
-      <span lang="ja">すみません、ちょっと つごうが わるくて。</span> (Sorry, it's a little inconvenient.)
-      <div class="trap">⚠️ TRAP: Do not confuse ませんか (inviting/asking) with ましょう (proposing/let's). Use ませんか when giving the other person a choice. Use ましょう to enthusiastically agree.</div>
+      <b>What it is:</b><br>
+      Two verb endings for social plans — one for asking, one for agreeing.<br>
+      • <b>ませんか</b> = soft invitation: "Won't you ~?" / "Would you like to ~?"<br>
+      • <b>ましょう</b> = enthusiastic proposal: "Let's ~!" / "Shall we ~?"<br><br>
+      <b>How to form:</b><br>
+      Take the polite stem (ます form minus ます):<br>
+      &nbsp;&nbsp;<span lang="ja">いきます → いき + ませんか → いきませんか</span><br>
+      &nbsp;&nbsp;<span lang="ja">いきます → いき + ましょう → いきましょう</span><br><br>
+      <b>When to use which:</b><br>
+      • ませんか — you're OFFERING an invitation (choice is theirs):<br>
+      &nbsp;&nbsp;<span lang="ja">いっしょに えいがを みませんか。</span> ("Want to watch a movie together?")<br>
+      • ましょう — you're AGREEING or both sides already want to go:<br>
+      &nbsp;&nbsp;<span lang="ja">じゃ、いきましょう！</span> ("Okay, let's go!")<br><br>
+      <b>Why Japanese declines softly:</b><br>
+      Blunt refusals disrupt harmony (和). The standard soft decline leaves the reason vague so no one loses face:<br>
+      <span lang="ja">すみません、ちょっと つごうが わるくて…</span><br>
+      ("Sorry, it's a little… inconvenient.") — trailing off signals no without saying no.<br><br>
+      <b>Why this matters:</b><br>
+      ませんか/ましょう are the gateway to social Japanese — making plans, accepting invitations, suggesting activities. Without them you can only describe things, not interact.
+      <div class="trap">⚠️ TRAP 1: ませんか ≠ ましょう. ませんか opens the invitation; ましょう closes it. Don't use ましょう to initially invite — it sounds like you're assuming they'll come.<br>
+      ⚠️ TRAP 2: Don't say just "いいえ" to decline. It sounds blunt and rude. Always add ちょっと + a vague reason + trailing …<br>
+      ⚠️ TRAP 3: ましょうか = "Shall I ~?" (offering help, softer than ましょう alone). Context matters.</div>
     </div>
     <div class="pv">
       <div style="overflow-x:auto">
@@ -5986,12 +6134,12 @@ body::before {
     </div>
   </div>
   <!-- 7-LAYER EXPANSION: Invitations -->
-  <div style="padding:14px;border-top:2px solid #eee">
+  <div class="expansion">
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">1. What Is It</h4>
+    <h4 style="">1. What Is It</h4>
     <p style="font-size:13px;line-height:1.6;margin:0 0 14px 0"><span lang="ja">〜ませんか</span> is the polite way to invite someone to do something. It literally uses the negative question form ("won't you...?") which sounds softer and less pushy than a direct suggestion. <span lang="ja">〜ましょう</span> is the enthusiastic "let's!" used to accept or propose.</p>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">2. Rules Table</h4>
+    <h4 style="">2. Rules Table</h4>
     <table>
       <thead><tr><th>Pattern</th><th>Form</th><th>Function</th><th>Example</th></tr></thead>
       <tbody>
@@ -6001,7 +6149,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">Declining Patterns</h4>
+    <h4 style="">Declining Patterns</h4>
     <table>
       <thead><tr><th>Pattern</th><th>Japanese</th><th>Meaning</th><th>Politeness</th></tr></thead>
       <tbody>
@@ -6011,7 +6159,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">3. Contrast &mdash; <span lang="ja">ませんか</span> vs <span lang="ja">ましょう</span></h4>
+    <h4 style="">3. Contrast &mdash; <span lang="ja">ませんか</span> vs <span lang="ja">ましょう</span></h4>
     <table>
       <thead><tr><th><span lang="ja">ませんか</span></th><th><span lang="ja">ましょう</span></th></tr></thead>
       <tbody>
@@ -6022,7 +6170,7 @@ body::before {
       </tbody>
     </table>
 
-    <h4 style="margin:14px 0 8px 0;color:var(--gold);">4. Mnemonic</h4>
+    <h4 style="">4. Mnemonic</h4>
     <div style="background:rgba(168,85,247,0.08);border-left:3px solid #a855f7;padding:12px;border-radius:4px;font-size:13px;margin-bottom:14px">
       <b>"ませんか = asking permission, ましょう = already decided"</b><br>
       Think of <span lang="ja">ませんか</span> as opening a door gently (the other person can walk through or not).<br>
@@ -6031,7 +6179,7 @@ body::before {
       <span lang="ja">ちょっと...</span> + trailing off = the Japanese "not today." You don't even need to finish the sentence. Everyone understands.
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">5. TRAP Warnings</h4>
+    <h4 style="">5. TRAP Warnings</h4>
     <div class="trap" style="margin-bottom:8px">
       ⚠️ TRAP #1: Using <span lang="ja">ましょう</span> to invite (too pushy)<br>
       ❌ WRONG: <span lang="ja">えいがを みましょう。</span> (as an invitation to a stranger)<br>
@@ -6044,7 +6192,7 @@ body::before {
       ✅ RIGHT: <span lang="ja">すみません、ちょっと...</span> (Soften with <span lang="ja">ちょっと</span>)
     </div>
 
-    <h4 style="margin:0 0 8px 0;color:var(--gold);">7. Cheat Sheet</h4>
+    <h4 style="">7. Cheat Sheet</h4>
     <table>
       <thead><tr><th>Situation</th><th>Use</th><th>Example</th></tr></thead>
       <tbody>
@@ -6391,7 +6539,7 @@ body::before {
 <div class="card" data-section="numbers-time-travel">
   <div class="card-header">TRAVEL & TIME — COMPLETE REFERENCE (Ch 5)</div>
   <div class="card-body" style="flex-direction: column;">
-    <div style="padding: 14px 18px; font-size: 13px; line-height: 1.6;">
+    <div class="rich-body">
 
       <h3 style="color: var(--gold); margin-top: 0;">Numbers 1-10</h3>
       <table>
@@ -6543,7 +6691,7 @@ body::before {
 <div class="card" data-section="grammar-patterns">
   <div class="card-header">SENTENCE PATTERN TEMPLATES — Ch 1-6 (DETAILED)</div>
   <div class="card-body" style="flex-direction: column;">
-    <div style="padding: 14px 18px; font-size: 13px; line-height: 1.6;">
+    <div class="rich-body">
 
       <h3 style="color: var(--gold); margin-top: 0;">Ch 2 Grammar Patterns</h3>
 
@@ -7054,7 +7202,7 @@ body::before {
 <div class="card" data-section="struct-ch1">
   <div class="card-header">CH 1: SELF-INTRODUCTION &amp; CLASSROOM REQUESTS</div>
   <div class="card-body" style="display:block">
-    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+    <div class="rich-body">
 
       <h3 style="color:var(--gold);margin-top:0">Self-Introduction Formula (<span lang="ja">はじめまして</span> Pattern)</h3>
       <p style="font-size:13px;line-height:1.7;"><b>What is it?</b> This is the #1 most important phrase pattern in Japanese. When you meet someone for the very first time, you use this 3-part formula. It is a <b>ritual</b> &mdash; every Japanese person uses it, and they expect you to use it too. Think of it like a handshake, but with words.</p>
@@ -7099,7 +7247,7 @@ body::before {
 <div class="card" data-section="struct-ch2">
   <div class="card-header">CH 2: ALL 5 GRAMMAR POINTS &mdash; COMPLETE BREAKDOWN</div>
   <div class="card-body" style="display:block">
-    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+    <div class="rich-body">
 
       <h3 style="color:var(--gold);margin-top:0">G1: <span lang="ja">X は Y です / じゃありません</span></h3>
       <p style="font-size:13px;line-height:1.7;"><b>What is it?</b> This is the most basic sentence pattern in Japanese. It lets you say "X <b>is</b> Y." The word <span lang="ja">です</span> (desu) is like the English verb "is/am/are." The particle <span lang="ja">は</span> (pronounced "wa," NOT "ha") marks the <b>topic</b> &mdash; it tells the listener what you are talking about.</p>
@@ -7217,7 +7365,7 @@ body::before {
 <div class="card" data-section="struct-ch3">
   <div class="card-header">CH 3: ALL 5 GRAMMAR POINTS &mdash; COMPLETE BREAKDOWN</div>
   <div class="card-body" style="display:block">
-    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+    <div class="rich-body">
 
       <h3 style="color:var(--gold);margin-top:0">G1: Verb Particles <span lang="ja">を / に・へ / で</span></h3>
       <p style="font-size:13px;line-height:1.7;"><b>What is it?</b> Particles are tiny words that tell you the <b>role</b> of each noun in a sentence. English uses word ORDER to show roles ("Dog bites man" vs "Man bites dog"). Japanese uses PARTICLES instead, so word order is flexible. There are 3 essential verb particles:</p>
@@ -7341,7 +7489,7 @@ body::before {
 <div class="card" data-section="struct-ch4">
   <div class="card-header">CH 4: ALL 5 GRAMMAR POINTS &mdash; COMPLETE BREAKDOWN</div>
   <div class="card-body" style="display:block">
-    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+    <div class="rich-body">
 
       <h3 style="color:var(--gold);margin-top:0">G1: <span lang="ja">これ / それ / あれ / どれ</span> Demonstratives</h3>
       <p style="font-size:13px;line-height:1.7;"><b>What is it?</b> These are the Japanese words for "this one / that one / that one over there / which one?" They point at things. Japanese has THREE levels of distance (English only has two: "this" and "that"). The extra level distinguishes "that thing near you" from "that thing way over there."</p>
@@ -7456,7 +7604,7 @@ body::before {
 <div class="card" data-section="struct-ch5">
   <div class="card-header">CH 5: ALL 5 GRAMMAR POINTS &mdash; COMPLETE BREAKDOWN</div>
   <div class="card-body" style="display:block">
-    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+    <div class="rich-body">
 
       <h3 style="color:var(--gold);margin-top:0">G1: <span lang="ja">この / その / あの / どの</span> + Noun</h3>
       <p style="font-size:13px;line-height:1.7;"><b>What is it?</b> In Ch 4, you learned <span lang="ja">これ/それ/あれ</span> (this/that/that over there), which stand ALONE as pronouns. Now you learn their modifier versions: <span lang="ja">この/その/あの</span>, which go BEFORE a noun. The difference is like "this" (alone) vs "this book" (before a noun). You cannot use <span lang="ja">この</span> alone or <span lang="ja">これ</span> before a noun.</p>
@@ -7586,7 +7734,7 @@ body::before {
 <div class="card" data-section="struct-ch6">
   <div class="card-header">CH 6: ALL 5 GRAMMAR POINTS &mdash; COMPLETE BREAKDOWN</div>
   <div class="card-body" style="display:block">
-    <div style="padding:14px 18px;font-size:13px;line-height:1.8">
+    <div class="rich-body">
 
       <h3 style="color:var(--gold);margin-top:0">G1: <span lang="ja">と</span> (Accompaniment, Connector) and <span lang="ja">に</span> (Recipient, Purpose)</h3>
       <p style="font-size:13px;line-height:1.7;"><b>What is it?</b> Two particles with multiple uses. <span lang="ja">と</span> has two jobs: (1) "with [person]" and (2) "and" between nouns. <span lang="ja">に</span> adds two NEW jobs here: (1) "to [person]" (recipient of an action like writing a letter) and (2) purpose of going somewhere (<span lang="ja">かいものに いきます</span> = go shopping, literally "go for the purpose of shopping").</p>
@@ -8035,8 +8183,8 @@ body::before {
     </div>
 
     <!-- 7-LAYER EXPANSION: Particles Decision Tree -->
-    <div style="padding:14px;border-top:2px solid #eee">
-      <h4 style="margin:0 0 8px 0;color:var(--gold);">Master Particle Decision Tree &mdash; "Which Particle Do I Use?"</h4>
+    <div class="expansion">
+      <h4 style="">Master Particle Decision Tree &mdash; "Which Particle Do I Use?"</h4>
       <div style="max-width:100%;overflow-x:auto;margin-bottom:14px">
         <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-family:monospace;min-width:360px">
           <div style="background:#2d6a6f;color:white;padding:8px 16px;border-radius:20px;text-align:center;font-weight:bold">What role does this word play?</div>
@@ -8100,7 +8248,7 @@ body::before {
         </div>
       </div>
 
-      <h4 style="margin:14px 0 8px 0;color:var(--gold);">Quick Particle Cheat Sheet</h4>
+      <h4 style="">Quick Particle Cheat Sheet</h4>
       <table>
         <thead><tr><th>Question to Ask Yourself</th><th>Particle</th><th>Memory</th></tr></thead>
         <tbody>
@@ -8204,7 +8352,7 @@ body::before {
 
     <!-- 7-LAYER EXPANSION: Verb Group Identifier Flowchart -->
     <div style="padding:14px 0 0 0;border-top:2px solid #eee">
-      <h4 style="margin:0 0 8px 0;color:var(--gold);">Verb Group Identifier Flowchart</h4>
+      <h4 style="">Verb Group Identifier Flowchart</h4>
       <div style="max-width:100%;overflow-x:auto;margin-bottom:14px">
         <div style="display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-family:monospace;min-width:360px">
           <div style="background:#2d6a6f;color:white;padding:8px 16px;border-radius:20px;text-align:center;font-weight:bold">Look at the dictionary form ending</div>
@@ -8235,7 +8383,7 @@ body::before {
         </div>
       </div>
 
-      <h4 style="margin:14px 0 8px 0;color:var(--gold);">Impostor Verbs (Disguised U-verbs)</h4>
+      <h4 style="">Impostor Verbs (Disguised U-verbs)</h4>
       <table>
         <thead><tr><th>Verb</th><th>Looks Like</th><th>Actually Is</th><th><span lang="ja">ます</span> form proves it</th></tr></thead>
         <tbody>
@@ -8782,6 +8930,16 @@ function wGrade(ch, ok) {
   if (ok) s.wScore++;
   s.wResults.push({ english: s.wCards[s.wIdx].english, expected: s.wCards[s.wIdx].japanese, correct: ok });
   s.wIdx++;
+  // Auto-speed adjustment: correct = speed up, wrong = slow down
+  if (autoPlay.on) {
+    autoPlay.speed = ok
+      ? Math.max(1.0, parseFloat((autoPlay.speed - 0.5).toFixed(1)))
+      : Math.min(8.0, parseFloat((autoPlay.speed + 0.5).toFixed(1)));
+    const sv = document.getElementById('speedVal');
+    if (sv) sv.textContent = autoPlay.speed.toFixed(1) + 's';
+    const sl = document.getElementById('speedSlider');
+    if (sl) sl.value = autoPlay.speed;
+  }
   showWriteCard($('area_' + ch), ch);
 }
 
@@ -9528,7 +9686,13 @@ function autoAdvance() {
     for (const btn of checkBtns) {
       const t = btn.textContent.toLowerCase();
       if (t.includes('check') || t.includes('show') || t.includes('reveal') || t.includes('flip')) {
-        btn.click();
+        if (btn.disabled) {
+          // Write mode: Check button disabled because canvas is empty — call wCheckAnswer directly
+          const m = btn.id && btn.id.match(/^wCheck_(.+)$/);
+          if (m) wCheckAnswer(m[1]);
+        } else {
+          btn.click();
+        }
         autoPlay.phase = 'back';
         autoPlay.elapsed = 0;
         updateCountdownRing();
@@ -9995,6 +10159,18 @@ function formatLookup(v) {
 
 function toggleVoiceMain(){voiceEnabled=!voiceEnabled;var fab=document.getElementById('voiceFab');if(fab){fab.textContent=voiceEnabled?'🔊':'🔇';fab.classList.toggle('off',!voiceEnabled);fab.title=voiceEnabled?'Voice ON (V)':'Voice OFF (V)';}if(!voiceEnabled&&speechSynthesis)speechSynthesis.cancel();}
 document.addEventListener('keydown',function(ev){if(ev.target.tagName==='INPUT'||ev.target.tagName==='TEXTAREA')return;if(ev.key==='v'||ev.key==='V'){toggleVoiceMain();}});
+
+// Style .pl section headers and KEY TERM badges
+document.querySelectorAll('.pl').forEach(function(pl){
+  pl.querySelectorAll('b').forEach(function(b){
+    var t = b.textContent.trim();
+    if(t === 'KEY TERM'){
+      b.classList.add('pl-keyterm');
+    } else if(t.length > 0 && t.length < 60 && (t.endsWith(':') || t.endsWith('：'))){
+      b.classList.add('pl-head');
+    }
+  });
+});
 </script>
 <!-- FLOATING SEARCH WIDGET -->
 <button class="float-search-btn" id="floatSearchBtn" onclick="toggleFloatSearch()" title="Search (Ctrl+F)">🔍</button>
