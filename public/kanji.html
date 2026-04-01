@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kanji Reference – Ch.1–6 | Japanese Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0a;--surface:#111;--surface2:#1a1a1a;--border:#2a2a2a;
+  --gold:#d4a843;--gold-bright:#f0c85a;--gold-dark:#8b6d1e;
+  --text:#e8e8e8;--text-dim:#999;--blue:#6ab0f5;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:60px}
+/* ── back bar ── */
+.back-bar{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface)}
+.back-btn{background:none;border:1px solid var(--border);color:var(--text-dim);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;transition:all .2s}
+.back-btn:hover{border-color:var(--gold);color:var(--gold)}
+.back-bar-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);letter-spacing:.04em}
+/* ── hero ── */
+.hero{text-align:center;padding:36px 20px 24px}
+.hero-kanji{font-family:'Klee One',cursive;font-size:5rem;color:var(--gold-bright);line-height:1;margin-bottom:8px}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;letter-spacing:.06em}
+.hero-sub{color:var(--text-dim);font-size:.9rem;margin-top:6px}
+/* ── filter tabs ── */
+.filter-bar{display:flex;justify-content:center;gap:8px;padding:0 20px 24px;flex-wrap:wrap}
+.ftab{background:var(--surface);border:1px solid var(--border);color:var(--text-dim);padding:8px 22px;border-radius:40px;cursor:pointer;font-size:.9rem;font-family:'DM Sans',sans-serif;transition:all .2s}
+.ftab.active,.ftab:hover{border-color:var(--gold);color:var(--gold);background:rgba(212,168,67,.08)}
+.ftab.active{font-weight:600}
+</style>
+</head>
+<body>
+<!-- ── irregular callout ── -->
+<style>
+.irreg-box{max-width:680px;margin:0 auto 28px;background:rgba(212,168,67,.07);border:1px solid rgba(212,168,67,.3);border-radius:var(--radius);padding:16px 20px}
+.irreg-box h3{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--gold);margin-bottom:10px;letter-spacing:.04em}
+.irreg-list{display:flex;flex-wrap:wrap;gap:10px 20px}
+.irreg-item{font-family:'Noto Sans JP',sans-serif;font-size:.95rem}
+.irreg-item .irk{color:var(--gold-bright);font-size:1.1rem;font-family:'Klee One',cursive}
+.irreg-item .irr{color:var(--blue);margin-left:4px;font-size:.85rem}
+.irreg-item .irm{color:var(--text-dim);margin-left:4px;font-size:.82rem}
+/* ── grid ── */
+.grid-wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.chapter-label{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--gold-dark);letter-spacing:.08em;margin:28px 0 14px 4px;border-bottom:1px solid var(--border);padding-bottom:6px}
+.kanji-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:8px}
+/* ── kanji card ── */
+.kcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 14px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:border-color .2s}
+.kcard:hover{border-color:var(--gold-dark)}
+.kchar{font-family:'Klee One',cursive;font-size:4.5rem;line-height:1;color:var(--gold-bright)}
+.ksvg-wrap{width:90px;height:90px;background:var(--surface2);border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ksvg-wrap svg{width:80px;height:80px}
+.ksvg-wrap .ksvg-err{color:var(--text-dim);font-size:.7rem;text-align:center;padding:4px}
+.kreadings{text-align:center;width:100%}
+.kon{color:var(--gold);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.05em}
+.kkun{color:var(--blue);font-family:'Noto Sans JP',sans-serif;font-size:.82rem;margin-top:2px}
+.kmeaning{color:var(--text);font-size:.88rem;font-weight:500;margin-top:4px}
+.kcompounds{width:100%;border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:4px}
+.kcomp{font-family:'Noto Sans JP',sans-serif;font-size:.8rem;color:var(--text-dim)}
+.kcomp .kc-word{color:var(--text);font-size:.9rem}
+.kcomp .kc-read{color:var(--blue);margin:0 4px;font-size:.8rem}
+.kcomp .kc-mean{color:var(--text-dim);font-size:.78rem}
+</style>
+<!-- ── DOM ── -->
+<div class="back-bar">
+  <button class="back-btn" onclick="history.back()">← Back</button>
+  <span class="back-bar-title">漢字 Kanji Reference</span>
+</div>
+<div class="hero">
+  <div class="hero-kanji">漢字</div>
+  <div class="hero-title">Kanji Reference</div>
+  <div class="hero-sub">Chapters 4 – 6 · Nakama 1</div>
+</div>
+<div class="filter-bar">
+  <button class="ftab active" onclick="filterCh('all')">All (26)</button>
+  <button class="ftab" onclick="filterCh('ch4')">Ch.4 · 5 kanji</button>
+  <button class="ftab" onclick="filterCh('ch5')">Ch.5 · 14 kanji</button>
+  <button class="ftab" onclick="filterCh('ch6')">Ch.6 · 7 kanji</button>
+</div>
+<div class="grid-wrap">
+  <div class="irreg-box" id="irregBox">
+    <h3>⚡ Irregular Readings</h3>
+    <div class="irreg-list">
+      <div class="irreg-item"><span class="irk">今日</span><span class="irr">きょう</span><span class="irm">today</span></div>
+      <div class="irreg-item"><span class="irk">明日</span><span class="irr">あした</span><span class="irm">tomorrow</span></div>
+      <div class="irreg-item"><span class="irk">昨日</span><span class="irr">きのう</span><span class="irm">yesterday</span></div>
+      <div class="irreg-item"><span class="irk">今週</span><span class="irr">こんしゅう</span><span class="irm">this week</span></div>
+      <div class="irreg-item"><span class="irk">先週</span><span class="irr">せんしゅう</span><span class="irm">last week</span></div>
+      <div class="irreg-item"><span class="irk">来週</span><span class="irr">らいしゅう</span><span class="irm">next week</span></div>
+    </div>
+  </div>
+  <div id="ch4section"><div class="chapter-label">Chapter 4 · 大学校先生</div><div class="kanji-grid" id="grid-ch4"></div></div>
+  <div id="ch5section"><div class="chapter-label">Chapter 5 · 山川田木火水土金月日上下中小</div><div class="kanji-grid" id="grid-ch5"></div></div>
+  <div id="ch6section"><div class="chapter-label">Chapter 6 · 今私曜何週末休</div><div class="kanji-grid" id="grid-ch6"></div></div>
+</div>
+<script>
+const KANJI = {
+  ch4:[
+    {char:"大",hex:"05927",on:"ダイ・タイ",kun:"おお(きい)",meaning:"big / large",
+     compounds:[["大学","だいがく","university"],["大人","おとな","adult"],["大きい","おおきい","big"]]},
+    {char:"学",hex:"05b66",on:"ガク",kun:"まな(ぶ)",meaning:"study / learn",
+     compounds:[["大学","だいがく","university"],["学生","がくせい","student"],["学校","がっこう","school"]]},
+    {char:"校",hex:"06821",on:"コウ",kun:"—",meaning:"school",
+     compounds:[["学校","がっこう","school"],["高校","こうこう","high school"],["校長","こうちょう","principal"]]},
+    {char:"先",hex:"05148",on:"セン",kun:"さき",meaning:"ahead / previous",
+     compounds:[["先生","せんせい","teacher"],["先週","せんしゅう","last week"],["先ほど","さきほど","a moment ago"]]},
+    {char:"生",hex:"0751f",on:"セイ・ショウ",kun:"い(きる)・なま",meaning:"life / live / raw",
+     compounds:[["先生","せんせい","teacher"],["学生","がくせい","student"],["生まれ","うまれ","birth"]]}
+  ],
+  ch5:[
+    {char:"山",hex:"05c71",on:"サン",kun:"やま",meaning:"mountain",
+     compounds:[["富士山","ふじさん","Mt. Fuji"],["山田","やまだ","Yamada (name)"],["山登り","やまのぼり","mountain climbing"]]},
+    {char:"川",hex:"05ddd",on:"セン",kun:"かわ",meaning:"river",
+     compounds:[["小川","おがわ","stream"],["川口","かわぐち","Kawaguchi"],["川下り","かわくだり","river descent"]]},
+    {char:"田",hex:"07530",on:"デン",kun:"た",meaning:"rice field",
+     compounds:[["田中","たなか","Tanaka (name)"],["田舎","いなか","countryside"],["水田","すいでん","paddy field"]]},
+    {char:"木",hex:"06728",on:"モク・ボク",kun:"き",meaning:"tree / wood",
+     compounds:[["木曜日","もくようび","Thursday"],["木村","きむら","Kimura (name)"],["木々","きぎ","trees"]]},
+    {char:"火",hex:"0706b",on:"カ",kun:"ひ",meaning:"fire",
+     compounds:[["火曜日","かようび","Tuesday"],["花火","はなび","fireworks"],["火山","かざん","volcano"]]},
+    {char:"水",hex:"06c34",on:"スイ",kun:"みず",meaning:"water",
+     compounds:[["水曜日","すいようび","Wednesday"],["水泳","すいえい","swimming"],["水道","すいどう","waterworks"]]},
+    {char:"土",hex:"0571f",on:"ド・ト",kun:"つち",meaning:"earth / soil",
+     compounds:[["土曜日","どようび","Saturday"],["土地","とち","land"],["土台","どだい","foundation"]]},
+    {char:"金",hex:"091d1",on:"キン・コン",kun:"かね",meaning:"gold / money",
+     compounds:[["金曜日","きんようび","Friday"],["お金","おかね","money"],["金色","きんいろ","golden"]]},
+    {char:"月",hex:"06708",on:"ガツ・ゲツ",kun:"つき",meaning:"moon / month",
+     compounds:[["月曜日","げつようび","Monday"],["今月","こんげつ","this month"],["月見","つきみ","moon viewing"]]},
+    {char:"日",hex:"065e5",on:"ニチ・ジツ",kun:"ひ・か",meaning:"sun / day",
+     compounds:[["日曜日","にちようび","Sunday"],["日本","にほん","Japan"],["毎日","まいにち","every day"]]},
+    {char:"上",hex:"04e0a",on:"ジョウ",kun:"うえ・のぼ(る)",meaning:"above / up",
+     compounds:[["上手","じょうず","skilled"],["上野","うえの","Ueno"],["上がる","あがる","to rise"]]},
+    {char:"下",hex:"04e0b",on:"カ・ゲ",kun:"した・くだ(る)",meaning:"below / down",
+     compounds:[["下手","へた","unskilled"],["地下","ちか","underground"],["下がる","さがる","to fall"]]},
+    {char:"中",hex:"04e2d",on:"チュウ",kun:"なか",meaning:"middle / inside",
+     compounds:[["中学校","ちゅうがっこう","middle school"],["中国","ちゅうごく","China"],["中身","なかみ","contents"]]},
+    {char:"小",hex:"05c0f",on:"ショウ",kun:"ちい(さい)・こ",meaning:"small",
+     compounds:[["小学校","しょうがっこう","elementary school"],["小説","しょうせつ","novel"],["小さい","ちいさい","small"]]}
+  ],
+  ch6:[
+    {char:"今",hex:"04eca",on:"コン・キン",kun:"いま",meaning:"now / current",
+     compounds:[["今日","きょう","today ※"],["今週","こんしゅう","this week"],["今年","ことし","this year"]]},
+    {char:"私",hex:"079c1",on:"シ",kun:"わたし・わたくし",meaning:"I / private",
+     compounds:[["私立","しりつ","private (institution)"],["私鉄","してつ","private railway"],["私語","しご","whispering"]]},
+    {char:"曜",hex:"066dc",on:"ヨウ",kun:"—",meaning:"day of week",
+     compounds:[["月曜日","げつようび","Monday"],["何曜日","なんようび","what day?"],["曜日","ようび","day of week"]]},
+    {char:"何",hex:"04f55",on:"カ",kun:"なに・なん",meaning:"what",
+     compounds:[["何時","なんじ","what time"],["何曜日","なんようび","what day?"],["何か","なにか","something"]]},
+    {char:"週",hex:"09031",on:"シュウ",kun:"—",meaning:"week",
+     compounds:[["今週","こんしゅう","this week"],["先週","せんしゅう","last week"],["毎週","まいしゅう","every week"]]},
+    {char:"末",hex:"0672b",on:"マツ・バツ",kun:"すえ",meaning:"end / tip",
+     compounds:[["週末","しゅうまつ","weekend"],["月末","げつまつ","end of month"],["年末","ねんまつ","year end"]]},
+    {char:"休",hex:"04f11",on:"キュウ",kun:"やす(む)",meaning:"rest / vacation",
+     compounds:[["休み","やすみ","rest / holiday"],["夏休み","なつやすみ","summer vacation"],["休日","きゅうじつ","day off"]]}
+  ]
+};
+</script>
+<script>
+const KANJIVG = "https://raw.githubusercontent.com/KanjiVG/kanjivg/master/kanji/";
+
+function buildCard(k){
+  const card = document.createElement("div");
+  card.className = "kcard";
+  card.dataset.ch = k._ch;
+
+  // large character
+  const ch = document.createElement("div");
+  ch.className = "kchar";
+  ch.textContent = k.char;
+  card.appendChild(ch);
+
+  // SVG stroke order container
+  const svgWrap = document.createElement("div");
+  svgWrap.className = "ksvg-wrap";
+  svgWrap.id = "svg-" + k.hex;
+  svgWrap.innerHTML = '<div class="ksvg-err">loading…</div>';
+  card.appendChild(svgWrap);
+
+  // readings
+  const rd = document.createElement("div");
+  rd.className = "kreadings";
+  rd.innerHTML =
+    '<div class="kon">ON: ' + k.on + '</div>' +
+    '<div class="kkun">KUN: ' + k.kun + '</div>' +
+    '<div class="kmeaning">' + k.meaning + '</div>';
+  card.appendChild(rd);
+
+  // compounds
+  const cp = document.createElement("div");
+  cp.className = "kcompounds";
+  k.compounds.forEach(function(c){
+    const row = document.createElement("div");
+    row.className = "kcomp";
+    row.innerHTML =
+      '<span class="kc-word">' + c[0] + '</span>' +
+      '<span class="kc-read">【' + c[1] + '】</span>' +
+      '<span class="kc-mean">' + c[2] + '</span>';
+    cp.appendChild(row);
+  });
+  card.appendChild(cp);
+  return card;
+}
+
+function recolorSVG(svgEl){
+  // strokes: light lavender; stroke numbers: gold
+  svgEl.querySelectorAll("path").forEach(function(p){
+    p.setAttribute("stroke","#d8d8e8");
+  });
+  svgEl.querySelectorAll("text").forEach(function(t){
+    t.setAttribute("fill","#f0c85a");
+    t.setAttribute("font-size","8");
+  });
+  svgEl.removeAttribute("width");
+  svgEl.removeAttribute("height");
+  svgEl.setAttribute("viewBox","0 0 109 109");
+  svgEl.style.width = "80px";
+  svgEl.style.height = "80px";
+}
+
+async function loadStrokes(hex){
+  const wrap = document.getElementById("svg-" + hex);
+  if(!wrap) return;
+  try{
+    const res = await fetch(KANJIVG + hex + ".svg");
+    if(!res.ok) throw new Error("404");
+    const text = await res.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, "image/svg+xml");
+    const svgEl = doc.querySelector("svg");
+    if(!svgEl) throw new Error("no svg");
+    recolorSVG(svgEl);
+    wrap.innerHTML = "";
+    wrap.appendChild(svgEl);
+  }catch(e){
+    wrap.innerHTML = '<div class="ksvg-err">stroke<br>order<br>N/A</div>';
+  }
+}
+
+function render(){
+  ["ch4","ch5","ch6"].forEach(function(ch){
+    const grid = document.getElementById("grid-" + ch);
+    if(!grid) return;
+    KANJI[ch].forEach(function(k){
+      k._ch = ch;
+      grid.appendChild(buildCard(k));
+    });
+  });
+  // load all stroke SVGs
+  ["ch4","ch5","ch6"].forEach(function(ch){
+    KANJI[ch].forEach(function(k){ loadStrokes(k.hex); });
+  });
+}
+
+function filterCh(ch){
+  document.querySelectorAll(".ftab").forEach(function(b){ b.classList.remove("active"); });
+  event.currentTarget.classList.add("active");
+  ["ch4","ch5","ch6"].forEach(function(c){
+    const sec = document.getElementById(c + "section");
+    if(!sec) return;
+    if(ch === "all" || ch === c){ sec.style.display = ""; }
+    else{ sec.style.display = "none"; }
+  });
+  const irreg = document.getElementById("irregBox");
+  if(irreg) irreg.style.display = (ch === "ch6" || ch === "all") ? "" : "none";
+}
+
+document.addEventListener("DOMContentLoaded", render);
+</script>
+</body>
+</html>

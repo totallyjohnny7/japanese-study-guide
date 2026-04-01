@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nakama 1 — Ch3: Daily Routines</title>
+<title>Quiz 20 - Ch. 5 Kanji</title>
 <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0a0a0a;--surface:#111111;--card:#161616;--border:#2a2a2a;--accent:#d4a843;--accent2:#f0c85a;--green:#4ecf7a;--red:#e85454;--yellow:#f0c85a;--text:#e0ddd5;--muted:#5a5548;--dim:#3a3528;--blue:#5ba8e8;--gold-glow:rgba(212,168,67,0.15);}
@@ -22,7 +22,7 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .mode-btn .pct{font-size:9px;opacity:.7;display:block;margin-top:1px;}
 
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
-.btn{border:none;color:#fff;padding:9px 18px;border-radius:9px;cursor:pointer;touch-action:manipulation;font-size:13px;font-weight:600;font-family:'DM Sans';transition:all .2s;}
+.btn{border:none;color:#fff;padding:9px 18px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans';transition:all .2s;}
 .btn:hover{transform:translateY(-1px);filter:brightness(1.1);}
 .btn:active{transform:scale(.97);}
 .btn:disabled{opacity:.4;cursor:default;transform:none;}
@@ -87,41 +87,14 @@ textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,
   .ime-bar{gap:6px;padding:6px 10px;}
   .ime-hint{display:none;}
 }
-/* ═══ AUTO TIMER ═══ */
-.autoplay-bar{display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;flex-wrap:wrap;}
-.autoplay-bar label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
-.ap-toggle{position:relative;width:40px;height:22px;flex-shrink:0;}.ap-toggle input{opacity:0;width:0;height:0;}
-.ap-toggle .ap-slider{position:absolute;inset:0;background:var(--border);border-radius:22px;cursor:pointer;transition:.3s;}
-.ap-toggle .ap-slider::before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:var(--muted);border-radius:50%;transition:.3s;}
-.ap-toggle input:checked+.ap-slider{background:var(--green);}
-.ap-toggle input:checked+.ap-slider::before{transform:translateX(18px);background:#fff;}
-.ap-speed{-webkit-appearance:none;appearance:none;width:90px;height:4px;background:var(--border);border-radius:4px;outline:none;}
-.ap-speed::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;}
-.ap-val{font-size:12px;color:var(--accent);font-weight:700;min-width:30px;}
-.ap-hint{font-size:10px;color:var(--dim);margin-left:auto;}
-.cring{position:absolute;top:10px;right:10px;width:46px;height:46px;z-index:10;}
-.cring svg{width:46px;height:46px;transform:rotate(-90deg);}
-.cring .rbg{fill:none;stroke:var(--border);stroke-width:3;}
-.cring .rfg{fill:none;stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .1s linear;}
-.cring .rfg.rfront{stroke:#9b59b6;}.cring .rfg.rback{stroke:var(--green);}
-.cring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text);}
-/* ═══ MATCH GAME ═══ */
-.match-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
-@media(max-width:400px){.match-grid{grid-template-columns:repeat(2,1fr);}}
-.match-card{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:12px 8px;min-height:72px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;font-size:14px;font-weight:600;font-family:'Noto Sans JP','DM Sans';transition:all .15s;-webkit-tap-highlight-color:transparent;user-select:none;}
-.match-card:hover{border-color:var(--accent);background:rgba(212,168,67,0.06);}
-.match-card.selected{border-color:var(--accent2);background:rgba(240,200,90,0.15);box-shadow:0 0 12px rgba(240,200,90,0.2);}
-.match-card.matched{opacity:0;pointer-events:none;transform:scale(.85);transition:all .4s;}
-.match-card.wrong{animation:mshake .35s ease;}
-@keyframes mshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
-.match-timer{font-size:28px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;}
+
 </style>
 </head>
 <body>
 <div class="app">
 <div class="header">
-  <h1>Nakama 1 — Ch3: Daily Routines</h1>
-  <p>Write · Listen · Read · Speak</p>
+  <h1>Quiz 20 — Ch. 5 Kanji</h1>
+  <p>Kanji derived from pictures and symbols (1)</p>
 </div>
 
 <!-- Voice Toggle -->
@@ -143,8 +116,6 @@ textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,
   <button class="mode-btn" onclick="setMode('reading')" id="m_reading">📖 Reading<span class="pct">Exams 40%</span></button>
   <button class="mode-btn" onclick="setMode('oral')" id="m_oral">🗣️ Oral<span class="pct">Oral 10%</span></button>
   <button class="mode-btn" onclick="setMode('mix')" id="m_mix">🎲 Mixed Quiz<span class="pct">Everything</span></button>
-  <button class="mode-btn" onclick="setMode('flash')" id="m_flash">🃏 Flashcard<span class="pct">Review All</span></button>
-  <button class="mode-btn" onclick="setMode('match')" id="m_match">🎮 Match<span class="pct">Quizlet Style</span></button>
 </div>
 
 <!-- Main content area -->
@@ -155,7 +126,7 @@ textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,
 
 <script>
 // ═══ DEFAULT DATA ═══
-let DATA = {"vocab":[{"english":"Morning","japanese":"あさ","reading":"asa"},{"english":"Breakfast","japanese":"あさごはん","reading":"asagohan"},{"english":"Day after tomorrow","japanese":"あさって","reading":"asatte"},{"english":"Tomorrow","japanese":"あした","reading":"ashita"},{"english":"Home","japanese":"うち","reading":"uchi"},{"english":"Movie","japanese":"えいが","reading":"eiga"},{"english":"Day before yesterday","japanese":"おととい","reading":"ototoi"},{"english":"Bath","japanese":"おふろ","reading":"ofuro"},{"english":"School","japanese":"がっこう","reading":"gakkou"},{"english":"Tuesday","japanese":"かようび","reading":"kayoubi"},{"english":"Yesterday","japanese":"きのう","reading":"kinou"},{"english":"Today","japanese":"きょう","reading":"kyou"},{"english":"Friday","japanese":"きんようび","reading":"kinyoubi"},{"english":"Class","japanese":"クラス","reading":"kurasu"},{"english":"Monday","japanese":"げつようび","reading":"getsuyoubi"},{"english":"Coffee","japanese":"コーヒー","reading":"koohii"},{"english":"Meal, cooked rice","japanese":"ごはん","reading":"gohan"},{"english":"This week","japanese":"こんしゅう","reading":"konshuu"},{"english":"Tonight","japanese":"こんばん","reading":"konban"},{"english":"Shower","japanese":"シャワー","reading":"shawaa"},{"english":"Weekend","japanese":"しゅうまつ","reading":"shuumatsu"},{"english":"Class, course","japanese":"じゅぎょう","reading":"jugyou"},{"english":"Homework","japanese":"しゅくだい","reading":"shukudai"},{"english":"Wednesday","japanese":"すいようび","reading":"suiyoubi"},{"english":"Life, living","japanese":"せいかつ","reading":"seikatsu"},{"english":"Last week","japanese":"せんしゅう","reading":"senshuu"},{"english":"Next","japanese":"つぎ","reading":"tsugi"},{"english":"Television, TV","japanese":"テレビ","reading":"terebi"},{"english":"Telephone number","japanese":"でんわばんごう","reading":"denwa bangou"},{"english":"Library","japanese":"としょかん","reading":"toshokan"},{"english":"Saturday","japanese":"どようび","reading":"doyoubi"},{"english":"Sunday","japanese":"にちようび","reading":"nichiyoubi"},{"english":"Night, evening","japanese":"ばん","reading":"ban"},{"english":"Supper, dinner","japanese":"ばんごはん","reading":"bangohan"},{"english":"Afternoon","japanese":"ひる","reading":"hiru"},{"english":"Lunch","japanese":"ひるごはん","reading":"hirugohan"},{"english":"Study","japanese":"べんきょう","reading":"benkyou"},{"english":"Book","japanese":"ほん","reading":"hon"},{"english":"Every morning","japanese":"まいあさ","reading":"maiasa"},{"english":"Every week","japanese":"まいしゅう","reading":"maishuu"},{"english":"Every day","japanese":"まいにち","reading":"mainichi"},{"english":"Every night","japanese":"まいばん","reading":"maiban"},{"english":"Thursday","japanese":"もくようび","reading":"mokuyoubi"},{"english":"To go","japanese":"いきます","reading":"ikimasu"},{"english":"To return, go home","japanese":"かえります","reading":"kaerimasu"},{"english":"To drink","japanese":"のみます","reading":"nomimasu"},{"english":"To read","japanese":"よみます","reading":"yomimasu"},{"english":"To take a shower","japanese":"あびます","reading":"abimasu"},{"english":"To get up, wake up","japanese":"おきます","reading":"okimasu"},{"english":"To eat","japanese":"たべます","reading":"tabemasu"},{"english":"To go to bed","japanese":"ねます","reading":"nemasu"},{"english":"To see, to watch","japanese":"みます","reading":"mimasu"},{"english":"To come","japanese":"きます","reading":"kimasu"},{"english":"To do","japanese":"します","reading":"shimasu"},{"english":"To study","japanese":"べんきょうします","reading":"benkyou shimasu"},{"english":"When","japanese":"いつ","reading":"itsu"},{"english":"~ minute(s)","japanese":"～ふん","reading":"~fun"},{"english":"Not very often","japanese":"あまり","reading":"amari"},{"english":"Always","japanese":"いつも","reading":"itsumo"},{"english":"Not at all","japanese":"ぜんぜん","reading":"zenzen"},{"english":"Usually","japanese":"たいてい","reading":"taitei"},{"english":"Sometimes","japanese":"ときどき","reading":"tokidoki"},{"english":"Often, well","japanese":"よく","reading":"yoku"},{"english":"At, in (location of action)","japanese":"で","reading":"de"},{"english":"At, on, in (point in time)","japanese":"に","reading":"ni"},{"english":"To (goal)","japanese":"に","reading":"ni"},{"english":"To (direction)","japanese":"へ","reading":"e"},{"english":"Direct object marker","japanese":"を","reading":"wo"},{"english":"This ~ prefix","japanese":"こん～","reading":"kon~"},{"english":"Every ~ prefix","japanese":"まい～","reading":"mai~"},{"english":"About ~ (time only)","japanese":"～ごろ","reading":"~goro"},{"english":"Day of the week","japanese":"～ようび","reading":"~youbi"},{"english":"To enter (bath)","japanese":"はいります","reading":"hairimasu"},{"english":"What day of the week","japanese":"なんようび","reading":"nanyoubi"},{"english":"Half past","japanese":"はん","reading":"han"},{"english":"And, then","japanese":"そして","reading":"soshite"},{"english":"After that","japanese":"そのあと","reading":"sono ato"},{"english":"So, therefore","japanese":"ですから","reading":"desukara"},{"english":"One minute","japanese":"いっぷん","reading":"ippun"},{"english":"Two minutes","japanese":"にふん","reading":"nifun"},{"english":"Three minutes","japanese":"さんぷん","reading":"sanpun"},{"english":"Four minutes","japanese":"よんぷん","reading":"yonpun"},{"english":"Five minutes","japanese":"ごふん","reading":"gofun"},{"english":"Six minutes","japanese":"ろっぷん","reading":"roppun"},{"english":"Seven minutes","japanese":"ななふん","reading":"nanafun"},{"english":"Eight minutes","japanese":"はっぷん","reading":"happun"},{"english":"Nine minutes","japanese":"きゅうふん","reading":"kyuufun"},{"english":"Ten minutes","japanese":"じゅっぷん","reading":"juppun"},{"english":"How many minutes","japanese":"なんぷん","reading":"nanpun"},{"english":"Something exists, to have","japanese":"あります","reading":"arimasu"}],"dialogues":[{"title":"じゅぎょうがあります。(I have a class.)","lines":[{"speaker":"上田","jp":"リーさん、おはようございます。","en":"Good morning, Li."},{"speaker":"リー","jp":"あ、おはようございます。","en":"Oh, good morning."},{"speaker":"上田","jp":"きょうはなんようびですか。","en":"What day is it today?"},{"speaker":"リー","jp":"かようびですよ。","en":"It's Tuesday."},{"speaker":"上田","jp":"そうですか。かようびはじゅぎょうがありますか。","en":"I see. Do you have class on Tuesday?"},{"speaker":"リー","jp":"ええ、あります。くじからじゅうにじまでです。","en":"Yes, I do. From 9 to 12."},{"speaker":"上田","jp":"そうですか。","en":"I see."}]}],"readings":[{"title":"ジョンソンさんの一日 (Ms. Johnson's Daily Routine)","text":"わたしはまいにちしちじはんにおきます。そして、シャワーをあびます。たいていはちじごろあさごはんをたべます。そして、はちじはんごろだいがくへいきます。にほんごのじゅぎょうはまいあさくじにあります。そのあと、よくとしょかんでべんきょうします。ひるごはんはたいていがくせいかいかんでたべます。げつようびとすいようびときんようびのごごはえいごとぶんがくのじゅぎょうがあります。かようびともくようびのごごはじゅぎょうがありません。たいていごじはんごろうちにかえります。ろくじごろばんごはんをたべます。そして、しゅくだいをします。テレビはあまりみません。いつもじゅういちじはんにねます。","questions":[{"q":"What time does Johnson wake up?","a":"7:30"},{"q":"What time does she go to bed?","a":"11:30"},{"q":"What classes does she have Mon/Wed/Fri?","a":"Japanese, English, and Literature"},{"q":"Where does she usually eat lunch?","a":"Student union"},{"q":"Does she watch TV often?","a":"No, not very often"}]}]};
+let DATA = {"vocab":[{"english":"Mountain","japanese":"山","reading":"やま / さん"},{"english":"River","japanese":"川","reading":"かわ / せん"},{"english":"Rice field, paddy","japanese":"田","reading":"た / でん"},{"english":"Middle, inside, throughout","japanese":"中","reading":"なか / ちゅう"},{"english":"Sun, day","japanese":"日","reading":"ひ・か / にち・じつ"},{"english":"Book, origin, base","japanese":"本","reading":"もと / ほん"},{"english":"Person, people","japanese":"人","reading":"ひと / じん・にん"},{"english":"Above, up, top","japanese":"上","reading":"うえ / じょう"},{"english":"Below, down, under","japanese":"下","reading":"した / か・げ"},{"english":"Small, little","japanese":"小","reading":"ちいさい / しょう"},{"english":"Tree, wood","japanese":"木","reading":"き / もく・ぼく"},{"english":"Eye","japanese":"目","reading":"め / もく"},{"english":"Mouth","japanese":"口","reading":"くち / こう・く"},{"english":"Ear","japanese":"耳","reading":"みみ / じ"},{"english":"Hand","japanese":"手","reading":"て / しゅ"},{"english":"Foot, leg","japanese":"足","reading":"あし / そく"},{"english":"Woman, female","japanese":"女","reading":"おんな / じょ"},{"english":"Man, male","japanese":"男","reading":"おとこ / だん"},{"english":"Child","japanese":"子","reading":"こ / し"},{"english":"I, private","japanese":"私","reading":"わたし / し"}],"dialogues":[],"readings":[]};
 
 const $=id=>document.getElementById(id);
 const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
@@ -167,7 +138,6 @@ const esc=s=>s.replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 let mode='write';
 let canvas,ctx,drawing=false,lastPos=null,hasStrokes=false;
-let autoPlay={on:false,speed:4.0,timer:null,phase:'front',elapsed:0};
 
 // ═══ MODE SWITCHING ═══
 function setMode(m){
@@ -186,8 +156,6 @@ function render(){
     case 'reading': renderReading(a); break;
     case 'oral': renderOral(a); break;
     case 'mix': renderMix(a); break;
-    case 'flash': renderFlash(a); break;
-    case 'match': renderMatch(a); break;
   }
 }
 
@@ -210,15 +178,7 @@ function showWriteCard(el){
       <span style="color:var(--green);font-size:12px;font-weight:700">${wScore} correct</span>
     </div>
     <div class="progress-bar"><div class="progress-fill" style="width:${((wIdx+1)/wCards.length)*100}%"></div></div>
-    <div class="autoplay-bar">
-      <label>AUTO</label>
-      <label class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></label>
-      <label>SPEED</label>
-      <input type="range" class="ap-speed" id="apSlider" min="1" max="10" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
-      <span class="ap-val" id="apVal">${autoPlay.speed.toFixed(1)}s</span>
-      <span class="ap-hint">A=auto · Space=flip · 1=✅ · 2=❌</span>
-    </div>
-    <div class="card center" style="position:relative">
+    <div class="card center">
       <div style="color:var(--muted);font-size:11px;margin-bottom:6px">Write the Japanese for:</div>
       <div style="font-size:34px;font-weight:700;color:#fff">${esc(c.english)}</div>
       <button class="btn mt8" style="background:var(--surface);border:1px solid var(--border);font-size:11px" onclick="speakJP('${c.japanese}')">🔊 Hear it</button>
@@ -232,7 +192,7 @@ function showWriteCard(el){
       </div>
     </div>
     <div id="wCompare" class="hidden"></div>`;
-  setTimeout(()=>{initDrawCanvas('wCanvas','wCheck');clearAPTimer();if(autoPlay.on)startAPTimer();},50);
+  setTimeout(()=>initDrawCanvas('wCanvas','wCheck'),50);
 }
 
 function wClear(){clearDrawCanvas('wCanvas','wCheck');}
@@ -318,9 +278,6 @@ function wGrade(ok){
   if(ok)wScore++;
   wResults.push({english:wCards[wIdx].english,expected:wCards[wIdx].japanese,correct:ok});
   wIdx++;
-  if(autoPlay.on){
-    autoPlay.speed=ok?Math.max(1.0,parseFloat((autoPlay.speed-.5).toFixed(1))):Math.min(8.0,parseFloat((autoPlay.speed+.5).toFixed(1)));
-  }
   showWriteCard($('mainArea'));
 }
 
@@ -335,149 +292,6 @@ function showWriteResults(el){
     ${wResults.map(r=>`<div class="result-row" style="border-left:3px solid ${r.correct?'var(--green)':'var(--red)'}"><div><span style="color:#fff;font-size:13px">${esc(r.english)}</span><span style="color:var(--dim);font-size:11px;margin-left:8px">→ ${r.expected}</span></div><div style="color:${r.correct?'var(--green)':'var(--red)'}">${r.correct?'✓':'✗'}</div></div>`).join('')}
     <button class="btn w100 mt16" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="renderWrite($('mainArea'))">🔄 Restart</button>`;
 }
-
-// ═══════════════════════════
-// 🃏 FLASHCARD
-// ═══════════════════════════
-let fCards=[],fIdx=0,fScore=0,fResults=[];
-function renderFlash(el){fCards=shuffle(DATA.vocab);fIdx=0;fScore=0;fResults=[];showFlashFront(el);}
-function showFlashFront(el){
-  if(fIdx>=fCards.length)return showFlashResults(el);
-  const c=fCards[fIdx];
-  el.innerHTML=`
-    <div class="flex-between mb8">
-      <span style="color:var(--muted);font-size:12px">${fIdx+1}/${fCards.length}</span>
-      <span style="color:var(--green);font-size:12px;font-weight:700">${fScore} correct</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" style="width:${((fIdx+1)/fCards.length)*100}%"></div></div>
-    <div class="autoplay-bar">
-      <label>AUTO</label>
-      <label class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></label>
-      <label>SPEED</label>
-      <input type="range" class="ap-speed" id="apSlider" min="1" max="10" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
-      <span class="ap-val" id="apVal">${autoPlay.speed.toFixed(1)}s</span>
-      <span class="ap-hint">A=auto · Space=flip · 1=✅ · 2=❌</span>
-    </div>
-    <div class="card center" style="position:relative;min-height:160px">
-      <div style="color:var(--muted);font-size:11px;margin-bottom:8px;letter-spacing:2px;text-transform:uppercase">What is the Japanese for:</div>
-      <div style="font-size:34px;font-weight:700;color:#fff;margin-bottom:20px">${esc(c.english)}</div>
-      <button class="btn" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="showFlashBack($('mainArea'))">👁 Show Answer</button>
-    </div>`;
-  clearAPTimer();if(autoPlay.on)startAPTimer();
-}
-function showFlashBack(el){
-  autoPlay.phase='back';autoPlay.elapsed=0;
-  const c=fCards[fIdx];
-  speakJP(c.japanese);
-  el.innerHTML=`
-    <div class="flex-between mb8">
-      <span style="color:var(--muted);font-size:12px">${fIdx+1}/${fCards.length}</span>
-      <span style="color:var(--green);font-size:12px;font-weight:700">${fScore} correct</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" style="width:${((fIdx+1)/fCards.length)*100}%"></div></div>
-    <div class="autoplay-bar">
-      <label>AUTO</label>
-      <label class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></label>
-      <label>SPEED</label>
-      <input type="range" class="ap-speed" id="apSlider" min="1" max="10" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
-      <span class="ap-val" id="apVal">${autoPlay.speed.toFixed(1)}s</span>
-      <span class="ap-hint">A=auto · Space=flip · 1=✅ · 2=❌</span>
-    </div>
-    <div class="card center slide-up" style="position:relative;min-height:160px">
-      <div style="color:var(--muted);font-size:11px;margin-bottom:4px;letter-spacing:2px;text-transform:uppercase">Answer</div>
-      <div class="handwritten" style="font-size:52px">${c.japanese}</div>
-      <div style="color:var(--accent2);font-size:13px;margin-top:8px">${c.reading}</div>
-    </div>
-    <div class="gap8 mt8">
-      <button class="btn" style="background:var(--green);padding:11px 28px" onclick="flashGrade(true)">✅ Got it</button>
-      <button class="btn" style="background:var(--red);padding:11px 28px" onclick="flashGrade(false)">❌ Missed</button>
-    </div>`;
-  if(autoPlay.on)showAPRing();
-}
-function flashGrade(ok){
-  if(ok)fScore++;
-  fResults.push({...fCards[fIdx],correct:ok});
-  fIdx++;
-  if(autoPlay.on){
-    autoPlay.speed=ok?Math.max(1.0,parseFloat((autoPlay.speed-.5).toFixed(1))):Math.min(8.0,parseFloat((autoPlay.speed+.5).toFixed(1)));
-    const sv=document.getElementById('apVal');if(sv)sv.textContent=autoPlay.speed.toFixed(1)+'s';
-    const sl=document.getElementById('apSlider');if(sl)sl.value=autoPlay.speed;
-  }
-  showFlashFront($('mainArea'));
-}
-function showFlashResults(el){
-  clearAPTimer();
-  const pct=Math.round((fScore/fCards.length)*100);
-  const missed=fResults.filter(r=>!r.correct);
-  el.innerHTML=`
-    <div class="center" style="margin-bottom:20px">
-      <div style="font-size:48px">${pct>=80?'🎉':pct>=50?'📝':'💪'}</div>
-      <div style="font-size:32px;font-weight:700">${fScore}/${fCards.length}</div>
-      <div style="color:var(--muted);font-size:14px">${pct}%</div>
-    </div>
-    ${fResults.map(r=>`<div class="result-row" style="border-left:3px solid ${r.correct?'var(--green)':'var(--red)'}"><div><span style="color:#fff;font-size:13px">${esc(r.english)}</span><span style="color:var(--dim);font-size:11px;margin-left:8px">→ ${r.japanese}</span></div><div style="color:${r.correct?'var(--green)':'var(--red)'}">${r.correct?'✓':'✗'}</div></div>`).join('')}
-    ${missed.length?`<button class="btn w100 mt8" style="background:var(--red)" onclick="reReviewMissed($('mainArea'))">🔁 Re-review Missed (${missed.length})</button>`:''}
-    <button class="btn w100 mt8" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="renderFlash($('mainArea'))">🔄 Restart All</button>`;}
-function reReviewMissed(el){
-  const missed=fResults.filter(r=>!r.correct).map(r=>({english:r.english,japanese:r.japanese,reading:r.reading}));
-  fCards=shuffle(missed);fIdx=0;fScore=0;fResults=[];
-  showFlashFront(el);
-}
-
-// ═══════════════════════════
-// 🎮 MATCH GAME
-// ═══════════════════════════
-let mPairs=[],mTiles=[],mSel=-1,mMatched,mSecs=0,mTmr=null;
-function fmtTime(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
-function renderMatch(el){
-  clearInterval(mTmr);
-  const pool=shuffle(DATA.vocab).slice(0,6);
-  mPairs=pool;
-  mTiles=shuffle([...pool.map((c,i)=>({id:i*2,pairId:i,type:'en',text:c.english})),...pool.map((c,i)=>({id:i*2+1,pairId:i,type:'jp',text:c.japanese}))]);
-  mSel=-1;mMatched=new Set();mSecs=0;
-  showMatch(el);
-  mTmr=setInterval(()=>{mSecs++;const t=$('mTimer');if(t)t.textContent=fmtTime(mSecs);},1000);
-}
-function showMatch(el){
-  el.innerHTML=`
-    <div class="flex-between mb8">
-      <span style="color:var(--muted);font-size:12px">Match ${mPairs.length} pairs</span>
-      <span class="match-timer" id="mTimer">0:00</span>
-    </div>
-    <div class="match-grid">
-      ${mTiles.map((t,i)=>`<div class="match-card" id="mt${i}" onclick="matchClick(${i})" style="${t.type==='jp'?'font-family:\'Klee One\',cursive;font-size:22px':'font-size:13px'}">${esc(t.text)}</div>`).join('')}
-    </div>
-    <div id="mMsg" style="text-align:center;min-height:26px;font-size:12px;color:var(--muted)">Tap a card to start matching!</div>`;}
-function matchClick(i){
-  const tile=mTiles[i];
-  if(mMatched.has(tile.pairId))return;
-  if(mSel===i){$('mt'+i).classList.remove('selected');mSel=-1;return;}
-  if(mSel<0){mSel=i;$('mt'+i).classList.add('selected');return;}
-  const prev=mSel,a=mTiles[prev],b=tile;
-  mSel=-1;$('mt'+prev).classList.remove('selected');
-  if(a.pairId===b.pairId){
-    mMatched.add(a.pairId);
-    $('mt'+prev).classList.add('matched');$('mt'+i).classList.add('matched');
-    const msg=$('mMsg');if(msg)msg.textContent='✅ Matched!';
-    if(mMatched.size===mPairs.length){clearInterval(mTmr);setTimeout(()=>showMatchDone($('mainArea')),600);}
-  } else {
-    $('mt'+prev).classList.add('wrong');$('mt'+i).classList.add('wrong');
-    const msg=$('mMsg');if(msg)msg.textContent='❌ Not a match — try again!';
-    setTimeout(()=>{$('mt'+prev).classList.remove('wrong');$('mt'+i).classList.remove('wrong');const m=$('mMsg');if(m)m.textContent='Keep matching!';},500);
-  }
-}
-function showMatchDone(el){
-  clearInterval(mTmr);
-  el.innerHTML=`
-    <div class="center slide-up">
-      <div style="font-size:52px;margin-bottom:8px">🎉</div>
-      <div style="font-size:28px;font-weight:700;color:var(--accent2)">All Matched!</div>
-      <div style="font-size:18px;color:var(--muted);margin:10px 0">Time: <span style="color:var(--accent);font-weight:700">${fmtTime(mSecs)}</span></div>
-      <div class="gap8 mt16">
-        <button class="btn" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="renderMatch($('mainArea'))">🔄 Play Again</button>
-        <button class="btn" style="background:var(--surface);border:1px solid var(--border);color:var(--text)" onclick="setMode('flash')">🃏 Flashcards</button>
-      </div>
-    </div>`;}
 
 // ═══════════════════════════
 // 👂 DICTATION
@@ -753,33 +567,6 @@ function clearDrawCanvas(canvasId,checkBtnId){
   if(canvasState[canvasId]){canvasState[canvasId].strokes=[];canvasState[canvasId].currentPoints=[];}
   $(checkBtnId).disabled=true;
 }
-
-// ═══ AUTO TIMER ═══
-function toggleAutoPlay(on){autoPlay.on=on;clearAPTimer();const t=document.getElementById('apToggle');if(t&&t.checked!==on)t.checked=on;if(on)startAPTimer();}
-function setAutoSpeed(val){autoPlay.speed=parseFloat(val);const sv=document.getElementById('apVal');if(sv)sv.textContent=autoPlay.speed.toFixed(1)+'s';if(autoPlay.on){clearAPTimer();startAPTimer();}}
-function clearAPTimer(){if(autoPlay.timer){clearInterval(autoPlay.timer);autoPlay.timer=null;}autoPlay.elapsed=0;const r=document.getElementById('apRing');if(r)r.remove();}
-function startAPTimer(){if(!autoPlay.on)return;autoPlay.elapsed=0;autoPlay.phase='front';showAPRing();autoPlay.timer=setInterval(()=>{autoPlay.elapsed+=0.1;updateAPRing();if(autoPlay.elapsed>=autoPlay.speed){autoPlay.elapsed=0;apAdvance();}},100);}
-function apAdvance(){
-  if(autoPlay.phase==='front'){
-    const btns=document.querySelectorAll('#mainArea button');
-    for(const b of btns){const t=b.textContent.toLowerCase();if(t.includes('check')||t.includes('show')||t.includes('reveal')){if(b.disabled)wCheckAnswer();else b.click();autoPlay.phase='back';autoPlay.elapsed=0;updateAPRing();return;}}
-    autoPlay.phase='back';autoPlay.elapsed=0;
-  }
-  if(autoPlay.phase==='back'){
-    const btns=document.querySelectorAll('button');
-    for(const b of btns){const t=b.textContent.toLowerCase();if(t.includes('got it')||t.includes('next')||t.includes('correct')){b.click();autoPlay.phase='front';autoPlay.elapsed=0;updateAPRing();return;}}
-    autoPlay.phase='front';autoPlay.elapsed=0;
-  }
-}
-function showAPRing(){let r=document.getElementById('apRing');if(r)r.remove();const card=document.querySelector('.card.center');if(!card)return;card.style.position='relative';r=document.createElement('div');r.id='apRing';r.className='cring';const cr=19,cc=2*Math.PI*cr;r.innerHTML=`<svg viewBox="0 0 48 48"><circle class="rbg" cx="24" cy="24" r="${cr}"/><circle class="rfg ${autoPlay.phase==='front'?'rfront':'rback'}" id="ringFg" cx="24" cy="24" r="${cr}" stroke-dasharray="${cc}" stroke-dashoffset="0"/></svg><div class="cring-num" id="ringNum">${autoPlay.speed.toFixed(1)}</div>`;card.prepend(r);}
-function updateAPRing(){const fg=document.getElementById('ringFg');const num=document.getElementById('ringNum');if(!fg||!num){showAPRing();return;}const cr=19,cc=2*Math.PI*cr;fg.setAttribute('stroke-dashoffset',(cc*(1-autoPlay.elapsed/autoPlay.speed)).toString());fg.className.baseVal='rfg '+(autoPlay.phase==='front'?'rfront':'rback');num.textContent=Math.max(0,autoPlay.speed-autoPlay.elapsed).toFixed(1);}
-document.addEventListener('keydown',e=>{
-  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
-  if(e.key==='a'||e.key==='A')toggleAutoPlay(!autoPlay.on);
-  if(e.key==='1'){const b=document.querySelector('.btn[onclick*="flashGrade(true)"]');if(b)flashGrade(true);}
-  if(e.key==='2'){const b=document.querySelector('.btn[onclick*="flashGrade(false)"]');if(b)flashGrade(false);}
-  if(e.key===' '||e.key==='ArrowRight'){const b=document.querySelector('.btn[onclick*="showFlashBack"]');if(b){e.preventDefault();showFlashBack($('mainArea'));}}
-});
 
 // ═══ IMPORT ═══
 function toggleImp(){$('impSection').classList.toggle('hidden');}

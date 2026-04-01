@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -22,7 +22,7 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .mode-btn .pct{font-size:9px;opacity:.7;display:block;margin-top:1px;}
 
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
-.btn{border:none;color:#fff;padding:9px 18px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans';transition:all .2s;}
+.btn{border:none;color:#fff;padding:9px 18px;border-radius:9px;cursor:pointer;touch-action:manipulation;font-size:13px;font-weight:600;font-family:'DM Sans';transition:all .2s;}
 .btn:hover{transform:translateY(-1px);filter:brightness(1.1);}
 .btn:active{transform:scale(.97);}
 .btn:disabled{opacity:.4;cursor:default;transform:none;}
@@ -212,7 +212,7 @@ function showWriteCard(el){
     <div class="progress-bar"><div class="progress-fill" style="width:${((wIdx+1)/wCards.length)*100}%"></div></div>
     <div class="autoplay-bar">
       <label>AUTO</label>
-      <div class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></div>
+      <label class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></label>
       <label>SPEED</label>
       <input type="range" class="ap-speed" id="apSlider" min="1" max="10" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
       <span class="ap-val" id="apVal">${autoPlay.speed.toFixed(1)}s</span>
@@ -352,7 +352,7 @@ function showFlashFront(el){
     <div class="progress-bar"><div class="progress-fill" style="width:${((fIdx+1)/fCards.length)*100}%"></div></div>
     <div class="autoplay-bar">
       <label>AUTO</label>
-      <div class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></div>
+      <label class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></label>
       <label>SPEED</label>
       <input type="range" class="ap-speed" id="apSlider" min="1" max="10" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
       <span class="ap-val" id="apVal">${autoPlay.speed.toFixed(1)}s</span>
@@ -377,7 +377,7 @@ function showFlashBack(el){
     <div class="progress-bar"><div class="progress-fill" style="width:${((fIdx+1)/fCards.length)*100}%"></div></div>
     <div class="autoplay-bar">
       <label>AUTO</label>
-      <div class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></div>
+      <label class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></label>
       <label>SPEED</label>
       <input type="range" class="ap-speed" id="apSlider" min="1" max="10" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
       <span class="ap-val" id="apVal">${autoPlay.speed.toFixed(1)}s</span>
