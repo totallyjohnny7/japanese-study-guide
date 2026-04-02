@@ -88,6 +88,15 @@ textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,
   .ime-hint{display:none;}
 }
 
+.match-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+@media(max-width:400px){.match-grid{grid-template-columns:repeat(2,1fr);}}
+.match-card{background:var(--surface);border:2px solid var(--border);border-radius:12px;padding:12px 8px;min-height:72px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;font-size:14px;font-weight:600;font-family:'Noto Sans JP','DM Sans';transition:all .15s;-webkit-tap-highlight-color:transparent;user-select:none;}
+.match-card:hover{border-color:var(--accent);background:rgba(212,168,67,0.06);}
+.match-card.selected{border-color:var(--accent2);background:rgba(240,200,90,0.15);box-shadow:0 0 12px rgba(240,200,90,0.2);}
+.match-card.matched{opacity:0;pointer-events:none;transform:scale(.85);transition:all .4s;}
+.match-card.wrong{animation:mshake .35s ease;}
+@keyframes mshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.match-timer{font-size:28px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;}
 </style>
 </head>
 <body>
@@ -116,6 +125,8 @@ textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,
   <button class="mode-btn" onclick="setMode('reading')" id="m_reading">📖 Reading<span class="pct">Exams 40%</span></button>
   <button class="mode-btn" onclick="setMode('oral')" id="m_oral">🗣️ Oral<span class="pct">Oral 10%</span></button>
   <button class="mode-btn" onclick="setMode('mix')" id="m_mix">🎲 Mixed Quiz<span class="pct">Everything</span></button>
+  <button class="mode-btn" onclick="setMode('flash')" id="m_flash">🃏 Flashcard<span class="pct">Review All</span></button>
+  <button class="mode-btn" onclick="setMode('match')" id="m_match">🎮 Match<span class="pct">Quizlet Style</span></button>
 </div>
 
 <!-- Main content area -->
@@ -156,6 +167,8 @@ function render(){
     case 'reading': renderReading(a); break;
     case 'oral': renderOral(a); break;
     case 'mix': renderMix(a); break;
+    case 'flash': renderFlash(a); break;
+    case 'match': renderMatch(a); break;
   }
 }
 
