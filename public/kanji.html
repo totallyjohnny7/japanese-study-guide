@@ -74,10 +74,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   <div class="hero-sub">Chapters 4 – 6 · Nakama 1</div>
 </div>
 <div class="filter-bar">
-  <button class="ftab active" onclick="filterCh('all')">All (26)</button>
-  <button class="ftab" onclick="filterCh('ch4')">Ch.4 · 5 kanji</button>
-  <button class="ftab" onclick="filterCh('ch5')">Ch.5 · 14 kanji</button>
-  <button class="ftab" onclick="filterCh('ch6')">Ch.6 · 7 kanji</button>
+  <button class="ftab active" onclick="filterCh('all',event)">All (26)</button>
+  <button class="ftab" onclick="filterCh('ch4',event)">Ch.4 · 5 kanji</button>
+  <button class="ftab" onclick="filterCh('ch5',event)">Ch.5 · 14 kanji</button>
+  <button class="ftab" onclick="filterCh('ch6',event)">Ch.6 · 7 kanji</button>
 </div>
 <div class="grid-wrap">
   <div class="irreg-box" id="irregBox">
@@ -253,9 +253,9 @@ function render(){
   });
 }
 
-function filterCh(ch){
+function filterCh(ch,e){
   document.querySelectorAll(".ftab").forEach(function(b){ b.classList.remove("active"); });
-  event.currentTarget.classList.add("active");
+  if(e&&e.currentTarget) e.currentTarget.classList.add("active");
   ["ch4","ch5","ch6"].forEach(function(c){
     const sec = document.getElementById(c + "section");
     if(!sec) return;

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nakama 1 — 活用 Conjugation Drill</title>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--surface:#111111;--card:#161616;--border:#2a2a2a;--accent:#d4a843;--accent2:#f0c85a;--green:#4ecf7a;--red:#e85454;--yellow:#f0c85a;--text:#e0ddd5;--muted:#5a5548;--dim:#3a3528;--blue:#5ba8e8;--gold-glow:rgba(212,168,67,0.15);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 20% 20%,rgba(212,168,67,0.03) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(212,168,67,0.02) 0%,transparent 50%);pointer-events:none;}
+.app{position:relative;z-index:1;padding:16px 16px 40px;max-width:520px;margin:0 auto;}
+.back-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans';transition:all .2s;}
+.back-btn:hover{color:var(--accent);border-color:var(--accent);}
+.back-title{font-size:13px;color:var(--muted);font-weight:600;letter-spacing:1px;}
+.header{text-align:center;margin-bottom:20px;}
+.header .kanji-hero{font-size:56px;font-family:'Noto Sans JP';background:linear-gradient(135deg,#f0c85a,#d4a843,#8b6d1e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;}
+.header h1{font-size:24px;font-weight:700;background:linear-gradient(135deg,#f0c85a,#d4a843,#8b6d1e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:"Cormorant Garamond",serif;letter-spacing:2px;margin-top:4px;}
+.header p{color:var(--muted);font-size:11px;margin-top:3px;letter-spacing:3px;text-transform:uppercase;}
+</style>
+<style>
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;justify-content:center;}
+.filter-btn{padding:7px 13px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans';transition:all .2s;white-space:nowrap;}
+.filter-btn.active{background:linear-gradient(135deg,#8b6d1e,var(--accent));color:#fff;border-color:var(--accent);box-shadow:0 0 12px rgba(212,168,67,0.15);}
+.forms{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;justify-content:center;}
+.form-btn{padding:6px 11px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:10px;font-weight:600;cursor:pointer;font-family:'DM Sans';transition:all .2s;white-space:nowrap;}
+.form-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
+.btn{border:none;color:#fff;padding:9px 18px;border-radius:9px;cursor:pointer;touch-action:manipulation;font-size:13px;font-weight:600;font-family:'DM Sans';transition:all .2s;}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.1);}
+.btn:active{transform:scale(.97);}
+.btn:disabled{opacity:.4;cursor:default;transform:none;}
+.btn-accent{background:linear-gradient(135deg,#8b6d1e,var(--accent));}
+.btn-outline{background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;padding:7px 14px;}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.btn-green{background:linear-gradient(135deg,#2a8a4a,var(--green));}
+.progress-bar{height:4px;background:var(--surface);border-radius:4px;margin-bottom:14px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .4s;}
+.score-line{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px;}
+.score-line .correct{color:var(--green);font-weight:700;}
+.score-line .wrong{color:var(--red);font-weight:700;}
+</style>
+<style>
+.prompt-word{font-family:'Noto Sans JP','Klee One';font-size:38px;color:#fff;text-align:center;line-height:1.3;margin-bottom:4px;}
+.prompt-english{font-size:12px;color:var(--muted);text-align:center;margin-bottom:4px;}
+.prompt-target{font-size:14px;color:var(--accent2);text-align:center;font-weight:700;margin-bottom:16px;letter-spacing:1px;}
+.answer-input{width:100%;background:#0a0a0a;border:2px solid var(--border);border-radius:10px;color:#ffffff;padding:12px;font-size:20px;font-weight:500;font-family:'Noto Sans JP','DM Sans';outline:none;caret-color:var(--accent2);text-align:center;}
+.answer-input:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,168,67,0.15);background:#0d0d0d;}
+.answer-input::placeholder{color:#5a5548;font-size:14px;}
+.feedback{text-align:center;margin-top:12px;font-size:15px;font-weight:600;animation:slideUp .3s ease;}
+.feedback.correct{color:var(--green);}
+.feedback.wrong{color:var(--red);}
+.rule-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:10px;font-size:12px;color:var(--text);line-height:1.6;}
+.rule-box .rule-title{color:var(--accent);font-weight:700;margin-bottom:4px;font-size:11px;letter-spacing:1px;text-transform:uppercase;}
+.correct-answer{color:var(--accent2);font-family:'Noto Sans JP';font-size:18px;margin-top:6px;text-align:center;}
+.action-row{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
+.result-row{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--border);padding:10px 14px;border-radius:10px;margin-bottom:5px;}
+.result-row .jp{font-family:'Noto Sans JP';font-size:15px;}
+.result-row .en{font-size:11px;color:var(--muted);}
+.result-row .tag{display:inline-block;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700;}
+.tag-ok{background:rgba(78,207,122,0.15);color:var(--green);}
+.tag-miss{background:rgba(232,84,84,0.15);color:var(--red);}
+.hidden{display:none!important;}
+.center{text-align:center;}
+.mt8{margin-top:8px;}.mt12{margin-top:12px;}.mt16{margin-top:16px;}
+@keyframes slideUp{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:#8b6d1e;border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="back-bar">
+    <button class="back-btn" onclick="history.back()">&#8592; Back</button>
+    <span class="back-title">活用 Conjugation Drill</span>
+  </div>
+  <div class="header">
+    <div class="kanji-hero">活用</div>
+    <h1>Conjugation Drill</h1>
+    <p>Verb &amp; Adjective Forms &middot; Nakama 1</p>
+  </div>
+
+  <div id="filter-area">
+    <div class="filters" id="filters"></div>
+    <div class="forms" id="forms"></div>
+  </div>
+
+  <div id="start-screen" class="center">
+    <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">Select filters above, then start drilling.</p>
+    <p style="font-size:12px;color:var(--muted);" id="item-count"></p>
+    <button class="btn btn-accent mt12" id="start-btn" onclick="startDrill()">Start Drill</button>
+  </div>
+
+  <div id="drill-screen" class="hidden">
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="score-line">
+      <span id="q-counter">1 / 10</span>
+      <span><span class="correct" id="sc-right">0</span> / <span class="wrong" id="sc-wrong">0</span></span>
+    </div>
+    <div class="card" id="drill-card">
+      <div class="prompt-word" id="prompt-word"></div>
+      <div class="prompt-english" id="prompt-english"></div>
+      <div class="prompt-target" id="prompt-target"></div>
+      <input type="text" class="answer-input" id="answer-input" placeholder="Type your answer..." autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="action-row mt12">
+        <button class="btn btn-accent" id="check-btn" onclick="checkAnswer()">Check</button>
+        <button class="btn btn-outline" id="rule-btn" onclick="toggleRule()">Show Rule</button>
+      </div>
+      <div id="feedback" class="feedback hidden"></div>
+      <div id="correct-answer" class="correct-answer hidden"></div>
+      <div id="rule-box" class="rule-box hidden"></div>
+      <div class="action-row hidden" id="next-row">
+        <button class="btn btn-accent" id="next-btn" onclick="nextQuestion()">Next &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results-screen" class="hidden">
+    <div class="card center">
+      <div style="font-size:40px;margin-bottom:8px;">&#127942;</div>
+      <h2 style="color:var(--accent);font-family:'Cormorant Garamond';font-size:22px;">Drill Complete!</h2>
+      <p style="color:var(--muted);font-size:13px;margin-top:6px;" id="final-score"></p>
+      <div class="progress-bar mt12"><div class="progress-fill" id="final-bar" style="width:0%"></div></div>
+    </div>
+    <h3 style="color:var(--muted);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin:14px 0 8px;">Results</h3>
+    <div id="results-list"></div>
+    <div class="center mt16">
+      <button class="btn btn-accent" onclick="resetDrill()">Try Again</button>
+      <button class="btn btn-outline" onclick="retryMissed()" id="retry-missed-btn" style="margin-left:8px;">Retry Missed</button>
+    </div>
+  </div>
+</div>
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+const VERBS_RU = [
+  {dictionary:"食べる",masu:"食べます",stem:"食べ",type:"ru",english:"eat"},
+  {dictionary:"見る",masu:"見ます",stem:"見",type:"ru",english:"see/watch"},
+  {dictionary:"起きる",masu:"起きます",stem:"起き",type:"ru",english:"get up"},
+  {dictionary:"寝る",masu:"寝ます",stem:"寝",type:"ru",english:"sleep"},
+  {dictionary:"教える",masu:"教えます",stem:"教え",type:"ru",english:"teach"},
+  {dictionary:"出る",masu:"出ます",stem:"出",type:"ru",english:"go out"},
+  {dictionary:"着る",masu:"着ます",stem:"着",type:"ru",english:"wear"},
+  {dictionary:"開ける",masu:"開けます",stem:"開け",type:"ru",english:"open"},
+  {dictionary:"閉める",masu:"閉めます",stem:"閉め",type:"ru",english:"close"},
+];
+const VERBS_U = [
+  {dictionary:"行く",masu:"行きます",stem:"行き",type:"u",english:"go"},
+  {dictionary:"帰る",masu:"帰ります",stem:"帰り",type:"u",english:"return"},
+  {dictionary:"読む",masu:"読みます",stem:"読み",type:"u",english:"read"},
+  {dictionary:"書く",masu:"書きます",stem:"書き",type:"u",english:"write"},
+  {dictionary:"話す",masu:"話します",stem:"話し",type:"u",english:"speak"},
+  {dictionary:"聞く",masu:"聞きます",stem:"聞き",type:"u",english:"listen/ask"},
+  {dictionary:"飲む",masu:"飲みます",stem:"飲み",type:"u",english:"drink"},
+  {dictionary:"買う",masu:"買います",stem:"買い",type:"u",english:"buy"},
+  {dictionary:"会う",masu:"会います",stem:"会い",type:"u",english:"meet"},
+  {dictionary:"待つ",masu:"待ちます",stem:"待ち",type:"u",english:"wait"},
+  {dictionary:"遊ぶ",masu:"遊びます",stem:"遊び",type:"u",english:"play"},
+  {dictionary:"泳ぐ",masu:"泳ぎます",stem:"泳ぎ",type:"u",english:"swim"},
+  {dictionary:"作る",masu:"作ります",stem:"作り",type:"u",english:"make"},
+  {dictionary:"走る",masu:"走ります",stem:"走り",type:"u",english:"run"},
+  {dictionary:"死ぬ",masu:"死にます",stem:"死に",type:"u",english:"die"},
+];
+const VERBS_IRR = [
+  {dictionary:"する",masu:"します",stem:"し",type:"irr",english:"do"},
+  {dictionary:"来る",masu:"来ます",stem:"来",type:"irr",english:"come",reading:"きます"},
+];
+const ADJ_I = [
+  {dictionary:"大きい",stem:"大き",type:"i-adj",english:"big"},
+  {dictionary:"小さい",stem:"小さ",type:"i-adj",english:"small"},
+  {dictionary:"高い",stem:"高",type:"i-adj",english:"expensive/tall"},
+  {dictionary:"安い",stem:"安",type:"i-adj",english:"cheap"},
+  {dictionary:"新しい",stem:"新し",type:"i-adj",english:"new"},
+  {dictionary:"古い",stem:"古",type:"i-adj",english:"old (things)"},
+  {dictionary:"楽しい",stem:"楽し",type:"i-adj",english:"fun"},
+  {dictionary:"面白い",stem:"面白",type:"i-adj",english:"interesting"},
+  {dictionary:"難しい",stem:"難し",type:"i-adj",english:"difficult"},
+  {dictionary:"暑い",stem:"暑",type:"i-adj",english:"hot (weather)"},
+  {dictionary:"寒い",stem:"寒",type:"i-adj",english:"cold (weather)"},
+  {dictionary:"いい",stem:"い",type:"i-adj",english:"good",irregular:true},
+];
+const ADJ_NA = [
+  {dictionary:"元気",type:"na-adj",english:"healthy/energetic"},
+  {dictionary:"好き",type:"na-adj",english:"like"},
+  {dictionary:"嫌い",type:"na-adj",english:"dislike"},
+  {dictionary:"静か",type:"na-adj",english:"quiet"},
+  {dictionary:"賑やか",type:"na-adj",english:"lively"},
+  {dictionary:"有名",type:"na-adj",english:"famous"},
+  {dictionary:"大変",type:"na-adj",english:"tough/terrible"},
+  {dictionary:"簡単",type:"na-adj",english:"easy/simple"},
+  {dictionary:"残念",type:"na-adj",english:"regrettable"},
+];
+
+const FILTERS = [
+  {id:"all",label:"All"},
+  {id:"ru",label:"る-verbs"},
+  {id:"u",label:"う-verbs"},
+  {id:"irr",label:"Irregular"},
+  {id:"i-adj",label:"い-adj"},
+  {id:"na-adj",label:"な-adj"},
+];
+const FORMS = [
+  {id:"pres-aff",label:"Present Aff"},
+  {id:"pres-neg",label:"Present Neg"},
+  {id:"past-aff",label:"Past Aff"},
+  {id:"past-neg",label:"Past Neg"},
+];
+
+let activeFilter = "all";
+let activeForm = "pres-neg";
+let pool = [];
+let queue = [];
+let current = null;
+let qIdx = 0;
+let score = {right:0, wrong:0};
+let results = [];
+let answered = false;
+// ═══════════════════════════════════════
+// CONJUGATION ENGINE
+// ═══════════════════════════════════════
+function conjugate(item, form) {
+  const t = item.type;
+  // VERBS (masu-form based)
+  if (t === "ru" || t === "u" || t === "irr") {
+    const s = item.stem;
+    switch(form) {
+      case "pres-aff": return s + "ます";
+      case "pres-neg": return s + "ません";
+      case "past-aff": return s + "ました";
+      case "past-neg": return s + "ませんでした";
+    }
+  }
+  // い-ADJECTIVES
+  if (t === "i-adj") {
+    const isIi = item.irregular;
+    switch(form) {
+      case "pres-aff": return item.dictionary + "です";
+      case "pres-neg": return (isIi ? "よくないです" : item.stem + "くないです");
+      case "past-aff": return (isIi ? "よかったです" : item.stem + "かったです");
+      case "past-neg": return (isIi ? "よくなかったです" : item.stem + "くなかったです");
+    }
+  }
+  // な-ADJECTIVES
+  if (t === "na-adj") {
+    const d = item.dictionary;
+    switch(form) {
+      case "pres-aff": return d + "です";
+      case "pres-neg": return d + "じゃないです";
+      case "past-aff": return d + "でした";
+      case "past-neg": return d + "じゃなかったです";
+    }
+  }
+  return "";
+}
+function getRule(item, form) {
+  const t = item.type;
+  if (t === "ru" || t === "u" || t === "irr") {
+    const label = t === "ru" ? "る-verb" : t === "u" ? "う-verb" : "Irregular verb";
+    switch(form) {
+      case "pres-aff": return label + ": stem + ます (given masu form)";
+      case "pres-neg": return label + ": stem + ません";
+      case "past-aff": return label + ": stem + ました";
+      case "past-neg": return label + ": stem + ませんでした";
+    }
+  }
+  if (t === "i-adj") {
+    const note = item.irregular ? " (いい is special: い→よ)" : "";
+    switch(form) {
+      case "pres-aff": return "い-adj: dictionary form + です" + note;
+      case "pres-neg": return "い-adj: drop い → くないです" + note;
+      case "past-aff": return "い-adj: drop い → かったです" + note;
+      case "past-neg": return "い-adj: drop い → くなかったです" + note;
+    }
+  }
+  if (t === "na-adj") {
+    switch(form) {
+      case "pres-aff": return "な-adj: stem + です";
+      case "pres-neg": return "な-adj: stem + じゃないです";
+      case "past-aff": return "な-adj: stem + でした";
+      case "past-neg": return "な-adj: stem + じゃなかったです";
+    }
+  }
+  return "";
+}
+function getFormLabel(form) {
+  switch(form) {
+    case "pres-aff": return "Present Affirmative";
+    case "pres-neg": return "Present Negative";
+    case "past-aff": return "Past Affirmative";
+    case "past-neg": return "Past Negative";
+  }
+  return form;
+}
+
+function getDisplayWord(item) {
+  if (item.type === "ru" || item.type === "u" || item.type === "irr") {
+    return item.masu;
+  }
+  return item.dictionary;
+}
+
+function getTypeLabel(t) {
+  switch(t) {
+    case "ru": return "る-verb";
+    case "u": return "う-verb";
+    case "irr": return "Irregular";
+    case "i-adj": return "い-adj";
+    case "na-adj": return "な-adj";
+  }
+  return t;
+}
+// ═══════════════════════════════════════
+// UI SETUP
+// ═══════════════════════════════════════
+function buildFilters() {
+  const c = document.getElementById("filters");
+  c.innerHTML = FILTERS.map(f =>
+    `<button class="filter-btn${f.id===activeFilter?' active':''}" data-f="${f.id}">${f.label}</button>`
+  ).join("");
+  c.querySelectorAll(".filter-btn").forEach(b => {
+    b.onclick = () => {
+      activeFilter = b.dataset.f;
+      c.querySelectorAll(".filter-btn").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      updateCount();
+    };
+  });
+}
+function buildForms() {
+  const c = document.getElementById("forms");
+  c.innerHTML = FORMS.map(f =>
+    `<button class="form-btn${f.id===activeForm?' active':''}" data-f="${f.id}">${f.label}</button>`
+  ).join("");
+  c.querySelectorAll(".form-btn").forEach(b => {
+    b.onclick = () => {
+      activeForm = b.dataset.f;
+      c.querySelectorAll(".form-btn").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active");
+      updateCount();
+    };
+  });
+}
+function getPool() {
+  let items = [];
+  if (activeFilter === "all" || activeFilter === "ru") items = items.concat(VERBS_RU);
+  if (activeFilter === "all" || activeFilter === "u") items = items.concat(VERBS_U);
+  if (activeFilter === "all" || activeFilter === "irr") items = items.concat(VERBS_IRR);
+  if (activeFilter === "all" || activeFilter === "i-adj") items = items.concat(ADJ_I);
+  if (activeFilter === "all" || activeFilter === "na-adj") items = items.concat(ADJ_NA);
+  // For pres-aff on verbs, skip (it's just the masu form given)
+  if (activeForm === "pres-aff") {
+    items = items.filter(i => i.type === "i-adj" || i.type === "na-adj");
+  }
+  return items;
+}
+
+function updateCount() {
+  const p = getPool();
+  document.getElementById("item-count").textContent = p.length + " items available";
+  document.getElementById("start-btn").disabled = p.length === 0;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// ═══════════════════════════════════════
+// DRILL LOGIC
+// ═══════════════════════════════════════
+function startDrill() {
+  pool = getPool();
+  if (pool.length === 0) return;
+  queue = shuffle(pool);
+  qIdx = 0;
+  score = {right:0, wrong:0};
+  results = [];
+  document.getElementById("start-screen").classList.add("hidden");
+  document.getElementById("filter-area").classList.add("hidden");
+  document.getElementById("results-screen").classList.add("hidden");
+  document.getElementById("drill-screen").classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion() {
+  if (qIdx >= queue.length) { showResults(); return; }
+  current = queue[qIdx];
+  answered = false;
+  const total = queue.length;
+  document.getElementById("prog-fill").style.width = ((qIdx/total)*100)+"%";
+  document.getElementById("q-counter").textContent = (qIdx+1)+" / "+total;
+  document.getElementById("sc-right").textContent = score.right;
+  document.getElementById("sc-wrong").textContent = score.wrong;
+  document.getElementById("prompt-word").textContent = getDisplayWord(current);
+  document.getElementById("prompt-english").textContent = "(" + current.english + ") — " + getTypeLabel(current.type);
+  document.getElementById("prompt-target").textContent = "→ " + getFormLabel(activeForm);
+  const inp = document.getElementById("answer-input");
+  inp.value = "";
+  inp.disabled = false;
+  inp.focus();
+  document.getElementById("feedback").classList.add("hidden");
+  document.getElementById("correct-answer").classList.add("hidden");
+  document.getElementById("rule-box").classList.add("hidden");
+  document.getElementById("next-row").classList.add("hidden");
+  document.getElementById("check-btn").classList.remove("hidden");
+  document.getElementById("rule-btn").classList.remove("hidden");
+}
+
+function checkAnswer() {
+  if (answered) return;
+  answered = true;
+  const inp = document.getElementById("answer-input");
+  const userAns = inp.value.trim();
+  const correctAns = conjugate(current, activeForm);
+  const isCorrect = userAns === correctAns;
+  const fb = document.getElementById("feedback");
+  fb.classList.remove("hidden","correct","wrong");
+
+  if (isCorrect) {
+    fb.classList.add("correct");
+    fb.innerHTML = "&#10004; Correct!";
+    score.right++;
+    speakJapanese(correctAns);
+    results.push({item:current, correct:true, userAns, correctAns});
+  } else {
+    fb.classList.add("wrong");
+    fb.innerHTML = "&#10008; Incorrect";
+    score.wrong++;
+    const ca = document.getElementById("correct-answer");
+    ca.classList.remove("hidden");
+    ca.textContent = correctAns;
+    results.push({item:current, correct:false, userAns, correctAns});
+  }
+  inp.disabled = true;
+  document.getElementById("check-btn").classList.add("hidden");
+  document.getElementById("next-row").classList.remove("hidden");
+  document.getElementById("sc-right").textContent = score.right;
+  document.getElementById("sc-wrong").textContent = score.wrong;
+  // Auto-show rule on wrong answer
+  if (!isCorrect) {
+    const rb = document.getElementById("rule-box");
+    rb.classList.remove("hidden");
+    rb.innerHTML = '<div class="rule-title">Conjugation Rule</div>' + getRule(current, activeForm);
+  }
+}
+
+function toggleRule() {
+  const rb = document.getElementById("rule-box");
+  if (rb.classList.contains("hidden")) {
+    rb.classList.remove("hidden");
+    rb.innerHTML = '<div class="rule-title">Conjugation Rule</div>' + getRule(current, activeForm);
+  } else {
+    rb.classList.add("hidden");
+  }
+}
+
+function nextQuestion() {
+  qIdx++;
+  showQuestion();
+}
+function showResults() {
+  document.getElementById("drill-screen").classList.add("hidden");
+  document.getElementById("results-screen").classList.remove("hidden");
+  const total = results.length;
+  const pct = total > 0 ? Math.round((score.right / total) * 100) : 0;
+  document.getElementById("final-score").textContent =
+    score.right + " / " + total + " correct (" + pct + "%)";
+  document.getElementById("final-bar").style.width = pct + "%";
+  const list = document.getElementById("results-list");
+  const missed = results.filter(r => !r.correct);
+  document.getElementById("retry-missed-btn").style.display = missed.length > 0 ? "" : "none";
+  list.innerHTML = results.map(r => {
+    const tagClass = r.correct ? "tag-ok" : "tag-miss";
+    const tagText = r.correct ? "OK" : "MISS";
+    const display = getDisplayWord(r.item);
+    const detail = r.correct
+      ? r.correctAns
+      : '<span style="color:var(--red);text-decoration:line-through;">' + (r.userAns||"(blank)") + '</span> → <span style="color:var(--accent2);">' + r.correctAns + '</span>';
+    return '<div class="result-row">' +
+      '<div><span class="jp">' + display + '</span> <span class="en" style="margin-left:6px;">' + r.item.english + '</span></div>' +
+      '<div style="text-align:right;"><span class="tag ' + tagClass + '">' + tagText + '</span>' +
+      '<div style="font-size:12px;font-family:Noto Sans JP;margin-top:2px;">' + detail + '</div></div></div>';
+  }).join("");
+}
+function resetDrill() {
+  document.getElementById("results-screen").classList.add("hidden");
+  document.getElementById("start-screen").classList.remove("hidden");
+  document.getElementById("filter-area").classList.remove("hidden");
+  updateCount();
+}
+
+function retryMissed() {
+  const missed = results.filter(r => !r.correct).map(r => r.item);
+  if (missed.length === 0) return;
+  queue = shuffle(missed);
+  qIdx = 0;
+  score = {right:0, wrong:0};
+  results = [];
+  document.getElementById("results-screen").classList.add("hidden");
+  document.getElementById("drill-screen").classList.remove("hidden");
+  showQuestion();
+}
+
+function speakJapanese(text) {
+  if (!window.speechSynthesis) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "ja-JP";
+  u.rate = 0.85;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+// ═══════════════════════════════════════
+// KEYBOARD HANDLER
+// ═══════════════════════════════════════
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    if (!answered && !document.getElementById("drill-screen").classList.contains("hidden")) {
+      checkAnswer();
+    } else if (answered && !document.getElementById("next-row").classList.contains("hidden")) {
+      nextQuestion();
+    }
+  }
+});
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+buildFilters();
+buildForms();
+updateCount();
+</script>
+</body>
+</html>

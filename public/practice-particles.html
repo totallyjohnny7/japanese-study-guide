@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nakama 1 — 助詞 Particle Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--surface:#111111;--card:#161616;--border:#2a2a2a;--accent:#d4a843;--accent2:#f0c85a;--green:#4ecf7a;--red:#e85454;--yellow:#f0c85a;--text:#e0ddd5;--muted:#5a5548;--dim:#3a3528;--blue:#5ba8e8;--gold-glow:rgba(212,168,67,0.15);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 20% 20%,rgba(212,168,67,0.03) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(212,168,67,0.02) 0%,transparent 50%);pointer-events:none;}
+.app{position:relative;z-index:1;padding:16px 16px 40px;max-width:520px;margin:0 auto;}
+.back-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.back-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans';transition:all .2s;}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.back-title{font-size:13px;color:var(--muted);font-weight:600;}
+.header{text-align:center;margin-bottom:20px;}
+.header .kanji-big{font-family:'Noto Sans JP';font-size:48px;color:var(--accent);line-height:1.2;}
+.header h1{font-size:28px;font-weight:700;background:linear-gradient(135deg,#f0c85a,#d4a843,#8b6d1e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:"Cormorant Garamond",serif;letter-spacing:2px;}
+.header p{color:var(--muted);font-size:11px;margin-top:3px;letter-spacing:3px;text-transform:uppercase;}
+.modes{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;justify-content:center;}
+.mode-btn{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans';transition:all .2s;white-space:nowrap;}
+.mode-btn.active{background:linear-gradient(135deg,#8b6d1e,var(--accent));color:#fff;border-color:var(--accent);box-shadow:0 0 12px rgba(212,168,67,0.15);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
+.btn{border:none;color:#fff;padding:9px 18px;border-radius:9px;cursor:pointer;touch-action:manipulation;font-size:13px;font-weight:600;font-family:'DM Sans';transition:all .2s;}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.1);}
+.btn:active{transform:scale(.97);}
+.btn:disabled{opacity:.4;cursor:default;transform:none;}
+.progress-bar{height:4px;background:var(--surface);border-radius:4px;margin-bottom:14px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .4s;}
+.hidden{display:none!important;}
+.center{text-align:center;}
+.mt6{margin-top:6px;}.mt8{margin-top:8px;}.mt12{margin-top:12px;}.mt16{margin-top:16px;}
+.mb8{margin-bottom:8px;}.w100{width:100%;}
+.flex-between{display:flex;justify-content:space-between;align-items:center;}
+.gap8{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+@keyframes slideUp{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.slide-up{animation:slideUp .3s ease;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:#8b6d1e;border-radius:3px;}
+/* Quiz specific */
+.question-num{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.japanese-sentence{font-family:'Noto Sans JP','Klee One';font-size:24px;color:#fff;line-height:1.6;text-align:center;margin-bottom:12px;min-height:40px;}
+.japanese-sentence .blank{display:inline-block;min-width:44px;border-bottom:3px solid var(--accent);margin:0 2px;color:transparent;position:relative;}
+.japanese-sentence .blank.correct{border-color:var(--green);color:var(--green);animation:pulse .5s;}
+.japanese-sentence .blank.wrong{border-color:var(--red);color:var(--red);}
+.english-hint{font-size:13px;color:var(--muted);text-align:center;margin-bottom:16px;font-style:italic;}
+.hint-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:4px 12px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:'DM Sans';transition:all .2s;margin-bottom:14px;}
+.hint-btn:hover{border-color:var(--accent);color:var(--accent);}
+.hint-text{font-size:11px;color:var(--accent2);text-align:center;margin-bottom:14px;padding:6px 10px;background:rgba(212,168,67,0.06);border-radius:8px;border:1px solid rgba(212,168,67,0.1);}
+.particle-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:360px;margin:0 auto;}
+.particle-btn{padding:12px 8px;border-radius:10px;border:2px solid var(--border);background:var(--card);color:var(--text);font-size:20px;font-family:'Noto Sans JP';text-align:center;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;font-weight:700;}
+.particle-btn:hover{border-color:var(--accent);background:rgba(212,168,67,0.06);}
+.particle-btn:active{transform:scale(.95);}
+.particle-btn.correct-flash{background:rgba(78,207,122,0.15);border-color:var(--green);color:var(--green);}
+.particle-btn.wrong-flash{background:rgba(232,84,84,0.15);border-color:var(--red);color:var(--red);}
+.particle-btn.disabled{pointer-events:none;opacity:.4;}
+.feedback{text-align:center;padding:12px;border-radius:10px;margin-top:12px;font-size:14px;font-weight:600;min-height:48px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;}
+.feedback.correct{background:rgba(78,207,122,0.08);border:1px solid rgba(78,207,122,0.2);color:var(--green);}
+.feedback.wrong{background:rgba(232,84,84,0.08);border:1px solid rgba(232,84,84,0.2);color:var(--red);}
+.feedback .explain{font-size:11px;color:var(--muted);font-weight:400;}
+/* Score & results */
+.score-bar{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:600;}
+.score-bar .score-val{color:var(--accent2);}
+.results-title{font-size:22px;font-weight:700;text-align:center;margin-bottom:16px;background:linear-gradient(135deg,#f0c85a,#d4a843);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:"Cormorant Garamond",serif;}
+.results-stat{display:flex;justify-content:space-between;padding:10px 14px;background:var(--surface);border-radius:10px;margin-bottom:6px;font-size:13px;}
+.results-stat .label{color:var(--muted);}
+.results-stat .val{font-weight:700;}
+.results-stat .val.good{color:var(--green);}
+.results-stat .val.bad{color:var(--red);}
+.missed-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;}
+.missed-item .jp{font-family:'Noto Sans JP';font-size:16px;color:#fff;margin-bottom:4px;}
+.missed-item .en{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.missed-item .correction{font-size:12px;}
+.missed-item .correction .wrong-ans{color:var(--red);text-decoration:line-through;margin-right:8px;}
+.missed-item .correction .right-ans{color:var(--green);font-weight:700;}
+/* Difficulty tabs */
+.diff-tabs{display:flex;gap:6px;margin-bottom:16px;justify-content:center;flex-wrap:wrap;}
+.diff-tab{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans';transition:all .2s;}
+.diff-tab.active{background:linear-gradient(135deg,#8b6d1e,var(--accent));color:#fff;border-color:var(--accent);box-shadow:0 0 12px rgba(212,168,67,0.15);}
+/* Particle filter */
+.particle-filter{display:flex;gap:6px;margin-bottom:16px;justify-content:center;flex-wrap:wrap;}
+.pf-btn{padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:13px;font-family:'Noto Sans JP';cursor:pointer;transition:all .2s;font-weight:600;}
+.pf-btn.active{background:rgba(212,168,67,0.1);border-color:var(--accent);color:var(--accent2);}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<!-- Back bar -->
+<div class="back-bar">
+  <button class="back-btn" onclick="history.back()">← Back</button>
+  <span class="back-title">助詞 Particle Practice</span>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="kanji-big">助詞</div>
+  <h1>Particle Practice</h1>
+  <p>Chapters 1–6 · Nakama 1</p>
+</div>
+
+<!-- Mode selector -->
+<div class="modes" id="modeBar">
+  <button class="mode-btn active" data-mode="practice" onclick="setMode('practice')">Practice All</button>
+  <button class="mode-btn" data-mode="particle" onclick="setMode('particle')">By Particle</button>
+</div>
+
+<!-- Particle filter (shown in By Particle mode) -->
+<div class="particle-filter hidden" id="particleFilter"></div>
+
+<!-- Difficulty tabs -->
+<div class="diff-tabs" id="diffTabs">
+  <button class="diff-tab active" data-diff="all" onclick="setDiff('all')">All</button>
+  <button class="diff-tab" data-diff="beginner" onclick="setDiff('beginner')">Beginner</button>
+  <button class="diff-tab" data-diff="intermediate" onclick="setDiff('intermediate')">Intermediate</button>
+  <button class="diff-tab" data-diff="advanced" onclick="setDiff('advanced')">Advanced</button>
+</div>
+<!-- Score bar -->
+<div class="score-bar" id="scoreBar">
+  <span>Question <span id="qNum">1</span> / <span id="qTotal">0</span></span>
+  <span>Score: <span class="score-val" id="scoreVal">0</span></span>
+</div>
+
+<!-- Progress -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+<!-- Quiz card -->
+<div class="card slide-up" id="quizCard">
+  <div class="question-num" id="questionLabel">QUESTION 1</div>
+  <div class="japanese-sentence" id="jpSentence"></div>
+  <div class="english-hint" id="enHint"></div>
+  <div class="center">
+    <button class="hint-btn" id="hintBtn" onclick="showHint()">💡 Show Hint</button>
+  </div>
+  <div class="hint-text hidden" id="hintText"></div>
+  <div class="particle-grid" id="particleGrid"></div>
+  <div class="feedback hidden" id="feedback"></div>
+</div>
+
+<!-- Start screen -->
+<div class="card center" id="startScreen">
+  <div style="font-size:40px;margin-bottom:10px;">助詞</div>
+  <div style="font-size:16px;font-weight:700;color:var(--accent2);margin-bottom:6px;">Particle Practice</div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:16px;" id="startCount">60 questions · All particles</div>
+  <button class="btn w100" style="background:linear-gradient(135deg,#8b6d1e,var(--accent));" onclick="startQuiz()">Start Practice</button>
+</div>
+<!-- Results screen -->
+<div class="card hidden" id="resultsScreen">
+  <div class="results-title">Practice Complete!</div>
+  <div class="results-stat"><span class="label">Total Questions</span><span class="val" id="rTotal">0</span></div>
+  <div class="results-stat"><span class="label">Correct</span><span class="val good" id="rCorrect">0</span></div>
+  <div class="results-stat"><span class="label">Wrong</span><span class="val bad" id="rWrong">0</span></div>
+  <div class="results-stat"><span class="label">Accuracy</span><span class="val" id="rAcc" style="color:var(--accent2)">0%</span></div>
+  <div id="missedList" class="mt16"></div>
+  <div class="gap8 mt16">
+    <button class="btn" style="background:linear-gradient(135deg,#8b6d1e,var(--accent));" onclick="restartAll()">Restart All</button>
+    <button class="btn hidden" id="reviewMissedBtn" style="background:var(--surface);border:1px solid var(--border);color:var(--accent2);" onclick="reviewMissed()">Review Missed</button>
+  </div>
+</div>
+
+</div><!-- end .app -->
+
+<script>
+// ═══════════════════════════════════════
+// SENTENCE DATA — 67 sentences
+// ═══════════════════════════════════════
+const ALL_SENTENCES = [
+// ── は (wa) topic marker ──
+{japanese:"田中さん＿＿学生です",answer:"は",english:"Tanaka is a student.",hint:"topic marker — marks what the sentence is about",difficulty:"beginner"},
+{japanese:"私＿＿日本人です",answer:"は",english:"I am Japanese.",hint:"topic marker",difficulty:"beginner"},
+{japanese:"これ＿＿本です",answer:"は",english:"This is a book.",hint:"topic marker — introduces the topic 'this'",difficulty:"beginner"},
+{japanese:"山田先生＿＿英語の先生です",answer:"は",english:"Professor Yamada is an English teacher.",hint:"topic marker",difficulty:"beginner"},
+{japanese:"東京＿＿日本にあります",answer:"は",english:"Tokyo is in Japan.",hint:"topic marker — marks the topic 'Tokyo'",difficulty:"beginner"},
+{japanese:"今日＿＿いい天気ですね",answer:"は",english:"It's nice weather today, isn't it?",hint:"topic marker — sets 'today' as the topic",difficulty:"beginner"},
+{japanese:"あの人＿＿だれですか",answer:"は",english:"Who is that person?",hint:"topic marker — marks the person being asked about",difficulty:"beginner"},
+{japanese:"日本語＿＿おもしろいです",answer:"は",english:"Japanese is interesting.",hint:"topic marker",difficulty:"beginner"},
+{japanese:"お名前＿＿何ですか",answer:"は",english:"What is your name?",hint:"topic marker — marks 'name' as the topic",difficulty:"beginner"},
+{japanese:"私＿＿毎日六時に起きます",answer:"は",english:"I wake up at 6 every day.",hint:"topic marker",difficulty:"intermediate"},
+{japanese:"この大学＿＿大きいです",answer:"は",english:"This university is big.",hint:"topic marker",difficulty:"beginner"},
+{japanese:"あの映画＿＿よくなかったです",answer:"は",english:"That movie was not good.",hint:"topic marker",difficulty:"intermediate"},
+{japanese:"週末＿＿何をしますか",answer:"は",english:"What do you do on weekends?",hint:"topic marker — sets 'weekend' as topic",difficulty:"intermediate"},
+{japanese:"コーヒー＿＿好きですが、紅茶は好きじゃないです",answer:"は",english:"I like coffee, but I don't like tea.",hint:"topic marker — contrast usage",difficulty:"advanced"},
+{japanese:"昨日＿＿雨でした",answer:"は",english:"Yesterday was rainy.",hint:"topic marker — sets time as topic",difficulty:"intermediate"},
+// ── が (ga) subject marker ──
+{japanese:"日本語＿＿わかりますか",answer:"が",english:"Do you understand Japanese?",hint:"subject marker — used with わかる",difficulty:"intermediate"},
+{japanese:"猫＿＿好きです",answer:"が",english:"I like cats.",hint:"subject marker — used with 好き (like)",difficulty:"beginner"},
+{japanese:"だれ＿＿来ましたか",answer:"が",english:"Who came?",hint:"subject marker — used with question words",difficulty:"intermediate"},
+{japanese:"水＿＿ほしいです",answer:"が",english:"I want water.",hint:"subject marker — used with ほしい (want)",difficulty:"intermediate"},
+{japanese:"あそこに大きい犬＿＿います",answer:"が",english:"There is a big dog over there.",hint:"subject marker — existence (animate)",difficulty:"intermediate"},
+{japanese:"テーブルの上に花＿＿あります",answer:"が",english:"There are flowers on the table.",hint:"subject marker — existence (inanimate)",difficulty:"intermediate"},
+{japanese:"何＿＿ありますか",answer:"が",english:"What is there?",hint:"subject marker — used with question words",difficulty:"intermediate"},
+{japanese:"音楽＿＿聞こえます",answer:"が",english:"I can hear music.",hint:"subject marker — used with potential/sensory verbs",difficulty:"advanced"},
+// ── を (wo) object marker ──
+{japanese:"朝ごはん＿＿食べます",answer:"を",english:"I eat breakfast.",hint:"object marker — marks what you eat",difficulty:"beginner"},
+{japanese:"日本語＿＿勉強します",answer:"を",english:"I study Japanese.",hint:"object marker — marks the thing being studied",difficulty:"beginner"},
+{japanese:"テレビ＿＿見ます",answer:"を",english:"I watch TV.",hint:"object marker — marks what you watch",difficulty:"beginner"},
+{japanese:"水＿＿飲みます",answer:"を",english:"I drink water.",hint:"object marker — marks what you drink",difficulty:"beginner"},
+{japanese:"本＿＿読みます",answer:"を",english:"I read a book.",hint:"object marker",difficulty:"beginner"},
+{japanese:"手紙＿＿書きました",answer:"を",english:"I wrote a letter.",hint:"object marker — marks the thing written",difficulty:"intermediate"},
+{japanese:"音楽＿＿聞きます",answer:"を",english:"I listen to music.",hint:"object marker — marks the thing listened to",difficulty:"beginner"},
+{japanese:"宿題＿＿しましたか",answer:"を",english:"Did you do the homework?",hint:"object marker — marks the task done",difficulty:"intermediate"},
+// ── に (ni) location / time / direction ──
+{japanese:"七時＿＿起きます",answer:"に",english:"I wake up at 7 o'clock.",hint:"time marker — marks a specific time",difficulty:"beginner"},
+{japanese:"大学＿＿行きます",answer:"に",english:"I go to the university.",hint:"direction marker — marks destination",difficulty:"beginner"},
+{japanese:"図書館＿＿本があります",answer:"に",english:"There are books in the library.",hint:"location marker — marks where something exists",difficulty:"beginner"},
+{japanese:"月曜日＿＿テストがあります",answer:"に",english:"There is a test on Monday.",hint:"time marker — marks a specific day",difficulty:"intermediate"},
+{japanese:"友だち＿＿電話をかけます",answer:"に",english:"I call my friend.",hint:"target/indirect object marker",difficulty:"intermediate"},
+{japanese:"家＿＿帰ります",answer:"に",english:"I return home.",hint:"direction marker — marks the destination of return",difficulty:"beginner"},
+{japanese:"九月＿＿日本に来ました",answer:"に",english:"I came to Japan in September.",hint:"time marker — marks month",difficulty:"intermediate"},
+{japanese:"椅子＿＿座ってください",answer:"に",english:"Please sit on the chair.",hint:"location marker — marks where to sit",difficulty:"intermediate"},
+{japanese:"先生＿＿聞きました",answer:"に",english:"I asked the teacher.",hint:"target marker — marks the person asked",difficulty:"advanced"},
+{japanese:"毎日八時＿＿寝ます",answer:"に",english:"I go to bed at 8 every day.",hint:"time marker — marks specific hour",difficulty:"beginner"},
+// ── で (de) location of action / means ──
+{japanese:"図書館＿＿勉強します",answer:"で",english:"I study at the library.",hint:"location of action — marks where an action takes place",difficulty:"beginner"},
+{japanese:"バス＿＿大学に行きます",answer:"で",english:"I go to university by bus.",hint:"means/method — marks how you do something",difficulty:"intermediate"},
+{japanese:"日本語＿＿話してください",answer:"で",english:"Please speak in Japanese.",hint:"means — marks the language used",difficulty:"intermediate"},
+{japanese:"レストラン＿＿食べましょう",answer:"で",english:"Let's eat at a restaurant.",hint:"location of action — marks where the eating happens",difficulty:"beginner"},
+{japanese:"ペン＿＿書いてください",answer:"で",english:"Please write with a pen.",hint:"means/instrument — marks the tool used",difficulty:"intermediate"},
+{japanese:"カフェ＿＿コーヒーを飲みました",answer:"で",english:"I drank coffee at a cafe.",hint:"location of action",difficulty:"intermediate"},
+
+// ── と (to) with / and ──
+{japanese:"友だち＿＿映画を見ました",answer:"と",english:"I watched a movie with a friend.",hint:"accompaniment — marks who you do something with",difficulty:"beginner"},
+{japanese:"田中さん＿＿山田さんは友だちです",answer:"と",english:"Tanaka and Yamada are friends.",hint:"conjunction — connects two nouns (and)",difficulty:"beginner"},
+{japanese:"先生＿＿話しました",answer:"と",english:"I talked with the teacher.",hint:"accompaniment — marks who you interact with",difficulty:"intermediate"},
+{japanese:"犬＿＿猫がいます",answer:"と",english:"There is a dog and a cat.",hint:"conjunction — connects two nouns",difficulty:"beginner"},
+// ── も (mo) also ──
+{japanese:"私＿＿学生です",answer:"も",english:"I am also a student.",hint:"'also/too' — replaces は to mean 'also'",difficulty:"intermediate"},
+{japanese:"田中さんは日本人です。山田さん＿＿日本人です",answer:"も",english:"Tanaka is Japanese. Yamada is also Japanese.",hint:"'also' — marks that the same applies",difficulty:"beginner"},
+{japanese:"ここに猫がいます。犬＿＿います",answer:"も",english:"There is a cat here. There is also a dog.",hint:"'also' — adds another item",difficulty:"intermediate"},
+{japanese:"英語＿＿日本語＿＿話します",answer:"も",english:"I speak both English and Japanese.",hint:"'both...and' — も on each item",difficulty:"advanced"},
+
+// ── の (no) possession / connection ──
+{japanese:"私＿＿本です",answer:"の",english:"It is my book.",hint:"possession — shows ownership",difficulty:"beginner"},
+{japanese:"日本語＿＿先生はだれですか",answer:"の",english:"Who is the Japanese teacher?",hint:"connection — links two nouns",difficulty:"beginner"},
+{japanese:"大学＿＿図書館は大きいです",answer:"の",english:"The university library is big.",hint:"connection — 'of the university'",difficulty:"beginner"},
+{japanese:"これは友だち＿＿車です",answer:"の",english:"This is my friend's car.",hint:"possession — friend's car",difficulty:"beginner"},
+{japanese:"日本＿＿食べ物はおいしいです",answer:"の",english:"Japanese food is delicious.",hint:"connection — 'of Japan'",difficulty:"intermediate"},
+// ── へ (e) direction ──
+{japanese:"日本＿＿行きたいです",answer:"へ",english:"I want to go to Japan.",hint:"direction — marks the direction of movement",difficulty:"intermediate"},
+{japanese:"東京＿＿ようこそ",answer:"へ",english:"Welcome to Tokyo.",hint:"direction — marks destination",difficulty:"beginner"},
+{japanese:"学校＿＿歩いて行きます",answer:"へ",english:"I walk to school.",hint:"direction — marks where you are heading",difficulty:"intermediate"},
+
+// ── から / まで (kara / made) from / until ──
+{japanese:"九時＿＿授業があります",answer:"から",english:"There is class from 9 o'clock.",hint:"'from' — marks the starting point",difficulty:"intermediate"},
+{japanese:"東京＿＿来ました",answer:"から",english:"I came from Tokyo.",hint:"'from' — marks the origin/source",difficulty:"intermediate"},
+{japanese:"五時＿＿働きます",answer:"まで",english:"I work until 5 o'clock.",hint:"'until' — marks the ending point",difficulty:"intermediate"},
+{japanese:"大学＿＿バスで二十分です",answer:"まで",english:"It's 20 minutes to the university by bus.",hint:"'until/to' — marks the destination endpoint",difficulty:"advanced"},
+];
+
+// All particle choices shown to user
+const PARTICLES = ["は","が","を","に","で","と","も","の","へ","から","まで"];
+// Particle explanation map for wrong-answer feedback
+const PARTICLE_EXPLAIN = {
+  "は": "topic of the sentence",
+  "が": "subject (with existence, desire, ability, or question words)",
+  "を": "direct object of a verb",
+  "に": "specific time, location of existence, or direction/target",
+  "で": "location of action or means/method",
+  "と": "'and' between nouns or 'with' someone",
+  "も": "'also/too' — replaces は/が",
+  "の": "possession or noun-to-noun connection ('of')",
+  "へ": "direction of movement (toward)",
+  "から": "starting point ('from')",
+  "まで": "ending point ('until/to')"
+};
+
+// ═══ STATE ═══
+let mode = "practice";       // "practice" or "particle"
+let diff = "all";            // "all","beginner","intermediate","advanced"
+let particleFilter = null;   // null = all, or specific particle string
+let questions = [];
+let current = 0;
+let score = 0;
+let missed = [];
+let answered = false;
+let quizActive = false;
+// ═══ DOM REFS ═══
+const $=id=>document.getElementById(id);
+const quizCard=$("quizCard"), startScreen=$("startScreen"), resultsScreen=$("resultsScreen");
+const jpSentence=$("jpSentence"), enHint=$("enHint"), hintBtn=$("hintBtn"), hintText=$("hintText");
+const feedback=$("feedback"), particleGrid=$("particleGrid");
+const progressFill=$("progressFill"), qNum=$("qNum"), qTotal=$("qTotal"), scoreVal=$("scoreVal");
+const questionLabel=$("questionLabel"), scoreBar=$("scoreBar");
+const startCount=$("startCount"), particleFilterEl=$("particleFilter");
+
+// ═══ SHUFFLE ═══
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+// ═══ BUILD FILTERED SET ═══
+function getFilteredSentences(){
+  let set = ALL_SENTENCES.slice();
+  if(diff !== "all") set = set.filter(s=>s.difficulty===diff);
+  if(particleFilter) set = set.filter(s=>s.answer===particleFilter);
+  return set;
+}
+
+// ═══ MODE & FILTER CONTROLS ═══
+function setMode(m){
+  mode=m;
+  document.querySelectorAll("#modeBar .mode-btn").forEach(b=>b.classList.toggle("active",b.dataset.mode===m));
+  if(m==="particle"){particleFilterEl.classList.remove("hidden");buildParticleFilter();}
+  else{particleFilterEl.classList.add("hidden");particleFilter=null;}
+  updateStartCount();
+}
+function setDiff(d){
+  diff=d;
+  document.querySelectorAll("#diffTabs .diff-tab").forEach(b=>b.classList.toggle("active",b.dataset.diff===d));
+  updateStartCount();
+}
+
+function buildParticleFilter(){
+  const unique=[...new Set(ALL_SENTENCES.map(s=>s.answer))];
+  particleFilterEl.innerHTML='<button class="pf-btn'+(particleFilter===null?' active':'')+'" onclick="setPF(null)">All</button>'+
+    unique.map(p=>'<button class="pf-btn'+(particleFilter===p?' active':'')+'" onclick="setPF(\''+p+'\')">'+p+'</button>').join('');
+}
+
+function setPF(p){
+  particleFilter=p;
+  buildParticleFilter();
+  updateStartCount();
+}
+
+function updateStartCount(){
+  const c=getFilteredSentences().length;
+  startCount.textContent=c+" question"+(c!==1?"s":"")+" · "+(particleFilter||"All particles");
+}
+
+// ═══ BUILD PARTICLE BUTTONS ═══
+function buildParticleGrid(){
+  particleGrid.innerHTML=PARTICLES.map(p=>
+    '<button class="particle-btn" data-p="'+p+'" onclick="selectParticle(\''+p+'\')">'+p+'</button>'
+  ).join('');
+}
+// ═══ START QUIZ ═══
+function startQuiz(){
+  const set=getFilteredSentences();
+  if(set.length===0){alert("No questions match your filters. Try different settings.");return;}
+  questions=shuffle(set.slice());
+  current=0; score=0; missed=[]; answered=false; quizActive=true;
+  startScreen.classList.add("hidden");
+  resultsScreen.classList.add("hidden");
+  quizCard.classList.remove("hidden");
+  scoreBar.style.display="flex";
+  qTotal.textContent=questions.length;
+  scoreVal.textContent="0";
+  showQuestion();
+}
+
+// ═══ SHOW QUESTION ═══
+function showQuestion(){
+  if(current>=questions.length){showResults();return;}
+  answered=false;
+  const q=questions[current];
+  qNum.textContent=current+1;
+  questionLabel.textContent="QUESTION "+(current+1);
+  progressFill.style.width=((current/questions.length)*100)+"%";
+  // Build sentence with blank
+  const parts=q.japanese.split("＿＿");
+  jpSentence.innerHTML=parts[0]+'<span class="blank" id="blankSpan">＿＿</span>'+parts[1];
+  enHint.textContent=q.english;
+  hintBtn.classList.remove("hidden");
+  hintText.classList.add("hidden");
+  hintText.textContent="";
+  feedback.classList.add("hidden");
+  feedback.className="feedback hidden";
+  buildParticleGrid();
+  // Re-animate card
+  quizCard.classList.remove("slide-up");
+  void quizCard.offsetWidth;
+  quizCard.classList.add("slide-up");
+}
+
+// ═══ HINT ═══
+function showHint(){
+  const q=questions[current];
+  hintText.textContent="Hint: "+q.hint;
+  hintText.classList.remove("hidden");
+  hintBtn.classList.add("hidden");
+}
+
+// ═══ SELECT PARTICLE ═══
+function selectParticle(p){
+  if(answered) return;
+  answered=true;
+  const q=questions[current];
+  const isCorrect=(p===q.answer);
+  const blank=document.getElementById("blankSpan");
+  // Disable all buttons
+  document.querySelectorAll(".particle-btn").forEach(b=>b.classList.add("disabled"));
+  // Flash selected button
+  const selBtn=document.querySelector('.particle-btn[data-p="'+p+'"]');
+  if(isCorrect){
+    score++;
+    scoreVal.textContent=score;
+    blank.textContent=q.answer;
+    blank.classList.add("correct");
+    if(selBtn) selBtn.classList.add("correct-flash");
+    feedback.innerHTML="✅ Correct!";
+    feedback.className="feedback correct";
+    feedback.classList.remove("hidden");
+    setTimeout(()=>{current++;showQuestion();},1000);
+  } else {
+    blank.textContent=q.answer;
+    blank.classList.add("wrong");
+    if(selBtn) selBtn.classList.add("wrong-flash");
+    // Highlight correct button
+    const correctBtn=document.querySelector('.particle-btn[data-p="'+q.answer+'"]');
+    if(correctBtn) correctBtn.classList.add("correct-flash");
+    missed.push({...q, userAnswer:p});
+    feedback.innerHTML='❌ The answer is <strong>'+q.answer+'</strong><div class="explain">The particle <strong>'+q.answer+'</strong> marks the '+PARTICLE_EXPLAIN[q.answer]+'</div>';
+    feedback.className="feedback wrong";
+    feedback.classList.remove("hidden");
+    setTimeout(()=>{current++;showQuestion();},2500);
+  }
+}
+
+// ═══ RESULTS ═══
+function showResults(){
+  quizActive=false;
+  quizCard.classList.add("hidden");
+  scoreBar.style.display="none";
+  progressFill.style.width="100%";
+  resultsScreen.classList.remove("hidden");
+  $("rTotal").textContent=questions.length;
+  $("rCorrect").textContent=score;
+  $("rWrong").textContent=questions.length-score;
+  const pct=questions.length>0?Math.round((score/questions.length)*100):0;
+  $("rAcc").textContent=pct+"%";
+  // Missed items
+  const ml=$("missedList");
+  if(missed.length>0){
+    ml.innerHTML='<div style="font-size:14px;font-weight:700;color:var(--accent2);margin-bottom:10px;">Missed Items ('+missed.length+')</div>'+
+      missed.map(m=>{
+        const parts=m.japanese.split("＿＿");
+        return '<div class="missed-item"><div class="jp">'+parts[0]+'<strong style="color:var(--green)">'+m.answer+'</strong>'+parts[1]+'</div><div class="en">'+m.english+'</div><div class="correction"><span class="wrong-ans">'+m.userAnswer+'</span><span class="right-ans">'+m.answer+' — '+PARTICLE_EXPLAIN[m.answer]+'</span></div></div>';
+      }).join('');
+    $("reviewMissedBtn").classList.remove("hidden");
+  } else {
+    ml.innerHTML='<div style="text-align:center;color:var(--green);font-size:16px;font-weight:700;margin:20px 0;">🎉 Perfect Score!</div>';
+    $("reviewMissedBtn").classList.add("hidden");
+  }
+}
+
+// ═══ RESTART / REVIEW ═══
+function restartAll(){
+  resultsScreen.classList.add("hidden");
+  startScreen.classList.remove("hidden");
+  scoreBar.style.display="none";
+  updateStartCount();
+}
+
+function reviewMissed(){
+  if(missed.length===0) return;
+  questions=shuffle(missed.map(m=>{const {userAnswer,...rest}=m;return rest;}));
+  current=0; score=0; missed=[]; answered=false; quizActive=true;
+  resultsScreen.classList.add("hidden");
+  quizCard.classList.remove("hidden");
+  scoreBar.style.display="flex";
+  qTotal.textContent=questions.length;
+  scoreVal.textContent="0";
+  showQuestion();
+}
+
+// ═══ INIT ═══
+function init(){
+  quizCard.classList.add("hidden");
+  resultsScreen.classList.add("hidden");
+  scoreBar.style.display="none";
+  startScreen.classList.remove("hidden");
+  updateStartCount();
+}
+init();
+</script>
+</body>
+</html>
