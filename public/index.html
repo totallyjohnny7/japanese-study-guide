@@ -571,6 +571,200 @@ body::before {
 .nav-tab.practice-tab { color: var(--green); }
 .nav-tab.practice-tab.active { color: var(--green); border-bottom-color: var(--green); }
 .nav-tab.practice-tab .kanji { color: var(--green); }
+/* Oral Exam Tab */
+#tab_oral-exam.active { color: #e85454; border-bottom-color: #e85454; }
+.oe-weight { display:inline-block;background:linear-gradient(135deg,#8b6d1e,#6b5518);color:#f5f2ea;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:10px; }
+.oe-weight.big { background:linear-gradient(135deg,#a82020,#d44); }
+.oe-intro { background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin:20px 0; }
+.oe-intro h2 { font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);margin-bottom:8px; }
+.oe-intro p { font-size:13px;line-height:1.7;color:var(--text-dim); }
+.oe-tip { background:rgba(91,168,232,0.08);border:1px solid rgba(91,168,232,0.25);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:12px;line-height:1.7; }
+.oe-tip b { color:var(--blue); }
+.oe-warn { background:rgba(232,84,84,0.08);border:1px solid rgba(232,84,84,0.25);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:12px;line-height:1.7; }
+.oe-warn b { color:var(--red); }
+.oe-subsec { cursor:pointer;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;transition:border-color 0.2s; }
+.oe-subsec:hover { border-color:var(--gold-dark); }
+.oe-subsec .oe-q { margin-bottom:6px; }
+.oe-subsec .oe-a { display:none;border-top:1px solid var(--border);padding-top:10px;margin-top:10px; }
+.oe-subsec.open .oe-a { display:block; }
+.oe-ja { font-family:'Noto Sans JP',sans-serif;font-size:16px;font-weight:700;color:var(--gold);line-height:1.8; }
+.oe-ja-lg { font-size:18px; }
+.oe-rm { font-size:12px;color:var(--blue);font-style:italic;line-height:1.5; }
+.oe-en { font-size:12px;color:var(--text-dim);line-height:1.5; }
+.oe-te { background:rgba(78,207,122,0.12);border:1px solid rgba(78,207,122,0.3);border-radius:4px;padding:1px 4px;color:var(--green); }
+.oe-hl { background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.3);border-radius:4px;padding:1px 4px; }
+.oe-d-line { padding:10px 14px;border-radius:10px;margin-bottom:6px;max-width:88%; }
+.oe-d-a { background:var(--gold-subtle);border:1px solid rgba(212,168,67,0.2);margin-right:auto; }
+.oe-d-b { background:rgba(78,207,122,0.06);border:1px solid rgba(78,207,122,0.15);margin-left:auto; }
+.oe-d-name { font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text-dim);margin-bottom:4px;text-transform:uppercase; }
+.oe-loc-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:10px 0; }
+.oe-loc-item { background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center; }
+.oe-loc-jp { font-family:'Noto Sans JP';font-size:20px;color:var(--gold);font-weight:700; }
+.oe-loc-rm { font-size:11px;color:var(--blue); }
+.oe-loc-en { font-size:11px;color:var(--text-dim);margin-top:2px; }
+.oe-template { background:#0d0d0d;border:2px solid var(--gold-dark);border-radius:12px;padding:20px;margin:14px 0;position:relative; }
+.oe-template::before { content:'TEMPLATE';position:absolute;top:-10px;left:16px;background:var(--gold-dark);color:#f5f2ea;font-size:9px;font-weight:700;letter-spacing:2px;padding:2px 10px;border-radius:4px; }
+.oe-blank { display:inline-block;min-width:70px;border-bottom:2px dashed var(--gold-dim);margin:0 4px;text-align:center;color:var(--text-dim);font-size:11px; }
+.oe-score-bar { display:flex;height:8px;border-radius:4px;overflow:hidden;margin:14px auto 8px;max-width:500px; }
+.oe-tabs { display:flex;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);margin:16px 0; }
+.oe-tab-btn { flex:1;padding:12px 8px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;font-family:'DM Sans';text-align:center;transition:all 0.2s; }
+.oe-tab-btn:not(:last-child) { border-right:1px solid var(--border); }
+.oe-tab-btn:hover { color:var(--text-dim);background:var(--card); }
+.oe-tab-btn.active { color:var(--gold);background:var(--card);box-shadow:inset 0 -2px 0 var(--gold); }
+.oe-sec { display:none; }
+.oe-sec.active { display:block; }
+
+/* ═══ TRANSLATOR ═══ */
+.tx-panel {
+  position: fixed;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(580px, calc(100% - 24px));
+  max-height: calc(100vh - 120px);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.6);
+  z-index: 200;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: txSlide 0.2s ease;
+}
+@keyframes txSlide { from { transform: translateX(-50%) translateY(20px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
+.tx-panel.open { display: flex; }
+.tx-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.tx-header .tx-title { font-size: 14px; font-weight: 700; color: var(--gold); flex: 1; }
+.tx-close { background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer; padding: 0 4px; }
+.tx-close:hover { color: var(--text); }
+.tx-dir-toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.tx-dir-btn {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.tx-dir-btn.active { background: var(--gold-dark); color: var(--white); }
+.tx-input-wrap {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.tx-input {
+  width: 100%;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  color: var(--white);
+  padding: 12px 14px;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: 'Noto Sans JP', 'DM Sans';
+  outline: none;
+  caret-color: var(--gold);
+}
+.tx-input:focus { border-color: var(--gold-dark); box-shadow: 0 0 12px var(--gold-glow); }
+.tx-input::placeholder { color: var(--muted); font-size: 14px; }
+.tx-preview {
+  font-family: 'Noto Sans JP';
+  font-size: 14px;
+  color: var(--gold);
+  min-height: 20px;
+  margin-top: 6px;
+  padding: 0 2px;
+}
+.tx-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  max-height: 380px;
+}
+.tx-results::-webkit-scrollbar { width: 4px; }
+.tx-results::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+.tx-empty { text-align: center; color: var(--muted); padding: 30px 16px; font-size: 13px; }
+.tx-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.tx-item:hover { background: var(--surface); }
+.tx-item .tx-main { flex: 1; }
+.tx-item .tx-jp { font-family: 'Noto Sans JP'; font-size: 20px; font-weight: 700; color: var(--gold); }
+.tx-item .tx-reading { font-size: 12px; color: var(--blue); font-style: italic; }
+.tx-item .tx-en { font-size: 13px; color: var(--text); margin-top: 2px; }
+.tx-item .tx-ch { font-size: 10px; color: var(--muted); margin-top: 4px; letter-spacing: 0.5px; }
+.tx-item .tx-score {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(212,168,67,0.12);
+  color: var(--gold);
+  white-space: nowrap;
+  margin-top: 4px;
+}
+.tx-item .tx-score.exact { background: rgba(78,207,122,0.15); color: var(--green); }
+.tx-item .tx-speak {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.tx-item .tx-speak:hover { border-color: var(--gold); color: var(--gold); }
+.tx-fab {
+  position: fixed;
+  bottom: 56px;
+  left: 16px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(37,99,235,0.4);
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.tx-fab:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,99,235,0.5); }
+.tx-fab.hidden { display: none; }
+@media(max-width:600px) {
+  .tx-panel { width: calc(100% - 12px); border-radius: 14px 14px 0 0; }
+  .tx-fab { bottom: 56px; left: 12px; width: 42px; height: 42px; font-size: 18px; }
+}
 
 .practice-lab-grid {
   display: grid;
@@ -919,7 +1113,7 @@ body::before {
   <div id="searchResults" class="hidden" style="position:absolute;left:16px;right:16px;top:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;max-height:420px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.6);z-index:200;margin-top:4px;"></div>
 </div>
 
-<div class="nav-wrap"><div class="nav-scroll"><button class="nav-tab" onclick="showChapter('ch1')" id="tab_ch1"><span class="kanji">第一章</span>Ch 1: Sounds & Hiragana</button><button class="nav-tab" onclick="showChapter('ch2')" id="tab_ch2"><span class="kanji">第二章</span>Ch 2: Introductions</button><button class="nav-tab" onclick="showChapter('ch3')" id="tab_ch3"><span class="kanji">第三章</span>Ch 3: Daily Routines</button><button class="nav-tab" onclick="showChapter('ch4')" id="tab_ch4"><span class="kanji">第四章</span>Ch 4: Japanese Cities</button><button class="nav-tab" onclick="showChapter('ch5')" id="tab_ch5"><span class="kanji">第五章</span>Ch 5: Japanese Homes</button><button class="nav-tab" onclick="showChapter('ch6')" id="tab_ch6"><span class="kanji">第六章</span>Ch 6: Leisure Time</button><button class="nav-tab practice-tab" onclick="showChapter('practice-lab')" id="tab_practice-lab"><span class="kanji">練</span>Practice Lab</button><button class="nav-tab" style="color:var(--gold-bright);border-bottom-color:transparent" onclick="window.location.href='kanji.html'" id="tab_kanji"><span class="kanji" style="color:var(--gold-bright)">&#28450;&#23383;</span>Kanji</button><button class="nav-tab ref-tab" onclick="showChapter('ref-numbers')" id="tab_ref-numbers"><span class="kanji">数</span>Numbers & Time</button><button class="nav-tab ref-tab" onclick="showChapter('ref-patterns')" id="tab_ref-patterns"><span class="kanji">文</span>Patterns</button><button class="nav-tab ref-tab" onclick="showChapter('ref-conv')" id="tab_ref-conv"><span class="kanji">話</span>Conversations</button><button class="nav-tab ref-tab" onclick="showChapter('ref-struct')" id="tab_ref-struct"><span class="kanji">構</span>Structure</button></div></div><div class="main-container">
+<div class="nav-wrap"><div class="nav-scroll"><button class="nav-tab" onclick="showChapter('ch1')" id="tab_ch1"><span class="kanji">第一章</span>Ch 1: Sounds & Hiragana</button><button class="nav-tab" onclick="showChapter('ch2')" id="tab_ch2"><span class="kanji">第二章</span>Ch 2: Introductions</button><button class="nav-tab" onclick="showChapter('ch3')" id="tab_ch3"><span class="kanji">第三章</span>Ch 3: Daily Routines</button><button class="nav-tab" onclick="showChapter('ch4')" id="tab_ch4"><span class="kanji">第四章</span>Ch 4: Japanese Cities</button><button class="nav-tab" onclick="showChapter('ch5')" id="tab_ch5"><span class="kanji">第五章</span>Ch 5: Japanese Homes</button><button class="nav-tab" onclick="showChapter('ch6')" id="tab_ch6"><span class="kanji">第六章</span>Ch 6: Leisure Time</button><button class="nav-tab practice-tab" onclick="showChapter('practice-lab')" id="tab_practice-lab"><span class="kanji">練</span>Practice Lab</button><button class="nav-tab" style="color:#e85454" onclick="showChapter('oral-exam')" id="tab_oral-exam"><span class="kanji" style="color:#e85454">🎤</span>Oral Exam</button><button class="nav-tab" style="color:var(--gold-bright);border-bottom-color:transparent" onclick="window.location.href='kanji.html'" id="tab_kanji"><span class="kanji" style="color:var(--gold-bright)">&#28450;&#23383;</span>Kanji</button><button class="nav-tab ref-tab" onclick="showChapter('ref-numbers')" id="tab_ref-numbers"><span class="kanji">数</span>Numbers & Time</button><button class="nav-tab ref-tab" onclick="showChapter('ref-patterns')" id="tab_ref-patterns"><span class="kanji">文</span>Patterns</button><button class="nav-tab ref-tab" onclick="showChapter('ref-conv')" id="tab_ref-conv"><span class="kanji">話</span>Conversations</button><button class="nav-tab ref-tab" onclick="showChapter('ref-struct')" id="tab_ref-struct"><span class="kanji">構</span>Structure</button></div></div><div class="main-container">
 <div class="chapter-panel" id="panel_ch1">
   <div class="ch-title">第一章 — THE JAPANESE SOUND SYSTEM</div>
   <div class="ch-subtitle">Ch 1: Sounds & Hiragana · 42 vocabulary items</div>
@@ -8646,6 +8840,323 @@ body::before {
   </div>
 </div>
 
+<div class="chapter-panel" id="panel_oral-exam">
+<div class="ch-title" style="color:#e85454">🎤 ORAL EXAM PREP — Spring 2026</div>
+<div class="ch-subtitle">13 minutes · 100 points · Individual test · Chapters 1–6</div>
+<div class="oe-score-bar">
+<div style="width:10%;background:#b088f9;"></div>
+<div style="width:20%;background:#5ba8e8;"></div>
+<div style="width:50%;background:#d4a843;"></div>
+<div style="width:20%;background:#4ecf7a;"></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;font-size:11px;margin-bottom:14px;">
+<span style="color:#b088f9;">■ Self-Intro 10pts</span>
+<span style="color:#5ba8e8;">■ Dialogue 20pts</span>
+<span style="color:#d4a843;">■ Locations 50pts</span>
+<span style="color:#4ecf7a;">■ Q&A 20pts</span>
+</div>
+
+<div class="oe-tabs">
+<button class="oe-tab-btn active" onclick="showOEsec(0)">SELF-INTRO</button>
+<button class="oe-tab-btn" onclick="showOEsec(1)">DIALOGUE</button>
+<button class="oe-tab-btn" onclick="showOEsec(2)">LOCATIONS</button>
+<button class="oe-tab-btn" onclick="showOEsec(3)">Q &amp; A</button>
+<button class="oe-tab-btn" onclick="showOEsec(4)">CHEATSHEET</button>
+</div>
+
+<!-- ═══ SELF-INTRO ═══ -->
+<div class="oe-sec active" id="oesec0">
+<div class="oe-intro">
+<span class="oe-weight">10 POINTS</span>
+<h2>Section 1: Self-Introduction</h2>
+<p>Introduce yourself: name, school, year, major, hometown. Use patterns from Ch 1–2. Speak naturally — aim for ~30 seconds.</p>
+</div>
+<div class="oe-tip"><b>STRATEGY:</b> Memorize as one smooth flow. Practice aloud 10+ times. The instructor wants confident, natural delivery.</div>
+<div class="card"><div class="card-header">YOUR INTRODUCTION TEMPLATE</div><div class="card-body">
+<div class="oe-template">
+<div class="oe-ja oe-ja-lg" style="line-height:2.2;">
+はじめまして。<span class="oe-blank">your name</span>です。<br>
+<span class="oe-blank">school</span>の <span class="oe-blank">year</span>ねんせいです。<br>
+せんこうは <span class="oe-blank">major</span>です。<br>
+<span class="oe-blank">hometown</span>から きました。<br>
+どうぞ よろしく おねがいします。
+</div>
+</div>
+<h4 style="color:var(--gold);font-size:12px;letter-spacing:1px;margin:16px 0 10px;">EXAMPLE</h4>
+<div style="background:var(--surface);border-radius:10px;padding:16px;">
+<div class="oe-ja" style="line-height:2.4;">はじめまして。ジョニーです。<br>UNO の にねんせいです。<br>せんこうは コンピューターサイエンス です。<br>オマハから きました。<br>どうぞ よろしく おねがいします。</div>
+<div class="oe-rm" style="margin-top:10px;">Hajimemashite. Jonii desu. / UNO no ni-nensei desu. / Senkoo wa konpyuutaa saiensu desu. / Omaha kara kimashita. / Doozo yoroshiku onegaishimasu.</div>
+<div class="oe-en" style="margin-top:8px;">How do you do? I'm Johnny. / I'm a sophomore at UNO. / My major is Computer Science. / I came from Omaha. / Nice to meet you.</div>
+</div>
+</div></div>
+<div class="oe-warn"><b>COMMON MISTAKES:</b> Don't say わたしは at the start — it's implied. End with どうぞよろしくおねがいします (polite — safer for exam).</div>
+<div class="card"><div class="card-header">YEAR IN SCHOOL VOCAB</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">いちねんせい</div><div class="oe-loc-rm">ichi-nensei</div><div class="oe-loc-en">freshman</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">にねんせい</div><div class="oe-loc-rm">ni-nensei</div><div class="oe-loc-en">sophomore</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">さんねんせい</div><div class="oe-loc-rm">san-nensei</div><div class="oe-loc-en">junior</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">よねんせい</div><div class="oe-loc-rm">yo-nensei</div><div class="oe-loc-en">senior</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">だいがくいんせい</div><div class="oe-loc-rm">daigakuinsei</div><div class="oe-loc-en">graduate student</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">せんこう</div><div class="oe-loc-rm">senkoo</div><div class="oe-loc-en">major</div></div>
+</div>
+</div></div>
+</div>
+
+<!-- ═══ DIALOGUE ═══ -->
+<div class="oe-sec" id="oesec1">
+<div class="oe-intro">
+<span class="oe-weight">20 POINTS</span>
+<h2>Section 2: Dialogue Reading</h2>
+<p>Read aloud a dialogue from Ch 4, 5, or 6. The instructor picks which one. Practice ALL three. Focus on pronunciation, natural flow, and pitch.</p>
+</div>
+<div class="oe-tip"><b>HOW TO PRACTICE:</b> 1) Read aloud slowly. 2) Listen to MindTap audio and mimic rhythm. 3) Record yourself and compare. 4) Focus on natural pauses between phrases.</div>
+
+<div class="card"><div class="card-header">CH 4 — このへんに ぎんこうが ありますか <span style="font-size:9px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;">CITY</span></div><div class="card-body">
+<p class="oe-en" style="margin-bottom:12px;font-style:italic;">Ueda needs to find a bank near Shibuya Station.</p>
+<div style="background:var(--surface);border-radius:10px;padding:16px;">
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">あのう、すみませんが。</div><div class="oe-rm">Anoo, sumimasen ga.</div><div class="oe-en">Um, excuse me.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY</div><div class="oe-ja">はい。</div><div class="oe-rm">Hai.</div><div class="oe-en">Yes?</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">このへんに ぎんこうが ありますか。</div><div class="oe-rm">Kono hen ni ginkoo ga arimasu ka.</div><div class="oe-en">Is there a bank around here?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY</div><div class="oe-ja">ええ、ありますよ。あそこに たかい ビルが ありますね。</div><div class="oe-rm">Ee, arimasu yo. Asoko ni takai biru ga arimasu ne.</div><div class="oe-en">Yes, there is. See that tall building over there?</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ええ。</div><div class="oe-rm">Ee.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY</div><div class="oe-ja">あの ビルの となりに ちいさい しろい たてものが ありますね。あれが ぎんこうです。</div><div class="oe-rm">Ano biru no tonari ni chiisai shiroi tatemono ga arimasu ne. Are ga ginkoo desu.</div><div class="oe-en">Next to that building there's a small white building. That's the bank.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">あ、あれですね。どうも ありがとう ございます。</div><div class="oe-rm">A, are desu ne. Doomo arigatoo gozaimasu.</div><div class="oe-en">Oh, that one? Thank you very much.</div></div>
+</div>
+</div></div>
+
+<div class="card"><div class="card-header">CH 5 — リーさんの アパート <span style="font-size:9px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;">HOME</span></div><div class="card-body">
+<p class="oe-en" style="margin-bottom:12px;font-style:italic;">Ueda visits Li's apartment and they discuss the view and commute.</p>
+<div style="background:var(--surface);border-radius:10px;padding:16px;">
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ごめんください。</div><div class="oe-rm">Gomen kudasai.</div><div class="oe-en">Is anyone home?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">あ、上田さん。いらっしゃい。どうぞ あがってください。</div><div class="oe-rm">A, Ueda-san. Irasshai. Doozo agatte kudasai.</div><div class="oe-en">Oh, Ueda! Welcome. Please come in.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">おじゃまします。</div><div class="oe-rm">Ojama shimasu.</div><div class="oe-en">Thank you (for having me).</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">わあ、とても あかるいですね。</div><div class="oe-rm">Waa, totemo akarui desu ne.</div><div class="oe-en">Wow, it's very bright!</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">ええ。この アパートは たかい ところに ありますから。</div><div class="oe-rm">Ee. Kono apaato wa takai tokoro ni arimasu kara.</div><div class="oe-en">It's because this apartment is up high.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">あそこに りっぱな たてものが ありますね。あれは 大学ですか。</div><div class="oe-rm">Asoko ni rippana tatemono ga arimasu ne. Are wa daigaku desu ka.</div><div class="oe-en">There's a splendid building over there. Is that the university?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">ええ、あれは じょうとう大学の たいいくかんですよ。</div><div class="oe-rm">Ee, are wa Jootoo daigaku no taiikukan desu yo.</div><div class="oe-en">Yes, that's Joto University's gym.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">そうですか。ここから 大学まで どのくらい かかりますか。</div><div class="oe-rm">Soo desu ka. Koko kara daigaku made dono kurai kakarimasu ka.</div><div class="oe-en">How long does it take from here to university?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">バスで にじゅっぷんぐらい かかります。でも、ぼくは たいてい じてんしゃで いきますよ。</div><div class="oe-rm">Basu de nijuppun gurai kakarimasu. Demo, boku wa taitei jitensha de ikimasu yo.</div><div class="oe-en">About 20 min by bus. But I usually go by bicycle.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">じてんしゃでは どのくらい かかりますか。</div><div class="oe-rm">Jitensha de wa dono kurai kakarimasu ka.</div><div class="oe-en">How long by bicycle?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">じゅうごふんぐらいです。</div><div class="oe-rm">Juugofun gurai desu.</div><div class="oe-en">About 15 minutes.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">へえ、はやいですね。</div><div class="oe-rm">Hee, hayai desu ne.</div><div class="oe-en">Wow, that's fast!</div></div>
+</div>
+</div></div>
+
+<div class="card"><div class="card-header">CH 6 — 週末は どうでしたか <span style="font-size:9px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;">LEISURE</span></div><div class="card-body">
+<p class="oe-en" style="margin-bottom:12px;font-style:italic;">Ueda and Li meet Monday morning and talk about their weekends.</p>
+<div style="background:var(--surface);border-radius:10px;padding:16px;">
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">リーさん、おはようございます。</div><div class="oe-rm">Rii-san, ohayoo gozaimasu.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">あ、上田さん、おはようございます。週末は どうでしたか。</div><div class="oe-rm">A, Ueda-san, ohayoo gozaimasu. Shuumatsu wa doo deshita ka.</div><div class="oe-en">How was your weekend?</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">とても たのしかったです。</div><div class="oe-rm">Totemo tanoshikatta desu.</div><div class="oe-en">It was really fun.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">それは よかったですね。</div><div class="oe-rm">Sore wa yokatta desu ne.</div><div class="oe-en">That's great!</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ええ、みちこさんと しぶやに かいものに <span class="oe-te">いって</span>、コンサートへ いきました。</div><div class="oe-rm">Ee, Michiko-san to Shibuya ni kaimono ni itte, konsaato e ikimashita.</div><div class="oe-en">I went shopping in Shibuya with Michiko and went to a concert.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">そうですか。いいですね。</div><div class="oe-rm">Soo desu ka. Ii desu ne.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">リーさんの 週末は どうでしたか。</div><div class="oe-rm">Rii-san no shuumatsu wa doo deshita ka.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">先週は しゅくだいが たくさん <span class="oe-te">あって</span>、週末は ずっと うちで べんきょうしました。</div><div class="oe-rm">Senshuu wa shukudai ga takusan atte, shuumatsu wa zutto uchi de benkyoo shimashita.</div><div class="oe-en">I had a lot of homework so I studied at home all weekend.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">それは 大変でしたね。</div><div class="oe-rm">Sore wa taihen deshita ne.</div><div class="oe-en">That sounds tough.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">ええ。だから、<span class="oe-te">いそがしくて</span>、ぜんぜん おもしろくなかったです。</div><div class="oe-rm">Ee. Dakara, isogashikute, zenzen omoshiroku nakatta desu.</div><div class="oe-en">Yeah. So it was busy and not interesting at all.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">じゃあ、うちに あそびに きませんか。</div><div class="oe-rm">Jaa, uchi ni asobi ni kimasen ka.</div><div class="oe-en">Well then, come hang out at my place?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">えっ、いいんですか。</div><div class="oe-rm">E, ii n desu ka.</div><div class="oe-en">Really? Are you sure?</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ええ。土曜日は どうですか。</div><div class="oe-rm">Ee. Doyoobi wa doo desu ka.</div><div class="oe-en">How about Saturday?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">ええ、大丈夫です。</div><div class="oe-rm">Ee, daijoobu desu.</div><div class="oe-en">Sure, that works.</div></div>
+</div>
+</div></div>
+</div>
+
+<!-- ═══ LOCATIONS ═══ -->
+<div class="oe-sec" id="oesec2">
+<div class="oe-intro">
+<span class="oe-weight big">50 POINTS — HALF YOUR GRADE</span>
+<h2>Section 3: Picture Description</h2>
+<p>Describe <b>5 locations</b> of objects in a picture using location words + あります／います. You MUST use at least <b>2 connected phrases</b> with て-form.</p>
+</div>
+<div class="oe-warn"><b>CRITICAL:</b> At least 2 of your 5 sentences MUST connect two ideas using て-form. Without this, you lose major points.<br><span class="oe-ja" style="font-size:14px;">つくえの 下に ねこが<span class="oe-te">いて</span>、まどの そとに きが あります。</span></div>
+
+<div class="card"><div class="card-header">LOCATION WORDS — MEMORIZE THESE</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">上（うえ）</div><div class="oe-loc-rm">ue</div><div class="oe-loc-en">on / above</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">下（した）</div><div class="oe-loc-rm">shita</div><div class="oe-loc-en">under / below</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">まえ</div><div class="oe-loc-rm">mae</div><div class="oe-loc-en">in front of</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">うしろ</div><div class="oe-loc-rm">ushiro</div><div class="oe-loc-en">behind</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">みぎ</div><div class="oe-loc-rm">migi</div><div class="oe-loc-en">right</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ひだり</div><div class="oe-loc-rm">hidari</div><div class="oe-loc-en">left</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">となり</div><div class="oe-loc-rm">tonari</div><div class="oe-loc-en">next to</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">よこ</div><div class="oe-loc-rm">yoko</div><div class="oe-loc-en">beside</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ちかく</div><div class="oe-loc-rm">chikaku</div><div class="oe-loc-en">near</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">中（なか）</div><div class="oe-loc-rm">naka</div><div class="oe-loc-en">inside</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">そと</div><div class="oe-loc-rm">soto</div><div class="oe-loc-en">outside</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あいだ</div><div class="oe-loc-rm">aida</div><div class="oe-loc-en">between</div></div>
+</div>
+</div></div>
+
+<div class="card"><div class="card-header">THE SENTENCE PATTERN</div><div class="card-body">
+<div class="oe-template"><div class="oe-ja" style="font-size:16px;line-height:2;"><span class="oe-hl">PLACE</span> の <span class="oe-hl">LOCATION</span> に <span class="oe-hl">OBJECT</span> が <span class="oe-hl">あります／います</span></div>
+<div class="oe-rm" style="margin-top:8px;">[PLACE] no [LOCATION] ni [OBJECT] ga arimasu / imasu</div></div>
+<div class="oe-tip" style="margin-top:14px;"><b>あります vs います:</b> あります = non-living things (books, phones, buildings, trees). います = living things (people, animals, insects).</div>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#1a6b3a,#2d8a4e);">て-FORM CONNECTOR — YOU NEED THIS</div><div class="card-body">
+<div class="oe-template" style="border-color:var(--green);">
+<div class="oe-ja" style="font-size:16px;line-height:2;">[place] に [object] が <span class="oe-te">あって／いて</span>、[place] に [object] が あります／います。</div>
+<div class="oe-en" style="margin-top:8px;">There is [X] at [place], and there is [Y] at [place].</div>
+</div>
+<div class="oe-loc-grid" style="margin-top:12px;">
+<div class="oe-loc-item" style="border-color:rgba(78,207,122,0.3);"><div class="oe-loc-jp" style="color:var(--green);">あります → <span class="oe-te">あって</span></div><div class="oe-loc-en">there is (non-living) &amp; ...</div></div>
+<div class="oe-loc-item" style="border-color:rgba(78,207,122,0.3);"><div class="oe-loc-jp" style="color:var(--green);">います → <span class="oe-te">いて</span></div><div class="oe-loc-en">there is (living) &amp; ...</div></div>
+</div>
+</div></div>
+
+<div class="card"><div class="card-header">5 EXAMPLE SENTENCES (EXAM-READY)</div><div class="card-body">
+<div style="margin-bottom:12px;padding:12px;background:var(--surface);border-radius:8px;"><div style="color:#b088f9;font-size:10px;font-weight:700;letter-spacing:1px;">SENTENCE 1 — SIMPLE</div><div class="oe-ja" style="margin:6px 0;">つくえの 上に ホセさんの でんわが あります。</div><div class="oe-rm">Tsukue no ue ni Hose-san no denwa ga arimasu.</div><div class="oe-en">On the desk, there is Jose's phone.</div></div>
+<div style="margin-bottom:12px;padding:12px;background:var(--surface);border-radius:8px;"><div style="color:#b088f9;font-size:10px;font-weight:700;letter-spacing:1px;">SENTENCE 2 — WITH ADJECTIVE</div><div class="oe-ja" style="margin:6px 0;">つくえの ひだりに <span class="oe-hl">くろくて 大きい</span> かばんが あります。</div><div class="oe-rm">Tsukue no hidari ni kurokute ookii kaban ga arimasu.</div><div class="oe-en">To the left of the desk, there is a black, big bag.</div></div>
+<div style="margin-bottom:12px;padding:12px;background:var(--surface);border-radius:8px;"><div style="color:#b088f9;font-size:10px;font-weight:700;letter-spacing:1px;">SENTENCE 3 — SIMPLE</div><div class="oe-ja" style="margin:6px 0;">まどの よこに とけいが あります。</div><div class="oe-rm">Mado no yoko ni tokei ga arimasu.</div><div class="oe-en">Next to the window, there is a clock.</div></div>
+<div style="margin-bottom:12px;padding:12px;background:var(--surface);border-radius:8px;"><div style="color:#b088f9;font-size:10px;font-weight:700;letter-spacing:1px;">SENTENCE 4 — SIMPLE</div><div class="oe-ja" style="margin:6px 0;">まどの そとに くるまが あります。</div><div class="oe-rm">Mado no soto ni kuruma ga arimasu.</div></div>
+<div style="margin-bottom:12px;padding:12px;background:rgba(78,207,122,0.06);border:1px solid rgba(78,207,122,0.2);border-radius:8px;"><div style="color:var(--green);font-size:10px;font-weight:700;letter-spacing:1px;">SENTENCE 5 — て-FORM ★</div><div class="oe-ja" style="margin:6px 0;">つくえの 下に ねこが <span class="oe-te">いて</span>、まどの そとに きが あります。</div><div class="oe-rm">Tsukue no shita ni neko ga ite, mado no soto ni ki ga arimasu.</div><div class="oe-en">Under the desk there is a cat, and outside the window there is a tree.</div></div>
+</div></div>
+
+<div class="card"><div class="card-header">OBJECTS YOU MIGHT SEE IN THE PICTURE</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">つくえ</div><div class="oe-loc-rm">tsukue</div><div class="oe-loc-en">desk</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いす</div><div class="oe-loc-rm">isu</div><div class="oe-loc-en">chair</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ベッド</div><div class="oe-loc-rm">beddo</div><div class="oe-loc-en">bed</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">まど</div><div class="oe-loc-rm">mado</div><div class="oe-loc-en">window</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ドア</div><div class="oe-loc-rm">doa</div><div class="oe-loc-en">door</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">テレビ</div><div class="oe-loc-rm">terebi</div><div class="oe-loc-en">TV</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">でんわ</div><div class="oe-loc-rm">denwa</div><div class="oe-loc-en">phone</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ほん</div><div class="oe-loc-rm">hon</div><div class="oe-loc-en">book</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">とけい</div><div class="oe-loc-rm">tokei</div><div class="oe-loc-en">clock</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">かばん</div><div class="oe-loc-rm">kaban</div><div class="oe-loc-en">bag</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ねこ</div><div class="oe-loc-rm">neko</div><div class="oe-loc-en">cat</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いぬ</div><div class="oe-loc-rm">inu</div><div class="oe-loc-en">dog</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">くるま</div><div class="oe-loc-rm">kuruma</div><div class="oe-loc-en">car</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">き</div><div class="oe-loc-rm">ki</div><div class="oe-loc-en">tree</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">コンピューター</div><div class="oe-loc-rm">konpyuutaa</div><div class="oe-loc-en">computer</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ぎんこう</div><div class="oe-loc-rm">ginkoo</div><div class="oe-loc-en">bank</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ゆうびんきょく</div><div class="oe-loc-rm">yuubinkyoku</div><div class="oe-loc-en">post office</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">レストラン</div><div class="oe-loc-rm">resutoran</div><div class="oe-loc-en">restaurant</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">スーパー</div><div class="oe-loc-rm">suupaa</div><div class="oe-loc-en">supermarket</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">としょかん</div><div class="oe-loc-rm">toshokan</div><div class="oe-loc-en">library</div></div>
+</div>
+</div></div>
+</div>
+
+<!-- ═══ Q&A — ALL QUESTIONS FROM EXAM PDF ═══ -->
+<div class="oe-sec" id="oesec3">
+<div class="oe-intro">
+<span class="oe-weight">20 POINTS</span>
+<h2>Section 4: Q &amp; A with Instructor</h2>
+<p>Random questions from the list below. If you don't understand, say: <span class="oe-ja" style="font-size:14px;">もういちど いってください。</span> — do NOT ask in English.</p>
+</div>
+<div class="oe-tip"><b>SURVIVAL PHRASES:</b><br><span class="oe-ja">もういちど いってください。</span> — Please say it again<br><span class="oe-ja">ゆっくり いってください。</span> — Please say it slowly</div>
+<p style="font-size:11px;color:var(--text-dim);margin:10px 0;">Click any question to reveal a sample answer. Adapt to your own life!</p>
+
+<div class="card"><div class="card-header">DAILY LIFE &amp; MEALS</div><div class="card-body" style="padding:10px;">
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">なんじに おきますか。</span><br><span class="oe-rm">Nanji ni okimasu ka.</span><br><span class="oe-en">What time do you wake up?</span></div><div class="oe-a"><div class="oe-ja">しちじに おきます。</div><div class="oe-rm">Shichi-ji ni okimasu.</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">いつも あさごはんを たべますか。なんじごろ たべますか。</span><br><span class="oe-en">Do you always eat breakfast? Around what time?</span></div><div class="oe-a"><div class="oe-ja">はい、たべます。はちじごろ たべます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">なんじに ひるごはんを たべますか。だれと たべますか。</span><br><span class="oe-en">What time do you eat lunch? Who do you eat with?</span></div><div class="oe-a"><div class="oe-ja">じゅうにじに ひるごはんを たべます。ともだちと たべます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">なんじに ばんごはんを たべますか。どこで たべますか。</span><br><span class="oe-en">What time do you eat dinner? Where?</span></div><div class="oe-a"><div class="oe-ja">ろくじに ばんごはんを たべます。うちで たべます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">まいにち シャワーを あびますか。</span><br><span class="oe-en">Do you take a shower every day?</span></div><div class="oe-a"><div class="oe-ja">はい、まいにち シャワーを あびます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">きのう シャワーを あびましたか。</span><br><span class="oe-en">Did you take a shower yesterday?</span></div><div class="oe-a"><div class="oe-ja">はい、あびました。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">なんじに いえに かえりますか。</span><br><span class="oe-en">What time do you go home?</span></div><div class="oe-a"><div class="oe-ja">ごじに いえに かえります。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">レストランで よく 何を たべますか。</span><br><span class="oe-en">What do you often eat at restaurants?</span></div><div class="oe-a"><div class="oe-ja">ハンバーガーを たべます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">よく りょうりしますか。</span><br><span class="oe-en">Do you often cook?</span></div><div class="oe-a"><div class="oe-ja">いいえ、あまり りょうりしません。</div></div></div>
+</div></div>
+
+<div class="card"><div class="card-header">SCHOOL &amp; CLASSES</div><div class="card-body" style="padding:10px;">
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">おなまえは 何ですか。</span><br><span class="oe-en">What is your name?</span></div><div class="oe-a"><div class="oe-ja">ジョニーです。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">せんこうは 何ですか。</span><br><span class="oe-en">What is your major?</span></div><div class="oe-a"><div class="oe-ja">せんこうは コンピューターサイエンスです。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">きょう、なんのじゅぎょうが ありますか。</span><br><span class="oe-en">What classes do you have today?</span></div><div class="oe-a"><div class="oe-ja">きょう、にほんごの じゅぎょうが あります。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">日本語の じゅぎょうは なんじから なんじまで ですか。</span><br><span class="oe-en">What time is Japanese class from and to?</span></div><div class="oe-a"><div class="oe-ja">くじから くじごじゅっぷんまでです。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">日本語の じゅぎょうは どうですか。</span><br><span class="oe-en">How is Japanese class?</span></div><div class="oe-a"><div class="oe-ja">たのしいですが、むずかしいです。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">どこで しゅくだいを しますか。だれと しますか。</span><br><span class="oe-en">Where do you do homework? With whom?</span></div><div class="oe-a"><div class="oe-ja">うちで しゅくだいを します。ひとりで します。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">いつも どこで べんきょうしますか。</span><br><span class="oe-en">Where do you usually study?</span></div><div class="oe-a"><div class="oe-ja">としょかんで べんきょうします。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">UNO はどんな大学ですか。新しいですか。</span><br><span class="oe-en">What kind of university is UNO? Is it new?</span></div><div class="oe-a"><div class="oe-ja">UNO は 大きい 大学です。あまり あたらしくありません。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">ASHビルは あたらしいですか。</span><br><span class="oe-en">Is the ASH building new?</span></div><div class="oe-a"><div class="oe-ja">いいえ、あまり あたらしくありません。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">よく 本を よみますか。</span><br><span class="oe-en">Do you often read books?</span></div><div class="oe-a"><div class="oe-ja">いいえ、あまり よみません。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">アルバイトを しますか。 どこで しますか。</span><br><span class="oe-en">Do you have a part-time job? Where?</span></div><div class="oe-a"><div class="oe-ja">はい、します。レストランで します。</div></div></div>
+</div></div>
+
+<div class="card"><div class="card-header">TRANSPORTATION &amp; HOME</div><div class="card-body" style="padding:10px;">
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">バスで 学校に きますか。</span><br><span class="oe-en">Do you come to school by bus?</span></div><div class="oe-a"><div class="oe-ja">いいえ、くるまで 学校に きます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">きょう、なんで 学校に きましたか。</span><br><span class="oe-en">How did you come to school today?</span></div><div class="oe-a"><div class="oe-ja">くるまで きました。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">まいにち、なんじごろ がっこうに きますか。</span><br><span class="oe-en">What time do you usually come to school?</span></div><div class="oe-a"><div class="oe-ja">はちじごろ がっこうに きます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">うちから 学校まで どのぐらい かかりますか。</span><br><span class="oe-en">How long does it take from home to school?</span></div><div class="oe-a"><div class="oe-ja">にじゅっぷんぐらい かかります。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">うちから 学校まで じてんしゃで きますか。</span><br><span class="oe-en">Do you come to school by bicycle?</span></div><div class="oe-a"><div class="oe-ja">いいえ、くるまで きます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">ここから としょかんまで あるいて どのぐらい かかりますか。</span><br><span class="oe-en">How long does it take to walk to the library from here?</span></div><div class="oe-a"><div class="oe-ja">ごふんぐらい かかります。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">オマハはどんなまちですか。大きいですか。</span><br><span class="oe-en">What kind of city is Omaha? Is it big?</span></div><div class="oe-a"><div class="oe-ja">オマハは しずかな まちです。あまり 大きくありません。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">いま、どんな ところに すんでいますか。</span><br><span class="oe-en">What kind of place do you live in now?</span></div><div class="oe-a"><div class="oe-ja">アパートに すんでいます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">○○さんのうちは どんな うちですか。</span><br><span class="oe-en">What kind of house is your house?</span></div><div class="oe-a"><div class="oe-ja">ちいさい アパートです。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">うちに ペットが いますか。</span><br><span class="oe-en">Do you have pets at home?</span></div><div class="oe-a"><div class="oe-ja">いいえ、いません。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">○○さんの へやに どんなものが ありますか。</span><br><span class="oe-en">What kind of things are in your room?</span></div><div class="oe-a"><div class="oe-ja">ベッドと つくえと コンピューターが あります。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">ドアは どこに ありますか。</span><br><span class="oe-en">Where is the door?</span></div><div class="oe-a"><div class="oe-ja">うしろに あります。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">このへんでは どのカフェが いいですか。</span><br><span class="oe-en">Which cafe around here is good?</span></div><div class="oe-a"><div class="oe-ja">スターバックスが いいです。</div></div></div>
+</div></div>
+
+<div class="card"><div class="card-header">PAST, FUTURE &amp; WEEKENDS</div><div class="card-body" style="padding:10px;">
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">こんばん、何をしますか。</span><br><span class="oe-en">What will you do tonight?</span></div><div class="oe-a"><div class="oe-ja">うちで テレビを みます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">あした、何を しますか。</span><br><span class="oe-en">What will you do tomorrow?</span></div><div class="oe-a"><div class="oe-ja">あした、がっこうに いきます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">きのう、どこに いきましたか。</span><br><span class="oe-en">Where did you go yesterday?</span></div><div class="oe-a"><div class="oe-ja">スーパーに いきました。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">きのうの ばん、何をしましたか。</span><br><span class="oe-en">What did you do last night?</span></div><div class="oe-a"><div class="oe-ja">しゅくだいを しました。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">週末、よく どこに いきますか。</span><br><span class="oe-en">Where do you often go on weekends?</span></div><div class="oe-a"><div class="oe-ja">ともだちの うちに いきます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">休みの日に よく 何をしますか。</span><br><span class="oe-en">What do you often do on days off?</span></div><div class="oe-a"><div class="oe-ja">ゲームを します。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">○○さんの こうこうせいかつは どうでしたか。</span><br><span class="oe-en">How was your high school life?</span></div><div class="oe-a"><div class="oe-ja">たのしかったです。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">これは 日本語で なんと いいますか。</span><br><span class="oe-en">(Points at something) What is this called in Japanese?</span></div><div class="oe-a"><div class="oe-ja">(Try your best! If you don't know: すみません、わかりません。)</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">よく だれに テキストしますか。一日に どれぐらい しますか。</span><br><span class="oe-en">Who do you often text? How much per day?</span></div><div class="oe-a"><div class="oe-ja">ともだちに テキストします。一日に じゅっかいぐらい します。</div></div></div>
+</div></div>
+
+<div class="card"><div class="card-header">て-FORM SEQUENCE QUESTIONS</div><div class="card-body" style="padding:10px;">
+<div class="oe-tip" style="margin:0 0 10px;"><b>CRITICAL:</b> These questions REQUIRE you to answer using て-form to connect actions!</div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">学校から うちに かえって 何をしますか。</span><br><span class="oe-en">What do you do after going home from school? (answer with て-form)</span></div><div class="oe-a"><div class="oe-ja">うちに <span class="oe-te">かえって</span>、ばんごはんを たべます。</div><div class="oe-rm">Uchi ni kaette, bangohan o tabemasu.</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">あさ おきて、何をしますか。</span><br><span class="oe-en">After waking up, what do you do?</span></div><div class="oe-a"><div class="oe-ja">あさ <span class="oe-te">おきて</span>、シャワーを あびます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">あさごはんを たべて、何をしますか。</span><br><span class="oe-en">After eating breakfast, what do you do?</span></div><div class="oe-a"><div class="oe-ja">あさごはんを <span class="oe-te">たべて</span>、がっこうに いきます。</div></div></div>
+<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">いつも シャワーを あびて、何を しますか。</span><br><span class="oe-en">After showering, what do you usually do?</span></div><div class="oe-a"><div class="oe-ja">シャワーを <span class="oe-te">あびて</span>、ふくを きます。</div></div></div>
+</div></div>
+</div>
+
+<!-- ═══ CHEATSHEET ═══ -->
+<div class="oe-sec" id="oesec4">
+<div class="oe-intro"><h2>Quick Reference Cheatsheet</h2><p>Last-minute review. Keep open while practicing.</p></div>
+
+<div class="card"><div class="card-header">KEY VERB FORMS</div><div class="card-body">
+<div style="overflow-x:auto;">
+<table style="width:100%;border-collapse:collapse;font-size:13px;">
+<thead><tr>
+<th style="background:linear-gradient(135deg,var(--gold-dark),#6b5518);color:var(--white);padding:8px;border:1px solid var(--border);">Polite</th>
+<th style="background:linear-gradient(135deg,var(--gold-dark),#6b5518);color:var(--white);padding:8px;border:1px solid var(--border);">Past</th>
+<th style="background:linear-gradient(135deg,#1a6b3a,#2d8a4e);color:var(--white);padding:8px;border:1px solid var(--border);">て-form</th>
+<th style="background:linear-gradient(135deg,var(--gold-dark),#6b5518);color:var(--white);padding:8px;border:1px solid var(--border);">English</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:6px;border:1px solid var(--border);">たべます</td><td style="padding:6px;border:1px solid var(--border);">たべました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">たべて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">eat</td></tr>
+<tr><td style="padding:6px;border:1px solid var(--border);">いきます</td><td style="padding:6px;border:1px solid var(--border);">いきました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">いって</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">go</td></tr>
+<tr><td style="padding:6px;border:1px solid var(--border);">きます</td><td style="padding:6px;border:1px solid var(--border);">きました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">きて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">come</td></tr>
+<tr><td style="padding:6px;border:1px solid var(--border);">します</td><td style="padding:6px;border:1px solid var(--border);">しました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">して</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">do</td></tr>
+<tr><td style="padding:6px;border:1px solid var(--border);">みます</td><td style="padding:6px;border:1px solid var(--border);">みました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">みて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">watch</td></tr>
+<tr><td style="padding:6px;border:1px solid var(--border);">おきます</td><td style="padding:6px;border:1px solid var(--border);">おきました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">おきて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">wake up</td></tr>
+<tr><td style="padding:6px;border:1px solid var(--border);">かえります</td><td style="padding:6px;border:1px solid var(--border);">かえりました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">かえって</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">return</td></tr>
+<tr><td style="padding:6px;border:1px solid var(--border);">あびます</td><td style="padding:6px;border:1px solid var(--border);">あびました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">あびて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">shower</td></tr>
+<tr><td style="padding:6px;border:1px solid var(--border);">よみます</td><td style="padding:6px;border:1px solid var(--border);">よみました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">よんで</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">read</td></tr>
+<tr><td style="padding:6px;border:1px solid var(--border);">あります</td><td style="padding:6px;border:1px solid var(--border);">ありました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">あって</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">exist (thing)</td></tr>
+<tr><td style="padding:6px;border:1px solid var(--border);">います</td><td style="padding:6px;border:1px solid var(--border);">いました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">いて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">exist (living)</td></tr>
+</tbody></table>
+</div>
+</div></div>
+
+<div class="card"><div class="card-header">PARTICLES QUICK REF</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">に</div><div class="oe-loc-en">time / location / goal<br>7じ<b>に</b> · うち<b>に</b></div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">で</div><div class="oe-loc-en">means / action place<br>バス<b>で</b> · うち<b>で</b></div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">を</div><div class="oe-loc-en">object marker<br>ほん<b>を</b> よみます</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">と</div><div class="oe-loc-en">with / and<br>ともだち<b>と</b></div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">から〜まで</div><div class="oe-loc-en">from ~ to ~<br>9じ<b>から</b>5じ<b>まで</b></div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">が</div><div class="oe-loc-en">subject (new info)<br>ねこ<b>が</b> います</div></div>
+</div>
+</div></div>
+
+<div class="oe-warn"><b>EXAM DAY REMINDERS:</b><br>• Arrive 15 min early<br>• If you mess up, correct yourself — it's allowed!<br>• NEVER speak English during the exam<br>• Use もういちど いってください if you don't understand<br>• Speak at a natural pace</div>
+</div>
+</div>
+
 <div class="chapter-panel" id="panel_practice-lab">
   <div class="ch-title">練習ラボ — PRACTICE LAB</div>
   <div class="ch-subtitle">Interactive practice tools · Write · Listen · Read · Speak</div>
@@ -9473,9 +9984,33 @@ function buildSearchIndex() {
   const chNames = {
     ch1: 'Ch1: Sounds & Hiragana', ch2: 'Ch2: Introductions', 
     ch3: 'Ch3: Daily Routines', ch4: 'Ch4: Japanese Cities',
-    ch5: 'Ch5: Japanese Homes', ch6: 'Ch6: Leisure Time'
+    ch5: 'Ch5: Japanese Homes', ch6: 'Ch6: Leisure Time',
+    'oral-exam': 'Oral Exam Prep'
   };
-  
+
+  // Index oral exam Q&A, dialogues, and vocab for search
+  document.querySelectorAll('#panel_oral-exam .oe-subsec').forEach(item => {
+    const qEl = item.querySelector('.oe-q');
+    const aEl = item.querySelector('.oe-a');
+    if (!qEl) return;
+    const jp = Array.from(qEl.querySelectorAll('.oe-ja')).map(e => e.textContent).join(' ');
+    const en = Array.from(qEl.querySelectorAll('.oe-en')).map(e => e.textContent).join(' ');
+    const ansJp = aEl ? (aEl.querySelector('.oe-ja')?.textContent || '') : '';
+    searchIdx.push({ jp: jp + ' ' + ansJp, en: en, reading: '', ch: 'oral-exam', chLabel: 'Oral Exam', type: 'vocab', title: 'Q&A' });
+  });
+  document.querySelectorAll('#panel_oral-exam .oe-d-line').forEach(line => {
+    const jpEl = line.querySelector('.oe-ja');
+    const enEl = line.querySelector('.oe-en');
+    if (!jpEl) return;
+    searchIdx.push({ jp: jpEl.textContent, en: enEl ? enEl.textContent : '', reading: '', ch: 'oral-exam', chLabel: 'Oral Exam', type: 'dialogue', title: 'Exam Dialogue' });
+  });
+  document.querySelectorAll('#panel_oral-exam .oe-loc-item').forEach(item => {
+    const jp = item.querySelector('.oe-loc-jp')?.textContent || '';
+    const rm = item.querySelector('.oe-loc-rm')?.textContent || '';
+    const en = item.querySelector('.oe-loc-en')?.textContent || '';
+    if (jp) searchIdx.push({ jp: jp, en: en, reading: rm, ch: 'oral-exam', chLabel: 'Oral Exam', type: 'vocab' });
+  });
+
   for (const [ch, data] of Object.entries(CHAPTER_DATA)) {
     if (!data.vocab) continue;
     const chLabel = chNames[ch] || ch;
@@ -9646,6 +10181,13 @@ document.addEventListener('click', function(e) {
 
 // ═══ INIT ═══
 showChapter('ch1');
+
+function showOEsec(n) {
+  document.querySelectorAll('.oe-sec').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.oe-tab-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById('oesec'+n).classList.add('active');
+  document.querySelectorAll('.oe-tab-btn')[n].classList.add('active');
+}
 
 
 // ═══ AUTO-PLAY SYSTEM ═══
@@ -10078,7 +10620,7 @@ function floatSearchHandler(query) {
     return;
   }
 
-  const chNames = {ch1:'Ch 1',ch2:'Ch 2',ch3:'Ch 3',ch4:'Ch 4',ch5:'Ch 5',ch6:'Ch 6'};
+  const chNames = {ch1:'Ch 1',ch2:'Ch 2',ch3:'Ch 3',ch4:'Ch 4',ch5:'Ch 5',ch6:'Ch 6','oral-exam':'Oral Exam'};
 
   let h = '';
   shown.forEach(({item: m}) => {
@@ -10196,6 +10738,448 @@ document.querySelectorAll('.pl').forEach(function(pl){
   });
 });
 </script>
+<!-- ═══ TRANSLATOR ═══ -->
+<button class="tx-fab" id="txFab" onclick="toggleTranslator()" title="Translate (T)">翻</button>
+<div class="tx-panel" id="txPanel">
+  <div class="tx-header">
+    <span class="tx-title">Instant Translator</span>
+    <div class="tx-dir-toggle">
+      <button class="tx-dir-btn active" id="txDirJE" onclick="setTxDir('je')">日→EN</button>
+      <button class="tx-dir-btn" id="txDirEJ" onclick="setTxDir('ej')">EN→日</button>
+    </div>
+    <button class="tx-close" onclick="toggleTranslator()">&times;</button>
+  </div>
+  <div class="tx-input-wrap">
+    <input type="text" class="tx-input" id="txInput" placeholder="Type romaji, hiragana, or Japanese..." oninput="txSearch()" autocomplete="off" spellcheck="false">
+    <div class="tx-preview" id="txPreview"></div>
+  </div>
+  <div class="tx-results" id="txResults">
+    <div class="tx-empty">Type to translate across all 456 vocabulary items<br><span style="font-size:11px;color:var(--gold-dim);">Supports romaji, hiragana, katakana, kanji, and English</span></div>
+  </div>
+</div>
+<script>
+// ═══ ROMAJI → HIRAGANA CONVERTER (with phonetic sound input) ═══
+const R2H_MAP = {
+  'a':'あ','i':'い','u':'う','e':'え','o':'お',
+  'ka':'か','ki':'き','ku':'く','ke':'け','ko':'こ',
+  'sa':'さ','shi':'し','si':'し','su':'す','se':'せ','so':'そ',
+  'ta':'た','chi':'ち','ti':'ち','tsu':'つ','tu':'つ','te':'て','to':'と',
+  'na':'な','ni':'に','nu':'ぬ','ne':'ね','no':'の',
+  'ha':'は','hi':'ひ','fu':'ふ','hu':'ふ','he':'へ','ho':'ほ',
+  'ma':'ま','mi':'み','mu':'む','me':'め','mo':'も',
+  'ya':'や','yu':'ゆ','yo':'よ',
+  'ra':'ら','ri':'り','ru':'る','re':'れ','ro':'ろ',
+  'wa':'わ','wi':'ゐ','we':'ゑ','wo':'を','n':'ん',
+  'ga':'が','gi':'ぎ','gu':'ぐ','ge':'げ','go':'ご',
+  'za':'ざ','ji':'じ','zi':'じ','zu':'ず','ze':'ぜ','zo':'ぞ',
+  'da':'だ','di':'ぢ','du':'づ','de':'で','do':'ど',
+  'ba':'ば','bi':'び','bu':'ぶ','be':'べ','bo':'ぼ',
+  'pa':'ぱ','pi':'ぴ','pu':'ぷ','pe':'ぺ','po':'ぽ',
+  'kya':'きゃ','kyu':'きゅ','kyo':'きょ',
+  'sha':'しゃ','shu':'しゅ','sho':'しょ',
+  'cha':'ちゃ','chu':'ちゅ','cho':'ちょ',
+  'nya':'にゃ','nyu':'にゅ','nyo':'にょ',
+  'hya':'ひゃ','hyu':'ひゅ','hyo':'ひょ',
+  'mya':'みゃ','myu':'みゅ','myo':'みょ',
+  'rya':'りゃ','ryu':'りゅ','ryo':'りょ',
+  'gya':'ぎゃ','gyu':'ぎゅ','gyo':'ぎょ',
+  'ja':'じゃ','ju':'じゅ','jo':'じょ',
+  'bya':'びゃ','byu':'びゅ','byo':'びょ',
+  'pya':'ぴゃ','pyu':'ぴゅ','pyo':'ぴょ',
+};
+const LONG_V = {'aa':'ああ','ii':'いい','uu':'うう','ee':'ええ','oo':'おう','ou':'おう'};
+
+// ═══ PHONETIC NORMALIZATION ═══
+// Maps English-ear phonetic spellings to standard romaji
+// e.g. "hee" → "hi", "bee" → "bi", "roh" → "ro"
+const PHONETIC_MAP = {
+  // English long-vowel spellings → Japanese vowel
+  'hee':'hi','bee':'bi','dee':'de','gee':'gi','kee':'ki','lee':'ri',
+  'mee':'mi','nee':'ni','pee':'pi','ree':'ri','see':'se','tee':'te',
+  'wee':'wi','zee':'ze','fee':'fi',
+  // "ay/ey" endings → え sound
+  'kay':'ke','bay':'be','day':'de','gay':'ge','hay':'he','jay':'je',
+  'lay':'re','may':'me','nay':'ne','pay':'pe','ray':'re','say':'se',
+  'tay':'te','way':'we',
+  // "oh/ow" endings → お sound
+  'koh':'ko','boh':'bo','doh':'do','goh':'go','hoh':'ho',
+  'moh':'mo','noh':'no','roh':'ro','soh':'so','toh':'to',
+  'kow':'ko','bow':'bo','row':'ro','tow':'to','now':'no',
+  // "oo" sound → う
+  'koo':'ku','boo':'bu','doo':'du','goo':'gu','hoo':'hu',
+  'moo':'mu','noo':'nu','roo':'ru','soo':'su','too':'tsu',
+  'woo':'wu','zoo':'zu','foo':'fu',
+  // Common mishearings
+  'she':'shi','shee':'shi','chee':'chi',
+  'sue':'su','rue':'ru','cue':'ku',
+  'joe':'jo','doe':'do','go':'go',
+  'ma':'ma','da':'da','la':'ra','le':'re','li':'ri','lo':'ro','lu':'ru',
+  // Syllable-final sounds
+  'ski':'suki','des':'desu',
+};
+
+function normalizePhonetic(text) {
+  // First: handle space-separated syllables (e.g. "hee ro be" or "ta be ma su")
+  let s = text.toLowerCase().trim();
+  // Split by spaces and normalize each chunk
+  const parts = s.split(/\s+/);
+  if (parts.length > 1) {
+    const normalized = parts.map(p => PHONETIC_MAP[p] || p);
+    return normalized.join('');
+  }
+  return s;
+}
+
+function romajiToHiragana(text) {
+  let s = normalizePhonetic(text);
+  let result = '';
+  let i = 0;
+  while (i < s.length) {
+    // Double consonant → っ
+    if (i + 1 < s.length && s[i] === s[i+1] && 'kstpgdbzcfhjmnrw'.includes(s[i]) && s[i] !== 'n') {
+      result += 'っ'; i++; continue;
+    }
+    let found = false;
+    for (let len = 3; len >= 1; len--) {
+      const chunk = s.substring(i, i + len);
+      if (R2H_MAP[chunk]) { result += R2H_MAP[chunk]; i += len; found = true; break; }
+      if (LONG_V[chunk]) { result += LONG_V[chunk]; i += len; found = true; break; }
+    }
+    if (!found && s[i] === 'n' && (i + 1 >= s.length || !'aiueoy'.includes(s[i+1]))) {
+      result += 'ん'; i++; found = true;
+    }
+    if (!found) { result += s[i]; i++; }
+  }
+  return result;
+}
+
+// Also generate alternate phonetic forms for broader fuzzy matching
+function getPhoneticVariants(text) {
+  const raw = text.toLowerCase().trim();
+  const variants = new Set();
+
+  // Original with spaces stripped
+  variants.add(raw.replace(/\s+/g, ''));
+
+  // Phonetic-normalized (space-separated syllables mapped)
+  const norm = normalizePhonetic(raw);
+  variants.add(norm);
+
+  // Hiragana conversion of each
+  variants.add(romajiToHiragana(raw));
+  if (norm !== raw) variants.add(romajiToHiragana(norm));
+
+  // Try replacing l→r (common English speaker confusion)
+  const lToR = raw.replace(/l/g, 'r');
+  if (lToR !== raw) {
+    variants.add(lToR.replace(/\s+/g, ''));
+    variants.add(romajiToHiragana(lToR));
+  }
+
+  // Try with 'u' inserted between consonant clusters (Japanese CV structure)
+  // e.g. "des" → "desu", "mast" → "masuto"
+  const withU = raw.replace(/\s+/g, '').replace(/([kstnhmrgzdbp])([kstnhmrgzdbp])/g, '$1u$2');
+  if (withU !== raw.replace(/\s+/g, '')) {
+    variants.add(withU);
+    variants.add(romajiToHiragana(withU));
+  }
+
+  return [...variants].filter(v => v.length > 0);
+}
+
+// ═══ LEVENSHTEIN DISTANCE ═══
+function levenshtein(a, b) {
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      matrix[i][j] = b[i-1] === a[j-1]
+        ? matrix[i-1][j-1]
+        : Math.min(matrix[i-1][j-1]+1, matrix[i][j-1]+1, matrix[i-1][j]+1);
+    }
+  }
+  return matrix[b.length][a.length];
+}
+
+// ═══ BUILD FLAT VOCAB INDEX ═══
+let txIndex = null;
+function buildTxIndex() {
+  if (txIndex) return;
+  txIndex = [];
+  const chNames = {ch1:'Ch1',ch2:'Ch2',ch3:'Ch3',ch4:'Ch4',ch5:'Ch5',ch6:'Ch6'};
+  for (const [ch, data] of Object.entries(CHAPTER_DATA)) {
+    if (!data.vocab) continue;
+    data.vocab.forEach(v => {
+      txIndex.push({
+        jp: v.japanese || '',
+        en: v.english || '',
+        rd: (v.reading || '').toLowerCase(),
+        ch: chNames[ch] || ch,
+        // Pre-compute cleaned forms for fast matching
+        jpClean: (v.japanese || '').replace(/[（）()～、。]/g, ''),
+        enClean: (v.english || '').toLowerCase(),
+      });
+    });
+  }
+}
+
+// ═══ TRANSLATOR STATE ═══
+let txDir = 'je'; // 'je' = JP→EN, 'ej' = EN→JP
+let txOpen = false;
+
+function toggleTranslator() {
+  txOpen = !txOpen;
+  const panel = document.getElementById('txPanel');
+  const fab = document.getElementById('txFab');
+  if (txOpen) {
+    panel.classList.add('open');
+    fab.classList.add('hidden');
+    buildTxIndex();
+    setTimeout(() => document.getElementById('txInput').focus(), 50);
+    updateTxPlaceholder();
+  } else {
+    panel.classList.remove('open');
+    fab.classList.remove('hidden');
+  }
+}
+
+function setTxDir(dir) {
+  txDir = dir;
+  document.getElementById('txDirJE').classList.toggle('active', dir === 'je');
+  document.getElementById('txDirEJ').classList.toggle('active', dir === 'ej');
+  document.getElementById('txInput').value = '';
+  document.getElementById('txPreview').textContent = '';
+  updateTxPlaceholder();
+  txSearch();
+}
+
+function updateTxPlaceholder() {
+  const input = document.getElementById('txInput');
+  if (txDir === 'je') {
+    input.placeholder = 'Type romaji, hiragana, or Japanese...';
+    input.style.fontFamily = "'Noto Sans JP', 'DM Sans'";
+  } else {
+    input.placeholder = 'Type English word or phrase...';
+    input.style.fontFamily = "'DM Sans'";
+  }
+}
+
+// ═══ MAIN SEARCH ENGINE ═══
+function txSearch() {
+  const raw = document.getElementById('txInput').value.trim();
+  const results = document.getElementById('txResults');
+  const preview = document.getElementById('txPreview');
+
+  if (!raw) {
+    results.innerHTML = '<div class="tx-empty">Type to translate across all 456 vocabulary items<br><span style="font-size:11px;color:var(--gold-dim);">Supports romaji, hiragana, katakana, kanji, and English</span></div>';
+    preview.textContent = '';
+    return;
+  }
+
+  buildTxIndex();
+
+  if (txDir === 'je') {
+    searchJpToEn(raw, results, preview);
+  } else {
+    searchEnToJp(raw, results, preview);
+  }
+}
+
+function searchJpToEn(raw, results, preview) {
+  const q = raw.toLowerCase().trim();
+  const isRomaji = /^[a-zA-Z\s]+$/.test(raw);
+
+  // Generate all phonetic variants (handles spaces, English-ear spellings, l→r, etc.)
+  const variants = isRomaji ? getPhoneticVariants(q) : [q];
+  const mainHiragana = isRomaji ? romajiToHiragana(q) : '';
+
+  // Show conversion preview with phonetic info
+  if (isRomaji && mainHiragana) {
+    const norm = normalizePhonetic(q);
+    const normH = romajiToHiragana(norm);
+    if (normH !== mainHiragana && norm !== q.replace(/\s+/g,'')) {
+      preview.innerHTML = '→ ' + mainHiragana + ' <span style="color:var(--green);font-size:11px;">(also trying: ' + normH + ')</span>';
+    } else {
+      preview.textContent = '→ ' + mainHiragana;
+    }
+  } else {
+    preview.textContent = '';
+  }
+
+  // Also generate "silent character" variants for each reading
+  // Japanese often drops final 'u' in speech: desu→des, masu→mas, etc.
+  function getSilentVariants(reading) {
+    const vs = [reading];
+    // Drop trailing u (です→"des", ます→"mas", etc.)
+    if (reading.endsWith('u')) vs.push(reading.slice(0, -1));
+    // Drop trailing su (common: desu→des, masu→mas)
+    if (reading.endsWith('su')) vs.push(reading.slice(0, -2) + 's');
+    // Drop medial u in 'su' clusters (e.g. "suki"→"ski", "tsukue"→"tskue")
+    vs.push(reading.replace(/su/g, 's').replace(/tsu/g, 'ts'));
+    // Handle devoiced "shi" → "sh", "chi" → "ch"
+    vs.push(reading.replace(/shi/g, 'sh').replace(/chi/g, 'ch'));
+    // Handle devoiced "hi" → silent in "shichi" etc.
+    return vs;
+  }
+
+  // Score every vocab item against ALL variants
+  const scored = txIndex.map(item => {
+    let bestScore = 0;
+    let bestType = '';
+    const jpC = item.jpClean;
+    const rd = item.rd;
+
+    // Generate reading variants (with silent chars dropped)
+    const rdVariants = getSilentVariants(rd);
+
+    for (const v of variants) {
+      let score = 0;
+      let matchType = '';
+
+      // Check against Japanese text
+      if (jpC === v) { score = 200; matchType = 'EXACT'; }
+      else if (jpC.startsWith(v) && v.length > 0) { score = 150; matchType = 'STARTS WITH'; }
+      else if (v.length > 0 && jpC.includes(v)) { score = 100; matchType = 'CONTAINS'; }
+
+      // Check against reading AND its silent-char variants
+      if (score === 0) {
+        for (const rdV of rdVariants) {
+          if (rdV === v) { score = 195; matchType = 'EXACT'; break; }
+          if (v === rdV) { score = 195; matchType = 'EXACT'; break; }
+          if (rdV.startsWith(v) && v.length > 1) { score = Math.max(score, 145); matchType = 'STARTS WITH'; }
+          if (v.length > 1 && rdV.includes(v)) { score = Math.max(score, 95); matchType = 'CONTAINS'; }
+        }
+      }
+
+      // Check original reading directly
+      if (score === 0) {
+        if (rd === v) { score = 190; matchType = 'EXACT'; }
+        else if (rd.startsWith(v) && v.length > 1) { score = 140; matchType = 'STARTS WITH'; }
+        else if (v.length > 1 && rd.includes(v)) { score = 90; matchType = 'CONTAINS'; }
+      }
+
+      // English fallback (in case user types English in JP mode)
+      if (score === 0 && item.enClean.includes(v)) { score = 60; matchType = 'EN MATCH'; }
+
+      if (score > bestScore) { bestScore = score; bestType = matchType; }
+    }
+
+    // Fuzzy matching if no strong match found
+    if (bestScore < 60) {
+      // Compare input variants against reading variants
+      for (const v of variants) {
+        if (v.length < 2) continue;
+        for (const rdV of rdVariants) {
+          if (rdV.length < 2) continue;
+          const dist = levenshtein(v, rdV);
+          const maxLen = Math.max(v.length, rdV.length);
+          const sim = 1 - (dist / maxLen);
+          if (sim >= 0.5) {
+            const fScore = Math.round(sim * 55);
+            if (fScore > bestScore) { bestScore = fScore; bestType = Math.round(sim * 100) + '% SIMILAR'; }
+          }
+        }
+      }
+      // Also fuzzy on hiragana vs Japanese
+      for (const v of variants) {
+        if (v.length < 2 || /^[a-z]/.test(v)) continue; // skip romaji, only hiragana
+        const dist = levenshtein(v, jpC);
+        const maxLen = Math.max(v.length, jpC.length);
+        const sim = 1 - (dist / maxLen);
+        if (sim >= 0.45) {
+          const fScore = Math.round(sim * 50);
+          if (fScore > bestScore) { bestScore = fScore; bestType = Math.round(sim * 100) + '% SIMILAR'; }
+        }
+      }
+    }
+
+    return { item, score: bestScore, matchType: bestType };
+  }).filter(s => s.score > 0).sort((a, b) => b.score - a.score);
+
+  renderTxResults(scored.slice(0, 20), results);
+}
+
+function searchEnToJp(raw, results, preview) {
+  const q = raw.toLowerCase().trim();
+  preview.textContent = '';
+
+  const scored = txIndex.map(item => {
+    let score = 0;
+    let matchType = '';
+    const en = item.enClean;
+
+    // Exact
+    if (en === q) { score = 200; matchType = 'EXACT'; }
+    // Starts-with
+    else if (en.startsWith(q)) { score = 150; matchType = 'STARTS WITH'; }
+    // Word boundary match (e.g., "eat" matches "to eat")
+    else if (en.includes(q) && (en.includes(' ' + q) || en.includes('(' + q) || en.startsWith(q))) { score = 130; matchType = 'WORD MATCH'; }
+    // Contains
+    else if (en.includes(q)) { score = 90; matchType = 'CONTAINS'; }
+    // Fuzzy
+    else if (q.length > 2) {
+      // Check each English word
+      const words = en.split(/[\s,;()\/]+/);
+      let bestSim = 0;
+      for (const w of words) {
+        if (w.length < 2) continue;
+        const dist = levenshtein(q, w);
+        const maxLen = Math.max(q.length, w.length);
+        const sim = 1 - (dist / maxLen);
+        if (sim > bestSim) bestSim = sim;
+      }
+      if (bestSim >= 0.6) { score = Math.round(bestSim * 50); matchType = Math.round(bestSim * 100) + '% SIMILAR'; }
+    }
+
+    return { item, score, matchType };
+  }).filter(s => s.score > 0).sort((a, b) => b.score - a.score);
+
+  renderTxResults(scored.slice(0, 20), results);
+}
+
+function renderTxResults(scored, container) {
+  if (!scored.length) {
+    container.innerHTML = '<div class="tx-empty">No matches found. Try a different spelling or shorter query.</div>';
+    return;
+  }
+
+  let h = '';
+  scored.forEach(({ item, score, matchType }) => {
+    const scoreClass = score >= 150 ? 'exact' : '';
+    const jpSafe = item.jp.replace(/'/g, "\\'");
+    h += '<div class="tx-item" onclick="speakJP(\'' + jpSafe + '\')">'
+      + '<div class="tx-main">'
+      + '<div class="tx-jp">' + escHTML(item.jp) + '</div>'
+      + (item.rd ? '<div class="tx-reading">' + escHTML(item.rd) + '</div>' : '')
+      + '<div class="tx-en">' + escHTML(item.en) + '</div>'
+      + '<div class="tx-ch">' + escHTML(item.ch) + ' · <span class="tx-score ' + scoreClass + '">' + matchType + '</span></div>'
+      + '</div>'
+      + '<button class="tx-speak" onclick="event.stopPropagation();speakJP(\'' + jpSafe + '\')">🔊</button>'
+      + '</div>';
+  });
+
+  container.innerHTML = h;
+}
+
+function escHTML(s) { return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
+
+// Keyboard shortcut: T to toggle translator
+document.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 't' || e.key === 'T') {
+    e.preventDefault();
+    toggleTranslator();
+  }
+});
+// Escape to close translator
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && txOpen) toggleTranslator();
+});
+</script>
+
 <!-- FLOATING SEARCH WIDGET -->
 <button class="float-search-btn" id="floatSearchBtn" onclick="toggleFloatSearch()" title="Search (Ctrl+F)">🔍</button>
 <div class="float-search-panel" id="floatSearchPanel">
