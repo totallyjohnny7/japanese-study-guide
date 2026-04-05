@@ -213,6 +213,7 @@
   }
   .dict-play-btn:hover { background: var(--gold-dim); color: #fff; border-color: var(--gold); }
   .dict-play-btn:active { transform: scale(0.95); }
+  .ime-hint { font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: 0.5px; }
   .q-hint { font-size: 11px; color: var(--text2); font-style: italic; margin-bottom: 10px; }
 
   /* === INPUTS === */
@@ -400,6 +401,144 @@
 
 <script>
 "use strict";
+
+/* =====================================================================
+   ROMAJI → KANA IME (auto-converts as you type)
+   ===================================================================== */
+const ROMAJI_MAP = {
+  // basic vowels
+  a:'あ',i:'い',u:'う',e:'え',o:'お',
+  // k
+  ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',
+  // s
+  sa:'さ',si:'し',shi:'し',su:'す',se:'せ',so:'そ',
+  // t
+  ta:'た',ti:'ち',chi:'ち',tu:'つ',tsu:'つ',te:'て',to:'と',
+  // n
+  na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',
+  // h
+  ha:'は',hi:'ひ',hu:'ふ',fu:'ふ',he:'へ',ho:'ほ',
+  // m
+  ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',
+  // y
+  ya:'や',yu:'ゆ',yo:'よ',
+  // r
+  ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',
+  // w
+  wa:'わ',wi:'ゐ',we:'ゑ',wo:'を',
+  // n (standalone)
+  nn:'ん',xn:'ん',
+  // g
+  ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',
+  // z
+  za:'ざ',zi:'じ',ji:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',
+  // d
+  da:'だ',di:'ぢ',du:'づ',de:'で',do:'ど',
+  // b
+  ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',
+  // p
+  pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',
+  // compound sounds
+  kya:'きゃ',kyu:'きゅ',kyo:'きょ',
+  sha:'しゃ',shu:'しゅ',sho:'しょ',
+  cha:'ちゃ',chu:'ちゅ',cho:'ちょ',
+  nya:'にゃ',nyu:'にゅ',nyo:'にょ',
+  hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ',
+  mya:'みゃ',myu:'みゅ',myo:'みょ',
+  rya:'りゃ',ryu:'りゅ',ryo:'りょ',
+  gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',
+  ja:'じゃ',ju:'じゅ',jo:'じょ',
+  bya:'びゃ',byu:'びゅ',byo:'びょ',
+  pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ',
+  // small kana
+  xa:'ぁ',xi:'ぃ',xu:'ぅ',xe:'ぇ',xo:'ぉ',
+  xya:'ゃ',xyu:'ゅ',xyo:'ょ',xtu:'っ',xtsu:'っ',
+  // punctuation
+  '.':'。',',':'、','?':'？','!':'！','-':'ー',
+};
+
+// Katakana versions (offset +0x60 from hiragana)
+const KATAKANA_MAP = {};
+for (const [k, v] of Object.entries(ROMAJI_MAP)) {
+  const kata = v.split('').map(c => {
+    const code = c.charCodeAt(0);
+    // hiragana range → katakana
+    if (code >= 0x3041 && code <= 0x3096) return String.fromCharCode(code + 0x60);
+    return c;
+  }).join('');
+  KATAKANA_MAP[k] = kata;
+}
+
+function romajiToKana(text, useKatakana) {
+  const map = useKatakana ? KATAKANA_MAP : ROMAJI_MAP;
+  let result = '';
+  let buf = '';
+  let i = 0;
+  while (i < text.length) {
+    const c = text[i].toLowerCase();
+    // Handle double consonant → っ/ッ
+    if (c === text[i+1]?.toLowerCase() && 'bcdfghjklmpqrstvwxyz'.includes(c) && c !== 'n') {
+      result += useKatakana ? 'ッ' : 'っ';
+      i++;
+      continue;
+    }
+    buf += c;
+    // Try longest match first (4, 3, 2, 1 chars)
+    let matched = false;
+    for (let len = Math.min(buf.length, 4); len >= 1; len--) {
+      const tryStr = buf.slice(buf.length - len);
+      if (map[tryStr]) {
+        result += buf.slice(0, buf.length - len) + map[tryStr];
+        buf = '';
+        matched = true;
+        break;
+      }
+    }
+    // Handle standalone 'n' before non-vowel/non-y
+    if (!matched && buf.length >= 2 && buf[0] === 'n' && !'aiueony'.includes(buf[1])) {
+      result += useKatakana ? 'ン' : 'ん';
+      buf = buf.slice(1);
+    }
+    i++;
+  }
+  // Trailing 'n' → ん
+  if (buf === 'n') { result += useKatakana ? 'ン' : 'ん'; buf = ''; }
+  result += buf; // leftover romaji stays as-is
+  return result;
+}
+
+// Attach IME to all kana/particle/sentence inputs
+function attachIME(input) {
+  if (input.dataset.imeAttached) return;
+  input.dataset.imeAttached = '1';
+  const isKatakana = input.placeholder?.includes('カタカナ') || input.dataset.script === 'katakana';
+
+  input.addEventListener('input', function() {
+    const pos = this.selectionStart;
+    const val = this.value;
+    // Don't convert if already contains kana (user has system IME)
+    if (/[\u3040-\u30FF]/.test(val.slice(-1))) return;
+    const converted = romajiToKana(val, isKatakana);
+    if (converted !== val) {
+      this.value = converted;
+      // Try to restore cursor position approximately
+      const diff = converted.length - val.length;
+      this.selectionStart = this.selectionEnd = Math.max(0, pos + diff);
+    }
+  });
+}
+
+// Observe DOM for dynamically created inputs and attach IME
+const imeObserver = new MutationObserver(() => {
+  document.querySelectorAll('.dict-kana, .particle-input, .sentence-input, [data-script]').forEach(attachIME);
+});
+imeObserver.observe(document.body || document.documentElement, { childList: true, subtree: true });
+// Also attach on load
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.dict-kana, .particle-input, .sentence-input, [data-script]').forEach(attachIME);
+  }, 500);
+});
 
 /* =====================================================================
    QUESTION BANK
@@ -681,6 +820,7 @@ function buildExam(variant) {
   secA.innerHTML = `<div class="section-header">
     <div class="section-letter">A</div>
     <div class="section-title">Dictation — Write the kana and English meaning</div>
+    <div class="ime-hint">💡 Type romaji → auto-converts to kana (e.g. "ha" → は, "ni" → に, "ka" → か)</div>
     <div class="section-pts">6 pts</div>
   </div>`;
   variant.a.forEach((q, i) => {
@@ -749,6 +889,7 @@ function buildExam(variant) {
   secC.innerHTML = `<div class="section-header">
     <div class="section-letter">C</div>
     <div class="section-title">Particle Fill-in — Write the correct particle in each blank</div>
+    <div class="ime-hint">💡 Type romaji → auto-converts (e.g. "ha" → は, "de" → で, "mo" → も, "wo" → を)</div>
     <div class="section-pts">8 pts</div>
   </div>`;
   variant.c.forEach((q, i) => {
@@ -773,6 +914,7 @@ function buildExam(variant) {
   secD.innerHTML = `<div class="section-header">
     <div class="section-letter">D</div>
     <div class="section-title">Sentence Translation — English → Japanese</div>
+    <div class="ime-hint">💡 Type romaji → auto-converts to kana (e.g. "tsukue" → つくえ, "arimasu" → あります)</div>
     <div class="section-pts">10 pts</div>
   </div>`;
   variant.d.forEach((q, i) => {
