@@ -204,6 +204,15 @@
     display: inline-block;
   }
   .q-prompt:hover { color: var(--gold); }
+  .dict-play-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 20px; border-radius: 8px;
+    border: 1px solid var(--gold-dim); background: rgba(212,175,55,0.1);
+    color: var(--gold); font-size: 16px; font-weight: 600;
+    font-family: var(--font-en); cursor: pointer; transition: all 0.2s;
+  }
+  .dict-play-btn:hover { background: var(--gold-dim); color: #fff; border-color: var(--gold); }
+  .dict-play-btn:active { transform: scale(0.95); }
   .q-hint { font-size: 11px; color: var(--text2); font-style: italic; margin-bottom: 10px; }
 
   /* === INPUTS === */
@@ -341,6 +350,7 @@
     .section-letter { background: #000 !important; color: #fff !important; }
     .btn { display: none !important; }
     .tts-hint { display: none !important; }
+    .dict-play-btn { display: none !important; }
     .q-prompt { color: #000 !important; }
     .particle-sentence { color: #000 !important; }
     .section-header { border-bottom-color: #000 !important; }
@@ -680,9 +690,9 @@ function buildExam(variant) {
     const scriptLabel = q.isSentence ? 'sentence' : q.script;
     div.innerHTML = `
       <div class="q-number">A${i+1} <span class="ch-badge">Ch.${q.ch}</span> <span class="ch-badge" style="border-color: rgba(212,175,55,0.5); color:#d4af37">${scriptLabel}</span></div>
-      <div class="q-prompt" onclick="speakJP('${q.kana.replace(/'/g,"\\'")}')">
-        ${q.isSentence ? '🔊 ' : ''}<em style="font-family: var(--font-en); font-style: italic; color: var(--text2); font-size:14px">${q.romaji}</em>
-        <span class="tts-hint">(tap to hear)</span>
+      <div class="q-prompt">
+        <button type="button" class="dict-play-btn" onclick="event.stopPropagation();speakJP('${q.kana.replace(/'/g,"\\'")}')">🔊 Play</button>
+        <span style="font-size:12px;color:var(--muted);margin-left:8px;">${q.script === 'katakana' ? 'Write in katakana' : q.isSentence ? 'Listen and write' : 'Write in hiragana'}</span>
       </div>
       <div class="input-row">
         <div class="input-group">
