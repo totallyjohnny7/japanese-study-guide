@@ -640,6 +640,43 @@ body::before {
 .oe-speak.speaking { background:var(--gold);color:var(--bg);animation:oePulse 1s infinite; }
 @keyframes oePulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
 
+/* ═══ CLICK-TO-SPEAK: all Japanese text sitewide ═══ */
+[lang="ja"], .ja, .oe-ja, .oe-loc-jp {
+  cursor: pointer;
+  transition: text-decoration-color 0.2s, color 0.2s;
+}
+[lang="ja"]:hover, .ja:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--gold-dim);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+[lang="ja"].tts-active, .ja.tts-active, .oe-ja.tts-active, .oe-loc-jp.tts-active {
+  color: var(--gold-bright) !important;
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+}
+/* TTS hint tooltip on first hover */
+.tts-hint {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold-dark);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+.tts-hint.show { opacity: 1; }
+
 /* ═══ TRANSLATOR ═══ */
 .tx-panel {
   position: fixed;
@@ -10375,6 +10412,68 @@ if (window.speechSynthesis) {
   window.speechSynthesis.onvoiceschanged = () => {};
   setTimeout(injectOESpeakBtns, 500);
 }
+
+// ═══ GLOBAL CLICK-TO-SPEAK: tap any Japanese text to hear it ═══
+(function initGlobalTTS() {
+  let hintShown = false;
+  // Create hint tooltip
+  const hint = document.createElement('div');
+  hint.className = 'tts-hint';
+  hint.textContent = '🔊 Click any Japanese text to hear it spoken';
+  document.body.appendChild(hint);
+
+  // Show hint on first hover over Japanese text
+  document.addEventListener('mouseover', function(e) {
+    if (hintShown) return;
+    const ja = e.target.closest('[lang="ja"], .ja, .oe-ja, .oe-loc-jp');
+    if (ja) {
+      hintShown = true;
+      hint.classList.add('show');
+      setTimeout(() => hint.classList.remove('show'), 3000);
+      setTimeout(() => hint.remove(), 3500);
+    }
+  });
+
+  // Global click handler for Japanese text
+  document.addEventListener('click', function(e) {
+    // Don't interfere with buttons, inputs, links
+    if (e.target.closest('button, a, input, textarea, select')) return;
+    // Don't interfere with oe-subsec toggle (Q&A expand/collapse)
+    if (e.target.closest('.oe-subsec')) {
+      // Still speak if they clicked the Japanese text directly
+      const ja = e.target.closest('.oe-ja, [lang="ja"], .ja');
+      if (!ja) return;
+    }
+
+    const ja = e.target.closest('[lang="ja"], .ja, .oe-ja, .oe-loc-jp');
+    if (!ja) return;
+
+    const text = ja.textContent.trim();
+    if (!text || text.length < 1) return;
+
+    // Visual feedback
+    document.querySelectorAll('.tts-active').forEach(el => el.classList.remove('tts-active'));
+    ja.classList.add('tts-active');
+
+    // Use the existing speakJP if available and voice is enabled, otherwise use direct synthesis
+    if (typeof speechSynthesis !== 'undefined') {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'ja-JP';
+      u.rate = 0.85;
+      // Use the already-loaded jpVoice if available
+      if (typeof jpVoice !== 'undefined' && jpVoice) u.voice = jpVoice;
+      else {
+        const voices = speechSynthesis.getVoices();
+        const jv = voices.find(v => v.lang.startsWith('ja'));
+        if (jv) u.voice = jv;
+      }
+      u.onend = () => ja.classList.remove('tts-active');
+      u.onerror = () => ja.classList.remove('tts-active');
+      speechSynthesis.speak(u);
+    }
+  });
+})();
 
 // ═══ AUTO-PLAY SYSTEM ═══
 let autoPlay = { on: false, speed: 4.0, timer: null, phase: 'front', elapsed: 0 };
