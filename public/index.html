@@ -10235,7 +10235,7 @@ function toggleOEhide(type) {
 let oeSpeakQueue = [];
 let oeSpeaking = false;
 
-function speakJP(text, btn) {
+function oeSpeakLine(text, btn) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
@@ -10309,7 +10309,7 @@ function injectOESpeakBtns() {
       btn.className = 'oe-speak';
       btn.title = 'Speak this line';
       btn.textContent = '🔊';
-      btn.onclick = (e) => { e.stopPropagation(); speakJP(ja.textContent, btn); };
+      btn.onclick = (e) => { e.stopPropagation(); oeSpeakLine(ja.textContent, btn); };
       ja.style.display = 'inline';
       ja.insertAdjacentElement('afterend', btn);
     }
@@ -10321,7 +10321,7 @@ function injectOESpeakBtns() {
     btn.className = 'oe-speak';
     btn.title = 'Speak';
     btn.textContent = '🔊';
-    btn.onclick = (e) => { e.stopPropagation(); speakJP(ja.textContent, btn); };
+    btn.onclick = (e) => { e.stopPropagation(); oeSpeakLine(ja.textContent, btn); };
     ja.insertAdjacentElement('afterend', btn);
   });
   // Example sections (not inside template)
@@ -10331,7 +10331,7 @@ function injectOESpeakBtns() {
     btn.className = 'oe-speak';
     btn.title = 'Speak';
     btn.textContent = '🔊';
-    btn.onclick = (e) => { e.stopPropagation(); speakJP(ja.textContent, btn); };
+    btn.onclick = (e) => { e.stopPropagation(); oeSpeakLine(ja.textContent, btn); };
     ja.insertAdjacentElement('afterend', btn);
   });
   // Q&A subsections - add speak to answers
@@ -10343,7 +10343,7 @@ function injectOESpeakBtns() {
       btn.className = 'oe-speak';
       btn.title = 'Speak question';
       btn.textContent = '🔊';
-      btn.onclick = (e) => { e.stopPropagation(); speakJP(qJa.textContent, btn); };
+      btn.onclick = (e) => { e.stopPropagation(); oeSpeakLine(qJa.textContent, btn); };
       qJa.insertAdjacentElement('afterend', btn);
     }
     if (aJa && !aJa.parentElement.querySelector('.oe-speak')) {
@@ -10351,7 +10351,7 @@ function injectOESpeakBtns() {
       btn.className = 'oe-speak';
       btn.title = 'Speak answer';
       btn.textContent = '🔊';
-      btn.onclick = (e) => { e.stopPropagation(); speakJP(aJa.textContent, btn); };
+      btn.onclick = (e) => { e.stopPropagation(); oeSpeakLine(aJa.textContent, btn); };
       aJa.insertAdjacentElement('afterend', btn);
     }
   });
@@ -10364,7 +10364,7 @@ function injectOESpeakBtns() {
       btn.style.cssText = 'margin:6px auto 0;display:flex;';
       btn.title = 'Speak';
       btn.textContent = '🔊';
-      btn.onclick = (e) => { e.stopPropagation(); speakJP(jp.textContent, btn); };
+      btn.onclick = (e) => { e.stopPropagation(); oeSpeakLine(jp.textContent, btn); };
       item.appendChild(btn);
     }
   });
