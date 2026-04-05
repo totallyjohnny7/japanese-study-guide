@@ -214,6 +214,44 @@
   .dict-play-btn:hover { background: var(--gold-dim); color: #fff; border-color: var(--gold); }
   .dict-play-btn:active { transform: scale(0.95); }
   .ime-hint { font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: 0.5px; }
+
+  /* ═══ KANA PALETTE ═══ */
+  #kana-palette {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
+    background: #111; border-top: 2px solid var(--gold-dim);
+    padding: 6px 10px 10px; display: none; flex-direction: column; gap: 4px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.6);
+    max-height: 45vh; overflow-y: auto;
+  }
+  #kana-palette.open { display: flex; }
+  .kp-header { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+  .kp-title { font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: 1px; }
+  .kp-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .kp-tab { padding: 5px 12px; font-size: 12px; font-weight: 600; color: var(--muted); border: none; background: none; cursor: pointer; font-family: var(--font-jp); }
+  .kp-tab.active { color: var(--gold); background: rgba(212,175,55,0.15); }
+  .kp-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 0 4px; }
+  .kp-close:hover { color: #fff; }
+  .kp-row { display: flex; flex-wrap: wrap; gap: 3px; }
+  .kp-row-label { font-size: 9px; color: var(--muted); width: 100%; letter-spacing: 1px; margin-top: 2px; }
+  .kp-btn {
+    min-width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border); border-radius: 6px; background: var(--card);
+    color: #f5f5f5; font-family: var(--font-jp); font-size: 16px; cursor: pointer; transition: all 0.15s;
+  }
+  .kp-btn:hover { background: var(--gold-dim); color: #fff; border-color: var(--gold); }
+  .kp-btn:active { transform: scale(0.9); }
+  .kp-btn.particle { border-color: rgba(212,175,55,0.4); color: var(--gold); font-weight: 700; }
+  .kp-toggle {
+    position: fixed; bottom: 12px; right: 12px; z-index: 501;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--gold-dim); border: 2px solid var(--gold);
+    color: #fff; font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4); transition: all 0.2s;
+    font-family: var(--font-jp);
+  }
+  .kp-toggle:hover { background: var(--gold); }
+  @media print { #kana-palette, .kp-toggle { display: none !important; } }
   .q-hint { font-size: 11px; color: var(--text2); font-style: italic; margin-bottom: 10px; }
 
   /* === INPUTS === */
@@ -1198,6 +1236,92 @@ function escHtml(str) {
 (function init() {
   const seed = Math.floor(Math.random() * 999999) + 1;
   loadVariant(seed);
+})();
+</script>
+<!-- ═══ KANA PALETTE ═══ -->
+<button class="kp-toggle" onclick="toggleKanaPalette()" title="Kana Keyboard">あ</button>
+<div id="kana-palette">
+<div class="kp-header">
+  <span class="kp-title">KANA KEYBOARD</span>
+  <div class="kp-tabs">
+    <button class="kp-tab active" onclick="setKPmode('particles')">Particles</button>
+    <button class="kp-tab" onclick="setKPmode('hiragana')">ひらがな</button>
+    <button class="kp-tab" onclick="setKPmode('katakana')">カタカナ</button>
+  </div>
+  <button class="kp-close" onclick="toggleKanaPalette()">✕</button>
+</div>
+<div id="kp-content"></div>
+</div>
+<script>
+(function(){
+  const particles = ['は','が','を','に','で','の','へ','と','も','か','ね','よ','から','まで','や','くて','で（な）'];
+  const hiraRows = [
+    {label:'あ行', chars:'あいうえお'},
+    {label:'か行', chars:'かきくけこ'},
+    {label:'さ行', chars:'さしすせそ'},
+    {label:'た行', chars:'たちつてと'},
+    {label:'な行', chars:'なにぬねの'},
+    {label:'は行', chars:'はひふへほ'},
+    {label:'ま行', chars:'まみむめも'},
+    {label:'や行', chars:'やゆよ'},
+    {label:'ら行', chars:'らりるれろ'},
+    {label:'わ行', chars:'わをん'},
+    {label:'濁音', chars:'がぎぐげござじずぜぞだぢづでどばびぶべぼ'},
+    {label:'半濁', chars:'ぱぴぷぺぽ'},
+    {label:'小', chars:'っゃゅょ'},
+    {label:'記号', chars:'。、？！ー'},
+  ];
+  const kataRows = hiraRows.map(r => ({
+    label: r.label,
+    chars: r.chars.split('').map(c => {
+      const code = c.charCodeAt(0);
+      if (code >= 0x3041 && code <= 0x3096) return String.fromCharCode(code + 0x60);
+      return c;
+    }).join('')
+  }));
+
+  let lastFocused = null;
+  document.addEventListener('focusin', e => {
+    if (e.target.matches('input[type="text"], textarea')) lastFocused = e.target;
+  });
+
+  window.insertKana = function(ch) {
+    if (!lastFocused) { alert('Click an input field first!'); return; }
+    const el = lastFocused;
+    const start = el.selectionStart || 0;
+    const end = el.selectionEnd || 0;
+    el.value = el.value.slice(0, start) + ch + el.value.slice(end);
+    el.selectionStart = el.selectionEnd = start + ch.length;
+    el.focus();
+    el.dispatchEvent(new Event('input', {bubbles:true}));
+  };
+
+  window.toggleKanaPalette = function() {
+    document.getElementById('kana-palette').classList.toggle('open');
+  };
+
+  window.setKPmode = function(mode) {
+    document.querySelectorAll('.kp-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    const cont = document.getElementById('kp-content');
+    let html = '';
+    if (mode === 'particles') {
+      html = '<div class="kp-row">';
+      particles.forEach(p => { html += `<button class="kp-btn particle" onclick="insertKana('${p}')">${p}</button>`; });
+      html += '</div>';
+    } else {
+      const rows = mode === 'katakana' ? kataRows : hiraRows;
+      rows.forEach(r => {
+        html += `<div class="kp-row-label">${r.label}</div><div class="kp-row">`;
+        r.chars.split('').forEach(c => { html += `<button class="kp-btn" onclick="insertKana('${c}')">${c}</button>`; });
+        html += '</div>';
+      });
+    }
+    cont.innerHTML = html;
+  };
+
+  // Init with particles tab
+  setTimeout(() => window.setKPmode('particles'), 100);
 })();
 </script>
 </body>
