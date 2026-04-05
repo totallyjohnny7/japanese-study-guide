@@ -617,8 +617,8 @@ const POOL_B = [
   {id:"v7",  english:"famous",            correct:["ゆうめい","ゆうめいな"],             script:"hiragana", ch:4},
   {id:"v8",  english:"clean, pretty",     correct:["きれい","きれいな"],                 script:"hiragana", ch:4},
   {id:"v9",  english:"chair",             correct:["いす"],                              script:"hiragana", ch:5},
-  {id:"v10", english:"cat",               correct:["ねこ"],                              script:"hiragana", ch:5},
-  {id:"v11", english:"dog",               correct:["いぬ"],                              script:"hiragana", ch:5},
+  {id:"v10", english:"classroom",          correct:["きょうしつ"],                        script:"hiragana", ch:5},
+  {id:"v11", english:"photograph",         correct:["しゃしん"],                          script:"hiragana", ch:5},
   {id:"v12", english:"bicycle",           correct:["じてんしゃ"],                        script:"hiragana", ch:5},
   {id:"v13", english:"room",              correct:["へや"],                              script:"hiragana", ch:5},
   {id:"v14", english:"bright",            correct:["あかるい"],                          script:"hiragana", ch:5},
@@ -628,7 +628,7 @@ const POOL_B = [
   {id:"v18", english:"cooking, cuisine",  correct:["りょうり"],                          script:"hiragana", ch:6},
   {id:"v19", english:"laundry",           correct:["せんたく"],                          script:"hiragana", ch:6},
   {id:"v20", english:"cleaning",          correct:["そうじ"],                            script:"hiragana", ch:6},
-  {id:"v21", english:"part-time job",     correct:["アルバイト","あるばいと"],           script:"katakana", ch:6},
+  {id:"v21", english:"part-time job",     correct:["アルバイト"],                        script:"katakana", ch:6},
   {id:"v22", english:"fun",               correct:["たのしい"],                          script:"hiragana", ch:6},
   {id:"v23", english:"busy",              correct:["いそがしい"],                        script:"hiragana", ch:6},
   {id:"v24", english:"difficult",         correct:["むずかしい"],                        script:"hiragana", ch:6},
@@ -639,7 +639,7 @@ const POOL_B = [
 const POOL_C = [
   {id:"p1",  sentence:"じしょ{1}どこ{2}ありますか。",                correct:["は","に"],      hint:"asking where the dictionary is",                  ch:4},
   {id:"p2",  sentence:"大学{1}ほんや{2}あります。",                  correct:["に","が"],      hint:"there is a bookstore at the university",           ch:4},
-  {id:"p3",  sentence:"あの たてもの{1}とても りっぱです{2}。",       correct:["は","ね"],      hint:"that building is splendid, right?",                ch:4},
+  {id:"p3",  sentence:"あの たてもの{1}とても りっぱです{2}。",       correct:["は","ね"],      alt2:["は","よ"], hint:"that building is splendid, right?",                ch:4},
   {id:"p4",  sentence:"これ{1}だれ{2}かばんですか。",                correct:["は","の"],      hint:"whose bag is this?",                               ch:4},
   {id:"p5",  sentence:"つくえ{1}うえ{2}でんわ{3}あります。",         correct:["の","に","が"], hint:"there is a phone on the desk",                     ch:5},
   {id:"p6",  sentence:"いす{1}した{2}ねこ{3}います。",               correct:["の","に","が"], hint:"there is a cat under the chair",                   ch:5},
@@ -651,7 +651,7 @@ const POOL_C = [
   {id:"p12", sentence:"ともだち{1}でんわ{2}かけます。",              correct:["に","を"],      hint:"I make a phone call to a friend",                  ch:6},
   {id:"p13", sentence:"いっしょ{1}およぎ{2}いきませんか。",          correct:["に","に"],      hint:"won't you go swimming together?",                  ch:6},
   {id:"p14", sentence:"そうじ{1}せんたく{2}しました。",              correct:["と","を"],      hint:"I did cleaning and laundry",                       ch:6},
-  {id:"p15", sentence:"先生{1}しつもん{2}ききました。",              correct:["に","を"],      hint:"I asked the teacher a question",                   ch:6},
+  {id:"p15", sentence:"先生{1}しつもん{2}しました。",                correct:["に","を"],      hint:"I asked the teacher a question",                   ch:6},
   {id:"p16", sentence:"日本語{1}はなします。",                        correct:["で"],           hint:"I speak in Japanese (means / language)",           ch:6},
   {id:"p17", sentence:"この へん{1}コンビニ{2}ありますか。",          correct:["に","が"],      hint:"is there a convenience store around here?",        ch:4},
   {id:"p18", sentence:"あの ひと{1}だれですか。",                     correct:["は"],           hint:"who is that person?",                              ch:4},
@@ -659,6 +659,7 @@ const POOL_C = [
   {id:"p20", sentence:"じてんしゃ{1}どのぐらい かかりますか。",       correct:["で"],           hint:"how long does it take by bicycle?",                ch:5},
   {id:"p21", sentence:"りょうしん{1}てがみ{2}かきます。",             correct:["に","を"],      hint:"I write a letter to my parents",                   ch:6},
   {id:"p22", sentence:"ともだち{1}うち{2}よびます。",                 correct:["を","に"],      hint:"I invite a friend to my house",                    ch:6},
+  {id:"p23", sentence:"コンサート{1}いきました。",                   correct:["へ"],           hint:"I went to a concert (direction)", alt:["に"],       ch:6},
 ];
 
 const POOL_D = [
@@ -667,20 +668,20 @@ const POOL_D = [
   {id:"s3",  english:"That building is new and pretty.",                     correct:["あの たてものは あたらしくて きれいです","あのたてものは あたらしくて きれいです","あの たてものは あたらしくて、きれいです"],  grammar:"て-form adjective connection", ch:4},
   {id:"s4",  english:"Where is the library?",                                correct:["としょかんは どこですか","としょかんは どこに ありますか","としょかんはどこですか"],                grammar:"～はどこですか", ch:4},
   {id:"s5",  english:"There is a cat under the desk.",                       correct:["つくえの したに ねこが います","つくえのしたに ねこが います"],                             grammar:"location noun + に + が います", ch:5},
-  {id:"s6",  english:"There is a bookshelf next to the door.",               correct:["ドアの よこに ほんだなが あります","ドアのよこに ほんだなが あります"],                       grammar:"location noun + に + が あります", ch:5},
-  {id:"s7",  english:"It takes about 20 minutes from home to school by bus.",correct:["うちから がっこうまで バスで にじゅっぷんぐらい かかります","うちから 学校まで バスで 20ふんぐらい かかります","うちからがっこうまでバスでにじゅっぷんぐらいかかります"],  grammar:"から～まで～で～かかります", ch:5},
+  {id:"s6",  english:"There is a bookshelf next to the door.",               correct:["ドアの よこに ほんだなが あります","ドアのよこに ほんだなが あります","とびらの よこに ほんだなが あります","とびらのよこに ほんだなが あります"],  grammar:"location noun + に + が あります", ch:5},
+  {id:"s7",  english:"It takes about 20 minutes from home to school by bus.",correct:["うちから がっこうまで バスで にじゅっぷんぐらい かかります","うちから 学校まで バスで 20ぷんぐらい かかります","うちからがっこうまでバスでにじゅっぷんぐらいかかります","うちから がっこうまで バスで にじっぷんぐらい かかります"],  grammar:"から～まで～で～かかります", ch:5},
   {id:"s8",  english:"This room is bright and spacious.",                    correct:["この へやは あかるくて ひろいです","このへやは あかるくて ひろいです","この へやは あかるくて、ひろいです"],                 grammar:"て-form adjective", ch:5},
-  {id:"s9",  english:"I went shopping and went to a concert.",               correct:["かいものに いって、コンサートに いきました","かいものに いって コンサートに いきました","かいものにいって コンサートにいきました"],  grammar:"て-form verb sequence", ch:6},
+  {id:"s9",  english:"I went shopping and went to a concert.",               correct:["かいものに いって、コンサートに いきました","かいものに いって コンサートに いきました","かいものにいって コンサートにいきました","かいものを して コンサートに いきました","かいものをして、コンサートにいきました"],  grammar:"て-form verb sequence", ch:6},
   {id:"s10", english:"How was the weekend?",                                 correct:["しゅうまつは どうでしたか","週末は どうでしたか","しゅうまつはどうでしたか"],                 grammar:"past tense question", ch:6},
   {id:"s11", english:"It was very fun.",                                     correct:["とても たのしかったです","とてもたのしかったです"],                                          grammar:"past い-adjective", ch:6},
   {id:"s12", english:"It was tough.",                                        correct:["たいへんでした","大変でした"],                                                               grammar:"past な-adjective", ch:6},
-  {id:"s13", english:"Won't you go to a picnic together?",                   correct:["いっしょに ピクニックに いきませんか","いっしょにピクニックにいきませんか"],               grammar:"～ませんか invitation", ch:6},
+  {id:"s13", english:"Shall we go on a picnic together?",                    correct:["いっしょに ピクニックに いきませんか","いっしょにピクニックにいきませんか","いっしょに ピクニックを しませんか","いっしょにピクニックをしませんか"],  grammar:"～ませんか invitation", ch:6},
   {id:"s14", english:"I studied with a friend at the library.",              correct:["としょかんで ともだちと べんきょうしました","ともだちと としょかんで べんきょうしました","としょかんでともだちとべんきょうしました"],  grammar:"で location + と association", ch:6},
   {id:"s15", english:"I go to the pool to swim.",                            correct:["プールに およぎに いきます","プールにおよぎにいきます","プールに およぎにいきます"],              grammar:"purpose に + いきます", ch:6},
   {id:"s16", english:"I wrote a letter to my parents.",                      correct:["りょうしんに てがみを かきました","りょうしんにてがみをかきました"],                        grammar:"recipient に", ch:6},
   {id:"s17", english:"The party was lively and fun.",                        correct:["パーティは にぎやかで たのしかったです","パーティーは にぎやかで たのしかったです","パーティは にぎやかで、たのしかったです","パーティーは にぎやかで、たのしかったです"],  grammar:"な-adj て-form + い-adj past", ch:6},
   {id:"s18", english:"What kind of town is this?",                           correct:["これは どんな まちですか","ここは どんな まちですか","これはどんなまちですか","ここはどんなまちですか"],  grammar:"どんな", ch:4},
-  {id:"s19", english:"There is a big park behind the hospital.",             correct:["びょういんの うしろに おおきい こうえんが あります","びょういんのうしろに おおきいこうえんが あります"],  grammar:"location noun + adjective + があります", ch:5},
+  {id:"s19", english:"There is a big park behind the hospital.",             correct:["びょういんの うしろに おおきい こうえんが あります","びょういんのうしろに おおきいこうえんが あります","びょういんの うしろに おおきな こうえんが あります"],  grammar:"location noun + adjective + があります", ch:5},
   {id:"s20", english:"I did cleaning and laundry.",                          correct:["そうじと せんたくを しました","そうじとせんたくをしました","そうじと せんたくをしました"],   grammar:"と connecting nouns", ch:6},
   {id:"s21", english:"Which one is your textbook?",                          correct:["きょうかしょは どれですか","あなたの きょうかしょは どれですか","きょうかしょはどれですか"],  grammar:"どれ demonstrative", ch:4},
   {id:"s22", english:"Is there a supermarket around here?",                  correct:["このへんに スーパーが ありますか","この へんに スーパーが ありますか","このへんにスーパーがありますか"],  grammar:"～に～がありますか", ch:4},
@@ -1056,19 +1057,40 @@ function submitExam() {
     let allOk = true;
     let feedbackParts = [];
 
-    q.correct.forEach((correctParticle, bi) => {
-      const inp = inputs[bi];
-      const val = inp ? inp.value : '';
-      const ok  = normalize(val) === normalize(correctParticle);
-      if (!ok) allOk = false;
-      if (ok) {
-        feedbackParts.push(`<span class="mark ok">✓</span><span class="feedback-correct">Blank ${bi+1}: ${correctParticle}</span>`);
-      } else {
-        feedbackParts.push(`<span class="mark fail">✗</span> Blank ${bi+1}: <span class="feedback-wrong"><span class="user-ans">${escHtml(val)||'(blank)'}</span> → <span class="correct-ans">${correctParticle}</span></span>`);
+    // Check primary answers, then alt/alt2 if available
+    const answerSets = [q.correct];
+    if (q.alt) answerSets.push(q.alt);
+    if (q.alt2) answerSets.push(q.alt2);
+
+    // Find the answer set that gives the best score
+    let bestCorrectCount = 0;
+    let bestFeedback = [];
+    const totalBlanks = q.correct.length;
+
+    answerSets.forEach(answers => {
+      let correctCount = 0;
+      let fb = [];
+      answers.forEach((correctParticle, bi) => {
+        const inp = inputs[bi];
+        const val = inp ? inp.value : '';
+        const ok = normalize(val) === normalize(correctParticle);
+        if (ok) correctCount++;
+        if (ok) {
+          fb.push(`<span class="mark ok">✓</span><span class="feedback-correct">Blank ${bi+1}: ${correctParticle}</span>`);
+        } else {
+          fb.push(`<span class="mark fail">✗</span> Blank ${bi+1}: <span class="feedback-wrong"><span class="user-ans">${escHtml(val)||'(blank)'}</span> → <span class="correct-ans">${correctParticle}</span></span>`);
+        }
+      });
+      if (correctCount > bestCorrectCount) {
+        bestCorrectCount = correctCount;
+        bestFeedback = fb;
       }
     });
 
-    scoreC += allOk ? 1 : 0;
+    feedbackParts = bestFeedback;
+    allOk = bestCorrectCount === totalBlanks;
+    // Partial credit: fraction of blanks correct
+    scoreC += bestCorrectCount / totalBlanks;
     const fb = document.getElementById(`fb-c-${q.id}`);
     if (allOk) {
       qItem.classList.add('correct'); qItem.classList.remove('wrong');
@@ -1112,9 +1134,9 @@ function submitExam() {
 
   const banner = document.getElementById('score-banner');
   document.getElementById('grade-display').textContent = grade;
-  document.getElementById('score-text').textContent = `${total} / 30 points (${Math.round(pct)}%)`;
+  document.getElementById('score-text').textContent = `${+total.toFixed(1)} / 30 points (${Math.round(pct)}%)`;
   document.getElementById('score-breakdown').textContent =
-    `A: ${scoreA}/6  |  B: ${scoreB}/6  |  C: ${scoreC}/8  |  D: ${scoreD}/10`;
+    `A: ${scoreA}/6  |  B: ${scoreB}/6  |  C: ${+scoreC.toFixed(1)}/8  |  D: ${scoreD}/10`;
   banner.classList.add('visible');
   banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
