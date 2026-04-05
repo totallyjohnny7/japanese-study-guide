@@ -614,6 +614,32 @@ body::before {
 .oe-sec { display:none; }
 .oe-sec.active { display:block; }
 
+/* ═══ ORAL EXAM: HIDE TOGGLES & TTS ═══ */
+.oe-toolbar { display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 16px;padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px; }
+.oe-toggle-btn { padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans';transition:all 0.2s;display:flex;align-items:center;gap:6px; }
+.oe-toggle-btn:hover { border-color:var(--gold-dim); }
+.oe-toggle-btn.active { background:var(--gold-dark);border-color:var(--gold);color:var(--white); }
+.oe-toggle-btn .oe-toggle-dot { width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0; }
+.oe-toggle-btn.active .oe-toggle-dot { background:var(--red); }
+
+/* Hide states */
+#panel_oral-exam.hide-english .oe-en,
+#panel_oral-exam.hide-english .oe-loc-en { visibility:hidden; }
+#panel_oral-exam.hide-romaji .oe-rm,
+#panel_oral-exam.hide-romaji .oe-loc-rm,
+#panel_oral-exam.hide-romaji .oe-d-line .oe-rm { visibility:hidden; }
+#panel_oral-exam.hide-english .oe-en:hover,
+#panel_oral-exam.hide-romaji .oe-rm:hover,
+#panel_oral-exam.hide-english .oe-loc-en:hover,
+#panel_oral-exam.hide-romaji .oe-loc-rm:hover,
+#panel_oral-exam.hide-romaji .oe-d-line .oe-rm:hover { visibility:visible;opacity:0.5; }
+
+/* TTS speak buttons */
+.oe-speak { display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--gold);font-size:14px;cursor:pointer;margin-left:6px;vertical-align:middle;transition:all 0.2s;flex-shrink:0; }
+.oe-speak:hover { background:var(--gold-dark);color:var(--white);border-color:var(--gold); }
+.oe-speak.speaking { background:var(--gold);color:var(--bg);animation:oePulse 1s infinite; }
+@keyframes oePulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
 /* ═══ TRANSLATOR ═══ */
 .tx-panel {
   position: fixed;
@@ -8864,6 +8890,13 @@ body::before {
 <button class="oe-tab-btn" onclick="showOEsec(4)">CHEATSHEET</button>
 </div>
 
+<div class="oe-toolbar">
+<button class="oe-toggle-btn" id="oeHideEn" onclick="toggleOEhide('english')"><span class="oe-toggle-dot"></span>Hide English</button>
+<button class="oe-toggle-btn" id="oeHideRm" onclick="toggleOEhide('romaji')"><span class="oe-toggle-dot"></span>Hide Romaji</button>
+<button class="oe-toggle-btn" onclick="speakAllOE()" id="oeSpeakAll">🔊 Speak All</button>
+<button class="oe-toggle-btn" onclick="stopOEspeak()">⏹ Stop</button>
+</div>
+
 <!-- ═══ SELF-INTRO ═══ -->
 <div class="oe-sec active" id="oesec0">
 <div class="oe-intro">
@@ -8875,10 +8908,10 @@ body::before {
 <div class="card"><div class="card-header">YOUR INTRODUCTION TEMPLATE</div><div class="card-body">
 <div class="oe-template">
 <div class="oe-ja oe-ja-lg" style="line-height:2.2;">
-はじめまして。<span class="oe-blank">your name</span>です。<br>
-<span class="oe-blank">school</span>の <span class="oe-blank">year</span>ねんせいです。<br>
-せんこうは <span class="oe-blank">major</span>です。<br>
-<span class="oe-blank">hometown</span>から きました。<br>
+はじめまして。ジョニーです。<br>
+UNO の にねんせいです。<br>
+せんこうは コンピューターサイエンス です。<br>
+オマハから きました。<br>
 どうぞ よろしく おねがいします。
 </div>
 </div>
@@ -10189,6 +10222,159 @@ function showOEsec(n) {
   document.querySelectorAll('.oe-tab-btn')[n].classList.add('active');
 }
 
+// ═══ ORAL EXAM: HIDE TOGGLES ═══
+function toggleOEhide(type) {
+  const panel = document.getElementById('panel_oral-exam');
+  const cls = 'hide-' + type;
+  const btn = type === 'english' ? document.getElementById('oeHideEn') : document.getElementById('oeHideRm');
+  panel.classList.toggle(cls);
+  btn.classList.toggle('active');
+}
+
+// ═══ ORAL EXAM: TTS (Text-to-Speech) ═══
+let oeSpeakQueue = [];
+let oeSpeaking = false;
+
+function speakJP(text, btn) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ja-JP';
+  u.rate = 0.85;
+  u.pitch = 1.0;
+  // Try to find a Japanese voice
+  const voices = window.speechSynthesis.getVoices();
+  const jpVoice = voices.find(v => v.lang.startsWith('ja'));
+  if (jpVoice) u.voice = jpVoice;
+  if (btn) { btn.classList.add('speaking'); u.onend = () => btn.classList.remove('speaking'); u.onerror = () => btn.classList.remove('speaking'); }
+  window.speechSynthesis.speak(u);
+}
+
+function speakAllOE() {
+  if (!window.speechSynthesis) return;
+  stopOEspeak();
+  oeSpeaking = true;
+  const btn = document.getElementById('oeSpeakAll');
+  btn.classList.add('active');
+  // Get active section
+  const sec = document.querySelector('.oe-sec.active');
+  if (!sec) return;
+  // Collect all Japanese text from the active section
+  const jaEls = sec.querySelectorAll('.oe-ja, .oe-loc-jp, .oe-d-line .oe-ja');
+  oeSpeakQueue = [];
+  jaEls.forEach(el => {
+    const t = el.textContent.trim();
+    if (t && t.length > 1) oeSpeakQueue.push(t);
+  });
+  speakNext();
+}
+
+function speakNext() {
+  if (!oeSpeaking || oeSpeakQueue.length === 0) {
+    oeSpeaking = false;
+    const btn = document.getElementById('oeSpeakAll');
+    if (btn) btn.classList.remove('active');
+    return;
+  }
+  const text = oeSpeakQueue.shift();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ja-JP';
+  u.rate = 0.85;
+  const voices = window.speechSynthesis.getVoices();
+  const jpVoice = voices.find(v => v.lang.startsWith('ja'));
+  if (jpVoice) u.voice = jpVoice;
+  u.onend = () => { setTimeout(speakNext, 400); };
+  u.onerror = () => { setTimeout(speakNext, 200); };
+  window.speechSynthesis.speak(u);
+}
+
+function stopOEspeak() {
+  oeSpeaking = false;
+  oeSpeakQueue = [];
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  const btn = document.getElementById('oeSpeakAll');
+  if (btn) btn.classList.remove('active');
+  document.querySelectorAll('.oe-speak.speaking').forEach(b => b.classList.remove('speaking'));
+}
+
+// ═══ INJECT SPEAK BUTTONS INTO ORAL EXAM ═══
+function injectOESpeakBtns() {
+  const panel = document.getElementById('panel_oral-exam');
+  if (!panel) return;
+  // Add speak buttons to dialogue lines
+  panel.querySelectorAll('.oe-d-line').forEach(line => {
+    const ja = line.querySelector('.oe-ja');
+    if (ja && !line.querySelector('.oe-speak')) {
+      const btn = document.createElement('button');
+      btn.className = 'oe-speak';
+      btn.title = 'Speak this line';
+      btn.textContent = '🔊';
+      btn.onclick = (e) => { e.stopPropagation(); speakJP(ja.textContent, btn); };
+      ja.style.display = 'inline';
+      ja.insertAdjacentElement('afterend', btn);
+    }
+  });
+  // Add speak buttons to template and example ja lines
+  panel.querySelectorAll('.oe-template .oe-ja, .oe-template .oe-ja-lg').forEach(ja => {
+    if (ja.closest('.oe-d-line') || ja.parentElement.querySelector('.oe-speak')) return;
+    const btn = document.createElement('button');
+    btn.className = 'oe-speak';
+    btn.title = 'Speak';
+    btn.textContent = '🔊';
+    btn.onclick = (e) => { e.stopPropagation(); speakJP(ja.textContent, btn); };
+    ja.insertAdjacentElement('afterend', btn);
+  });
+  // Example sections (not inside template)
+  panel.querySelectorAll('div > .oe-ja').forEach(ja => {
+    if (ja.closest('.oe-d-line') || ja.closest('.oe-template') || ja.closest('.oe-subsec') || ja.parentElement.querySelector('.oe-speak')) return;
+    const btn = document.createElement('button');
+    btn.className = 'oe-speak';
+    btn.title = 'Speak';
+    btn.textContent = '🔊';
+    btn.onclick = (e) => { e.stopPropagation(); speakJP(ja.textContent, btn); };
+    ja.insertAdjacentElement('afterend', btn);
+  });
+  // Q&A subsections - add speak to answers
+  panel.querySelectorAll('.oe-subsec').forEach(sub => {
+    const qJa = sub.querySelector('.oe-q .oe-ja');
+    const aJa = sub.querySelector('.oe-a .oe-ja');
+    if (qJa && !qJa.parentElement.querySelector('.oe-speak')) {
+      const btn = document.createElement('button');
+      btn.className = 'oe-speak';
+      btn.title = 'Speak question';
+      btn.textContent = '🔊';
+      btn.onclick = (e) => { e.stopPropagation(); speakJP(qJa.textContent, btn); };
+      qJa.insertAdjacentElement('afterend', btn);
+    }
+    if (aJa && !aJa.parentElement.querySelector('.oe-speak')) {
+      const btn = document.createElement('button');
+      btn.className = 'oe-speak';
+      btn.title = 'Speak answer';
+      btn.textContent = '🔊';
+      btn.onclick = (e) => { e.stopPropagation(); speakJP(aJa.textContent, btn); };
+      aJa.insertAdjacentElement('afterend', btn);
+    }
+  });
+  // Location vocab items
+  panel.querySelectorAll('.oe-loc-item').forEach(item => {
+    const jp = item.querySelector('.oe-loc-jp');
+    if (jp && !item.querySelector('.oe-speak')) {
+      const btn = document.createElement('button');
+      btn.className = 'oe-speak';
+      btn.style.cssText = 'margin:6px auto 0;display:flex;';
+      btn.title = 'Speak';
+      btn.textContent = '🔊';
+      btn.onclick = (e) => { e.stopPropagation(); speakJP(jp.textContent, btn); };
+      item.appendChild(btn);
+    }
+  });
+}
+
+// Load voices and inject buttons after DOM ready
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = () => {};
+  setTimeout(injectOESpeakBtns, 500);
+}
 
 // ═══ AUTO-PLAY SYSTEM ═══
 let autoPlay = { on: false, speed: 4.0, timer: null, phase: 'front', elapsed: 0 };
