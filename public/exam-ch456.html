@@ -1244,9 +1244,9 @@ function escHtml(str) {
 <div class="kp-header">
   <span class="kp-title">KANA KEYBOARD</span>
   <div class="kp-tabs">
-    <button class="kp-tab active" onclick="setKPmode('particles')">Particles</button>
-    <button class="kp-tab" onclick="setKPmode('hiragana')">ひらがな</button>
-    <button class="kp-tab" onclick="setKPmode('katakana')">カタカナ</button>
+    <button class="kp-tab active" onclick="setKPmode('particles',event)">Particles</button>
+    <button class="kp-tab" onclick="setKPmode('hiragana',event)">ひらがな</button>
+    <button class="kp-tab" onclick="setKPmode('katakana',event)">カタカナ</button>
   </div>
   <button class="kp-close" onclick="toggleKanaPalette()">✕</button>
 </div>
@@ -1300,9 +1300,10 @@ function escHtml(str) {
     document.getElementById('kana-palette').classList.toggle('open');
   };
 
-  window.setKPmode = function(mode) {
+  window.setKPmode = function(mode, evt) {
     document.querySelectorAll('.kp-tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+    if (evt && evt.target) evt.target.classList.add('active');
+    else document.querySelector('.kp-tab')?.classList.add('active');
     const cont = document.getElementById('kp-content');
     let html = '';
     if (mode === 'particles') {
