@@ -214,7 +214,7 @@ function showWriteCard(el){
       <label>AUTO</label>
       <label class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></label>
       <label>SPEED</label>
-      <input type="range" class="ap-speed" id="apSlider" min="1" max="10" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
+      <input type="range" class="ap-speed" id="apSlider" min="0.5" max="30" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
       <span class="ap-val" id="apVal">${autoPlay.speed.toFixed(1)}s</span>
       <span class="ap-hint">A=auto · Space=flip · 1=✅ · 2=❌</span>
     </div>
@@ -319,7 +319,7 @@ function wGrade(ok){
   wResults.push({english:wCards[wIdx].english,expected:wCards[wIdx].japanese,correct:ok});
   wIdx++;
   if(autoPlay.on){
-    autoPlay.speed=ok?Math.max(1.0,parseFloat((autoPlay.speed-.5).toFixed(1))):Math.min(8.0,parseFloat((autoPlay.speed+.5).toFixed(1)));
+    autoPlay.speed=ok?Math.max(0.5,parseFloat((autoPlay.speed-.5).toFixed(1))):Math.min(30.0,parseFloat((autoPlay.speed+.5).toFixed(1)));
   }
   showWriteCard($('mainArea'));
 }
@@ -354,7 +354,7 @@ function showFlashFront(el){
       <label>AUTO</label>
       <label class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></label>
       <label>SPEED</label>
-      <input type="range" class="ap-speed" id="apSlider" min="1" max="10" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
+      <input type="range" class="ap-speed" id="apSlider" min="0.5" max="30" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
       <span class="ap-val" id="apVal">${autoPlay.speed.toFixed(1)}s</span>
       <span class="ap-hint">A=auto · Space=flip · 1=✅ · 2=❌</span>
     </div>
@@ -379,7 +379,7 @@ function showFlashBack(el){
       <label>AUTO</label>
       <label class="ap-toggle"><input type="checkbox" id="apToggle" onchange="toggleAutoPlay(this.checked)"${autoPlay.on?' checked':''}><span class="ap-slider"></span></label>
       <label>SPEED</label>
-      <input type="range" class="ap-speed" id="apSlider" min="1" max="10" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
+      <input type="range" class="ap-speed" id="apSlider" min="0.5" max="30" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
       <span class="ap-val" id="apVal">${autoPlay.speed.toFixed(1)}s</span>
       <span class="ap-hint">A=auto · Space=flip · 1=✅ · 2=❌</span>
     </div>
@@ -399,7 +399,7 @@ function flashGrade(ok){
   fResults.push({...fCards[fIdx],correct:ok});
   fIdx++;
   if(autoPlay.on){
-    autoPlay.speed=ok?Math.max(1.0,parseFloat((autoPlay.speed-.5).toFixed(1))):Math.min(8.0,parseFloat((autoPlay.speed+.5).toFixed(1)));
+    autoPlay.speed=ok?Math.max(0.5,parseFloat((autoPlay.speed-.5).toFixed(1))):Math.min(30.0,parseFloat((autoPlay.speed+.5).toFixed(1)));
     const sv=document.getElementById('apVal');if(sv)sv.textContent=autoPlay.speed.toFixed(1)+'s';
     const sl=document.getElementById('apSlider');if(sl)sl.value=autoPlay.speed;
   }

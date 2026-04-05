@@ -9544,8 +9544,8 @@ function wGrade(ch, ok) {
   // Auto-speed adjustment: correct = speed up, wrong = slow down
   if (autoPlay.on) {
     autoPlay.speed = ok
-      ? Math.max(1.0, parseFloat((autoPlay.speed - 0.5).toFixed(1)))
-      : Math.min(8.0, parseFloat((autoPlay.speed + 0.5).toFixed(1)));
+      ? Math.max(0.5, parseFloat((autoPlay.speed - 0.5).toFixed(1)))
+      : Math.min(30.0, parseFloat((autoPlay.speed + 0.5).toFixed(1)));
     const sv = document.getElementById('speedVal');
     if (sv) sv.textContent = autoPlay.speed.toFixed(1) + 's';
     const sl = document.getElementById('speedSlider');
@@ -10492,7 +10492,7 @@ function getAutoPlayBarHTML() {
       <span class="slider"></span>
     </div>
     <label>SPEED</label>
-    <input type="range" class="speed-slider" id="speedSlider" min="1" max="10" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
+    <input type="range" class="speed-slider" id="speedSlider" min="0.5" max="30" step="0.5" value="${autoPlay.speed}" oninput="setAutoSpeed(this.value)">
     <span class="speed-val" id="speedVal">${autoPlay.speed.toFixed(1)}s</span>
     <span class="autoplay-hint">Press A to toggle</span>
   </div>`;
