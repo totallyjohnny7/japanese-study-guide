@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>なかま1 だい4・5・6か ふくしゅう プリント</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* === RESET & BASE === */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #1a1a1a;
+    --bg4: #222222;
+    --text: #f5f5f5;
+    --text2: #aaaaaa;
+    --gold: #d4af37;
+    --gold-dim: #a8892a;
+    --gold-glow: rgba(212,175,55,0.25);
+    --red: #c0392b;
+    --red-dim: rgba(192,57,43,0.15);
+    --green: #27ae60;
+    --green-dim: rgba(39,174,96,0.12);
+    --border: rgba(212,175,55,0.2);
+    --font-jp: 'Noto Sans JP', sans-serif;
+    --font-en: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-en);
+    font-size: 15px;
+    line-height: 1.6;
+    padding-top: 64px;
+  }
+
+  /* === TOOLBAR === */
+  #toolbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+    z-index: 1000;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  #toolbar .title-small {
+    font-family: var(--font-jp);
+    font-size: 13px;
+    color: var(--gold);
+    white-space: nowrap;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+
+  .btn {
+    font-family: var(--font-en);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+  }
+  .btn:hover { background: var(--bg4); border-color: var(--gold); color: var(--gold); }
+  .btn.primary { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 700; }
+  .btn.primary:hover { background: #e8c84a; }
+  .btn.danger { border-color: var(--red); color: var(--red); }
+  .btn.danger:hover { background: var(--red-dim); }
+
+  #variant-badge {
+    margin-left: auto;
+    font-family: var(--font-en);
+    font-size: 11px;
+    color: var(--text2);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--bg2);
+  }
+  #variant-badge span { color: var(--gold); font-weight: 700; }
+
+  /* === SCORE BANNER === */
+  #score-banner {
+    display: none;
+    position: sticky;
+    top: 56px;
+    z-index: 900;
+    background: var(--bg2);
+    border-bottom: 2px solid var(--gold);
+    padding: 14px 24px;
+    text-align: center;
+  }
+  #score-banner.visible { display: block; }
+  #score-banner .grade { font-size: 28px; font-weight: 700; color: var(--gold); }
+  #score-banner .score-text { font-size: 15px; color: var(--text2); margin-top: 2px; }
+  #score-banner .breakdown { font-size: 13px; color: var(--text2); margin-top: 6px; }
+
+  /* === MAIN LAYOUT === */
+  #main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+
+  .page-title {
+    font-family: var(--font-jp);
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 700;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+  .page-subtitle {
+    font-size: 12px;
+    color: var(--text2);
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  /* === SECTION === */
+  .section {
+    margin-bottom: 36px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-letter {
+    width: 30px; height: 30px;
+    background: var(--gold);
+    color: #000;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .section-pts {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  /* === QUESTION ITEM === */
+  .q-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .q-item.correct { border-color: var(--gold); background: var(--green-dim); }
+  .q-item.wrong { border-color: var(--red); background: var(--red-dim); }
+  .q-item.partial { border-color: #f39c12; background: rgba(243,156,18,0.08); }
+
+  .q-number {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text2);
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .q-prompt {
+    font-family: var(--font-jp);
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 12px;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .q-prompt:hover { color: var(--gold); }
+  .q-hint { font-size: 11px; color: var(--text2); font-style: italic; margin-bottom: 10px; }
+
+  /* === INPUTS === */
+  .input-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+
+  input[type="text"], textarea {
+    font-family: var(--font-jp);
+    font-size: 15px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--gold-dim);
+    color: var(--text);
+    padding: 6px 2px;
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    width: 100%;
+  }
+  input[type="text"]:focus, textarea:focus {
+    border-bottom-color: var(--gold);
+    box-shadow: 0 2px 0 -1px var(--gold-glow);
+  }
+  input[type="text"]::placeholder, textarea::placeholder {
+    color: var(--gold-dim);
+    font-style: italic;
+    font-size: 12px;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 58px;
+    line-height: 1.5;
+    border: none;
+    border-bottom: 1px solid var(--gold-dim);
+  }
+
+  .input-label {
+    font-size: 11px;
+    color: var(--text2);
+    margin-bottom: 4px;
+    font-family: var(--font-en);
+  }
+  .input-group { flex: 1; min-width: 140px; }
+
+  /* === PARTICLE SENTENCE === */
+  .particle-sentence {
+    font-family: var(--font-jp);
+    font-size: 16px;
+    line-height: 2;
+    color: var(--text);
+  }
+  .particle-blank-wrap {
+    display: inline-block;
+    position: relative;
+    margin: 0 2px;
+    vertical-align: middle;
+  }
+  .particle-blank-wrap input[type="text"] {
+    width: 38px;
+    text-align: center;
+    font-size: 16px;
+    padding: 2px 4px;
+    border-bottom-width: 2px;
+  }
+
+  /* === FEEDBACK === */
+  .feedback-row {
+    margin-top: 10px;
+    display: none;
+    font-size: 13px;
+  }
+  .feedback-row.visible { display: block; }
+  .feedback-correct { color: var(--gold); font-family: var(--font-jp); }
+  .feedback-wrong .user-ans { text-decoration: line-through; color: var(--red); font-family: var(--font-jp); }
+  .feedback-wrong .correct-ans { color: var(--gold); font-family: var(--font-jp); }
+  .mark { font-size: 14px; font-weight: 700; margin-right: 6px; }
+  .mark.ok { color: var(--gold); }
+  .mark.fail { color: var(--red); }
+
+  /* === ANSWERKEY === */
+  #answer-key-section {
+    display: none;
+    margin-top: 40px;
+    border-top: 2px solid var(--border);
+    padding-top: 24px;
+  }
+  #answer-key-section.visible { display: block; }
+  .ak-title { font-size: 16px; font-weight: 700; color: var(--gold); margin-bottom: 16px; }
+  .ak-item { font-size: 13px; margin-bottom: 6px; display: flex; gap: 10px; }
+  .ak-num { color: var(--text2); min-width: 30px; }
+  .ak-ans { font-family: var(--font-jp); color: var(--text); }
+
+  /* === CHAPTER BADGE === */
+  .ch-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    margin-left: 8px;
+    vertical-align: middle;
+    font-family: var(--font-en);
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 600px) {
+    body { font-size: 14px; }
+    .input-row { flex-direction: column; }
+    .input-group { min-width: unset; width: 100%; }
+    #toolbar { gap: 5px; padding: 0 10px; }
+    .btn { padding: 5px 10px; font-size: 11px; }
+    #toolbar .title-small { display: none; }
+  }
+
+  /* === TTS click indicator === */
+  .tts-hint {
+    font-size: 10px;
+    color: var(--text2);
+    font-family: var(--font-en);
+    margin-left: 6px;
+    opacity: 0.6;
+    vertical-align: middle;
+  }
+
+  /* === PRINT STYLES === */
+  @media print {
+    body { background: #fff !important; color: #000 !important; padding-top: 0 !important; font-size: 12px; }
+    #toolbar, #score-banner, .no-print { display: none !important; }
+    #variant-badge { display: none !important; }
+    .q-item { background: #fff !important; border: 1px solid #ccc !important; page-break-inside: avoid; }
+    .section { page-break-inside: avoid; }
+    .section:not(:last-child)::after { content: ''; display: block; page-break-after: always; }
+    input[type="text"] { border: none !important; border-bottom: 1px solid #000 !important; background: #fff !important; color: #000 !important; }
+    textarea { border: none !important; border-bottom: 1px solid #000 !important; background: #fff !important; color: #000 !important; }
+    .page-title { color: #000 !important; }
+    .section-letter { background: #000 !important; color: #fff !important; }
+    .btn { display: none !important; }
+    .tts-hint { display: none !important; }
+    .q-prompt { color: #000 !important; }
+    .particle-sentence { color: #000 !important; }
+    .section-header { border-bottom-color: #000 !important; }
+  }
+
+  body.print-with-key .feedback-row { display: block !important; }
+  body.print-blank .feedback-row { display: none !important; }
+
+  @media print {
+    body.print-with-key input, body.print-with-key textarea { visibility: hidden; }
+    body.print-blank .feedback-row { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div id="toolbar">
+  <span class="title-small">なかま1 CH4-6</span>
+  <button class="btn primary" onclick="submitExam()">Submit</button>
+  <button class="btn" onclick="newVariant()">New Variant</button>
+  <button class="btn" onclick="toggleAnswerKey()">Show Answer Key</button>
+  <button class="btn no-print" onclick="printBlank()">Print Blank</button>
+  <button class="btn no-print" onclick="printWithKey()">Print w/ Key</button>
+  <button class="btn danger" onclick="resetExam()">Reset</button>
+  <div id="variant-badge">Variant #<span id="seed-display">—</span></div>
+</div>
+
+<!-- SCORE BANNER -->
+<div id="score-banner">
+  <div class="grade" id="grade-display">—</div>
+  <div class="score-text" id="score-text">—</div>
+  <div class="breakdown" id="score-breakdown">—</div>
+</div>
+
+<div id="main">
+  <div class="page-title">なかま1　だい4・5・6か　ふくしゅう　プリント</div>
+  <div class="page-subtitle">Nakama 1 Chapters 4–6 Review Exam &nbsp;|&nbsp; 30 points total &nbsp;|&nbsp; Click Japanese text to hear it</div>
+
+  <div id="exam-body"></div>
+  <div id="answer-key-section">
+    <div class="ak-title">Answer Key</div>
+    <div id="ak-body"></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* =====================================================================
+   QUESTION BANK
+   ===================================================================== */
+
+const POOL_A = [
+  {id:"d1",  romaji:"apaato",          kana:"アパート",                          english:["apartment"],                                    script:"katakana",  ch:4},
+  {id:"d2",  romaji:"depaato",         kana:"デパート",                          english:["department store"],                             script:"katakana",  ch:4},
+  {id:"d3",  romaji:"konbini",         kana:"コンビニ",                          english:["convenience store"],                            script:"katakana",  ch:4},
+  {id:"d4",  romaji:"resutoran",       kana:"レストラン",                        english:["restaurant"],                                   script:"katakana",  ch:4},
+  {id:"d5",  romaji:"nooto",           kana:"ノート",                            english:["notebook"],                                     script:"katakana",  ch:4},
+  {id:"d6",  romaji:"boorupen",        kana:"ボールペン",                        english:["ballpoint pen","ball-point pen"],                script:"katakana",  ch:4},
+  {id:"d7",  romaji:"basu",            kana:"バス",                              english:["bus"],                                          script:"katakana",  ch:5},
+  {id:"d8",  romaji:"beddo",           kana:"ベッド",                            english:["bed"],                                          script:"katakana",  ch:5},
+  {id:"d9",  romaji:"teeburu",         kana:"テーブル",                          english:["table"],                                        script:"katakana",  ch:5},
+  {id:"d10", romaji:"sofa",            kana:"ソファ",                            english:["sofa","couch"],                                 script:"katakana",  ch:5},
+  {id:"d11", romaji:"konsaato",        kana:"コンサート",                        english:["concert"],                                      script:"katakana",  ch:6},
+  {id:"d12", romaji:"tenisu",          kana:"テニス",                            english:["tennis"],                                       script:"katakana",  ch:6},
+  {id:"d13", romaji:"ginkou",          kana:"ぎんこう",                          english:["bank"],                                         script:"hiragana",  ch:4},
+  {id:"d14", romaji:"tatemono",        kana:"たてもの",                          english:["building","structure"],                         script:"hiragana",  ch:4},
+  {id:"d15", romaji:"tsukue",          kana:"つくえ",                            english:["desk"],                                         script:"hiragana",  ch:5},
+  {id:"d16", romaji:"mado",            kana:"まど",                              english:["window"],                                       script:"hiragana",  ch:5},
+  {id:"d17", romaji:"hondana",         kana:"ほんだな",                          english:["bookshelf","bookcase"],                         script:"hiragana",  ch:5},
+  {id:"d18", romaji:"tomodachi",       kana:"ともだち",                          english:["friend"],                                       script:"hiragana",  ch:6},
+  {id:"d19", romaji:"tegami",          kana:"てがみ",                            english:["letter"],                                       script:"hiragana",  ch:6},
+  {id:"d20", romaji:"kono hen ni ginkou ga arimasu",   kana:"このへんに ぎんこうが あります",     english:["there is a bank around here","there is a bank near here"], script:"hiragana", isSentence:true, ch:4},
+  {id:"d21", romaji:"tsukue no ue ni hon ga arimasu",  kana:"つくえの うえに ほんが あります",    english:["there is a book on the desk"],                              script:"hiragana", isSentence:true, ch:5},
+  {id:"d22", romaji:"issho ni tenisu o shimasen ka",   kana:"いっしょに テニスを しませんか",      english:["won't you play tennis together","shall we play tennis together"], script:"mixed", isSentence:true, ch:6},
+];
+
+const POOL_B = [
+  {id:"v1",  english:"post office",       correct:["ゆうびんきょく"],                    script:"hiragana", ch:4},
+  {id:"v2",  english:"park",              correct:["こうえん"],                          script:"hiragana", ch:4},
+  {id:"v3",  english:"hospital",          correct:["びょういん"],                        script:"hiragana", ch:4},
+  {id:"v4",  english:"bookstore",         correct:["ほんや"],                            script:"hiragana", ch:4},
+  {id:"v5",  english:"police box",        correct:["こうばん"],                          script:"hiragana", ch:4},
+  {id:"v6",  english:"eraser",            correct:["けしゴム","けしごむ"],               script:"hiragana", ch:4},
+  {id:"v7",  english:"famous",            correct:["ゆうめい","ゆうめいな"],             script:"hiragana", ch:4},
+  {id:"v8",  english:"clean, pretty",     correct:["きれい","きれいな"],                 script:"hiragana", ch:4},
+  {id:"v9",  english:"chair",             correct:["いす"],                              script:"hiragana", ch:5},
+  {id:"v10", english:"cat",               correct:["ねこ"],                              script:"hiragana", ch:5},
+  {id:"v11", english:"dog",               correct:["いぬ"],                              script:"hiragana", ch:5},
+  {id:"v12", english:"bicycle",           correct:["じてんしゃ"],                        script:"hiragana", ch:5},
+  {id:"v13", english:"room",              correct:["へや"],                              script:"hiragana", ch:5},
+  {id:"v14", english:"bright",            correct:["あかるい"],                          script:"hiragana", ch:5},
+  {id:"v15", english:"quiet",             correct:["しずか","しずかな"],                 script:"hiragana", ch:5},
+  {id:"v16", english:"spacious, wide",    correct:["ひろい"],                            script:"hiragana", ch:5},
+  {id:"v17", english:"shopping",          correct:["かいもの"],                          script:"hiragana", ch:6},
+  {id:"v18", english:"cooking, cuisine",  correct:["りょうり"],                          script:"hiragana", ch:6},
+  {id:"v19", english:"laundry",           correct:["せんたく"],                          script:"hiragana", ch:6},
+  {id:"v20", english:"cleaning",          correct:["そうじ"],                            script:"hiragana", ch:6},
+  {id:"v21", english:"part-time job",     correct:["アルバイト","あるばいと"],           script:"katakana", ch:6},
+  {id:"v22", english:"fun",               correct:["たのしい"],                          script:"hiragana", ch:6},
+  {id:"v23", english:"busy",              correct:["いそがしい"],                        script:"hiragana", ch:6},
+  {id:"v24", english:"difficult",         correct:["むずかしい"],                        script:"hiragana", ch:6},
+  {id:"v25", english:"interesting",       correct:["おもしろい"],                        script:"hiragana", ch:6},
+  {id:"v26", english:"boring",            correct:["つまらない"],                        script:"hiragana", ch:6},
+];
+
+const POOL_C = [
+  {id:"p1",  sentence:"じしょ{1}どこ{2}ありますか。",                correct:["は","に"],      hint:"asking where the dictionary is",                  ch:4},
+  {id:"p2",  sentence:"大学{1}ほんや{2}あります。",                  correct:["に","が"],      hint:"there is a bookstore at the university",           ch:4},
+  {id:"p3",  sentence:"あの たてもの{1}とても りっぱです{2}。",       correct:["は","ね"],      hint:"that building is splendid, right?",                ch:4},
+  {id:"p4",  sentence:"これ{1}だれ{2}かばんですか。",                correct:["は","の"],      hint:"whose bag is this?",                               ch:4},
+  {id:"p5",  sentence:"つくえ{1}うえ{2}でんわ{3}あります。",         correct:["の","に","が"], hint:"there is a phone on the desk",                     ch:5},
+  {id:"p6",  sentence:"いす{1}した{2}ねこ{3}います。",               correct:["の","に","が"], hint:"there is a cat under the chair",                   ch:5},
+  {id:"p7",  sentence:"うち{1}学校{2}バス{3}いきます。",             correct:["から","まで","で"], hint:"I go from home to school by bus",              ch:5},
+  {id:"p8",  sentence:"ここ{1}大学{2}どのぐらい かかりますか。",     correct:["から","まで"],  hint:"how long from here to university?",                ch:5},
+  {id:"p9",  sentence:"わたし{1}いきます。",                          correct:["も"],           hint:"I will go too",                                    ch:5},
+  {id:"p10", sentence:"ともだち{1}テニス{2}しました。",               correct:["と","を"],      hint:"I played tennis with a friend",                    ch:6},
+  {id:"p11", sentence:"かいもの{1}いきました。",                      correct:["に"],           hint:"I went shopping (purpose)",                        ch:6},
+  {id:"p12", sentence:"ともだち{1}でんわ{2}かけます。",              correct:["に","を"],      hint:"I make a phone call to a friend",                  ch:6},
+  {id:"p13", sentence:"いっしょ{1}およぎ{2}いきませんか。",          correct:["に","に"],      hint:"won't you go swimming together?",                  ch:6},
+  {id:"p14", sentence:"そうじ{1}せんたく{2}しました。",              correct:["と","を"],      hint:"I did cleaning and laundry",                       ch:6},
+  {id:"p15", sentence:"先生{1}しつもん{2}ききました。",              correct:["に","を"],      hint:"I asked the teacher a question",                   ch:6},
+  {id:"p16", sentence:"日本語{1}はなします。",                        correct:["で"],           hint:"I speak in Japanese (means / language)",           ch:6},
+  {id:"p17", sentence:"この へん{1}コンビニ{2}ありますか。",          correct:["に","が"],      hint:"is there a convenience store around here?",        ch:4},
+  {id:"p18", sentence:"あの ひと{1}だれですか。",                     correct:["は"],           hint:"who is that person?",                              ch:4},
+  {id:"p19", sentence:"まど{1}よこ{2}とけい{3}あります。",           correct:["の","に","が"], hint:"there is a clock next to the window",              ch:5},
+  {id:"p20", sentence:"じてんしゃ{1}どのぐらい かかりますか。",       correct:["で"],           hint:"how long does it take by bicycle?",                ch:5},
+  {id:"p21", sentence:"りょうしん{1}てがみ{2}かきます。",             correct:["に","を"],      hint:"I write a letter to my parents",                   ch:6},
+  {id:"p22", sentence:"ともだち{1}うち{2}よびます。",                 correct:["を","に"],      hint:"I invite a friend to my house",                    ch:6},
+];
+
+const POOL_D = [
+  {id:"s1",  english:"There is a bank near the station.",                    correct:["えきの ちかくに ぎんこうが あります","えきのちかくに ぎんこうが あります"],                grammar:"～に～があります", ch:4},
+  {id:"s2",  english:"This town is not very big.",                           correct:["この まちは あまり おおきくありません","このまちは あまり おおきくありません","このまちは あまり おおきくないです","この まちは あまり おおきくないです"],  grammar:"あまり + negative", ch:4},
+  {id:"s3",  english:"That building is new and pretty.",                     correct:["あの たてものは あたらしくて きれいです","あのたてものは あたらしくて きれいです","あの たてものは あたらしくて、きれいです"],  grammar:"て-form adjective connection", ch:4},
+  {id:"s4",  english:"Where is the library?",                                correct:["としょかんは どこですか","としょかんは どこに ありますか","としょかんはどこですか"],                grammar:"～はどこですか", ch:4},
+  {id:"s5",  english:"There is a cat under the desk.",                       correct:["つくえの したに ねこが います","つくえのしたに ねこが います"],                             grammar:"location noun + に + が います", ch:5},
+  {id:"s6",  english:"There is a clock next to the window.",                 correct:["まどの よこに とけいが あります","まどのよこに とけいが あります"],                         grammar:"location noun + に + が あります", ch:5},
+  {id:"s7",  english:"It takes about 20 minutes from home to school by bus.",correct:["うちから がっこうまで バスで にじゅっぷんぐらい かかります","うちから 学校まで バスで 20ふんぐらい かかります","うちからがっこうまでバスでにじゅっぷんぐらいかかります"],  grammar:"から～まで～で～かかります", ch:5},
+  {id:"s8",  english:"This room is bright and spacious.",                    correct:["この へやは あかるくて ひろいです","このへやは あかるくて ひろいです","この へやは あかるくて、ひろいです"],                 grammar:"て-form adjective", ch:5},
+  {id:"s9",  english:"I went shopping and went to a concert.",               correct:["かいものに いって、コンサートに いきました","かいものに いって コンサートに いきました","かいものにいって コンサートにいきました"],  grammar:"て-form verb sequence", ch:6},
+  {id:"s10", english:"How was the weekend?",                                 correct:["しゅうまつは どうでしたか","週末は どうでしたか","しゅうまつはどうでしたか"],                 grammar:"past tense question", ch:6},
+  {id:"s11", english:"It was very fun.",                                     correct:["とても たのしかったです","とてもたのしかったです"],                                          grammar:"past い-adjective", ch:6},
+  {id:"s12", english:"It was tough.",                                        correct:["たいへんでした","大変でした"],                                                               grammar:"past な-adjective", ch:6},
+  {id:"s13", english:"Won't you go to a picnic together?",                   correct:["いっしょに ピクニックに いきませんか","いっしょにピクニックにいきませんか"],               grammar:"～ませんか invitation", ch:6},
+  {id:"s14", english:"I studied with a friend at the library.",              correct:["としょかんで ともだちと べんきょうしました","ともだちと としょかんで べんきょうしました","としょかんでともだちとべんきょうしました"],  grammar:"で location + と association", ch:6},
+  {id:"s15", english:"I go to the gym to swim.",                             correct:["たいいくかんに およぎに いきます","たいいくかんにおよぎにいきます","たいいくかんに およぎにいきます"],  grammar:"purpose に + いきます", ch:6},
+  {id:"s16", english:"I wrote a letter to my parents.",                      correct:["りょうしんに てがみを かきました","りょうしんにてがみをかきました"],                        grammar:"recipient に", ch:6},
+  {id:"s17", english:"The party was lively and fun.",                        correct:["パーティは にぎやかで たのしかったです","パーティーは にぎやかで たのしかったです","パーティは にぎやかで、たのしかったです","パーティーは にぎやかで、たのしかったです"],  grammar:"な-adj て-form + い-adj past", ch:6},
+  {id:"s18", english:"What kind of town is this?",                           correct:["これは どんな まちですか","ここは どんな まちですか","これはどんなまちですか","ここはどんなまちですか"],  grammar:"どんな", ch:4},
+  {id:"s19", english:"There is a big park behind the hospital.",             correct:["びょういんの うしろに おおきい こうえんが あります","びょういんのうしろに おおきいこうえんが あります"],  grammar:"location noun + adjective + があります", ch:5},
+  {id:"s20", english:"I did cleaning and laundry.",                          correct:["そうじと せんたくを しました","そうじとせんたくをしました","そうじと せんたくをしました"],   grammar:"と connecting nouns", ch:6},
+  {id:"s21", english:"Which one is your textbook?",                          correct:["きょうかしょは どれですか","あなたの きょうかしょは どれですか","きょうかしょはどれですか"],  grammar:"どれ demonstrative", ch:4},
+  {id:"s22", english:"Is there a supermarket around here?",                  correct:["このへんに スーパーが ありますか","この へんに スーパーが ありますか","このへんにスーパーがありますか"],  grammar:"～に～がありますか", ch:4},
+  {id:"s23", english:"I came home and watched TV.",                          correct:["うちに かえって テレビを みました","うちにかえって テレビをみました","うちにかえって、テレビをみました"],  grammar:"て-form verb sequence past", ch:6},
+  {id:"s24", english:"It takes about 15 minutes on foot.",                   correct:["あるいて じゅうごふんぐらい かかります","あるいて 15ふんぐらい かかります","あるいてじゅうごふんぐらいかかります"],  grammar:"あるいて + かかります", ch:5},
+  {id:"s25", english:"I was busy and didn't go anywhere.",                   correct:["いそがしくて どこにも いきませんでした","いそがしくて、どこにも いきませんでした","いそがしくてどこにもいきませんでした"],  grammar:"い-adj て-form cause-effect", ch:6},
+];
+
+/* =====================================================================
+   SEEDED RNG (mulberry32)
+   ===================================================================== */
+function mulberry32(seed) {
+  return function() {
+    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+function shuffleArr(arr, rng) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pickN(arr, n, rng) {
+  return shuffleArr(arr, rng).slice(0, n);
+}
+
+/* =====================================================================
+   VARIANT GENERATOR
+   ===================================================================== */
+function generateVariant(seed) {
+  const rng = mulberry32(seed);
+
+  // Pool A: 6 items — ≥2 katakana, ≥2 hiragana, ≥1 sentence
+  const aKata    = POOL_A.filter(x => !x.isSentence && x.script === "katakana");
+  const aHira    = POOL_A.filter(x => !x.isSentence && x.script === "hiragana");
+  const aSent    = POOL_A.filter(x => x.isSentence);
+  const aMixed   = POOL_A.filter(x => x.isSentence && x.script === "mixed");
+
+  let picked_a = [];
+  picked_a.push(...pickN(aKata, 2, rng));
+  picked_a.push(...pickN(aHira, 2, rng));
+  picked_a.push(...pickN(aSent, 1, rng));
+  // pick 1 more from remainder
+  const usedIds_a = new Set(picked_a.map(x => x.id));
+  const remaining_a = POOL_A.filter(x => !usedIds_a.has(x.id));
+  picked_a.push(...pickN(remaining_a, 1, rng));
+  picked_a = shuffleArr(picked_a, rng);
+
+  // Pool B: 6 items — even chapter mix
+  const b4 = POOL_B.filter(x => x.ch === 4);
+  const b5 = POOL_B.filter(x => x.ch === 5);
+  const b6 = POOL_B.filter(x => x.ch === 6);
+  let picked_b = [];
+  picked_b.push(...pickN(b4, 2, rng));
+  picked_b.push(...pickN(b5, 2, rng));
+  picked_b.push(...pickN(b6, 2, rng));
+  picked_b = shuffleArr(picked_b, rng);
+
+  // Pool C: 8 items — even chapter mix
+  const c4 = POOL_C.filter(x => x.ch === 4);
+  const c5 = POOL_C.filter(x => x.ch === 5);
+  const c6 = POOL_C.filter(x => x.ch === 6);
+  let picked_c = [];
+  picked_c.push(...pickN(c4, 3, rng));
+  picked_c.push(...pickN(c5, 3, rng));
+  picked_c.push(...pickN(c6, 2, rng));
+  picked_c = shuffleArr(picked_c, rng);
+
+  // Pool D: 10 items — ~3 per chapter
+  const d4 = POOL_D.filter(x => x.ch === 4);
+  const d5 = POOL_D.filter(x => x.ch === 5);
+  const d6 = POOL_D.filter(x => x.ch === 6);
+  let picked_d = [];
+  picked_d.push(...pickN(d4, 3, rng));
+  picked_d.push(...pickN(d5, 3, rng));
+  picked_d.push(...pickN(d6, 4, rng));
+  picked_d = shuffleArr(picked_d, rng);
+
+  return { a: picked_a, b: picked_b, c: picked_c, d: picked_d };
+}
+
+/* =====================================================================
+   NORMALIZATION & GRADING
+   ===================================================================== */
+const FW_HW = {
+  'Ａ':'A','Ｂ':'B','Ｃ':'C','Ｄ':'D','Ｅ':'E','Ｆ':'F','Ｇ':'G','Ｈ':'H',
+  'Ｉ':'I','Ｊ':'J','Ｋ':'K','Ｌ':'L','Ｍ':'M','Ｎ':'N','Ｏ':'O','Ｐ':'P',
+  'Ｑ':'Q','Ｒ':'R','Ｓ':'S','Ｔ':'T','Ｕ':'U','Ｖ':'V','Ｗ':'W','Ｘ':'X',
+  'Ｙ':'Y','Ｚ':'Z','ａ':'a','ｂ':'b','ｃ':'c','ｄ':'d','ｅ':'e','ｆ':'f',
+  'ｇ':'g','ｈ':'h','ｉ':'i','ｊ':'j','ｋ':'k','ｌ':'l','ｍ':'m','ｎ':'n',
+  'ｏ':'o','ｐ':'p','ｑ':'q','ｒ':'r','ｓ':'s','ｔ':'t','ｕ':'u','ｖ':'v',
+  'ｗ':'w','ｘ':'x','ｙ':'y','ｚ':'z','０':'0','１':'1','２':'2','３':'3',
+  '４':'4','５':'5','６':'6','７':'7','８':'8','９':'9','　':' ',
+};
+
+function normalize(str) {
+  if (!str) return '';
+  // full-width to half-width
+  str = str.split('').map(c => FW_HW[c] || c).join('');
+  // trim and collapse spaces
+  str = str.trim().replace(/\s+/g, ' ');
+  // lowercase
+  str = str.toLowerCase();
+  // strip trailing punctuation
+  str = str.replace(/[。、．，.!！?？]+$/g, '');
+  return str;
+}
+
+function isCorrectAnswer(userInput, correctArr) {
+  const u = normalize(userInput);
+  if (!u) return false;
+  return correctArr.some(c => normalize(c) === u);
+}
+
+/* =====================================================================
+   TTS
+   ===================================================================== */
+function speakJP(text) {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'ja-JP';
+  utt.rate = 0.85;
+  speechSynthesis.speak(utt);
+}
+
+/* =====================================================================
+   DOM BUILDING
+   ===================================================================== */
+let currentVariant = null;
+let currentSeed = null;
+
+function buildParticleSentenceHTML(q, qIdx) {
+  // Replace {1},{2},{3} with input fields
+  let parts = q.sentence.split(/(\{[0-9]+\})/);
+  let blankCount = 0;
+  let html = '<span class="particle-sentence">';
+  for (const part of parts) {
+    const m = part.match(/^\{([0-9]+)\}$/);
+    if (m) {
+      const bi = parseInt(m[1]) - 1;
+      blankCount++;
+      html += `<span class="particle-blank-wrap">
+        <input type="text" class="particle-input"
+               data-q="${qIdx}" data-blank="${bi}"
+               maxlength="4"
+               placeholder="　"
+               aria-label="particle blank ${blankCount}"
+               autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </span>`;
+    } else {
+      // Make Japanese spans clickable for TTS
+      html += `<span class="tts-span" onclick="speakJP(this.textContent)" style="cursor:pointer">${part}</span>`;
+    }
+  }
+  html += '</span>';
+  return html;
+}
+
+function buildExam(variant) {
+  const body = document.getElementById('exam-body');
+  body.innerHTML = '';
+
+  // SECTION A — Dictation
+  const secA = document.createElement('div');
+  secA.className = 'section';
+  secA.id = 'sec-a';
+  secA.innerHTML = `<div class="section-header">
+    <div class="section-letter">A</div>
+    <div class="section-title">Dictation — Write the kana and English meaning</div>
+    <div class="section-pts">6 pts</div>
+  </div>`;
+  variant.a.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    div.dataset.pool = 'a';
+    div.dataset.id = q.id;
+    const scriptLabel = q.isSentence ? 'sentence' : q.script;
+    div.innerHTML = `
+      <div class="q-number">A${i+1} <span class="ch-badge">Ch.${q.ch}</span> <span class="ch-badge" style="border-color: rgba(212,175,55,0.5); color:#d4af37">${scriptLabel}</span></div>
+      <div class="q-prompt" onclick="speakJP('${q.kana.replace(/'/g,"\\'")}')">
+        ${q.isSentence ? '🔊 ' : ''}<em style="font-family: var(--font-en); font-style: italic; color: var(--text2); font-size:14px">${q.romaji}</em>
+        <span class="tts-hint">(tap to hear)</span>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <div class="input-label">Kana</div>
+          <input type="text" class="dict-kana" data-id="${q.id}"
+            placeholder="${q.script === 'katakana' ? 'カタカナで…' : 'ひらがなで…'}"
+            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <div class="input-group">
+          <div class="input-label">English meaning</div>
+          <input type="text" class="dict-eng" data-id="${q.id}"
+            placeholder="English meaning…"
+            autocomplete="off" autocorrect="off" spellcheck="false">
+        </div>
+      </div>
+      <div class="feedback-row" id="fb-a-${q.id}"></div>
+    `;
+    secA.appendChild(div);
+  });
+  body.appendChild(secA);
+
+  // SECTION B — Vocab
+  const secB = document.createElement('div');
+  secB.className = 'section';
+  secB.id = 'sec-b';
+  secB.innerHTML = `<div class="section-header">
+    <div class="section-letter">B</div>
+    <div class="section-title">Vocabulary — English → Japanese (kana)</div>
+    <div class="section-pts">6 pts</div>
+  </div>`;
+  variant.b.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    div.dataset.pool = 'b';
+    div.dataset.id = q.id;
+    div.innerHTML = `
+      <div class="q-number">B${i+1} <span class="ch-badge">Ch.${q.ch}</span></div>
+      <div class="q-prompt" style="font-family: var(--font-en); font-size:15px; cursor:default">${q.english}</div>
+      <input type="text" class="vocab-ans" data-id="${q.id}"
+        placeholder="${q.script === 'katakana' ? 'カタカナで…' : 'ひらがなで…'}"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        style="max-width: 280px">
+      <div class="feedback-row" id="fb-b-${q.id}"></div>
+    `;
+    secB.appendChild(div);
+  });
+  body.appendChild(secB);
+
+  // SECTION C — Particles
+  const secC = document.createElement('div');
+  secC.className = 'section';
+  secC.id = 'sec-c';
+  secC.innerHTML = `<div class="section-header">
+    <div class="section-letter">C</div>
+    <div class="section-title">Particle Fill-in — Write the correct particle in each blank</div>
+    <div class="section-pts">8 pts</div>
+  </div>`;
+  variant.c.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    div.dataset.pool = 'c';
+    div.dataset.id = q.id;
+    div.innerHTML = `
+      <div class="q-number">C${i+1} <span class="ch-badge">Ch.${q.ch}</span></div>
+      <div class="q-hint">${q.hint}</div>
+      <div>${buildParticleSentenceHTML(q, 'c-' + i)}</div>
+      <div class="feedback-row" id="fb-c-${q.id}"></div>
+    `;
+    secC.appendChild(div);
+  });
+  body.appendChild(secC);
+
+  // SECTION D — Sentences
+  const secD = document.createElement('div');
+  secD.className = 'section';
+  secD.id = 'sec-d';
+  secD.innerHTML = `<div class="section-header">
+    <div class="section-letter">D</div>
+    <div class="section-title">Sentence Translation — English → Japanese</div>
+    <div class="section-pts">10 pts</div>
+  </div>`;
+  variant.d.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    div.dataset.pool = 'd';
+    div.dataset.id = q.id;
+    div.innerHTML = `
+      <div class="q-number">D${i+1} <span class="ch-badge">Ch.${q.ch}</span> <span class="ch-badge">${q.grammar}</span></div>
+      <div class="q-prompt" style="font-family: var(--font-en); font-size:15px; cursor:default">${q.english}</div>
+      <textarea class="sent-ans" data-id="${q.id}"
+        placeholder="日本語で書いてください…"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        rows="2"></textarea>
+      <div class="feedback-row" id="fb-d-${q.id}"></div>
+    `;
+    secD.appendChild(div);
+  });
+  body.appendChild(secD);
+}
+
+/* =====================================================================
+   SUBMIT / GRADE
+   ===================================================================== */
+function submitExam() {
+  if (!currentVariant) return;
+  const v = currentVariant;
+
+  let scoreA = 0, scoreB = 0, scoreC = 0, scoreD = 0;
+
+  // --- Grade A ---
+  v.a.forEach(q => {
+    const kanaInput = document.querySelector(`.dict-kana[data-id="${q.id}"]`);
+    const engInput  = document.querySelector(`.dict-eng[data-id="${q.id}"]`);
+    const kanaVal   = kanaInput ? kanaInput.value : '';
+    const engVal    = engInput  ? engInput.value  : '';
+
+    const kanaOk = normalize(kanaVal) === normalize(q.kana);
+    const engOk  = q.english.some(e => normalize(engVal) === normalize(e));
+
+    const half = kanaOk ? 0.5 : 0;
+    const half2 = engOk ? 0.5 : 0;
+    scoreA += half + half2;
+
+    const qItem = document.querySelector(`.q-item[data-id="${q.id}"]`);
+    const fb    = document.getElementById(`fb-a-${q.id}`);
+
+    const pts = half + half2;
+    if (pts === 1) {
+      qItem.classList.add('correct'); qItem.classList.remove('wrong','partial');
+    } else if (pts === 0.5) {
+      qItem.classList.add('partial'); qItem.classList.remove('correct','wrong');
+    } else {
+      qItem.classList.add('wrong'); qItem.classList.remove('correct','partial');
+    }
+
+    let fbHtml = '';
+    // Kana feedback
+    if (kanaOk) {
+      fbHtml += `<div><span class="mark ok">✓</span><span class="feedback-correct">Kana: ${q.kana}</span></div>`;
+    } else {
+      fbHtml += `<div><span class="mark fail">✗</span> Kana: <span class="feedback-wrong"><span class="user-ans">${escHtml(kanaVal)||'(blank)'}</span> → <span class="correct-ans">${q.kana}</span></span></div>`;
+    }
+    // English feedback
+    if (engOk) {
+      fbHtml += `<div><span class="mark ok">✓</span><span class="feedback-correct">English: ${escHtml(engVal)}</span></div>`;
+    } else {
+      fbHtml += `<div><span class="mark fail">✗</span> English: <span class="feedback-wrong"><span class="user-ans">${escHtml(engVal)||'(blank)'}</span> → <span class="correct-ans">${q.english[0]}</span></span></div>`;
+    }
+    fb.innerHTML = fbHtml;
+    fb.classList.add('visible');
+  });
+
+  // --- Grade B ---
+  v.b.forEach(q => {
+    const inp = document.querySelector(`.vocab-ans[data-id="${q.id}"]`);
+    const val = inp ? inp.value : '';
+    const ok  = isCorrectAnswer(val, q.correct);
+    scoreB += ok ? 1 : 0;
+
+    const qItem = document.querySelector(`.q-item[data-id="${q.id}"]`);
+    const fb    = document.getElementById(`fb-b-${q.id}`);
+    if (ok) {
+      qItem.classList.add('correct'); qItem.classList.remove('wrong');
+    } else {
+      qItem.classList.add('wrong'); qItem.classList.remove('correct');
+    }
+    if (ok) {
+      fb.innerHTML = `<span class="mark ok">✓</span><span class="feedback-correct">${q.correct[0]}</span>`;
+    } else {
+      fb.innerHTML = `<span class="mark fail">✗</span> <span class="feedback-wrong"><span class="user-ans">${escHtml(val)||'(blank)'}</span> → <span class="correct-ans">${q.correct[0]}</span></span>`;
+    }
+    fb.classList.add('visible');
+  });
+
+  // --- Grade C ---
+  v.c.forEach(q => {
+    // Find all particle inputs for this question
+    const qItem = document.querySelector(`.q-item[data-id="${q.id}"]`);
+    const inputs = qItem ? qItem.querySelectorAll('.particle-input') : [];
+    let allOk = true;
+    let feedbackParts = [];
+
+    q.correct.forEach((correctParticle, bi) => {
+      const inp = inputs[bi];
+      const val = inp ? inp.value : '';
+      const ok  = normalize(val) === normalize(correctParticle);
+      if (!ok) allOk = false;
+      if (ok) {
+        feedbackParts.push(`<span class="mark ok">✓</span><span class="feedback-correct">Blank ${bi+1}: ${correctParticle}</span>`);
+      } else {
+        feedbackParts.push(`<span class="mark fail">✗</span> Blank ${bi+1}: <span class="feedback-wrong"><span class="user-ans">${escHtml(val)||'(blank)'}</span> → <span class="correct-ans">${correctParticle}</span></span>`);
+      }
+    });
+
+    scoreC += allOk ? 1 : 0;
+    const fb = document.getElementById(`fb-c-${q.id}`);
+    if (allOk) {
+      qItem.classList.add('correct'); qItem.classList.remove('wrong');
+    } else {
+      qItem.classList.add('wrong'); qItem.classList.remove('correct');
+    }
+    fb.innerHTML = feedbackParts.join('<br>');
+    fb.classList.add('visible');
+  });
+
+  // --- Grade D ---
+  v.d.forEach(q => {
+    const ta  = document.querySelector(`.sent-ans[data-id="${q.id}"]`);
+    const val = ta ? ta.value : '';
+    const ok  = isCorrectAnswer(val, q.correct);
+    scoreD += ok ? 1 : 0;
+
+    const qItem = document.querySelector(`.q-item[data-id="${q.id}"]`);
+    const fb    = document.getElementById(`fb-d-${q.id}`);
+    if (ok) {
+      qItem.classList.add('correct'); qItem.classList.remove('wrong');
+    } else {
+      qItem.classList.add('wrong'); qItem.classList.remove('correct');
+    }
+    if (ok) {
+      fb.innerHTML = `<span class="mark ok">✓</span><span class="feedback-correct">${q.correct[0]}</span>`;
+    } else {
+      fb.innerHTML = `<span class="mark fail">✗</span> <span class="feedback-wrong"><span class="user-ans">${escHtml(val)||'(blank)'}</span></span><br><span class="mark ok" style="opacity:0">✓</span><span class="feedback-correct">${q.correct[0]}</span>`;
+    }
+    fb.classList.add('visible');
+  });
+
+  const total = scoreA + scoreB + scoreC + scoreD;
+  const pct   = (total / 30) * 100;
+  let grade;
+  if (pct >= 90) grade = 'S';
+  else if (pct >= 80) grade = 'A';
+  else if (pct >= 70) grade = 'B';
+  else if (pct >= 60) grade = 'C';
+  else grade = '再挑戦';
+
+  const banner = document.getElementById('score-banner');
+  document.getElementById('grade-display').textContent = grade;
+  document.getElementById('score-text').textContent = `${total} / 30 points (${Math.round(pct)}%)`;
+  document.getElementById('score-breakdown').textContent =
+    `A: ${scoreA}/6  |  B: ${scoreB}/6  |  C: ${scoreC}/8  |  D: ${scoreD}/10`;
+  banner.classList.add('visible');
+  banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* =====================================================================
+   ANSWER KEY
+   ===================================================================== */
+let akVisible = false;
+function toggleAnswerKey() {
+  akVisible = !akVisible;
+  const sec = document.getElementById('answer-key-section');
+  sec.classList.toggle('visible', akVisible);
+  const btn = document.querySelector('.btn[onclick="toggleAnswerKey()"]');
+  btn.textContent = akVisible ? 'Hide Answer Key' : 'Show Answer Key';
+  if (akVisible) {
+    buildAnswerKey();
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function buildAnswerKey() {
+  if (!currentVariant) return;
+  const v = currentVariant;
+  const body = document.getElementById('ak-body');
+  body.innerHTML = '';
+
+  const sections = [
+    { label: 'Section A — Dictation', items: v.a, render: q => `${q.kana} / ${q.english[0]}` },
+    { label: 'Section B — Vocabulary', items: v.b, render: q => q.correct[0] },
+    { label: 'Section C — Particles', items: v.c, render: q => q.correct.join(', ') },
+    { label: 'Section D — Sentences', items: v.d, render: q => q.correct[0] },
+  ];
+  const prefixes = ['A','B','C','D'];
+  sections.forEach((sec, si) => {
+    const h = document.createElement('div');
+    h.style.cssText = 'font-weight:700; color: var(--gold); margin: 14px 0 8px; font-size:14px;';
+    h.textContent = sec.label;
+    body.appendChild(h);
+    sec.items.forEach((q, i) => {
+      const d = document.createElement('div');
+      d.className = 'ak-item';
+      d.innerHTML = `<span class="ak-num">${prefixes[si]}${i+1}.</span><span class="ak-ans">${sec.render(q)}</span>`;
+      body.appendChild(d);
+    });
+  });
+}
+
+/* =====================================================================
+   PRINT
+   ===================================================================== */
+function printBlank() {
+  document.body.classList.add('print-blank');
+  document.body.classList.remove('print-with-key');
+  // Hide feedback
+  document.querySelectorAll('.feedback-row').forEach(el => el.style.display = 'none');
+  window.print();
+  document.body.classList.remove('print-blank');
+  document.querySelectorAll('.feedback-row').forEach(el => el.style.display = '');
+}
+
+function printWithKey() {
+  if (!currentVariant) { alert('Submit the exam first to see answers.'); return; }
+  document.body.classList.add('print-with-key');
+  document.body.classList.remove('print-blank');
+  window.print();
+  document.body.classList.remove('print-with-key');
+}
+
+/* =====================================================================
+   RESET
+   ===================================================================== */
+function resetExam() {
+  if (!confirm('Reset all answers? Your progress will be lost.')) return;
+  document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+  document.querySelectorAll('.q-item').forEach(el => {
+    el.classList.remove('correct','wrong','partial');
+  });
+  document.querySelectorAll('.feedback-row').forEach(el => {
+    el.innerHTML = '';
+    el.classList.remove('visible');
+  });
+  document.getElementById('score-banner').classList.remove('visible');
+  document.getElementById('answer-key-section').classList.remove('visible');
+  akVisible = false;
+  document.querySelector('.btn[onclick="toggleAnswerKey()"]').textContent = 'Show Answer Key';
+}
+
+/* =====================================================================
+   NEW VARIANT
+   ===================================================================== */
+function newVariant() {
+  if (!confirm('Generate a new variant? Current answers will be cleared.')) return;
+  const seed = Math.floor(Math.random() * 999999) + 1;
+  loadVariant(seed);
+}
+
+function loadVariant(seed) {
+  currentSeed    = seed;
+  currentVariant = generateVariant(seed);
+  document.getElementById('seed-display').textContent = seed;
+  buildExam(currentVariant);
+  document.getElementById('score-banner').classList.remove('visible');
+  document.getElementById('answer-key-section').classList.remove('visible');
+  akVisible = false;
+  document.querySelector('.btn[onclick="toggleAnswerKey()"]').textContent = 'Show Answer Key';
+}
+
+/* =====================================================================
+   UTILS
+   ===================================================================== */
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* =====================================================================
+   INIT
+   ===================================================================== */
+(function init() {
+  const seed = Math.floor(Math.random() * 999999) + 1;
+  loadVariant(seed);
+})();
+</script>
+</body>
+</html>
