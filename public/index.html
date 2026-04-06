@@ -634,6 +634,13 @@ body::before {
 #panel_oral-exam.hide-romaji .oe-loc-rm:hover,
 #panel_oral-exam.hide-romaji .oe-d-line .oe-rm:hover { visibility:visible;opacity:0.5; }
 
+/* Vocab Atlas example blocks */
+.va-ex { background:rgba(158,204,255,0.05);border-left:3px solid #9eccff;border-radius:6px;padding:10px 12px;margin-top:12px;font-size:12px;line-height:1.7; }
+.va-ex b { color:#9eccff;font-size:10px;letter-spacing:1px; }
+.va-ex .oe-ja { color:var(--white);font-size:14px;margin:4px 0; }
+.va-ex .oe-rm { color:var(--text-dim);font-size:11px; }
+.va-ex .oe-en { color:var(--text);font-size:11px; }
+
 /* Comprehension Q&A details/summary */
 .oe-qa { background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:8px;cursor:pointer;transition:all 0.2s; }
 .oe-qa:hover { border-color:var(--gold-dim); }
@@ -1190,7 +1197,7 @@ body::before {
   <div id="searchResults" class="hidden" style="position:absolute;left:16px;right:16px;top:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;max-height:420px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.6);z-index:200;margin-top:4px;"></div>
 </div>
 
-<div class="nav-wrap"><div class="nav-scroll"><button class="nav-tab" onclick="showChapter('ch1')" id="tab_ch1"><span class="kanji">第一章</span>Ch 1: Sounds & Hiragana</button><button class="nav-tab" onclick="showChapter('ch2')" id="tab_ch2"><span class="kanji">第二章</span>Ch 2: Introductions</button><button class="nav-tab" onclick="showChapter('ch3')" id="tab_ch3"><span class="kanji">第三章</span>Ch 3: Daily Routines</button><button class="nav-tab" onclick="showChapter('ch4')" id="tab_ch4"><span class="kanji">第四章</span>Ch 4: Japanese Cities</button><button class="nav-tab" onclick="showChapter('ch5')" id="tab_ch5"><span class="kanji">第五章</span>Ch 5: Japanese Homes</button><button class="nav-tab" onclick="showChapter('ch6')" id="tab_ch6"><span class="kanji">第六章</span>Ch 6: Leisure Time</button><button class="nav-tab practice-tab" onclick="showChapter('practice-lab')" id="tab_practice-lab"><span class="kanji">練</span>Practice Lab</button><button class="nav-tab" style="color:#e85454" onclick="showChapter('oral-exam')" id="tab_oral-exam"><span class="kanji" style="color:#e85454">🎤</span>Oral Exam</button><button class="nav-tab" style="color:#f0c85a" onclick="window.location.href='exam-ch456.html'" id="tab_exam-sim"><span class="kanji" style="color:#f0c85a">📝</span>Exam Sim</button><button class="nav-tab" style="color:var(--gold-bright);border-bottom-color:transparent" onclick="window.location.href='kanji.html'" id="tab_kanji"><span class="kanji" style="color:var(--gold-bright)">&#28450;&#23383;</span>Kanji</button><button class="nav-tab ref-tab" onclick="showChapter('ref-numbers')" id="tab_ref-numbers"><span class="kanji">数</span>Numbers & Time</button><button class="nav-tab ref-tab" onclick="showChapter('ref-patterns')" id="tab_ref-patterns"><span class="kanji">文</span>Patterns</button><button class="nav-tab ref-tab" onclick="showChapter('ref-conv')" id="tab_ref-conv"><span class="kanji">話</span>Conversations</button><button class="nav-tab ref-tab" onclick="showChapter('ref-struct')" id="tab_ref-struct"><span class="kanji">構</span>Structure</button></div></div><div class="main-container">
+<div class="nav-wrap"><div class="nav-scroll"><button class="nav-tab" onclick="showChapter('ch1')" id="tab_ch1"><span class="kanji">第一章</span>Ch 1: Sounds & Hiragana</button><button class="nav-tab" onclick="showChapter('ch2')" id="tab_ch2"><span class="kanji">第二章</span>Ch 2: Introductions</button><button class="nav-tab" onclick="showChapter('ch3')" id="tab_ch3"><span class="kanji">第三章</span>Ch 3: Daily Routines</button><button class="nav-tab" onclick="showChapter('ch4')" id="tab_ch4"><span class="kanji">第四章</span>Ch 4: Japanese Cities</button><button class="nav-tab" onclick="showChapter('ch5')" id="tab_ch5"><span class="kanji">第五章</span>Ch 5: Japanese Homes</button><button class="nav-tab" onclick="showChapter('ch6')" id="tab_ch6"><span class="kanji">第六章</span>Ch 6: Leisure Time</button><button class="nav-tab practice-tab" onclick="showChapter('practice-lab')" id="tab_practice-lab"><span class="kanji">練</span>Practice Lab</button><button class="nav-tab" style="color:#e85454" onclick="showChapter('oral-exam')" id="tab_oral-exam"><span class="kanji" style="color:#e85454">🎤</span>Oral Exam</button><button class="nav-tab" style="color:#f0c85a" onclick="window.location.href='exam-ch456.html'" id="tab_exam-sim"><span class="kanji" style="color:#f0c85a">📝</span>Exam Sim</button><button class="nav-tab" style="color:var(--gold-bright);border-bottom-color:transparent" onclick="window.location.href='kanji.html'" id="tab_kanji"><span class="kanji" style="color:var(--gold-bright)">&#28450;&#23383;</span>Kanji</button><button class="nav-tab ref-tab" onclick="showChapter('ref-numbers')" id="tab_ref-numbers"><span class="kanji">数</span>Numbers & Time</button><button class="nav-tab ref-tab" onclick="showChapter('ref-patterns')" id="tab_ref-patterns"><span class="kanji">文</span>Patterns</button><button class="nav-tab ref-tab" onclick="showChapter('ref-conv')" id="tab_ref-conv"><span class="kanji">話</span>Conversations</button><button class="nav-tab ref-tab" onclick="showChapter('ref-struct')" id="tab_ref-struct"><span class="kanji">構</span>Structure</button><button class="nav-tab ref-tab" style="color:#9eccff;border-bottom-color:transparent" onclick="showChapter('ref-vocab')" id="tab_ref-vocab"><span class="kanji" style="color:#9eccff">語</span>Vocab Atlas</button></div></div><div class="main-container">
 <div class="chapter-panel" id="panel_ch1">
   <div class="ch-title">第一章 — THE JAPANESE SOUND SYSTEM</div>
   <div class="ch-subtitle">Ch 1: Sounds & Hiragana · 42 vocabulary items</div>
@@ -9492,6 +9499,482 @@ body::before {
     </a>
   </div>
 </div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     VOCAB ATLAS — Full grammatical category list (Ch 1–6)
+     ═══════════════════════════════════════════════════════════ -->
+<div class="chapter-panel" id="panel_ref-vocab">
+<div class="ch-title" style="color:#9eccff">語 VOCAB ATLAS</div>
+<div class="ch-subtitle">Every grammatical category from Nakama 1 (Ch 1–6) · with usage examples</div>
+
+<div class="oe-tip" style="border-color:#9eccff;background:rgba(158,204,255,0.06);"><b>HOW TO USE:</b> Each card = one part of speech. Cards show a <span class="oe-hl">vocab grid</span> + <span class="oe-hl">real example sentence</span> showing the word in context. ⚠️ icon = traps/exceptions.</div>
+
+<div class="oe-tabs">
+<button class="oe-tab-btn active" onclick="showVocSec(0)">NOUNS</button>
+<button class="oe-tab-btn" onclick="showVocSec(1)">VERBS</button>
+<button class="oe-tab-btn" onclick="showVocSec(2)">ADJ</button>
+<button class="oe-tab-btn" onclick="showVocSec(3)">PARTICLES</button>
+<button class="oe-tab-btn" onclick="showVocSec(4)">ADV/Q</button>
+<button class="oe-tab-btn" onclick="showVocSec(5)">NUM/TIME</button>
+<button class="oe-tab-btn" onclick="showVocSec(6)">FUNCTION</button>
+</div>
+
+<!-- ═══ SECTION 0: NOUNS ═══ -->
+<div class="oe-sec active" id="vocsec0">
+
+<div class="card"><div class="card-header">めいし — NOUNS (common)</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">がくせい</div><div class="oe-loc-rm">gakusei</div><div class="oe-loc-en">student (Ch2)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">せんせい</div><div class="oe-loc-rm">sensei</div><div class="oe-loc-en">teacher (Ch2)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">だいがく</div><div class="oe-loc-rm">daigaku</div><div class="oe-loc-en">university (Ch2)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">せんこう</div><div class="oe-loc-rm">senkoo</div><div class="oe-loc-en">major (Ch2)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ほん</div><div class="oe-loc-rm">hon</div><div class="oe-loc-en">book (Ch2)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あさごはん</div><div class="oe-loc-rm">asagohan</div><div class="oe-loc-en">breakfast (Ch3)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">えいが</div><div class="oe-loc-rm">eiga</div><div class="oe-loc-en">movie (Ch3)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ぎんこう</div><div class="oe-loc-rm">ginkoo</div><div class="oe-loc-en">bank (Ch4)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">としょかん</div><div class="oe-loc-rm">toshokan</div><div class="oe-loc-en">library (Ch4)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">こうえん</div><div class="oe-loc-rm">kooen</div><div class="oe-loc-en">park (Ch4)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">アパート</div><div class="oe-loc-rm">apaato</div><div class="oe-loc-en">apartment (Ch5)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">へや</div><div class="oe-loc-rm">heya</div><div class="oe-loc-en">room (Ch5)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">つくえ</div><div class="oe-loc-rm">tsukue</div><div class="oe-loc-en">desk (Ch5)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">まど</div><div class="oe-loc-rm">mado</div><div class="oe-loc-en">window (Ch5)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">しゅうまつ</div><div class="oe-loc-rm">shuumatsu</div><div class="oe-loc-en">weekend (Ch6)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">しゅくだい</div><div class="oe-loc-rm">shukudai</div><div class="oe-loc-en">homework (Ch6)</div></div>
+</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">わたしは ネブラスカだいがくの がくせいです。せんこうは せいぶつがくです。</span><br><span class="oe-en">I'm a student at Nebraska University. My major is biology.</span></div>
+</div></div>
+
+<div class="card"><div class="card-header">こゆうめいし — PROPER NOUNS</div><div class="card-body">
+<p style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Names of people, places, organizations. Take さん for people.</p>
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">にほん</div><div class="oe-loc-rm">Nihon</div><div class="oe-loc-en">Japan</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">とうきょう</div><div class="oe-loc-rm">Tookyoo</div><div class="oe-loc-en">Tokyo</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">アメリカ</div><div class="oe-loc-rm">Amerika</div><div class="oe-loc-en">America</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">じょうとうだいがく</div><div class="oe-loc-rm">Jootoo daigaku</div><div class="oe-loc-en">Joto University</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">しぶや</div><div class="oe-loc-rm">Shibuya</div><div class="oe-loc-en">Shibuya</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">スミスさん</div><div class="oe-loc-rm">Sumisu-san</div><div class="oe-loc-en">Mr/Ms Smith</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">うえださん</div><div class="oe-loc-rm">Ueda-san</div><div class="oe-loc-en">Ms Ueda</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">リーさん</div><div class="oe-loc-rm">Rii-san</div><div class="oe-loc-en">Mr Li</div></div>
+</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">うえださんは しぶやえきの まえに いました。</span><br><span class="oe-en">Ueda was in front of Shibuya Station.</span></div>
+</div></div>
+
+<div class="card"><div class="card-header">にんしょうだいめいし — PERSONAL PRONOUNS</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">わたし</div><div class="oe-loc-rm">watashi</div><div class="oe-loc-en">I (neutral)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ぼく</div><div class="oe-loc-rm">boku</div><div class="oe-loc-en">I (male, casual)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あなた ⚠️</div><div class="oe-loc-rm">anata</div><div class="oe-loc-en">you (avoid — use name+さん)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">かれ</div><div class="oe-loc-rm">kare</div><div class="oe-loc-en">he / boyfriend</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">かのじょ</div><div class="oe-loc-rm">kanojo</div><div class="oe-loc-en">she / girlfriend</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ TRAP:</b> あなた sounds rude/distant in normal speech. Always say <span class="oe-ja">うえださんは…</span> not <span class="oe-ja">あなたは…</span>. The subject is usually dropped entirely.</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">ぼくは たいてい じてんしゃで いきますよ。</span><br><span class="oe-en">I usually go by bicycle.</span> (Li — Ch5)</div>
+</div></div>
+
+<div class="card"><div class="card-header">しじだいめいし — DEMONSTRATIVE PRONOUNS (こ・そ・あ・ど)</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">これ／それ／あれ／どれ</div><div class="oe-loc-rm">kore/sore/are/dore</div><div class="oe-loc-en">this/that/that over there/which (THINGS)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ここ／そこ／あそこ／どこ</div><div class="oe-loc-rm">koko/soko/asoko/doko</div><div class="oe-loc-en">here/there/over there/where (PLACES)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">こちら／そちら／あちら／どちら</div><div class="oe-loc-rm">kochira/sochira/achira/dochira</div><div class="oe-loc-en">this way/that way (POLITE)</div></div>
+</div>
+<div class="oe-tip"><b>SPATIAL LOGIC:</b> こ = near speaker · そ = near listener · あ = far from both · ど = question</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">あそこに たかい ビルが ありますね。あれですよ。</span><br><span class="oe-en">There's a tall building over there. That's it.</span> (Ch4)</div>
+</div></div>
+
+<div class="card"><div class="card-header">れんたいし — DEMONSTRATIVE ADJECTIVES (この／その／あの／どの)</div><div class="card-body">
+<p style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Used <b>before</b> a noun. Cannot stand alone.</p>
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">この + 名詞</div><div class="oe-loc-en">this ___</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">その + 名詞</div><div class="oe-loc-en">that ___</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あの + 名詞</div><div class="oe-loc-en">that ___ over there</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">どの + 名詞</div><div class="oe-loc-en">which ___</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ DON'T MIX UP:</b> これ = "this (thing)" — standalone. この = "this ___" — needs noun. ✅ <span class="oe-ja">このほん</span> / <span class="oe-ja">これはほんです。</span></div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">この アパートは たかい ところに ありますから。</span><br><span class="oe-en">Because this apartment is up high.</span> (Ch5)</div>
+</div></div>
+
+<div class="card"><div class="card-header">いちめいし — LOCATION NOUNS (Ch5 core)</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">うえ</div><div class="oe-loc-rm">ue</div><div class="oe-loc-en">on / above</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">した</div><div class="oe-loc-rm">shita</div><div class="oe-loc-en">under</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">まえ</div><div class="oe-loc-rm">mae</div><div class="oe-loc-en">in front of</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">うしろ</div><div class="oe-loc-rm">ushiro</div><div class="oe-loc-en">behind</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">なか</div><div class="oe-loc-rm">naka</div><div class="oe-loc-en">inside</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">そと</div><div class="oe-loc-rm">soto</div><div class="oe-loc-en">outside</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">となり</div><div class="oe-loc-rm">tonari</div><div class="oe-loc-en">next to (same kind)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">よこ</div><div class="oe-loc-rm">yoko</div><div class="oe-loc-en">beside</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ちかく</div><div class="oe-loc-rm">chikaku</div><div class="oe-loc-en">near</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あいだ</div><div class="oe-loc-rm">aida</div><div class="oe-loc-en">between</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">みぎ／ひだり</div><div class="oe-loc-rm">migi / hidari</div><div class="oe-loc-en">right / left</div></div>
+</div>
+<div class="oe-tip"><b>PATTERN:</b> [PLACE] の [LOCATION] に [OBJECT] が あります／います</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">つくえの 下に ねこが いて、まどの そとに きが あります。</span><br><span class="oe-en">There's a cat under the desk, and a tree outside the window.</span></div>
+</div></div>
+
+<div class="card"><div class="card-header">せっとうじ・じょすうじ — PREFIXES &amp; TITLE SUFFIXES</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">お～</div><div class="oe-loc-en">polite (おなまえ, おちゃ)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ご～</div><div class="oe-loc-en">polite (ごかぞく, ごりょうしん)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～さん</div><div class="oe-loc-en">Mr/Ms (default)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～せんせい</div><div class="oe-loc-en">teacher/doctor</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～くん</div><div class="oe-loc-en">junior male</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～ちゃん</div><div class="oe-loc-en">cute / child</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～たち</div><div class="oe-loc-en">plural (がくせいたち)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～がた</div><div class="oe-loc-en">polite plural (せんせいがた)</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ NEVER ATTACH さん TO YOURSELF.</b> ❌ わたしは ジョニー<u>さん</u>です ✅ わたしは ジョニーです</div>
+</div></div>
+
+</div>
+
+<!-- ═══ SECTION 1: VERBS ═══ -->
+<div class="oe-sec" id="vocsec1">
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#1a4a6b,#2d6b8a);">いちだんどうし — る-VERBS (Class 2)</div><div class="card-body">
+<p style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Drop る → add ます/た/ない. Easy &amp; predictable.</p>
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">たべる → たべます</div><div class="oe-loc-rm">taberu</div><div class="oe-loc-en">to eat (Ch3)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">みる → みます</div><div class="oe-loc-rm">miru</div><div class="oe-loc-en">to see/watch</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ねる → ねます</div><div class="oe-loc-rm">neru</div><div class="oe-loc-en">to sleep</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">おきる → おきます</div><div class="oe-loc-rm">okiru</div><div class="oe-loc-en">to wake up</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">でかける → でかけます</div><div class="oe-loc-rm">dekakeru</div><div class="oe-loc-en">to go out</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いる → います</div><div class="oe-loc-rm">iru</div><div class="oe-loc-en">to exist (living)</div></div>
+</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">まいあさ ろくじに おきて、あさごはんを たべます。</span><br><span class="oe-en">Every morning I wake up at 6 and eat breakfast.</span></div>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#6b1a4a,#8a2d6b);">ごだんどうし — う-VERBS (Class 1)</div><div class="card-body">
+<p style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Final う-row sound → い-row + ます. Tricky て-form rules.</p>
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">のむ → のみます → のんで</div><div class="oe-loc-en">to drink</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">よむ → よみます → よんで</div><div class="oe-loc-en">to read</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">かく → かきます → かいて</div><div class="oe-loc-en">to write</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">きく → ききます → きいて</div><div class="oe-loc-en">to listen</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">はなす → はなします → はなして</div><div class="oe-loc-en">to speak</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あう → あいます → あって</div><div class="oe-loc-en">to meet</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いく → いきます → いって ⚠️</div><div class="oe-loc-en">to go (irreg. て-form)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">かえる → かえって</div><div class="oe-loc-en">to return (looks る, is う)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ある → あります</div><div class="oe-loc-en">to exist (non-living)</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ TRAP:</b> いく's て-form is <b>いって</b>, not いいて. かえる, はいる, はしる, きる (cut), しる look like る-verbs but are う-verbs.</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">みちこさんと しぶやに かいものに <u>いって</u>、コンサートへ <u>いきました</u>。</span><br><span class="oe-en">I went shopping in Shibuya with Michiko and went to a concert.</span> (Ch6)</div>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#6b4a1a,#8a6b2d);">ふきそくどうし — IRREGULAR VERBS</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">する → します → して</div><div class="oe-loc-en">to do</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">くる → きます → きて</div><div class="oe-loc-en">to come</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">べんきょうする</div><div class="oe-loc-en">to study</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">かいものする</div><div class="oe-loc-en">to shop</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">りょうりする</div><div class="oe-loc-en">to cook</div></div>
+</div>
+<div class="oe-tip"><b>NOUN+する:</b> Many nouns become verbs with する: しゅくだいをする / でんわする / そうじする</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">先週は しゅくだいが たくさん あって、週末は ずっと うちで べんきょうしました。</span><br><span class="oe-en">I had a lot of homework, so I studied at home all weekend.</span> (Ch6)</div>
+</div></div>
+
+<div class="card"><div class="card-header">CONJUGATED FORMS — quick reference</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">～ます</div><div class="oe-loc-en">present polite</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～ません</div><div class="oe-loc-en">negative</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～ました</div><div class="oe-loc-en">past</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～ませんでした</div><div class="oe-loc-en">past negative</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～て</div><div class="oe-loc-en">connector / request</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～ませんか</div><div class="oe-loc-en">invitation (won't you?)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～ましょう</div><div class="oe-loc-en">let's ~</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～てください</div><div class="oe-loc-en">please do ~</div></div>
+</div>
+<div class="va-ex"><b>EX (invitation):</b> <span class="oe-ja">うちに あそびに きませんか。</span> · <b>EX (request):</b> <span class="oe-ja">くるとき、でんわしてくれませんか。</span></div>
+</div></div>
+
+</div>
+
+<!-- ═══ SECTION 2: ADJECTIVES + COPULA ═══ -->
+<div class="oe-sec" id="vocsec2">
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#1a6b3a,#2d8a4e);">いけいようし — い-ADJECTIVES</div><div class="card-body">
+<p style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">End in い. Conjugate themselves — never use です to make them past/negative.</p>
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">たかい / やすい</div><div class="oe-loc-en">tall·expensive / cheap</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">おおきい / ちいさい</div><div class="oe-loc-en">big / small</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あたらしい / ふるい</div><div class="oe-loc-en">new / old</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あかるい</div><div class="oe-loc-en">bright (Ch5)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">きたない</div><div class="oe-loc-en">dirty (Ch6)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いそがしい</div><div class="oe-loc-en">busy (Ch6)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">たのしい</div><div class="oe-loc-en">fun (Ch6)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">おもしろい</div><div class="oe-loc-en">interesting</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いい ⚠️</div><div class="oe-loc-en">good (irregular!)</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ いい IS IRREGULAR:</b> past = <b>よかった</b> · neg = <b>よくない</b> · te-form = <b>よくて</b>. Uses よ-stem, not い-stem.</div>
+<div class="oe-tip"><b>CONJUGATION:</b> たかい → たかかった (was) → たかくない (not) → たかくて (and...) → たかくなかった (wasn't)</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">週末は とても <u>たのしかった</u>です。ぜんぜん おもしろく<u>なかった</u>です。</span><br><span class="oe-en">The weekend was fun. / It wasn't interesting at all.</span> (Ch6)</div>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#6b3a1a,#8a4e2d);">なけいようし — な-ADJECTIVES</div><div class="card-body">
+<p style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Need な before a noun. Conjugate via です — same as nouns.</p>
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">しずか(な)</div><div class="oe-loc-en">quiet</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">にぎやか(な)</div><div class="oe-loc-en">lively</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ゆうめい(な)</div><div class="oe-loc-en">famous</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">げんき(な)</div><div class="oe-loc-en">healthy / energetic</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">きれい(な) ⚠️</div><div class="oe-loc-en">pretty/clean (LOOKS い, IS な!)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">りっぱ(な)</div><div class="oe-loc-en">splendid (Ch5)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ひま(な)</div><div class="oe-loc-en">free (time)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">べんり(な)</div><div class="oe-loc-en">convenient</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ きれい trap:</b> Ends in い but is na-adj. ✅ <span class="oe-ja">きれい<u>な</u>へや</span> · ❌ <span style="text-decoration:line-through">きれかった</span> ✅ <span class="oe-ja">きれい<u>でした</u></span></div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">あそこに <u>りっぱな</u> たてものが ありますね。</span><br><span class="oe-en">There's a splendid building over there.</span> (Ch5)</div>
+</div></div>
+
+<div class="card"><div class="card-header">コピュラ — COPULA (です family)</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">です</div><div class="oe-loc-en">is/am/are (present)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">でした</div><div class="oe-loc-en">was/were (past)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">じゃありません</div><div class="oe-loc-en">is not</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">じゃありませんでした</div><div class="oe-loc-en">was not</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">でしょう</div><div class="oe-loc-en">probably / right?</div></div>
+</div>
+<div class="oe-tip"><b>USE WITH:</b> nouns &amp; な-adjectives. Never after い-adjectives. ❌ <span style="text-decoration:line-through">たかいでした</span> ✅ <span class="oe-ja">たかかったです</span></div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">それは よかったですね。それは 大変<u>でした</u>ね。</span><br><span class="oe-en">That's great. / That was tough.</span> (Ch6)</div>
+</div></div>
+
+</div>
+
+<!-- ═══ SECTION 3: PARTICLES ═══ -->
+<div class="oe-sec" id="vocsec3">
+
+<div class="card"><div class="card-header">かくじょし — CASE PARTICLES</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">が</div><div class="oe-loc-en">subject · existence</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">を</div><div class="oe-loc-en">direct object</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">に</div><div class="oe-loc-en">location · time · destination</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">で</div><div class="oe-loc-en">location of action · means</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">へ</div><div class="oe-loc-en">direction (toward)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">と</div><div class="oe-loc-en">with (someone) · and</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">から</div><div class="oe-loc-en">from</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">まで</div><div class="oe-loc-en">until</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">の</div><div class="oe-loc-en">possessive / modifier</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ に vs で:</b> に = WHERE something EXISTS/GOES (へやに ねこが います) · で = WHERE an ACTION happens (へや<u>で</u> べんきょうします).</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">バス<u>で</u> にじゅっぷんぐらい かかります。ここ<u>から</u> 大学<u>まで</u> どのくらい かかりますか。</span><br><span class="oe-en">20 min by bus. / How long from here to the university?</span> (Ch5)</div>
+</div></div>
+
+<div class="card"><div class="card-header">とりたてじょし — TOPIC / FOCUS PARTICLES</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">は</div><div class="oe-loc-rm">wa (written は)</div><div class="oe-loc-en">topic — "as for ___"</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">も</div><div class="oe-loc-rm">mo</div><div class="oe-loc-en">also / too</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">には</div><div class="oe-loc-en">に + は (stacked)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">では</div><div class="oe-loc-en">で + は (stacked)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">にも / でも</div><div class="oe-loc-en">に+も, で+も</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ STACKING RULE:</b> When topicalizing after に/で/と/から/まで → stack は/も on top. つくえの上<u>には</u> ほんが あります。</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">じてんしゃ<u>では</u> どのくらい かかりますか。</span><br><span class="oe-en">By bicycle, how long does it take?</span> (Ch5)</div>
+</div></div>
+
+<div class="card"><div class="card-header">せつぞくじょし — CONJUNCTIVE PARTICLES</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">が</div><div class="oe-loc-en">but (clause-final)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">から</div><div class="oe-loc-en">because (clause-final)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～て</div><div class="oe-loc-en">and / then (verb connector)</div></div>
+</div>
+<div class="va-ex"><b>EX (が=but):</b> <span class="oe-ja">うれしかったです<u>が</u>、いそがしくて 大変でした。</span></div>
+<div class="va-ex"><b>EX (から=because):</b> <span class="oe-ja">時間が なかった<u>から</u>、アパートは きたなかったです。</span></div>
+<div class="va-ex"><b>EX (て=and):</b> <span class="oe-ja">朝 はやく 起き<u>て</u>、そうじと せんたくを しました。</span></div>
+</div></div>
+
+<div class="card"><div class="card-header">しゅうじょし — SENTENCE-FINAL PARTICLES</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">か</div><div class="oe-loc-en">question marker</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ね</div><div class="oe-loc-en">right? (seeking agreement)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">よ</div><div class="oe-loc-en">! (new info / assertion)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">よね</div><div class="oe-loc-en">right? (confirming)</div></div>
+</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">あれは 大学です<u>か</u>。 あれです<u>よ</u>。 はやいです<u>ね</u>。</span></div>
+</div></div>
+
+<div class="card"><div class="card-header">QUOTATION &amp; LISTING</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">と</div><div class="oe-loc-en">quote / "with"</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">や</div><div class="oe-loc-en">incomplete list (~ etc.)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">とか</div><div class="oe-loc-en">things like (informal)</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ と vs や:</b> A<u>と</u>B = exactly A and B (full list) · A<u>や</u>B = A, B, and others (partial)</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">机の 上には コンピュータ<u>と</u> 電話が あります。</span></div>
+</div></div>
+
+</div>
+
+<!-- ═══ SECTION 4: ADVERBS &amp; QUESTION WORDS ═══ -->
+<div class="oe-sec" id="vocsec4">
+
+<div class="card"><div class="card-header">ていどのふくし — DEGREE ADVERBS</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">とても</div><div class="oe-loc-en">very (positive)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ちょっと</div><div class="oe-loc-en">a little</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">すこし</div><div class="oe-loc-en">a little (formal)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あまり ⚠️</div><div class="oe-loc-en">not very (NEG only)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ぜんぜん ⚠️</div><div class="oe-loc-en">not at all (NEG only)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">たくさん</div><div class="oe-loc-en">a lot (no particle!)</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ NEGATIVE PARTNERS:</b> あまり and ぜんぜん REQUIRE a negative ending. ❌ <span style="text-decoration:line-through">あまり おもしろいです</span> ✅ <span class="oe-ja">あまり おもしろくないです</span></div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">来週は <u>あまり</u> いそがしく<u>ありません</u>。しゅくだいが <u>たくさん</u> ありました。</span></div>
+</div></div>
+
+<div class="card"><div class="card-header">ひんどのふくし — FREQUENCY ADVERBS</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">いつも</div><div class="oe-loc-en">always</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">よく</div><div class="oe-loc-en">often / well</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">たいてい</div><div class="oe-loc-en">usually</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ときどき</div><div class="oe-loc-en">sometimes</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あまり</div><div class="oe-loc-en">rarely (+ neg)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ぜんぜん</div><div class="oe-loc-en">never (+ neg)</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ NO PARTICLE:</b> Frequency adverbs sit naked in the sentence — never take は/が/を.</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">ぼくは <u>たいてい</u> じてんしゃで いきますよ。</span><br><span class="oe-en">I usually go by bicycle.</span> (Ch5)</div>
+</div></div>
+
+<div class="card"><div class="card-header">ようたいのふくし — MANNER ADVERBS</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">ゆっくり</div><div class="oe-loc-en">slowly</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">はやく</div><div class="oe-loc-en">quickly / early</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">おそく</div><div class="oe-loc-en">late</div></div>
+</div>
+<div class="oe-tip"><b>BUILDING MANNER ADVERBS:</b> い-adjective, drop い → add く. たかい→たかく, はやい→はやく</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">土曜日の 朝 <u>はやく</u> 起きて、そうじと せんたくを しました。</span> (Ch6)</div>
+</div></div>
+
+<div class="card"><div class="card-header">ぎもんし — QUESTION WORDS</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">なに / なん</div><div class="oe-loc-en">what</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">だれ</div><div class="oe-loc-en">who</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">どこ</div><div class="oe-loc-en">where</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いつ</div><div class="oe-loc-en">when</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">どう</div><div class="oe-loc-en">how / how about</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">どうして</div><div class="oe-loc-en">why</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いくら</div><div class="oe-loc-en">how much $$</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いくつ</div><div class="oe-loc-en">how many</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">どのくらい</div><div class="oe-loc-en">how long / how much</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">どんな</div><div class="oe-loc-en">what kind of</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ なに vs なん:</b> なに before most particles · なん before で/と/の and counters (なんじ, なんにん, なんですか).</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">週末は <u>どう</u>でしたか。ぎんこうは <u>どこ</u>に ありますか。</span></div>
+</div></div>
+
+</div>
+
+<!-- ═══ SECTION 5: NUMBERS / COUNTERS / TIME ═══ -->
+<div class="oe-sec" id="vocsec5">
+
+<div class="card"><div class="card-header">すうし — NUMBERS</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">いち / に / さん</div><div class="oe-loc-en">1 / 2 / 3</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">よん・し / ご</div><div class="oe-loc-en">4 / 5</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ろく / なな・しち</div><div class="oe-loc-en">6 / 7</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">はち / きゅう・く</div><div class="oe-loc-en">8 / 9</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">じゅう / ひゃく / せん / まん</div><div class="oe-loc-en">10 / 100 / 1,000 / 10,000</div></div>
+</div>
+<div class="oe-tip"><b>NATIVE COUNTING (1–10):</b> ひとつ, ふたつ, みっつ, よっつ, いつつ, むっつ, ななつ, やっつ, ここのつ, とお — general "one item" without a counter.</div>
+</div></div>
+
+<div class="card"><div class="card-header">じょすうし — COUNTERS</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">～にん</div><div class="oe-loc-en">people ⚠️</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～まい</div><div class="oe-loc-en">flat objects</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～ほん/ぼん/ぽん ⚠️</div><div class="oe-loc-en">long thin</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～さつ</div><div class="oe-loc-en">books / magazines</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～じ</div><div class="oe-loc-en">o'clock</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～ふん/ぷん ⚠️</div><div class="oe-loc-en">minutes</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～えん</div><div class="oe-loc-en">yen</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～さい</div><div class="oe-loc-en">years old</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ SOUND CHANGES</b><br><b>Long thin (ほん):</b> いっぽん, にほん, さん<u>ぼん</u>, よんほん, ごほん, ろっ<u>ぽん</u>, ななほん, はっぽん, きゅうほん, じゅっぽん<br><b>Minutes (ふん):</b> いっぷん, にふん, さんぷん, よんぷん, ごふん, ろっぷん, ななふん, はっぷん, きゅうふん, じゅっぷん<br><b>People:</b> 1 = ひとり, 2 = ふたり (irregular!), 3+ = さんにん, よにん…</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">バスで <u>にじゅっぷん</u>ぐらい かかります。</span></div>
+</div></div>
+
+<div class="card"><div class="card-header">じかんめいし — TIME WORDS</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">きょう</div><div class="oe-loc-en">today</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あした</div><div class="oe-loc-en">tomorrow</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">きのう</div><div class="oe-loc-en">yesterday</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あさって</div><div class="oe-loc-en">day after tomorrow</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">まいにち</div><div class="oe-loc-en">every day</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">まいばん</div><div class="oe-loc-en">every night</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">せんしゅう</div><div class="oe-loc-en">last week</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">らいしゅう</div><div class="oe-loc-en">next week</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～ごろ ⚠️</div><div class="oe-loc-en">around (POINT in time)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">～ぐらい ⚠️</div><div class="oe-loc-en">about (DURATION/amount)</div></div>
+</div>
+<div class="oe-warn"><b>⚠️ ごろ vs ぐらい:</b> 5じ<u>ごろ</u> = around 5 o'clock (a moment) · 5じかん<u>ぐらい</u> = about 5 hours (a span). Mix these up = lose easy points.</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">12時<u>ごろ</u>に 両親が 来ました。バスで にじゅっぷん<u>ぐらい</u> かかります。</span></div>
+</div></div>
+
+</div>
+
+<!-- ═══ SECTION 6: FUNCTION WORDS ═══ -->
+<div class="oe-sec" id="vocsec6">
+
+<div class="card"><div class="card-header">せつぞくし — CONJUNCTIONS (sentence-starters)</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">そして</div><div class="oe-loc-en">and (then)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">それから</div><div class="oe-loc-en">after that</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">でも</div><div class="oe-loc-en">but (casual)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">しかし</div><div class="oe-loc-en">however (formal)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">じゃあ／では</div><div class="oe-loc-en">well then</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">だから／ですから</div><div class="oe-loc-en">so / therefore</div></div>
+</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja">少し 話を して、ショッピング・センターに 行って、昼ご飯を 食べました。<u>その 後</u>、買い物を して、キャンパスに 行きました。</span> (Ch6)</div>
+</div></div>
+
+<div class="card"><div class="card-header">かんどうし — INTERJECTIONS</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">はい / いいえ</div><div class="oe-loc-en">yes / no (formal)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ええ</div><div class="oe-loc-en">yes (softer)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">あの(う)</div><div class="oe-loc-en">um, excuse me…</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">えーと</div><div class="oe-loc-en">uhh… (thinking)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">へえ</div><div class="oe-loc-en">oh wow!</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">そうですか</div><div class="oe-loc-en">I see / really?</div></div>
+</div>
+<div class="va-ex"><b>EX:</b> <span class="oe-ja"><u>あのう</u>、すみませんが。</span> · <span class="oe-ja"><u>へえ</u>、はやいですね。</span> (Ch4 / Ch5)</div>
+</div></div>
+
+<div class="card"><div class="card-header">あいさつ — GREETINGS &amp; SET PHRASES</div><div class="card-body">
+<div class="oe-loc-grid">
+<div class="oe-loc-item"><div class="oe-loc-jp">おはようございます</div><div class="oe-loc-en">good morning</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">こんにちは</div><div class="oe-loc-en">good afternoon</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">こんばんは</div><div class="oe-loc-en">good evening</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">さようなら</div><div class="oe-loc-en">goodbye</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">すみません</div><div class="oe-loc-en">excuse me / sorry</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ありがとうございます</div><div class="oe-loc-en">thank you</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">どうぞ よろしく</div><div class="oe-loc-en">nice to meet you</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いただきます</div><div class="oe-loc-en">(before eating)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ごちそうさまでした</div><div class="oe-loc-en">(after eating)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">ごめんください</div><div class="oe-loc-en">"is anyone home?" (Ch5)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">いらっしゃい</div><div class="oe-loc-en">welcome (host says)</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">おじゃまします</div><div class="oe-loc-en">"sorry to intrude" (entering)</div></div>
+</div>
+<div class="va-ex"><b>EX (Ch5 Li's apartment):</b> <span class="oe-ja">ごめんください。— あ、上田さん。いらっしゃい。どうぞ あがってください。— おじゃまします。</span></div>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#6b1a4a,#8a2d6b);">⚠️ TRAP RECAP — memorize these for the exam</div><div class="card-body">
+<ul style="font-size:13px;line-height:1.9;padding-left:20px;color:var(--text);">
+<li><b>いい</b> is irregular → past = よかった, neg = よくない, te = よくて</li>
+<li><b>きれい</b> is a な-adjective even though it ends in い → きれいなへや</li>
+<li><b>あまり / ぜんぜん</b> always pair with negatives</li>
+<li><b>ごろ</b> = a point in time, <b>ぐらい</b> = a span / amount</li>
+<li>Stack particles: <b>には、では、にも、でも</b></li>
+<li><b>いく</b>'s te-form is <b>いって</b>, not いいて</li>
+<li>Long thin counters: <b>いっぽん, さんぼん, ろっぽん</b></li>
+<li>Minutes: <b>いっぷん, さんぷん, ろっぷん, じゅっぷん</b></li>
+<li>People: <b>ひとり, ふたり</b> are irregular; さんにん onward is regular</li>
+<li><b>あなた</b> sounds rude — use [name]さん instead</li>
+<li>Never use <b>です</b> after い-adjectives in past: ❌ たかいでした ✅ たかかったです</li>
+<li><b>かえる, はいる, はしる, きる(切)</b> look like る-verbs but are う-verbs</li>
+</ul>
+</div></div>
+
+</div>
+
+</div>
+
 </div><script>const CHAPTER_DATA = {"ch1": {"vocab": [{"english": "Good morning (casual)", "japanese": "おはよう", "reading": "ohayou"}, {"english": "Good morning (polite)", "japanese": "おはようございます", "reading": "ohayou gozaimasu"}, {"english": "Good afternoon", "japanese": "こんにちは", "reading": "konnichiwa"}, {"english": "Good evening", "japanese": "こんばんは", "reading": "konbanwa"}, {"english": "Goodbye (polite)", "japanese": "さようなら", "reading": "sayounara"}, {"english": "Goodbye (casual)", "japanese": "じゃあ、また", "reading": "jaa, mata"}, {"english": "Good night", "japanese": "おやすみなさい", "reading": "oyasumi nasai"}, {"english": "Thank you", "japanese": "ありがとうございます", "reading": "arigatou gozaimasu"}, {"english": "Excuse me / I'm sorry", "japanese": "すみません", "reading": "sumimasen"}, {"english": "How do you do?", "japanese": "はじめまして", "reading": "hajimemashite"}, {"english": "Nice to meet you", "japanese": "どうぞよろしく", "reading": "douzo yoroshiku"}, {"english": "I am ~", "japanese": "～です", "reading": "~desu"}, {"english": "It is called ~", "japanese": "～といいます", "reading": "~to iimasu"}, {"english": "What is ~ in Japanese?", "japanese": "～はにほんごでなんといいますか", "reading": "~wa nihongo de nan to iimasu ka"}, {"english": "What is ~ in English?", "japanese": "～はえいごでなんといいますか", "reading": "~wa eigo de nan to iimasu ka"}, {"english": "Please listen", "japanese": "きいてください", "reading": "kiite kudasai"}, {"english": "Please look", "japanese": "みてください", "reading": "mite kudasai"}, {"english": "Please read", "japanese": "よんでください", "reading": "yonde kudasai"}, {"english": "Please write", "japanese": "かいてください", "reading": "kaite kudasai"}, {"english": "Please say it", "japanese": "いってください", "reading": "itte kudasai"}, {"english": "Please repeat", "japanese": "もういちどいってください", "reading": "mou ichido itte kudasai"}, {"english": "I don't understand", "japanese": "わかりません", "reading": "wakarimasen"}, {"english": "I understand", "japanese": "わかりました", "reading": "wakarimashita"}, {"english": "Yes", "japanese": "はい", "reading": "hai"}, {"english": "No", "japanese": "いいえ", "reading": "iie"}, {"english": "That's right", "japanese": "そうです", "reading": "sou desu"}, {"english": "Is that so?", "japanese": "そうですか", "reading": "sou desu ka"}, {"english": "Teacher", "japanese": "せんせい", "reading": "sensei"}, {"english": "Japanese language", "japanese": "にほんご", "reading": "nihongo"}, {"english": "English language", "japanese": "えいご", "reading": "eigo"}, {"english": "Mr./Mrs./Miss/Ms. ~", "japanese": "～さん", "reading": "~san"}, {"english": "Good-bye (to superiors)", "japanese": "しつれいします", "reading": "shitsurei shimasu"}, {"english": "You are welcome", "japanese": "どういたしまして", "reading": "douitashimashite"}, {"english": "Um, excuse me", "japanese": "あのう、すみません", "reading": "anou, sumimasen"}, {"english": "Please say it again (student)", "japanese": "もういちどおねがいします", "reading": "mou ichido onegaishimasu"}, {"english": "Please speak slowly", "japanese": "もうすこしゆっくりおねがいします", "reading": "mou sukoshi yukkuri onegaishimasu"}, {"english": "Please speak loudly", "japanese": "おおきいこえでいってください", "reading": "ookii koe de itte kudasai"}, {"english": "Do you understand?", "japanese": "わかりましたか", "reading": "wakarimashita ka"}, {"english": "What do you call this in Japanese?", "japanese": "これはにほんごでなんといいますか", "reading": "kore wa nihongo de nan to iimasu ka"}, {"english": "You call it ~", "japanese": "～といいます", "reading": "~to iimasu"}, {"english": "What does ~ mean?", "japanese": "～ってなんですか", "reading": "~tte nan desu ka"}, {"english": "Good night", "japanese": "おやすみなさい", "reading": "oyasumi nasai"}], "dialogues": [], "readings": []}, "ch2": {"vocab": [{"english": "Asian studies", "japanese": "アジアけんきゅう", "reading": "ajia kenkyuu"}, {"english": "America, the United States", "japanese": "アメリカ", "reading": "amerika"}, {"english": "England", "japanese": "イギリス", "reading": "igirisu"}, {"english": "Freshman, first-year student", "japanese": "いちねんせい", "reading": "ichinensei"}, {"english": "Now", "japanese": "いま", "reading": "ima"}, {"english": "English (language)", "japanese": "えいご", "reading": "eigo"}, {"english": "Australia", "japanese": "オーストラリア", "reading": "oosutoraria"}, {"english": "Student", "japanese": "がくせい", "reading": "gakusei"}, {"english": "Canada", "japanese": "カナダ", "reading": "kanada"}, {"english": "South Korea", "japanese": "かんこく", "reading": "kankoku"}, {"english": "Management, business administration", "japanese": "けいえいがく", "reading": "keieigaku"}, {"english": "Engineering", "japanese": "こうがく", "reading": "kougaku"}, {"english": "High school", "japanese": "こうこう", "reading": "koukou"}, {"english": "P.M., afternoon", "japanese": "ごご", "reading": "gogo"}, {"english": "A.M., morning", "japanese": "ごぜん", "reading": "gozen"}, {"english": "This person, this way", "japanese": "こちら", "reading": "kochira"}, {"english": "Junior, third-year student", "japanese": "さんねんせい", "reading": "sannensei"}, {"english": "Spain", "japanese": "スペイン", "reading": "supein"}, {"english": "Major", "japanese": "せんこう", "reading": "senkou"}, {"english": "College, university", "japanese": "だいがく", "reading": "daigaku"}, {"english": "Graduate student", "japanese": "だいがくいんせい", "reading": "daigakuinsei"}, {"english": "College student", "japanese": "だいがくせい", "reading": "daigakusei"}, {"english": "Taiwan", "japanese": "たいわん", "reading": "taiwan"}, {"english": "China", "japanese": "ちゅうごく", "reading": "chuugoku"}, {"english": "Name", "japanese": "なまえ", "reading": "namae"}, {"english": "Sophomore, second-year student", "japanese": "にねんせい", "reading": "ninensei"}, {"english": "Japan", "japanese": "にほん", "reading": "nihon"}, {"english": "Business", "japanese": "ビジネス", "reading": "bijinesu"}, {"english": "France", "japanese": "フランス", "reading": "furansu"}, {"english": "Literature", "japanese": "ぶんがく", "reading": "bungaku"}, {"english": "Mexico", "japanese": "メキシコ", "reading": "mekishiko"}, {"english": "Senior, fourth-year student", "japanese": "よねんせい", "reading": "yonensei"}, {"english": "Next year", "japanese": "らいねん", "reading": "rainen"}, {"english": "International student", "japanese": "りゅうがくせい", "reading": "ryuugakusei"}, {"english": "History", "japanese": "れきし", "reading": "rekishi"}, {"english": "I (male)", "japanese": "ぼく", "reading": "boku"}, {"english": "I (both genders)", "japanese": "わたし", "reading": "watashi"}, {"english": "(to) be", "japanese": "です", "reading": "desu"}, {"english": "One o'clock", "japanese": "いちじ", "reading": "ichiji"}, {"english": "Two o'clock", "japanese": "にじ", "reading": "niji"}, {"english": "Three o'clock", "japanese": "さんじ", "reading": "sanji"}, {"english": "Four o'clock", "japanese": "よじ", "reading": "yoji"}, {"english": "Five o'clock", "japanese": "ごじ", "reading": "goji"}, {"english": "Six o'clock", "japanese": "ろくじ", "reading": "rokuji"}, {"english": "Seven o'clock", "japanese": "しちじ", "reading": "shichiji"}, {"english": "Eight o'clock", "japanese": "はちじ", "reading": "hachiji"}, {"english": "Nine o'clock", "japanese": "くじ", "reading": "kuji"}, {"english": "Ten o'clock", "japanese": "じゅうじ", "reading": "juuji"}, {"english": "Eleven o'clock", "japanese": "じゅういちじ", "reading": "juuichiji"}, {"english": "Twelve o'clock", "japanese": "じゅうにじ", "reading": "juuniji"}, {"english": "Half past", "japanese": "はん", "reading": "han"}, {"english": "Where", "japanese": "どこ", "reading": "doko"}, {"english": "Where (polite)", "japanese": "どちら", "reading": "dochira"}, {"english": "What", "japanese": "なに／なん", "reading": "nani/nan"}, {"english": "Question marker", "japanese": "か", "reading": "ka"}, {"english": "Noun modifier (of, 's)", "japanese": "の", "reading": "no"}, {"english": "Topic marker", "japanese": "は", "reading": "wa"}, {"english": "Also, too", "japanese": "も", "reading": "mo"}, {"english": "Polite prefix", "japanese": "お～", "reading": "o~"}, {"english": "Language suffix", "japanese": "～ご", "reading": "~go"}, {"english": "O'clock suffix", "japanese": "～じ", "reading": "~ji"}, {"english": "Nationality suffix", "japanese": "～じん", "reading": "~jin"}, {"english": "Student suffix", "japanese": "～せい", "reading": "~sei"}, {"english": "Year suffix", "japanese": "～ねん", "reading": "~nen"}, {"english": "Uh, well...", "japanese": "あのう", "reading": "anou"}, {"english": "No, you're welcome", "japanese": "いいえ", "reading": "iie"}, {"english": "Yes", "japanese": "はい／ええ", "reading": "hai/ee"}, {"english": "No, that's not so", "japanese": "いいえ、そうじゃありません", "reading": "iie, sou ja arimasen"}, {"english": "Yes, that's so", "japanese": "ええ、そうです", "reading": "ee, sou desu"}, {"english": "Came from ~", "japanese": "～からきました", "reading": "~kara kimashita"}, {"english": "Same here / It is I who should say that", "japanese": "こちらこそ", "reading": "kochira koso"}, {"english": "Is that so? I see", "japanese": "そうですか", "reading": "sou desu ka"}, {"english": "Is called ~", "japanese": "～っていいます", "reading": "~tte iimasu"}, {"english": "Thank you very much", "japanese": "どうもありがとうございます", "reading": "doumo arigatou gozaimasu"}, {"english": "Where are you from?", "japanese": "どこからきましたか", "reading": "doko kara kimashita ka"}, {"english": "Where are you from? (polite)", "japanese": "どちらからいらっしゃいましたか", "reading": "dochira kara irasshaimashita ka"}, {"english": "Medicine (medical science)", "japanese": "いがく", "reading": "igaku"}, {"english": "Music", "japanese": "おんがく", "reading": "ongaku"}, {"english": "Chemistry", "japanese": "かがく", "reading": "kagaku"}, {"english": "Education", "japanese": "きょういくがく", "reading": "kyouikugaku"}, {"english": "Economics", "japanese": "けいざいがく", "reading": "keizaigaku"}, {"english": "Architecture", "japanese": "けんちくがく", "reading": "kenchikugaku"}, {"english": "International relations", "japanese": "こくさいかんけい", "reading": "kokusaikankei"}, {"english": "Computer engineering", "japanese": "コンピュータこうがく", "reading": "konpyuuta kougaku"}, {"english": "Sociology", "japanese": "しゃかいがく", "reading": "shakaigaku"}, {"english": "Information science", "japanese": "じょうほうかがく", "reading": "jouhou kagaku"}, {"english": "Information technology", "japanese": "じょうほうこうがく", "reading": "jouhou kougaku"}, {"english": "Psychology", "japanese": "しんりがく", "reading": "shinrigaku"}, {"english": "Anthropology", "japanese": "じんるいがく", "reading": "jinruigaku"}, {"english": "Mathematics", "japanese": "すうがく", "reading": "suugaku"}, {"english": "Biology", "japanese": "せいぶつがく", "reading": "seibutsugaku"}, {"english": "Political science", "japanese": "せいじがく", "reading": "seijigaku"}, {"english": "Fine arts", "japanese": "びじゅつ", "reading": "bijutsu"}, {"english": "Physics", "japanese": "ぶつりがく", "reading": "butsurigaku"}], "dialogues": [{"title": "はじめまして (How do you do?)", "lines": [{"speaker": "リー", "jp": "あのう、すみません。いまなんじですか。", "en": "Excuse me. What time is it now?"}, {"speaker": "うえだ", "jp": "いちじですよ。", "en": "It's one o'clock."}, {"speaker": "リー", "jp": "いちじですか。どうもありがとうございます。", "en": "One o'clock? Thank you very much."}, {"speaker": "うえだ", "jp": "いいえ。", "en": "You're welcome."}, {"speaker": "リー", "jp": "あのう。", "en": "Um..."}, {"speaker": "うえだ", "jp": "はい。", "en": "Yes?"}, {"speaker": "リー", "jp": "おなまえはなんですか。ぼく、リーっていいます。どうぞよろしく。", "en": "What is your name? I'm called Li. Nice to meet you."}, {"speaker": "うえだ", "jp": "こちらこそどうぞよろしく。わたしのなまえはアリスうえだです。", "en": "Nice to meet you too. My name is Alice Ueda."}, {"speaker": "リー", "jp": "ああ、そうですか。ぼくはたいわんからきました。うえださんは？", "en": "Oh, I see. I came from Taiwan. How about you, Ms. Ueda?"}, {"speaker": "うえだ", "jp": "シカゴです。わたしはウエストサイドだいがくのさんねんせいです。", "en": "Chicago. I'm a junior at Westside University."}, {"speaker": "リー", "jp": "そうですか。ぼくもさんねんせいです。せんこうはなんですか。", "en": "I see. I'm also a junior. What is your major?"}, {"speaker": "うえだ", "jp": "ぶんがくです。リーさんは？", "en": "Literature. How about you, Li?"}, {"speaker": "リー", "jp": "ぼくはれきしです。", "en": "I study history."}, {"speaker": "りゅうがくせいセンターのひと", "jp": "うえださんですか。", "en": "Are you Ms. Ueda?"}, {"speaker": "うえだ", "jp": "ええ、そうです。", "en": "Yes, that's right."}, {"speaker": "りゅうがくせいセンターのひと", "jp": "すずきさん、こちらはうえださんです。うえださん、こちらはホストファミリーのすずきさんです。", "en": "Mr. Suzuki, this is Ms. Ueda. Ms. Ueda, this is your host family member, Mr. Suzuki."}, {"speaker": "うえだ", "jp": "はじめまして。アリスです。どうぞよろしく。", "en": "How do you do? I'm Alice. Nice to meet you."}, {"speaker": "すずき", "jp": "すずきです。こちらこそ、よろしく。", "en": "I'm Suzuki. Nice to meet you too."}]}], "readings": [{"title": "ともだちぼしゅう - Looking for a Friend (Keiko)", "text": "はじめまして！わたしはとうきょうだいがくのがくせいです。なまえはけいこです。せんこうはえいごです。いま、いちねんせいです。えいごのネイティブのともだちをさがしています。どうぞよろしく。", "questions": [{"q": "What is Keiko's major?", "a": "English"}, {"q": "What university does Keiko attend?", "a": "Tokyo University"}, {"q": "What year is Keiko in?", "a": "First year (freshman)"}, {"q": "What kind of friend is Keiko looking for?", "a": "A native English speaker"}, {"q": "Is Keiko a graduate student?", "a": "No, first-year undergraduate"}]}, {"title": "ともだちぼしゅう - Looking for a Friend (Takashi)", "text": "はじめまして。ぼくはたかしです。ちばだいがくのさんねんせいです。せんこうはアジアとアメリカのれきしです。どうぞよろしく。", "questions": [{"q": "What university does Takashi attend?", "a": "Chiba University"}, {"q": "What year is Takashi in?", "a": "Third year (junior)"}, {"q": "What is Takashi's major?", "a": "Asian and American history"}, {"q": "Does Takashi use わたし or ぼく?", "a": "ぼく (indicating male)"}]}, {"title": "ともだちぼしゅう - Looking for a Friend (Yang Lee)", "text": "はじめまして。わたしはヤン・リーといいます。ちゅうごくからきました。きょうとだいがくのりゅうがくせいです。にほんぶんがくのせんこうです。にねんせいです。ともだちをさがしています。よろしく。", "questions": [{"q": "Where is Yang Lee from?", "a": "China"}, {"q": "What university does Yang Lee attend?", "a": "Kyoto University"}, {"q": "Is Yang Lee a regular or international student?", "a": "International student"}, {"q": "What is Yang Lee's major?", "a": "Japanese literature"}, {"q": "What year is Yang Lee in?", "a": "Second year (sophomore)"}]}, {"title": "ともだちぼしゅう - Looking for a Friend (Richard)", "text": "はじめまして。ぼくはリチャードです。オーストラリアのシドニーからきました。いま、おおさかだいがくのよねんせいです。ビジネスのせんこうです。よろしく。", "questions": [{"q": "Where is Richard from?", "a": "Sydney, Australia"}, {"q": "What university does Richard attend?", "a": "Osaka University"}, {"q": "What year is Richard in?", "a": "Fourth year (senior)"}, {"q": "What is Richard's major?", "a": "Business"}]}]}, "ch3": {"vocab": [{"english": "Morning", "japanese": "あさ", "reading": "asa"}, {"english": "Breakfast", "japanese": "あさごはん", "reading": "asagohan"}, {"english": "Day after tomorrow", "japanese": "あさって", "reading": "asatte"}, {"english": "Tomorrow", "japanese": "あした", "reading": "ashita"}, {"english": "Home", "japanese": "うち", "reading": "uchi"}, {"english": "Movie", "japanese": "えいが", "reading": "eiga"}, {"english": "Day before yesterday", "japanese": "おととい", "reading": "ototoi"}, {"english": "Bath", "japanese": "おふろ", "reading": "ofuro"}, {"english": "School", "japanese": "がっこう", "reading": "gakkou"}, {"english": "Tuesday", "japanese": "かようび", "reading": "kayoubi"}, {"english": "Yesterday", "japanese": "きのう", "reading": "kinou"}, {"english": "Today", "japanese": "きょう", "reading": "kyou"}, {"english": "Friday", "japanese": "きんようび", "reading": "kinyoubi"}, {"english": "Class", "japanese": "クラス", "reading": "kurasu"}, {"english": "Monday", "japanese": "げつようび", "reading": "getsuyoubi"}, {"english": "Coffee", "japanese": "コーヒー", "reading": "koohii"}, {"english": "Meal, cooked rice", "japanese": "ごはん", "reading": "gohan"}, {"english": "This week", "japanese": "こんしゅう", "reading": "konshuu"}, {"english": "Tonight", "japanese": "こんばん", "reading": "konban"}, {"english": "Shower", "japanese": "シャワー", "reading": "shawaa"}, {"english": "Weekend", "japanese": "しゅうまつ", "reading": "shuumatsu"}, {"english": "Class, course", "japanese": "じゅぎょう", "reading": "jugyou"}, {"english": "Homework", "japanese": "しゅくだい", "reading": "shukudai"}, {"english": "Wednesday", "japanese": "すいようび", "reading": "suiyoubi"}, {"english": "Life, living", "japanese": "せいかつ", "reading": "seikatsu"}, {"english": "Last week", "japanese": "せんしゅう", "reading": "senshuu"}, {"english": "Next", "japanese": "つぎ", "reading": "tsugi"}, {"english": "Television, TV", "japanese": "テレビ", "reading": "terebi"}, {"english": "Telephone number", "japanese": "でんわばんごう", "reading": "denwa bangou"}, {"english": "Library", "japanese": "としょかん", "reading": "toshokan"}, {"english": "Saturday", "japanese": "どようび", "reading": "doyoubi"}, {"english": "Sunday", "japanese": "にちようび", "reading": "nichiyoubi"}, {"english": "Night, evening", "japanese": "ばん", "reading": "ban"}, {"english": "Supper, dinner", "japanese": "ばんごはん", "reading": "bangohan"}, {"english": "Afternoon", "japanese": "ひる", "reading": "hiru"}, {"english": "Lunch", "japanese": "ひるごはん", "reading": "hirugohan"}, {"english": "Study", "japanese": "べんきょう", "reading": "benkyou"}, {"english": "Book", "japanese": "ほん", "reading": "hon"}, {"english": "Every morning", "japanese": "まいあさ", "reading": "maiasa"}, {"english": "Every week", "japanese": "まいしゅう", "reading": "maishuu"}, {"english": "Every day", "japanese": "まいにち", "reading": "mainichi"}, {"english": "Every night", "japanese": "まいばん", "reading": "maiban"}, {"english": "Thursday", "japanese": "もくようび", "reading": "mokuyoubi"}, {"english": "To go", "japanese": "いきます", "reading": "ikimasu"}, {"english": "To return, go home", "japanese": "かえります", "reading": "kaerimasu"}, {"english": "To drink", "japanese": "のみます", "reading": "nomimasu"}, {"english": "To read", "japanese": "よみます", "reading": "yomimasu"}, {"english": "To take a shower", "japanese": "あびます", "reading": "abimasu"}, {"english": "To get up, wake up", "japanese": "おきます", "reading": "okimasu"}, {"english": "To eat", "japanese": "たべます", "reading": "tabemasu"}, {"english": "To go to bed", "japanese": "ねます", "reading": "nemasu"}, {"english": "To see, to watch", "japanese": "みます", "reading": "mimasu"}, {"english": "To come", "japanese": "きます", "reading": "kimasu"}, {"english": "To do", "japanese": "します", "reading": "shimasu"}, {"english": "To study", "japanese": "べんきょうします", "reading": "benkyou shimasu"}, {"english": "When", "japanese": "いつ", "reading": "itsu"}, {"english": "~ minute(s)", "japanese": "～ふん", "reading": "~fun"}, {"english": "Not very often", "japanese": "あまり", "reading": "amari"}, {"english": "Always", "japanese": "いつも", "reading": "itsumo"}, {"english": "Not at all", "japanese": "ぜんぜん", "reading": "zenzen"}, {"english": "Usually", "japanese": "たいてい", "reading": "taitei"}, {"english": "Sometimes", "japanese": "ときどき", "reading": "tokidoki"}, {"english": "Often, well", "japanese": "よく", "reading": "yoku"}, {"english": "At, in (location of action)", "japanese": "で", "reading": "de"}, {"english": "At, on, in (point in time)", "japanese": "に", "reading": "ni"}, {"english": "To (goal)", "japanese": "に", "reading": "ni"}, {"english": "To (direction)", "japanese": "へ", "reading": "e"}, {"english": "Direct object marker", "japanese": "を", "reading": "wo"}, {"english": "This ~ prefix", "japanese": "こん～", "reading": "kon~"}, {"english": "Every ~ prefix", "japanese": "まい～", "reading": "mai~"}, {"english": "About ~ (time only)", "japanese": "～ごろ", "reading": "~goro"}, {"english": "Day of the week", "japanese": "～ようび", "reading": "~youbi"}, {"english": "To enter (bath)", "japanese": "はいります", "reading": "hairimasu"}, {"english": "What day of the week", "japanese": "なんようび", "reading": "nanyoubi"}, {"english": "Half past", "japanese": "はん", "reading": "han"}, {"english": "And, then", "japanese": "そして", "reading": "soshite"}, {"english": "After that", "japanese": "そのあと", "reading": "sono ato"}, {"english": "So, therefore", "japanese": "ですから", "reading": "desukara"}, {"english": "One minute", "japanese": "いっぷん", "reading": "ippun"}, {"english": "Two minutes", "japanese": "にふん", "reading": "nifun"}, {"english": "Three minutes", "japanese": "さんぷん", "reading": "sanpun"}, {"english": "Four minutes", "japanese": "よんぷん", "reading": "yonpun"}, {"english": "Five minutes", "japanese": "ごふん", "reading": "gofun"}, {"english": "Six minutes", "japanese": "ろっぷん", "reading": "roppun"}, {"english": "Seven minutes", "japanese": "ななふん", "reading": "nanafun"}, {"english": "Eight minutes", "japanese": "はっぷん", "reading": "happun"}, {"english": "Nine minutes", "japanese": "きゅうふん", "reading": "kyuufun"}, {"english": "Ten minutes", "japanese": "じゅっぷん", "reading": "juppun"}, {"english": "How many minutes", "japanese": "なんぷん", "reading": "nanpun"}, {"english": "Something exists, to have", "japanese": "あります", "reading": "arimasu"}], "dialogues": [{"title": "じゅぎょうがあります。(I have a class.)", "lines": [{"speaker": "上田", "jp": "リーさん、おはようございます。", "en": "Good morning, Li."}, {"speaker": "リー", "jp": "あ、おはようございます。", "en": "Oh, good morning."}, {"speaker": "上田", "jp": "きょうはなんようびですか。", "en": "What day is it today?"}, {"speaker": "リー", "jp": "かようびですよ。", "en": "It's Tuesday."}, {"speaker": "上田", "jp": "そうですか。かようびはじゅぎょうがありますか。", "en": "I see. Do you have class on Tuesday?"}, {"speaker": "リー", "jp": "ええ、あります。くじからじゅうにじまでです。", "en": "Yes, I do. From 9 to 12."}, {"speaker": "上田", "jp": "そうですか。", "en": "I see."}]}], "readings": [{"title": "ジョンソンさんの一日 (Ms. Johnson's Daily Routine)", "text": "わたしはまいにちしちじはんにおきます。そして、シャワーをあびます。たいていはちじごろあさごはんをたべます。そして、はちじはんごろだいがくへいきます。にほんごのじゅぎょうはまいあさくじにあります。そのあと、よくとしょかんでべんきょうします。ひるごはんはたいていがくせいかいかんでたべます。げつようびとすいようびときんようびのごごはえいごとぶんがくのじゅぎょうがあります。かようびともくようびのごごはじゅぎょうがありません。たいていごじはんごろうちにかえります。ろくじごろばんごはんをたべます。そして、しゅくだいをします。テレビはあまりみません。いつもじゅういちじはんにねます。", "questions": [{"q": "What time does Johnson wake up?", "a": "7:30"}, {"q": "What time does she go to bed?", "a": "11:30"}, {"q": "What classes does she have Mon/Wed/Fri?", "a": "Japanese, English, and Literature"}, {"q": "Where does she usually eat lunch?", "a": "Student union"}, {"q": "Does she watch TV often?", "a": "No, not very often"}]}]}, "ch4": {"vocab": [{"english": "Apartment", "japanese": "アパート", "reading": "apaato"}, {"english": "Station", "japanese": "えき", "reading": "eki"}, {"english": "Pencil", "japanese": "えんぴつ", "reading": "enpitsu"}, {"english": "Luggage, bag", "japanese": "かばん", "reading": "kaban"}, {"english": "Coffee shop, cafe", "japanese": "カフェ", "reading": "kafe"}, {"english": "Coffee shop (traditional)", "japanese": "きっさてん", "reading": "kissaten"}, {"english": "Textbook", "japanese": "きょうかしょ", "reading": "kyoukasho"}, {"english": "Bank", "japanese": "ぎんこう", "reading": "ginkou"}, {"english": "Eraser", "japanese": "けしゴム", "reading": "keshigomu"}, {"english": "Park", "japanese": "こうえん", "reading": "kouen"}, {"english": "Police box", "japanese": "こうばん", "reading": "kouban"}, {"english": "This area", "japanese": "このへん", "reading": "kono hen"}, {"english": "Convenience store", "japanese": "コンビニ", "reading": "konbini"}, {"english": "Dictionary", "japanese": "じしょ", "reading": "jisho"}, {"english": "Supermarket", "japanese": "スーパー", "reading": "suupaa"}, {"english": "Building, structure", "japanese": "たてもの", "reading": "tatemono"}, {"english": "Test", "japanese": "テスト", "reading": "tesuto"}, {"english": "Department store", "japanese": "デパート", "reading": "depaato"}, {"english": "Notebook", "japanese": "ノート", "reading": "nooto"}, {"english": "Building", "japanese": "ビル", "reading": "biru"}, {"english": "Hospital", "japanese": "びょういん", "reading": "byouin"}, {"english": "Pen", "japanese": "ペン", "reading": "pen"}, {"english": "Ballpoint pen", "japanese": "ボールペン", "reading": "boorupen"}, {"english": "Bookstore", "japanese": "ほんや", "reading": "honya"}, {"english": "Town", "japanese": "まち", "reading": "machi"}, {"english": "Post office", "japanese": "ゆうびんきょく", "reading": "yuubinkyoku"}, {"english": "Dormitory", "japanese": "りょう", "reading": "ryou"}, {"english": "Restaurant", "japanese": "レストラン", "reading": "resutoran"}, {"english": "Over there, that place", "japanese": "あそこ", "reading": "asoko"}, {"english": "That (far away)", "japanese": "あれ", "reading": "are"}, {"english": "Here, this place", "japanese": "ここ", "reading": "koko"}, {"english": "This", "japanese": "これ", "reading": "kore"}, {"english": "There, that place", "japanese": "そこ", "reading": "soko"}, {"english": "That", "japanese": "それ", "reading": "sore"}, {"english": "Blue", "japanese": "あおい", "reading": "aoi"}, {"english": "Red", "japanese": "あかい", "reading": "akai"}, {"english": "New", "japanese": "あたらしい", "reading": "atarashii"}, {"english": "Good", "japanese": "いい", "reading": "ii"}, {"english": "Big", "japanese": "おおきい", "reading": "ookii"}, {"english": "Yellow", "japanese": "きいろい", "reading": "kiiroi"}, {"english": "Black", "japanese": "くろい", "reading": "kuroi"}, {"english": "White", "japanese": "しろい", "reading": "shiroi"}, {"english": "Tall, high, expensive", "japanese": "たかい", "reading": "takai"}, {"english": "Small", "japanese": "ちいさい", "reading": "chiisai"}, {"english": "Brown", "japanese": "ちゃいろい", "reading": "chairoi"}, {"english": "Old", "japanese": "ふるい", "reading": "furui"}, {"english": "Clean, pretty, neat", "japanese": "きれい（な）", "reading": "kirei (na)"}, {"english": "Famous", "japanese": "ゆうめい（な）", "reading": "yuumei (na)"}, {"english": "Fine, splendid, nice", "japanese": "りっぱ（な）", "reading": "rippa (na)"}, {"english": "Who", "japanese": "だれ", "reading": "dare"}, {"english": "Which one", "japanese": "どれ", "reading": "dore"}, {"english": "What kind of", "japanese": "どんな", "reading": "donna"}, {"english": "Very (with thanks)", "japanese": "どうも", "reading": "doumo"}, {"english": "Very (affirmative)", "japanese": "とても", "reading": "totemo"}, {"english": "Store suffix", "japanese": "～や", "reading": "~ya"}, {"english": "There is/are (inanimate)", "japanese": "あります", "reading": "arimasu"}, {"english": "There is/are (animate)", "japanese": "います", "reading": "imasu"}, {"english": "You know / isn't it", "japanese": "ね", "reading": "ne"}, {"english": "I tell you / emphasis", "japanese": "よ", "reading": "yo"}, {"english": "Where", "japanese": "どこ", "reading": "doko"}], "dialogues": [{"title": "このへんにぎんこうがありますか。(Is there a bank around here?)", "lines": [{"speaker": "上田", "jp": "すみません。このへんにぎんこうがありますか。", "en": "Excuse me. Is there a bank around here?"}, {"speaker": "ひと", "jp": "ぎんこうですか。ええ、ありますよ。あそこにおおきいたてものがありますね。", "en": "A bank? Yes, there is. Do you see that big building over there?"}, {"speaker": "上田", "jp": "ええ。", "en": "Yes."}, {"speaker": "ひと", "jp": "あのたてものがぎんこうです。", "en": "That building is the bank."}, {"speaker": "上田", "jp": "そうですか。どうもありがとうございます。", "en": "I see. Thank you very much."}, {"speaker": "ひと", "jp": "いいえ。", "en": "You're welcome."}]}], "readings": [{"title": "城東大学 (Joto University)", "text": "じょうとうだいがくはとうきょうにあります。がくせいはさんまんにんぐらいいますが、きょうじゅはせんにんぐらいです。とてもふるいだいがくです。キャンパスはあまりおおきくありませんが、きれいなたてものがたくさんあります。こうえんもあります。それから、だいがくのとしょかんはとてもゆうめいです。じょうとうだいがくにはけいざいがくぶとぶんがくぶとしょうがくぶとほうがくぶがあります。りゅうがくせいセンターもあります。アメリカとオーストラリアからたくさんりゅうがくせいがきます。", "questions": [{"q": "Where is Joto University?", "a": "Tokyo"}, {"q": "Is Joto University new or old?", "a": "Very old"}, {"q": "Is the campus big?", "a": "Not very big, but has many pretty buildings"}, {"q": "What is famous at the university?", "a": "The library"}, {"q": "Where do international students come from?", "a": "America and Australia"}]}]}, "ch5": {"vocab": [{"english": "On, above, over", "japanese": "うえ", "reading": "ue"}, {"english": "Behind, in back of", "japanese": "うしろ", "reading": "ushiro"}, {"english": "Under, beneath", "japanese": "した", "reading": "shita"}, {"english": "Outside", "japanese": "そと", "reading": "soto"}, {"english": "Near, in the vicinity of", "japanese": "ちかく", "reading": "chikaku"}, {"english": "Next to", "japanese": "となり", "reading": "tonari"}, {"english": "In, inside", "japanese": "なか", "reading": "naka"}, {"english": "To the left, left side", "japanese": "ひだり", "reading": "hidari"}, {"english": "In front of, in the front", "japanese": "まえ", "reading": "mae"}, {"english": "To the right", "japanese": "みぎ", "reading": "migi"}, {"english": "Next to, at the side of", "japanese": "よこ", "reading": "yoko"}, {"english": "Chair", "japanese": "いす", "reading": "isu"}, {"english": "Dog", "japanese": "いぬ", "reading": "inu"}, {"english": "Picture", "japanese": "え", "reading": "e"}, {"english": "Japanese-style closet", "japanese": "おしいれ", "reading": "oshiire"}, {"english": "School cafeteria", "japanese": "がくしょく", "reading": "gakushoku"}, {"english": "Student union", "japanese": "がくせいかいかん", "reading": "gakusei kaikan"}, {"english": "River", "japanese": "かわ", "reading": "kawa"}, {"english": "Tree", "japanese": "き", "reading": "ki"}, {"english": "Classroom", "japanese": "きょうしつ", "reading": "kyoushitsu"}, {"english": "Car", "japanese": "くるま", "reading": "kuruma"}, {"english": "Cell phone", "japanese": "けいたい（でんわ）", "reading": "keitai (denwa)"}, {"english": "Chalkboard", "japanese": "こくばん", "reading": "kokuban"}, {"english": "Computer", "japanese": "コンピュータ", "reading": "konpyuuta"}, {"english": "Bicycle", "japanese": "じてんしゃ", "reading": "jitensha"}, {"english": "Photograph", "japanese": "しゃしん", "reading": "shashin"}, {"english": "Sofa", "japanese": "ソファ", "reading": "sofa"}, {"english": "Gym", "japanese": "たいいくかん", "reading": "taiikukan"}, {"english": "Chest, drawers", "japanese": "たんす", "reading": "tansu"}, {"english": "Desk", "japanese": "つくえ", "reading": "tsukue"}, {"english": "Table", "japanese": "テーブル", "reading": "teeburu"}, {"english": "Telephone", "japanese": "でんわ", "reading": "denwa"}, {"english": "Door", "japanese": "ドア", "reading": "doa"}, {"english": "Toilet, restroom", "japanese": "トイレ", "reading": "toire"}, {"english": "Clock, watch", "japanese": "とけい", "reading": "tokei"}, {"english": "Place", "japanese": "ところ", "reading": "tokoro"}, {"english": "Cat", "japanese": "ねこ", "reading": "neko"}, {"english": "Bus", "japanese": "バス", "reading": "basu"}, {"english": "Video", "japanese": "ビデオ", "reading": "bideo"}, {"english": "Person", "japanese": "ひと", "reading": "hito"}, {"english": "Futon", "japanese": "ふとん", "reading": "futon"}, {"english": "Bed", "japanese": "ベッド", "reading": "beddo"}, {"english": "Room", "japanese": "へや", "reading": "heya"}, {"english": "Bookshelf", "japanese": "ほんだな", "reading": "hondana"}, {"english": "Window", "japanese": "まど", "reading": "mado"}, {"english": "Thing (tangible)", "japanese": "もの", "reading": "mono"}, {"english": "Mountain", "japanese": "やま", "reading": "yama"}, {"english": "Room (as in computer room)", "japanese": "ルーム", "reading": "ruumu"}, {"english": "Computer lab", "japanese": "コンピュータ・ルーム", "reading": "konpyuuta ruumu"}, {"english": "Media center", "japanese": "メディアセンター", "reading": "media sentaa"}, {"english": "Kitchen", "japanese": "キッチン", "reading": "kicchin"}, {"english": "Many, a lot", "japanese": "たくさん", "reading": "takusan"}, {"english": "That person (polite)", "japanese": "あのかた", "reading": "ano kata"}, {"english": "The inner part of a building", "japanese": "奥", "reading": "oku"}, {"english": "This side (closer)", "japanese": "手前", "reading": "temae"}, {"english": "To take (time), it costs", "japanese": "かかります", "reading": "kakarimasu"}, {"english": "That [+noun] over there", "japanese": "あの", "reading": "ano"}, {"english": "This [+noun]", "japanese": "この", "reading": "kono"}, {"english": "That [+noun]", "japanese": "その", "reading": "sono"}, {"english": "Which [+noun]?", "japanese": "どの", "reading": "dono"}, {"english": "Bright", "japanese": "あかるい", "reading": "akarui"}, {"english": "Dark", "japanese": "くらい", "reading": "kurai"}, {"english": "Cramped, narrow", "japanese": "せまい", "reading": "semai"}, {"english": "Fast, quick", "japanese": "はやい", "reading": "hayai"}, {"english": "Spacious, wide", "japanese": "ひろい", "reading": "hiroi"}, {"english": "Quiet", "japanese": "しずか（な）", "reading": "shizuka (na)"}, {"english": "From", "japanese": "から", "reading": "kara"}, {"english": "By means of, by, with", "japanese": "で", "reading": "de"}, {"english": "Until, to", "japanese": "まで", "reading": "made"}, {"english": "About (duration or quantity)", "japanese": "～ぐらい／くらい", "reading": "gurai/kurai"}, {"english": "~ hours", "japanese": "～じかん", "reading": "jikan"}, {"english": "But", "japanese": "でも", "reading": "demo"}, {"english": "Please come in", "japanese": "あがってください", "reading": "agatte kudasai"}, {"english": "On foot", "japanese": "あるいて", "reading": "aruite"}, {"english": "Welcome! Come in", "japanese": "いらっしゃい", "reading": "irasshai"}, {"english": "Thank you (before entering someone's house)", "japanese": "おじゃまします", "reading": "ojama shimasu"}, {"english": "Excuse me, anyone home?", "japanese": "ごめんください", "reading": "gomen kudasai"}, {"english": "How long, how much, how many", "japanese": "どのぐらい／どのくらい", "reading": "dono gurai/dono kurai"}], "dialogues": [{"title": "リーさんのアパート (Mr. Li's Apartment)", "lines": [{"speaker": "上田", "jp": "ごめん下さい。", "en": "Excuse me, anyone home?"}, {"speaker": "リー", "jp": "あ、上田さん。いらっしゃい。どうぞ上がって下さい。", "en": "Oh, Ms. Ueda. Welcome. Please come in."}, {"speaker": "上田", "jp": "おじゃまします。", "en": "Thank you. (I will intrude.)"}, {"speaker": "上田", "jp": "わあ、とてもあかるいですね。", "en": "Wow, it's very bright, isn't it?"}, {"speaker": "リー", "jp": "ええ。このアパートはたかいところにありますから。", "en": "Yes. Because this apartment is high up."}, {"speaker": "上田", "jp": "あそこにりっぱなたてものがありますね。あれは大学ですか。", "en": "There's a splendid building over there, isn't there? Is that the university?"}, {"speaker": "リー", "jp": "ええ、あれはじょうとう大学のたいいくかんですよ。", "en": "Yes, that's Joto University's gym."}, {"speaker": "上田", "jp": "え、じゃあ、たいいくかんのとなりのちゃいろいビルはなんですか。", "en": "Oh, then what is the brown building next to the gym?"}, {"speaker": "リー", "jp": "あれはとしょかんです。そして、そのまえのが学生会館です。", "en": "That's the library. And the one in front of it is the student union."}, {"speaker": "上田", "jp": "そうですか。ここから大学までどのくらいかかりますか。", "en": "I see. How long does it take from here to the university?"}, {"speaker": "リー", "jp": "バスでにじゅっぷんぐらいかかります。でも、ぼくはたいていじてんしゃでいきますよ。", "en": "It takes about twenty minutes by bus. But I usually go by bicycle."}, {"speaker": "上田", "jp": "そうですか。じてんしゃではどのくらいかかりますか。", "en": "I see. How long does it take by bicycle?"}, {"speaker": "リー", "jp": "じゅうごふんぐらいです。", "en": "About fifteen minutes."}, {"speaker": "上田", "jp": "へえ、はやいですね。", "en": "Really? That's fast!"}]}], "readings": [{"title": "Using Visual Clues", "text": "リーさんのアパートはたかいところにあります。アパートからじょうとう大学がみえます。たいいくかんのとなりにとしょかんがあります。としょかんのまえに学生会館があります。リーさんはたいていじてんしゃで大学にいきます。じゅうごふんぐらいかかります。", "questions": [{"q": "Where is Li's apartment?", "a": "In a high place"}, {"q": "What can you see from the apartment?", "a": "Joto University"}, {"q": "What is next to the gym?", "a": "The library"}, {"q": "How does Li usually go to the university?", "a": "By bicycle"}, {"q": "How long does it take by bicycle?", "a": "About 15 minutes"}]}]}, "ch6": {"vocab": [{"english": "Part-time job", "japanese": "アルバイト", "reading": "arubaito"}, {"english": "Exercise", "japanese": "うんどう", "reading": "undou"}, {"english": "Music", "japanese": "おんがく", "reading": "ongaku"}, {"english": "Shopping", "japanese": "かいもの", "reading": "kaimono"}, {"english": "Game", "japanese": "ゲーム", "reading": "geemu"}, {"english": "Concert", "japanese": "コンサート", "reading": "konsaato"}, {"english": "Next time", "japanese": "こんど", "reading": "kondo"}, {"english": "Magazine", "japanese": "ざっし", "reading": "zasshi"}, {"english": "Walk, stroll", "japanese": "さんぽ", "reading": "sanpo"}, {"english": "Job", "japanese": "しごと", "reading": "shigoto"}, {"english": "Question", "japanese": "しつもん", "reading": "shitsumon"}, {"english": "Jogging", "japanese": "ジョギング", "reading": "jogingu"}, {"english": "Newspaper", "japanese": "しんぶん", "reading": "shinbun"}, {"english": "Laundry", "japanese": "せんたく", "reading": "sentaku"}, {"english": "Cleaning", "japanese": "そうじ", "reading": "souji"}, {"english": "Letter", "japanese": "てがみ", "reading": "tegami"}, {"english": "Tennis", "japanese": "テニス", "reading": "tenisu"}, {"english": "Friend", "japanese": "ともだち", "reading": "tomodachi"}, {"english": "Party", "japanese": "パーティ", "reading": "paati"}, {"english": "Picnic", "japanese": "ピクニック", "reading": "pikunikku"}, {"english": "Pool", "japanese": "プール", "reading": "puuru"}, {"english": "E-mail", "japanese": "メール", "reading": "meeru"}, {"english": "Rest, absence, a day off", "japanese": "やすみ", "reading": "yasumi"}, {"english": "A day off, holiday", "japanese": "やすみのひ", "reading": "yasumi no hi"}, {"english": "Parents", "japanese": "りょうしん", "reading": "ryoushin"}, {"english": "Cooking, cuisine", "japanese": "りょうり", "reading": "ryouri"}, {"english": "To meet", "japanese": "あいます", "reading": "aimasu"}, {"english": "To play, have fun", "japanese": "あそびます", "reading": "asobimasu"}, {"english": "To walk", "japanese": "あるきます", "reading": "arukimasu"}, {"english": "To say", "japanese": "いいます", "reading": "iimasu"}, {"english": "To swim", "japanese": "およぎます", "reading": "oyogimasu"}, {"english": "To write", "japanese": "かきます", "reading": "kakimasu"}, {"english": "To ask, to listen to", "japanese": "ききます", "reading": "kikimasu"}, {"english": "To talk", "japanese": "はなします", "reading": "hanashimasu"}, {"english": "To wait", "japanese": "まちます", "reading": "machimasu"}, {"english": "To call (someone), to invite", "japanese": "よびます", "reading": "yobimasu"}, {"english": "To make (a phone call)", "japanese": "かけます", "reading": "kakemasu"}, {"english": "To go out", "japanese": "でかけます", "reading": "dekakemasu"}, {"english": "Busy", "japanese": "いそがしい", "reading": "isogashii"}, {"english": "Happy", "japanese": "うれしい", "reading": "ureshii"}, {"english": "Interesting", "japanese": "おもしろい", "reading": "omoshiroi"}, {"english": "Sad", "japanese": "かなしい", "reading": "kanashii"}, {"english": "Lonely", "japanese": "さびしい", "reading": "sabishii"}, {"english": "Fun", "japanese": "たのしい", "reading": "tanoshii"}, {"english": "Boring", "japanese": "つまらない", "reading": "tsumaranai"}, {"english": "Difficult", "japanese": "むずかしい", "reading": "muzukashii"}, {"english": "Easy / Kind", "japanese": "やさしい", "reading": "yasashii"}, {"english": "Healthy, cheerful, lively", "japanese": "げんき（な）", "reading": "genki (na)"}, {"english": "Sorry, regrettable", "japanese": "ざんねん（な）", "reading": "zannen (na)"}, {"english": "All right, no problem", "japanese": "だいじょうぶ（な）", "reading": "daijoubu (na)"}, {"english": "Tough", "japanese": "たいへん（な）", "reading": "taihen (na)"}, {"english": "Lively (place or event)", "japanese": "にぎやか（な）", "reading": "nigiyaka (na)"}, {"english": "Free, idle, unscheduled", "japanese": "ひま（な）", "reading": "hima (na)"}, {"english": "How?", "japanese": "どう", "reading": "dou"}, {"english": "Together", "japanese": "いっしょに", "reading": "issho ni"}, {"english": "By all means / I'd love to", "japanese": "ぜひ", "reading": "zehi"}, {"english": "Slowly / to relax", "japanese": "ゆっくり", "reading": "yukkuri"}, {"english": "With, together with", "japanese": "と", "reading": "to"}, {"english": "And (connects nouns)", "japanese": "と", "reading": "to"}, {"english": "In order to, for (purpose)", "japanese": "に", "reading": "ni"}, {"english": "To (goal, receiver)", "japanese": "に", "reading": "ni"}, {"english": "And (conjunction)", "japanese": "そして", "reading": "soshite"}, {"english": "I'm a little busy (declining invitation)", "japanese": "ちょっとつごうがわるくて", "reading": "chotto tsugou ga warukute"}, {"english": "Sorry, I have errands to attend to", "japanese": "ちょっとようじがあって", "reading": "chotto youji ga atte"}, {"english": "To fix a meal", "japanese": "りょうりをします", "reading": "ryouri o shimasu"}, {"english": "To do laundry", "japanese": "せんたくをします", "reading": "sentaku o shimasu"}, {"english": "To clean a room", "japanese": "そうじをします", "reading": "souji o shimasu"}, {"english": "To have a part-time job", "japanese": "アルバイトをします", "reading": "arubaito o shimasu"}, {"english": "To work", "japanese": "しごとをします", "reading": "shigoto o shimasu"}, {"english": "To read a newspaper", "japanese": "しんぶんをよみます", "reading": "shinbun o yomimasu"}, {"english": "To go shopping", "japanese": "かいものにいきます", "reading": "kaimono ni ikimasu"}, {"english": "To write e-mail", "japanese": "メールをかきます", "reading": "meeru o kakimasu"}, {"english": "To ask the teacher", "japanese": "先生にききます", "reading": "sensei ni kikimasu"}, {"english": "To ask a question", "japanese": "しつもんします", "reading": "shitsumon shimasu"}, {"english": "To talk in Japanese", "japanese": "日本語ではなします", "reading": "nihongo de hanashimasu"}, {"english": "To make a phone call", "japanese": "でんわをかけます", "reading": "denwa o kakemasu"}, {"english": "To listen to music", "japanese": "おんがくをききます", "reading": "ongaku o kikimasu"}, {"english": "To go to a concert", "japanese": "コンサートにいきます", "reading": "konsaato ni ikimasu"}, {"english": "To go on a picnic", "japanese": "ピクニックにいきます", "reading": "pikunikku ni ikimasu"}, {"english": "To exercise", "japanese": "うんどうします", "reading": "undou shimasu"}, {"english": "To play tennis", "japanese": "テニスをします", "reading": "tenisu o shimasu"}, {"english": "To go jogging", "japanese": "ジョギングをします", "reading": "jogingu o shimasu"}, {"english": "To swim in the pool", "japanese": "プールでおよぎます", "reading": "puuru de oyogimasu"}, {"english": "To meet a friend", "japanese": "ともだちにあいます", "reading": "tomodachi ni aimasu"}, {"english": "To wait for a friend", "japanese": "ともだちをまちます", "reading": "tomodachi o machimasu"}, {"english": "To take a walk", "japanese": "さんぽをします", "reading": "sanpo o shimasu"}, {"english": "To play a game", "japanese": "ゲームをします", "reading": "geemu o shimasu"}, {"english": "To relax at home", "japanese": "うちでゆっくりします", "reading": "uchi de yukkuri shimasu"}, {"english": "To write a letter", "japanese": "てがみをかきます", "reading": "tegami o kakimasu"}, {"english": "To read a magazine", "japanese": "ざっしをよみます", "reading": "zasshi o yomimasu"}, {"english": "To have a party", "japanese": "パーティをします", "reading": "paatii o shimasu"}, {"english": "To invite a friend over", "japanese": "ともだちをうちによびます", "reading": "tomodachi o uchi ni yobimasu"}], "dialogues": [{"title": "週末はどうでしたか。(How was your weekend?)", "lines": [{"speaker": "上田", "jp": "リーさん、おはようございます。", "en": "Good morning, Li."}, {"speaker": "リー", "jp": "あ、上田さん、おはようございます。週末はどうでしたか。", "en": "Oh, good morning, Ueda. How was your weekend?"}, {"speaker": "上田", "jp": "とてもたのしかったです。", "en": "It was really fun."}, {"speaker": "リー", "jp": "それはよかったですね。", "en": "That's good to hear."}, {"speaker": "上田", "jp": "ええ、みちこさんとしぶやにかいものにいって、コンサートへいきました。", "en": "Yes, I went shopping in Shibuya with Michiko and then went to a concert."}, {"speaker": "リー", "jp": "そうですか。いいですね。", "en": "I see. That sounds nice."}, {"speaker": "上田", "jp": "リーさんの週末はどうでしたか。", "en": "How was your weekend, Li?"}, {"speaker": "リー", "jp": "先週はしゅくだいがたくさんあって、週末はずっとうちでべんきょうしました。", "en": "Last week I had a lot of homework, and I studied at home all weekend."}, {"speaker": "上田", "jp": "それは大変でしたね。", "en": "That must have been tough."}, {"speaker": "リー", "jp": "ええ。だから、いそがしくて、ぜんぜんおもしろくなかったです。", "en": "Yes. So I was busy and it wasn't interesting at all."}, {"speaker": "上田", "jp": "じゃあ、来週の週末はどうですか。", "en": "Well, how about next weekend?"}, {"speaker": "リー", "jp": "来週はあまりいそがしくありません。", "en": "Next week I'm not very busy."}, {"speaker": "上田", "jp": "じゃあ、うちにあそびにきませんか。", "en": "Then, why don't you come over to my place?"}, {"speaker": "リー", "jp": "えっ、いいんですか。", "en": "Really? Are you sure?"}, {"speaker": "上田", "jp": "ええ。土曜日はどうですか。", "en": "Yes. How about Saturday?"}, {"speaker": "リー", "jp": "ええ、大丈夫です。", "en": "Yes, that's fine."}, {"speaker": "上田", "jp": "じゃあ、くるとき、でんわしてくれませんか。", "en": "Then, could you call me when you come?"}, {"speaker": "リー", "jp": "わかりました。じゃあ、土曜日に。", "en": "Got it. See you Saturday then."}]}, {"title": "Grammar I: Particle と examples", "lines": [{"speaker": "キム", "jp": "あ、どこへいきますか。", "en": "Oh, where are you going?"}, {"speaker": "田中", "jp": "たいいくかんにおよぎにいきます。", "en": "I'm going to the gym to swim."}, {"speaker": "キム", "jp": "そうですか。", "en": "I see."}]}, {"title": "Grammar II: Past adjectives examples", "lines": [{"speaker": "スミス", "jp": "週末はどうでしたか。", "en": "How was your weekend?"}, {"speaker": "山下", "jp": "とてもたのしかったです。", "en": "It was really fun."}, {"speaker": "スミス", "jp": "そうですか。よかったですね。", "en": "I see. I'm glad to hear that."}, {"speaker": "上田", "jp": "パーティはどうでしたか。", "en": "How was the party?"}, {"speaker": "リー", "jp": "とてもにぎやかでした。", "en": "It was very lively."}, {"speaker": "上田", "jp": "山田先生とはなしましたか。", "en": "Did you talk with Professor Yamada?"}, {"speaker": "リー", "jp": "いいえ、先生はいませんでした。", "en": "No, he wasn't there."}, {"speaker": "上田", "jp": "そうですか。ざんねんでしたね。", "en": "I see. That's too bad."}]}, {"title": "Grammar V: Invitation examples", "lines": [{"speaker": "ジョンソン", "jp": "今度の休みはいそがしいですか。", "en": "Are you busy during the next holiday?"}, {"speaker": "木村", "jp": "いいえ、いそがしくありません。", "en": "No, not really."}, {"speaker": "ジョンソン", "jp": "じゃあ、およぎにいきませんか。", "en": "Then, why don't we go swimming?"}, {"speaker": "山田", "jp": "テニスはよくしますか。", "en": "Do you play tennis often?"}, {"speaker": "上田", "jp": "ええ、しますよ。", "en": "Yes, I do."}, {"speaker": "山田", "jp": "じゃあ、土曜日にテニスをしませんか。", "en": "Well, why don't we play tennis on Saturday?"}]}], "readings": [{"title": "Identifying Missing Nouns", "text": "上田さんとリーさんは月曜日にきょうしつであいました。上田さんは週末にしぶやにかいものにいって、コンサートへいきました。とてもたのしかったです。リーさんは先週しゅくだいがたくさんあって、週末はずっとうちでべんきょうしました。いそがしくて、ぜんぜんおもしろくなかったです。上田さんはリーさんを土曜日にうちによびました。", "questions": [{"q": "What did Ueda do on the weekend?", "a": "Went shopping and to a concert"}, {"q": "Where did Ueda go shopping?", "a": "Shibuya"}, {"q": "Why did Li study all weekend?", "a": "He had a lot of homework"}, {"q": "How did Li feel about his weekend?", "a": "It was not interesting at all"}, {"q": "What did Ueda invite Li to do?", "a": "Come to her house on Saturday"}]}]}};
 
 // ═══ NAVIGATION ═══
@@ -10231,8 +10714,21 @@ function buildSearchIndex() {
     ch1: 'Ch1: Sounds & Hiragana', ch2: 'Ch2: Introductions', 
     ch3: 'Ch3: Daily Routines', ch4: 'Ch4: Japanese Cities',
     ch5: 'Ch5: Japanese Homes', ch6: 'Ch6: Leisure Time',
-    'oral-exam': 'Oral Exam Prep'
+    'oral-exam': 'Oral Exam Prep',
+    'ref-vocab': 'Vocab Atlas'
   };
+
+  // Index Vocab Atlas entries for search
+  document.querySelectorAll('#panel_ref-vocab .oe-loc-item').forEach(item => {
+    const jpEl = item.querySelector('.oe-loc-jp');
+    const rmEl = item.querySelector('.oe-loc-rm');
+    const enEl = item.querySelector('.oe-loc-en');
+    if (!jpEl) return;
+    const jp = jpEl.textContent.replace(/⚠️/g, '').trim();
+    const rm = rmEl ? rmEl.textContent : '';
+    const en = enEl ? enEl.textContent : '';
+    if (jp) searchIdx.push({ jp: jp, en: en, reading: rm, ch: 'ref-vocab', chLabel: 'Vocab Atlas', type: 'vocab' });
+  });
 
   // Index oral exam Q&A, dialogues, and vocab for search
   document.querySelectorAll('#panel_oral-exam .oe-subsec').forEach(item => {
@@ -10429,10 +10925,20 @@ document.addEventListener('click', function(e) {
 showChapter('ch1');
 
 function showOEsec(n) {
-  document.querySelectorAll('.oe-sec').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.oe-tab-btn').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById('panel_oral-exam');
+  panel.querySelectorAll('.oe-sec').forEach(s => s.classList.remove('active'));
+  panel.querySelectorAll('.oe-tab-btn').forEach(t => t.classList.remove('active'));
   document.getElementById('oesec'+n).classList.add('active');
-  document.querySelectorAll('.oe-tab-btn')[n].classList.add('active');
+  panel.querySelectorAll('.oe-tab-btn')[n].classList.add('active');
+}
+
+// ═══ VOCAB ATLAS: SECTION SWITCHING ═══
+function showVocSec(n) {
+  const panel = document.getElementById('panel_ref-vocab');
+  panel.querySelectorAll('.oe-sec').forEach(s => s.classList.remove('active'));
+  panel.querySelectorAll('.oe-tab-btn').forEach(t => t.classList.remove('active'));
+  document.getElementById('vocsec'+n).classList.add('active');
+  panel.querySelectorAll('.oe-tab-btn')[n].classList.add('active');
 }
 
 // ═══ ORAL EXAM: HIDE TOGGLES ═══
@@ -11081,7 +11587,7 @@ function floatSearchHandler(query) {
     return;
   }
 
-  const chNames = {ch1:'Ch 1',ch2:'Ch 2',ch3:'Ch 3',ch4:'Ch 4',ch5:'Ch 5',ch6:'Ch 6','oral-exam':'Oral Exam'};
+  const chNames = {ch1:'Ch 1',ch2:'Ch 2',ch3:'Ch 3',ch4:'Ch 4',ch5:'Ch 5',ch6:'Ch 6','oral-exam':'Oral Exam','ref-vocab':'Vocab Atlas'};
 
   let h = '';
   shown.forEach(({item: m}) => {
