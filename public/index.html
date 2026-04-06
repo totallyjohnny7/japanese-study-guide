@@ -634,6 +634,20 @@ body::before {
 #panel_oral-exam.hide-romaji .oe-loc-rm:hover,
 #panel_oral-exam.hide-romaji .oe-d-line .oe-rm:hover { visibility:visible;opacity:0.5; }
 
+/* Comprehension Q&A details/summary */
+.oe-qa { background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:8px;cursor:pointer;transition:all 0.2s; }
+.oe-qa:hover { border-color:var(--gold-dim); }
+.oe-qa[open] { background:rgba(212,168,67,0.06);border-color:var(--gold-dim); }
+.oe-qa summary { list-style:none;font-size:13px;line-height:1.6;outline:none; }
+.oe-qa summary::-webkit-details-marker { display:none; }
+.oe-qa summary::before { content:'▸ ';color:var(--gold);font-weight:700;margin-right:4px; }
+.oe-qa[open] summary::before { content:'▾ '; }
+.oe-qa summary .oe-ja { display:inline; }
+.oe-qa summary .oe-en { display:inline;color:var(--text-dim);font-size:11px;margin-left:6px; }
+.oe-qa .oe-ja { color:var(--white); }
+.oe-qa .oe-rm { color:var(--text-dim);font-size:11px;margin-top:4px; }
+.oe-qa .oe-en { color:var(--gold);font-size:12px;margin-top:4px; }
+
 /* TTS speak buttons */
 .oe-speak { display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--gold);font-size:14px;cursor:pointer;margin-left:6px;vertical-align:middle;transition:all 0.2s;flex-shrink:0; }
 .oe-speak:hover { background:var(--gold-dark);color:var(--white);border-color:var(--gold); }
@@ -8982,16 +8996,72 @@ body::before {
 <div class="oe-tip"><b>HOW TO PRACTICE:</b> 1) Read aloud slowly. 2) Listen to MindTap audio and mimic rhythm. 3) Record yourself and compare. 4) Focus on natural pauses between phrases.</div>
 
 <div class="card"><div class="card-header">CH 4 — このへんに ぎんこうが ありますか <span style="font-size:9px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;">CITY</span></div><div class="card-body">
-<p class="oe-en" style="margin-bottom:12px;font-style:italic;">Ueda needs to find a bank near Shibuya Station.</p>
+<p class="oe-en" style="margin-bottom:12px;font-style:italic;">Ueda is meeting a friend in Shibuya. After getting off the train she realizes she needs cash and asks a passerby in front of Shibuya Station (しぶやえき).</p>
 <div style="background:var(--surface);border-radius:10px;padding:16px;">
+<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px;">PART 1 — OUTSIDE THE STATION</div>
 <div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">あのう、すみませんが。</div><div class="oe-rm">Anoo, sumimasen ga.</div><div class="oe-en">Um, excuse me.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY</div><div class="oe-ja">はい。</div><div class="oe-rm">Hai.</div><div class="oe-en">Yes?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY A</div><div class="oe-ja">はい。</div><div class="oe-rm">Hai.</div><div class="oe-en">Yes?</div></div>
 <div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">このへんに ぎんこうが ありますか。</div><div class="oe-rm">Kono hen ni ginkoo ga arimasu ka.</div><div class="oe-en">Is there a bank around here?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY</div><div class="oe-ja">ええ、ありますよ。あそこに たかい ビルが ありますね。</div><div class="oe-rm">Ee, arimasu yo. Asoko ni takai biru ga arimasu ne.</div><div class="oe-en">Yes, there is. See that tall building over there?</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ええ。</div><div class="oe-rm">Ee.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY</div><div class="oe-ja">あの ビルの となりに ちいさい しろい たてものが ありますね。あれが ぎんこうです。</div><div class="oe-rm">Ano biru no tonari ni chiisai shiroi tatemono ga arimasu ne. Are ga ginkoo desu.</div><div class="oe-en">Next to that building there's a small white building. That's the bank.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">あ、あれですね。どうも ありがとう ございます。</div><div class="oe-rm">A, are desu ne. Doomo arigatoo gozaimasu.</div><div class="oe-en">Oh, that one? Thank you very much.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY A</div><div class="oe-ja">ええ、ありますよ。あそこに たかい ビルが ありますね。</div><div class="oe-rm">Ee, arimasu yo. Asoko ni takai biru ga arimasu ne.</div><div class="oe-en">Yes, there is. See that tall building over there?</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ええ。</div><div class="oe-rm">Ee.</div><div class="oe-en">Yes.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY A</div><div class="oe-ja">あれですよ。</div><div class="oe-rm">Are desu yo.</div><div class="oe-en">That's it.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">あ、そうですか。どうも ありがとう ございます。</div><div class="oe-rm">A, soo desu ka. Doomo arigatoo gozaimasu.</div><div class="oe-en">Oh, I see. Thank you very much.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY A</div><div class="oe-ja">いいえ。</div><div class="oe-rm">Iie.</div><div class="oe-en">You're welcome.</div></div>
+
+<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin:14px 0 8px;">PART 2 — INSIDE THE BUILDING</div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">あのう、すみません。</div><div class="oe-rm">Anoo, sumimasen.</div><div class="oe-en">Um, excuse me.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY B</div><div class="oe-ja">はい。</div><div class="oe-rm">Hai.</div><div class="oe-en">Yes?</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ぎんこうは どこに ありますか。</div><div class="oe-rm">Ginkoo wa doko ni arimasu ka.</div><div class="oe-en">Where is the bank?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY B</div><div class="oe-ja">あ、ぎんこうは それですよ。</div><div class="oe-rm">A, ginkoo wa sore desu yo.</div><div class="oe-en">Oh, the bank is right there.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ああ、どうも。</div><div class="oe-rm">Aa, doomo.</div><div class="oe-en">Ah, thanks.</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">PASSERBY B</div><div class="oe-ja">いいえ。</div><div class="oe-rm">Iie.</div><div class="oe-en">You're welcome.</div></div>
+
+<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin:14px 0 8px;">PART 3 — AT THE BANK ENTRANCE</div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">あのう、すみませんが、ATM は どこですか。</div><div class="oe-rm">Anoo, sumimasen ga, ATM wa doko desu ka.</div><div class="oe-en">Um, excuse me, where is the ATM?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">CLERK</div><div class="oe-ja">そこに ございます。</div><div class="oe-rm">Soko ni gozaimasu.</div><div class="oe-en">It's right there. (very polite)</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ああ、どうも。</div><div class="oe-rm">Aa, doomo.</div><div class="oe-en">Ah, thanks.</div></div>
 </div>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#1a4a6b,#2d6b8a);">CH 4 — 読んだ後で COMPREHENSION (Dialogue)</div><div class="card-body">
+<div class="oe-tip"><b>Practice answering aloud in Japanese.</b> Tap a question to see the model answer.</div>
+<details class="oe-qa"><summary><span class="oe-ja">1. うえださんは どこに いましたか。</span> <span class="oe-en">— Where was Ueda?</span></summary>
+<div class="oe-ja" style="margin-top:8px;">うえださんは しぶやえきの まえに いました。</div>
+<div class="oe-rm">Ueda-san wa Shibuya-eki no mae ni imashita.</div>
+<div class="oe-en">Ueda was in front of Shibuya Station.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">2. うえださんは 何を さがしていましたか。</span> <span class="oe-en">— What was Ueda looking for?</span></summary>
+<div class="oe-ja" style="margin-top:8px;">うえださんは ぎんこうを さがしていました。</div>
+<div class="oe-rm">Ueda-san wa ginkoo o sagashite imashita.</div>
+<div class="oe-en">Ueda was looking for a bank.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">3. ぎんこうは どこに ありましたか。</span> <span class="oe-en">— Where was the bank?</span></summary>
+<div class="oe-ja" style="margin-top:8px;">ぎんこうは たかい ビルの 中に ありました。</div>
+<div class="oe-rm">Ginkoo wa takai biru no naka ni arimashita.</div>
+<div class="oe-en">The bank was inside the tall building.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">4. うえださんは ATM を さがしましたか。</span> <span class="oe-en">— Did Ueda look for the ATM?</span></summary>
+<div class="oe-ja" style="margin-top:8px;">はい、ぎんこうの 中で こういんに ききました。</div>
+<div class="oe-rm">Hai, ginkoo no naka de kooin ni kikimashita.</div>
+<div class="oe-en">Yes — she asked the clerk inside the bank.</div></details>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#2d4a1a,#4a6b2d);">CH 4 — READING: 城東大学 (じょうとうだいがく)</div><div class="card-body">
+<div style="background:var(--surface);border-radius:10px;padding:16px;">
+<div class="oe-ja" style="line-height:2;">城東大学は 東京に あります。学生は 三万人ぐらい いますが、教授は 千人ぐらいです。とても 古い 大学です。キャンパスは あまり 大きくありませんが、きれいな 建物が たくさん あります。公園も あります。それから、大学の 図書館は とても 有名です。城東大学には 経済学部と 文学部と 商学部と 法学部が あります。留学生センターも あります。アメリカと オーストラリアから たくさん 留学生が 来ます。</div>
+</div>
+<details class="oe-qa" style="margin-top:14px;"><summary><span class="oe-ja">1. 城東大学は どこに ありますか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">東京に あります。</div>
+<div class="oe-en">It's in Tokyo.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">2. 城東大学は あたらしい 大学ですか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">いいえ、あたらしくありません。とても 古い 大学です。</div>
+<div class="oe-en">No, it's not new. It's a very old university.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">3. 城東大学の キャンパスは どんな キャンパスですか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">あまり 大きくありませんが、きれいな 建物が たくさん あります。公園も あります。</div>
+<div class="oe-en">It's not very big, but there are many beautiful buildings and a park too.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">4. 城東大学には ゆうめいな たてものが ありますか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">はい、図書館が とても ゆうめいです。</div>
+<div class="oe-en">Yes — the library is very famous.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">5. 城東大学には どんな 学生が たくさん いますか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">アメリカと オーストラリアからの 留学生が たくさん います。</div>
+<div class="oe-en">There are many international students from America and Australia.</div></details>
 </div></div>
 
 <div class="card"><div class="card-header">CH 5 — リーさんの アパート <span style="font-size:9px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;">HOME</span></div><div class="card-body">
@@ -9004,11 +9074,50 @@ body::before {
 <div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">ええ。この アパートは たかい ところに ありますから。</div><div class="oe-rm">Ee. Kono apaato wa takai tokoro ni arimasu kara.</div><div class="oe-en">It's because this apartment is up high.</div></div>
 <div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">あそこに りっぱな たてものが ありますね。あれは 大学ですか。</div><div class="oe-rm">Asoko ni rippana tatemono ga arimasu ne. Are wa daigaku desu ka.</div><div class="oe-en">There's a splendid building over there. Is that the university?</div></div>
 <div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">ええ、あれは じょうとう大学の たいいくかんですよ。</div><div class="oe-rm">Ee, are wa Jootoo daigaku no taiikukan desu yo.</div><div class="oe-en">Yes, that's Joto University's gym.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">え、じゃあ、たいいくかんの となりの ちゃいろい ビルは なんですか。</div><div class="oe-rm">E, jaa, taiikukan no tonari no chairoi biru wa nan desu ka.</div><div class="oe-en">Oh? Then what's that brown building next to the gym?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">あれは としょかんです。そして、その まえのが 学生会館（かいかん）です。</div><div class="oe-rm">Are wa toshokan desu. Soshite, sono mae no ga gakusei kaikan desu.</div><div class="oe-en">That's the library. And the one in front of it is the student union.</div></div>
 <div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">そうですか。ここから 大学まで どのくらい かかりますか。</div><div class="oe-rm">Soo desu ka. Koko kara daigaku made dono kurai kakarimasu ka.</div><div class="oe-en">How long does it take from here to university?</div></div>
 <div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">バスで にじゅっぷんぐらい かかります。でも、ぼくは たいてい じてんしゃで いきますよ。</div><div class="oe-rm">Basu de nijuppun gurai kakarimasu. Demo, boku wa taitei jitensha de ikimasu yo.</div><div class="oe-en">About 20 min by bus. But I usually go by bicycle.</div></div>
 <div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">じてんしゃでは どのくらい かかりますか。</div><div class="oe-rm">Jitensha de wa dono kurai kakarimasu ka.</div><div class="oe-en">How long by bicycle?</div></div>
 <div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">じゅうごふんぐらいです。</div><div class="oe-rm">Juugofun gurai desu.</div><div class="oe-en">About 15 minutes.</div></div>
 <div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">へえ、はやいですね。</div><div class="oe-rm">Hee, hayai desu ne.</div><div class="oe-en">Wow, that's fast!</div></div>
+</div>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#1a4a6b,#2d6b8a);">CH 5 — 読んだ後で COMPREHENSION (Dialogue)</div><div class="card-body">
+<details class="oe-qa"><summary><span class="oe-ja">1. リーさんの アパートは どんな ところですか。</span> <span class="oe-en">— What kind of place is Li's apartment?</span></summary>
+<div class="oe-ja" style="margin-top:8px;">リーさんの アパートは たかい ところに あって、とても あかるいです。</div>
+<div class="oe-rm">Rii-san no apaato wa takai tokoro ni atte, totemo akarui desu.</div>
+<div class="oe-en">Li's apartment is in a high place and is very bright.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">2. リーさんの アパートから 大学まで じてんしゃで どのくらい かかりますか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">じてんしゃで じゅうごふんぐらい かかります。</div>
+<div class="oe-rm">Jitensha de juugofun gurai kakarimasu.</div>
+<div class="oe-en">It takes about 15 minutes by bicycle.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">3. たいいくかんは どんな たてものですか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">たいいくかんは りっぱな たてものです。</div>
+<div class="oe-rm">Taiikukan wa rippana tatemono desu.</div>
+<div class="oe-en">The gym is a splendid (impressive) building.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">4. としょかんは どこに ありますか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">としょかんは たいいくかんの となりに あります。学生会館の うしろに あります。</div>
+<div class="oe-rm">Toshokan wa taiikukan no tonari ni arimasu. Gakusei kaikan no ushiro ni arimasu.</div>
+<div class="oe-en">The library is next to the gym, behind the student union.</div></details>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#2d4a1a,#4a6b2d);">CH 5 — READING: 田中先生の研究室 (たなかせんせいの けんきゅうしつ)</div><div class="card-body">
+<div style="background:var(--surface);border-radius:10px;padding:16px;">
+<div class="oe-ja" style="line-height:2;">田中先生の 研究室は とても 広いです。部屋の 右には 大きい 本棚が あります。本棚には 本が たくさん あります。本棚の 横には 窓が あります。窓は 部屋の 右に あります。窓の 外には 小さい 鉢植（はちうえ）が あります。そして、窓の 近くには 先生の 机が あります。机の 上には 本が たくさん あります。机は 部屋の 左側に あります。机の 上には コンピュータと 電話が あります。部屋の 手前には 小さい ソファが あります。ソファの 上にも 本が たくさん あります。ソファの 横に 小さい 椅子が あります。ソファの 下に ねこが います。</div>
+</div>
+<div class="oe-tip" style="margin-top:12px;"><b>TASK:</b> Find <b>4 discrepancies</b> between the description and the picture (if shown by your instructor). Pay close attention to <span class="oe-hl">left/right (左/右)</span> and <span class="oe-hl">on/under/next-to</span>.</div>
+<div class="oe-warn"><b>CONTRADICTION HINT:</b> The text first says the bookshelf is on the <b>right</b> of the room, then says the window is on the <b>right</b> of the room — but also says the window is <b>next to</b> the bookshelf. The desk is described as on the <b>left</b>, but ALSO near the window (which is on the right). These internal contradictions are exactly what you flag as "discrepancies."</div>
+<div style="margin-top:12px;"><b style="color:var(--gold);font-size:11px;">KEY VOCAB:</b>
+<div class="oe-loc-grid" style="margin-top:8px;">
+<div class="oe-loc-item"><div class="oe-loc-jp">奥（おく）</div><div class="oe-loc-rm">oku</div><div class="oe-loc-en">inner part</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">手前（てまえ）</div><div class="oe-loc-rm">temae</div><div class="oe-loc-en">this side / closer</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">鉢植（はちうえ）</div><div class="oe-loc-rm">hachiue</div><div class="oe-loc-en">potted plant</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">本棚（ほんだな）</div><div class="oe-loc-rm">hondana</div><div class="oe-loc-en">bookshelf</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">研究室</div><div class="oe-loc-rm">kenkyuushitsu</div><div class="oe-loc-en">professor's office</div></div>
+<div class="oe-loc-item"><div class="oe-loc-jp">たくさん</div><div class="oe-loc-rm">takusan</div><div class="oe-loc-en">many / a lot</div></div>
+</div>
 </div>
 </div></div>
 
@@ -9025,11 +9134,72 @@ body::before {
 <div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">先週は しゅくだいが たくさん <span class="oe-te">あって</span>、週末は ずっと うちで べんきょうしました。</div><div class="oe-rm">Senshuu wa shukudai ga takusan atte, shuumatsu wa zutto uchi de benkyoo shimashita.</div><div class="oe-en">I had a lot of homework so I studied at home all weekend.</div></div>
 <div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">それは 大変でしたね。</div><div class="oe-rm">Sore wa taihen deshita ne.</div><div class="oe-en">That sounds tough.</div></div>
 <div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">ええ。だから、<span class="oe-te">いそがしくて</span>、ぜんぜん おもしろくなかったです。</div><div class="oe-rm">Ee. Dakara, isogashikute, zenzen omoshiroku nakatta desu.</div><div class="oe-en">Yeah. So it was busy and not interesting at all.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">じゃあ、うちに あそびに きませんか。</div><div class="oe-rm">Jaa, uchi ni asobi ni kimasen ka.</div><div class="oe-en">Well then, come hang out at my place?</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">じゃあ、来週の 週末は どうですか。</div><div class="oe-rm">Jaa, raishuu no shuumatsu wa doo desu ka.</div><div class="oe-en">Well then, how about next weekend?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">来週は あまり いそがしくありません。</div><div class="oe-rm">Raishuu wa amari isogashiku arimasen.</div><div class="oe-en">Next week I'm not very busy.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">じゃあ、うちに あそびに きませんか。</div><div class="oe-rm">Jaa, uchi ni asobi ni kimasen ka.</div><div class="oe-en">Then, would you like to come hang out at my place?</div></div>
 <div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">えっ、いいんですか。</div><div class="oe-rm">E, ii n desu ka.</div><div class="oe-en">Really? Are you sure?</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ええ。土曜日は どうですか。</div><div class="oe-rm">Ee. Doyoobi wa doo desu ka.</div><div class="oe-en">How about Saturday?</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">ええ。土曜日は どうですか。</div><div class="oe-rm">Ee. Doyoobi wa doo desu ka.</div><div class="oe-en">Yes. How about Saturday?</div></div>
 <div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">ええ、大丈夫です。</div><div class="oe-rm">Ee, daijoobu desu.</div><div class="oe-en">Sure, that works.</div></div>
+<div class="oe-d-line oe-d-a"><div class="oe-d-name">UEDA</div><div class="oe-ja">じゃあ、くるとき、でんわしてくれませんか。</div><div class="oe-rm">Jaa, kuru toki, denwa shite kuremasen ka.</div><div class="oe-en">Then, when you come, could you give me a call?</div></div>
+<div class="oe-d-line oe-d-b"><div class="oe-d-name">LI</div><div class="oe-ja">わかりました。じゃあ、土曜日に。</div><div class="oe-rm">Wakarimashita. Jaa, doyoobi ni.</div><div class="oe-en">Got it. See you Saturday, then.</div></div>
 </div>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#1a4a6b,#2d6b8a);">CH 6 — 読んだ後で COMPREHENSION (Dialogue)</div><div class="card-body">
+<div class="oe-tip"><b>True / False section first, then short answer.</b> Tap each to reveal.</div>
+<details class="oe-qa"><summary><span class="oe-ja">1. リーさんは 日曜日に べんきょうしましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">はい、リーさんは 週末 ずっと うちで べんきょうしました。</div>
+<div class="oe-en">YES — Li studied at home all weekend (including Sunday).</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">2. リーさんは 土曜日に でかけましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">いいえ、でかけませんでした。うちで べんきょうしました。</div>
+<div class="oe-en">NO — Li did not go out. He studied at home.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">3. リーさんは おもしろい えいがを みましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">いいえ、みませんでした。週末は ぜんぜん おもしろくなかったです。</div>
+<div class="oe-en">NO — Li didn't watch any movie. The weekend was not interesting at all.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">4. 上田さんは キムさんと コンサートに いきましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">いいえ、みちこさんと いきました。</div>
+<div class="oe-en">NO — Ueda went with Michiko, not Kim.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">5. 上田さんは 先週の 週末に かいものを しましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">はい、しぶやで みちこさんと かいものを しました。</div>
+<div class="oe-en">YES — Ueda went shopping in Shibuya with Michiko.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">6. 上田さんは 先週 何を しましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">みちこさんと しぶやに かいものに <span class="oe-te">いって</span>、コンサートへ いきました。</div>
+<div class="oe-en">She went shopping in Shibuya with Michiko and went to a concert.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">7. リーさんは 週末 何を しましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">しゅくだいが たくさん <span class="oe-te">あって</span>、週末は ずっと うちで べんきょうしました。</div>
+<div class="oe-en">He had lots of homework, so he studied at home all weekend.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">8. リーさんは 来週の 週末 いそがしいですか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">いいえ、あまり いそがしくありません。</div>
+<div class="oe-en">No, he's not very busy.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">9. リーさんは 来週 何を しますか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">土曜日に 上田さんの うちへ あそびに 行きます。</div>
+<div class="oe-en">On Saturday, he's going to Ueda's house to hang out.</div></details>
+</div></div>
+
+<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#2d4a1a,#4a6b2d);">CH 6 — READING: 大川さんの しゅうまつ (Parents Visit)</div><div class="card-body">
+<div style="background:var(--surface);border-radius:10px;padding:16px;">
+<div class="oe-ja" style="line-height:2;">先週の 土曜日に 両親が 私に 会いに 来ました。とても うれしかったですが、いそがしくて 大変でした。木曜日と 金曜日に テストが <span class="oe-te">あって</span> 時間が なかったから、アパートは とても きたなかったです。ですから、土曜日の 朝 はやく 起きて、そうじと せんたくを しました。それから、スーパーに 買い物に 行きました。<br><br>12時ごろに 両親が 私の アパートに 来ました。少し 話を <span class="oe-te">して</span>、アパートの 近くの ショッピング・センターに 行って、昼ご飯を 食べました。その 後、買い物を <span class="oe-te">して</span>、キャンパスに 行きました。図書館で 上田さんに 会いましたから、いっしょに 図書館の カフェに <span class="oe-te">行って</span>、コーヒーを 飲んで 話を しました。両親は 5時ごろ 帰りました。</div>
+</div>
+<div class="oe-tip" style="margin-top:12px;"><b>NOTE the て-form chains</b> — this passage is a goldmine of て-form examples. Underline every て-form you can find.</div>
+<details class="oe-qa" style="margin-top:8px;"><summary><span class="oe-ja">1. 大川さんの 週末は どうでしたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">うれしかったですが、いそがしくて 大変でした。</div>
+<div class="oe-en">Happy but busy and tough.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">2. 大川さんは 金曜日に 何を しましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">テストが ありました。だから 時間が なかったです。</div>
+<div class="oe-en">Took a test (so didn't have time to clean).</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">3. 大川さんは 土曜日の あさ 何を しましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">はやく 起きて、そうじと せんたくを <span class="oe-te">して</span>、スーパーに 買い物に 行きました。</div>
+<div class="oe-en">Woke up early, cleaned, did laundry, and went grocery shopping.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">4. 大川さんは だれと 昼ご飯を 食べましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">両親と いっしょに 食べました。</div>
+<div class="oe-en">With his/her parents.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">5. どこで 食べましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">アパートの 近くの ショッピング・センターで 食べました。</div>
+<div class="oe-en">At the shopping center near the apartment.</div></details>
+<details class="oe-qa"><summary><span class="oe-ja">6. 土曜日の ごご、キャンパスで 何を しましたか。</span></summary>
+<div class="oe-ja" style="margin-top:8px;">図書館で 上田さんに 会って、いっしょに カフェで コーヒーを 飲んで 話を しました。</div>
+<div class="oe-en">Met Ueda at the library, went to the café, drank coffee and chatted.</div></details>
+<div class="oe-warn" style="margin-top:12px;"><b>VOCAB:</b> 〜から (because) · きたない (dirty) · ですから (so/therefore) · はやく (early) · 両親（りょうしん）(parents) · そうじ (cleaning) · せんたく (laundry)</div>
 </div></div>
 </div>
 
