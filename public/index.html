@@ -11365,102 +11365,55 @@ if (typeof speechSynthesis !== 'undefined') {
   speechSynthesis.onvoiceschanged = loadVoices;
 }
 
-// ═══ JAPANESE TEXT-TO-SPEECH ═══
-// Robust across Chrome, Firefox, Safari, iOS Safari. Handles:
-//   1. Voices loading async (retry until jpVoice or timeout)
-//   2. iOS Safari user-gesture unlock (first call primes the audio context)
-//   3. Long-utterance pause bug in Chrome (pause/resume every 10s)
-//   4. Benign 'canceled'/'interrupted' errors from cancel() chains
-let _ttsUnlocked = false;
-function _unlockTTS() {
-  if (_ttsUnlocked || typeof speechSynthesis === 'undefined') return;
+// ═══ JAPANESE TEXT-TO-SPEECH — MINIMAL REWRITE ═══
+// Philosophy: do the dumbest possible thing that works. No primers, no state
+// flags, no retry loops. Every call is a fresh utterance. Every failure is
+// logged to both console AND window.__ttsLog so users can inspect what went
+// wrong without opening devtools.
+if (!Array.isArray(window.__ttsHistory)) window.__ttsHistory = [];
+function ttsTrace(msg, data) {
   try {
-    // Silent utterance primes iOS audio pipeline within the user gesture
-    const primer = new SpeechSynthesisUtterance(' ');
-    primer.volume = 0;
-    primer.rate = 2;
-    speechSynthesis.speak(primer);
-    _ttsUnlocked = true;
-  } catch(_) { /* best-effort */ }
-}
-// Unlock on the first tap/click anywhere in the app (captured once, then removed)
-if (typeof window !== 'undefined') {
-  const unlockOnce = () => {
-    _unlockTTS();
-    window.removeEventListener('pointerdown', unlockOnce, true);
-    window.removeEventListener('keydown', unlockOnce, true);
-  };
-  window.addEventListener('pointerdown', unlockOnce, true);
-  window.addEventListener('keydown', unlockOnce, true);
+    const entry = { t: new Date().toISOString().slice(11, 19), msg, data };
+    window.__ttsHistory.push(entry);
+    if (window.__ttsHistory.length > 30) window.__ttsHistory.shift();
+  } catch(_) { window.__ttsHistory = []; }
+  console.log('[tts]', msg, data || '');
 }
 
-const speakJP = (rawText) => {
-  const t = (rawText == null ? '' : String(rawText)).trim();
-  if (!t) { console.warn('[speakJP] empty text'); return; }
-  if (!voiceEnabled) { console.info('[speakJP] voice disabled'); return; }
+function speakJP(text) {
+  const t = (text == null ? '' : String(text)).trim();
+  ttsTrace('speakJP called', { text: t, voiceEnabled });
+  if (!t) return;
+  if (!voiceEnabled) { ttsTrace('aborted: voice disabled'); return; }
   if (typeof speechSynthesis === 'undefined') {
-    showToast('Voice unavailable', 'Your browser does not support speech synthesis.', 'error');
+    ttsTrace('aborted: no speechSynthesis API');
     return;
   }
-  // Ensure unlock happens even if called from a non-user-gesture path (e.g. auto-speak on flip)
-  _unlockTTS();
-  // Retry voice loading if not ready yet
-  if (!voicesReady) loadVoices();
-  // If voices still aren't loaded AT ALL, defer briefly (voiceschanged event may fire)
-  // NOTE: We intentionally do NOT block on jpVoice — browsers without a Japanese voice
-  // still produce audible output (the default voice reads the kana phonetically),
-  // which is strictly better than silence.
-  if (!voicesReady) {
-    let attempts = 0;
-    const retry = setInterval(() => {
-      attempts++;
-      loadVoices();
-      if (voicesReady || attempts > 10) {
-        clearInterval(retry);
-        _doSpeakJP(t);
-      }
-    }, 60);
-    return;
-  }
-  _doSpeakJP(t);
-};
-
-function _doSpeakJP(t) {
-  try { speechSynthesis.cancel(); } catch(_) {}
+  try {
+    // Kill anything currently playing so we don't queue up
+    speechSynthesis.cancel();
+  } catch(e) { ttsTrace('cancel threw', String(e)); }
   const u = new SpeechSynthesisUtterance(t);
-  u.lang = 'ja-JP';          // MANDATORY — guarantees Japanese pronunciation
+  u.lang = 'ja-JP';
   u.rate = 0.85;
   u.pitch = 1.0;
   u.volume = 1.0;
-  if (jpVoice) u.voice = jpVoice;
-  // Chrome long-utterance pause bug workaround
-  let resumeTimer = setInterval(() => {
-    if (!speechSynthesis.speaking) { clearInterval(resumeTimer); return; }
-    speechSynthesis.pause();
-    speechSynthesis.resume();
-  }, 10000);
-  u.onend = () => clearInterval(resumeTimer);
-  u.onerror = (event) => {
-    clearInterval(resumeTimer);
-    // 'canceled' and 'interrupted' fire normally when cancel() stops a previous utterance
-    const ignoredErrors = ['canceled', 'interrupted'];
-    if (!ignoredErrors.includes(event.error)) {
-      console.warn('[speakJP] error:', event.error, 'text:', t);
-      if (!window._ttsErrorShown) {
-        window._ttsErrorShown = true;
-        showToast('Audio unavailable', 'Tap 🔊 again to replay. If the problem persists, check your browser audio permissions.', 'warn');
-      }
-    }
-  };
+  // Pick best available Japanese voice at the moment of speaking
+  const voices = speechSynthesis.getVoices();
+  const jaVoice = voices.find(v => v.lang === 'ja-JP')
+               || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'))
+               || null;
+  if (jaVoice) u.voice = jaVoice;
+  u.onstart = () => ttsTrace('utterance started', { text: t, voice: jaVoice ? jaVoice.name : 'default' });
+  u.onend   = () => ttsTrace('utterance ended');
+  u.onerror = (e) => ttsTrace('utterance error', e && e.error);
   try {
     speechSynthesis.speak(u);
+    ttsTrace('speak() called', { voices: voices.length, jaVoice: jaVoice ? jaVoice.name : 'none' });
   } catch(e) {
-    clearInterval(resumeTimer);
-    console.warn('[speakJP] speak() threw:', e);
-    showToast('Voice unavailable', 'Your browser cannot play Japanese audio right now. Try reloading the page.', 'error');
+    ttsTrace('speak() threw', String(e));
   }
 }
-// Expose for inline handlers and debugging
 window.speakJP = speakJP;
 const esc = s => s.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -14500,17 +14453,15 @@ document.addEventListener('keydown', function(e) {
     initFlashcards();
   };
 
-  /* ─── AUDIO TOGGLE ─────────────────────────────────────────────────
-     This toggles the global voiceEnabled state. It's a dedicated button
-     inside the flashcard panel (vs the small floating fab) so the user
-     has an obvious, testable control for flashcard audio. The ON click
-     is a user gesture — we use it to force-unlock TTS and play a test
-     utterance, which both verifies and primes the audio pipeline.
+  /* ─── AUDIO CONTROL (minimal, no state flags) ──────────────────────
+     One toggle that mirrors voiceEnabled. One test button that speaks
+     a known-good phrase in the user-gesture frame. One diagnostic line
+     showing voice count + selected voice so users can see what's
+     actually available in their browser.
   */
   const AUDIO_STORAGE_KEY = 'nakama_fc_audio_v1';
   function updateAudioToggleUI() {
     const btn = document.getElementById('fc-audio-toggle');
-    const hint = document.getElementById('fc-audio-hint');
     if (!btn) return;
     btn.classList.toggle('on', voiceEnabled);
     btn.classList.toggle('off', !voiceEnabled);
@@ -14519,87 +14470,74 @@ document.addEventListener('keydown', function(e) {
     const label = btn.querySelector('.fc-audio-label');
     if (icon) icon.textContent = voiceEnabled ? '🔊' : '🔇';
     if (label) label.textContent = voiceEnabled ? 'Audio: ON' : 'Audio: OFF';
-    if (hint && !hint.classList.contains('warn') && !hint.classList.contains('ok')) {
-      hint.textContent = voiceEnabled
-        ? 'Cards auto-play when flipped. Tap Test to confirm.'
-        : 'Audio is off. Click above to turn on.';
+    // Refresh diagnostic line
+    const hint = document.getElementById('fc-audio-hint');
+    if (hint && !hint.dataset.sticky) {
+      if (!voiceEnabled) {
+        hint.textContent = 'Audio is off. Click the green button to enable.';
+      } else if (typeof speechSynthesis === 'undefined') {
+        hint.textContent = 'This browser does not support speech synthesis.';
+      } else {
+        const voices = speechSynthesis.getVoices();
+        const ja = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
+        if (ja) {
+          hint.textContent = `Ready — using "${ja.name}" (${ja.lang}) · ${voices.length} voices available`;
+        } else if (voices.length === 0) {
+          hint.textContent = 'Voices still loading — click Test once they load.';
+        } else {
+          hint.textContent = `No Japanese voice installed — will use default (${voices.length} voices total)`;
+        }
+      }
     }
   }
-  function setAudioHint(text, kind) {
+  function setStickyHint(text, ms) {
     const hint = document.getElementById('fc-audio-hint');
     if (!hint) return;
-    hint.classList.remove('warn', 'ok');
-    if (kind) hint.classList.add(kind);
     hint.textContent = text;
-    // Reset to default after 4s
-    if (kind) {
-      setTimeout(() => {
-        hint.classList.remove('warn', 'ok');
-        updateAudioToggleUI();
-      }, 4000);
-    }
+    hint.dataset.sticky = '1';
+    setTimeout(() => {
+      delete hint.dataset.sticky;
+      updateAudioToggleUI();
+    }, ms || 3000);
+  }
+
+  // Re-render the diagnostic when voices load asynchronously
+  if (typeof speechSynthesis !== 'undefined') {
+    speechSynthesis.addEventListener?.('voiceschanged', () => updateAudioToggleUI());
   }
 
   window.fcToggleAudio = function() {
     voiceEnabled = !voiceEnabled;
     try { localStorage.setItem(AUDIO_STORAGE_KEY, voiceEnabled ? '1' : '0'); } catch(_) {}
-    // Also sync the global voice fab if it exists
-    const fab = document.getElementById('voiceFab');
-    if (fab) {
-      fab.textContent = voiceEnabled ? '🔊' : '🔇';
-      fab.classList.toggle('off', !voiceEnabled);
-      if (fab.title !== undefined) fab.title = voiceEnabled ? 'Voice ON (V)' : 'Voice OFF (V)';
-    }
     updateAudioToggleUI();
     if (voiceEnabled) {
-      // This click IS a user gesture → perfect moment to unlock iOS audio
-      _unlockTTS();
-      // Play a friendly test utterance so user hears confirmation immediately.
-      // Synchronous call inside the user gesture frame = iOS-safe.
-      _doSpeakJP('こんにちは');
-      setAudioHint('Playing test audio — you should hear "konnichiwa"', 'ok');
+      // Speak synchronously in this click handler — no setTimeout, no async work
+      speakJP('こんにちは');
+      setStickyHint('Playing "こんにちは" — if you hear nothing, check tab/OS volume');
     } else {
       try { speechSynthesis.cancel(); } catch(_) {}
-      setAudioHint('Audio muted', 'warn');
+      setStickyHint('Audio muted');
     }
   };
 
   window.fcTestAudio = function() {
-    // Force-unlock and speak a known-good test phrase.
-    // If voiceEnabled is off, temporarily bypass it (user clicked Test, clear intent).
-    _unlockTTS();
+    // Force audio on so user can hear SOMETHING
     if (!voiceEnabled) {
-      // Flip it on so the user hears something
       voiceEnabled = true;
       try { localStorage.setItem(AUDIO_STORAGE_KEY, '1'); } catch(_) {}
       updateAudioToggleUI();
     }
-    // Diagnose: is a Japanese voice available?
-    loadVoices();
-    if (!voicesReady) {
-      setAudioHint('Voices still loading… try again in a moment', 'warn');
-      // Retry after voices load
-      let attempts = 0;
-      const iv = setInterval(() => {
-        attempts++;
-        loadVoices();
-        if (voicesReady || attempts > 15) {
-          clearInterval(iv);
-          if (voicesReady) {
-            _doSpeakJP('こんにちは');
-            setAudioHint(jpVoice ? 'Playing test…' : 'No Japanese voice — speaking anyway', 'ok');
-          } else {
-            setAudioHint('Your browser has no speech voices installed', 'warn');
-          }
-        }
-      }, 80);
-      return;
+    // Synchronous speak inside the click gesture
+    speakJP('こんにちは');
+    const voices = typeof speechSynthesis !== 'undefined' ? speechSynthesis.getVoices() : [];
+    const ja = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
+    if (voices.length === 0) {
+      setStickyHint('⚠ No voices installed — your browser cannot speak');
+    } else if (!ja) {
+      setStickyHint(`⚠ No ja voice — using default (${voices.length} voices total)`);
+    } else {
+      setStickyHint(`🎧 Playing via "${ja.name}"`);
     }
-    if (!jpVoice) {
-      setAudioHint('No ja-JP voice found — falling back to default', 'warn');
-    }
-    _doSpeakJP('こんにちは');
-    setTimeout(() => setAudioHint('Playing "こんにちは" (konnichiwa)', 'ok'), 10);
   };
 
   window.initFlashcards = initFlashcards;
