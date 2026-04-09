@@ -206,16 +206,81 @@ async function runAutoTest() {
   recorder.start(100);
   appendLog('MediaRecorder started', 'info');
 
-  setVerdict('pending', '🔴 Recording — speaking now…');
+  setVerdict('pending', '🔴 Recording — running 5 alternative audio strategies…');
 
-  // Speak 3x with gaps
+  // Track peak per strategy
+  const results = {};
+  async function runStrategy(name, runFn, durationMs) {
+    appendLog('─── STRATEGY: ' + name + ' ───', 'info');
+    const before = peakOverall;
+    let localPeak = 0;
+    const watcher = setInterval(() => {
+      analyser.getByteTimeDomainData(dataArr);
+      let sumSq = 0;
+      for (let i = 0; i < dataArr.length; i++) {
+        const v = (dataArr[i] - 128) / 128;
+        sumSq += v * v;
+      }
+      const rms = Math.sqrt(sumSq / dataArr.length);
+      if (rms > localPeak) localPeak = rms;
+    }, 20);
+    try { await runFn(); } catch(e) { appendLog('  strategy threw: ' + e.message, 'err'); }
+    await new Promise(r => setTimeout(r, durationMs));
+    clearInterval(watcher);
+    const db = 20 * Math.log10(localPeak || 1e-7);
+    results[name] = { peak: localPeak, db };
+    const tag = localPeak > 0.01 ? 'ok' : 'err';
+    appendLog('  peak: ' + localPeak.toFixed(5) + ' (' + db.toFixed(1) + ' dBFS) ' + (localPeak > 0.01 ? '✅' : '❌'), tag);
+  }
+
+  // ALT 1: Web Speech API (the known-broken one)
   inSpeakingWindow = true;
-  speakJP('こんにちは');
-  await new Promise(r => setTimeout(r, 1500));
-  speakJP('ありがとう');
-  await new Promise(r => setTimeout(r, 1500));
-  speakJP('さようなら');
-  await new Promise(r => setTimeout(r, 1500));
+  await runStrategy('Web Speech API (speechSynthesis)', () => {
+    speakJP('こんにちは');
+  }, 2000);
+
+  // ALT 2: HTMLAudioElement playing same-origin pre-rendered MP3
+  await runStrategy('Same-origin <audio> element (MP3)', async () => {
+    const a = new Audio('/audio/konnichiha.mp3');
+    a.volume = 1.0;
+    await a.play();
+  }, 2000);
+
+  // ALT 3: HTMLAudioElement playing cross-origin MP3 direct from Google
+  await runStrategy('Cross-origin <audio> (Google Translate TTS)', async () => {
+    const a = new Audio('https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=' + encodeURIComponent('ありがとう'));
+    a.volume = 1.0;
+    await a.play().catch(e => appendLog('  play() rejected: ' + e.name, 'err'));
+  }, 2500);
+
+  // ALT 4: Web Audio API synthetic tone (bypasses speechSynthesis entirely)
+  await runStrategy('Web Audio API (AudioContext oscillator, 440Hz beep)', async () => {
+    const toneAc = new AudioContext();
+    const osc = toneAc.createOscillator();
+    const gain = toneAc.createGain();
+    osc.frequency.value = 440;
+    osc.type = 'sine';
+    gain.gain.value = 0.2;
+    osc.connect(gain).connect(toneAc.destination);
+    osc.start();
+    setTimeout(() => { osc.stop(); toneAc.close(); }, 800);
+  }, 1200);
+
+  // ALT 5: Fetch + decodeAudioData + AudioBufferSourceNode (bypasses <audio> path too)
+  await runStrategy('fetch → decodeAudioData → AudioBufferSource (MP3 through Web Audio)', async () => {
+    try {
+      const buf = await fetch('/audio/arigatou.mp3').then(r => r.arrayBuffer());
+      const bufAc = new AudioContext();
+      const audioBuf = await bufAc.decodeAudioData(buf);
+      const src = bufAc.createBufferSource();
+      src.buffer = audioBuf;
+      src.connect(bufAc.destination);
+      src.start();
+    } catch(e) {
+      appendLog('  decode/play threw: ' + e.message, 'err');
+    }
+  }, 2000);
+
   inSpeakingWindow = false;
 
   // Stop everything
@@ -225,26 +290,25 @@ async function runAutoTest() {
   stream.getTracks().forEach(t => t.stop());
   await ac.close();
 
-  appendLog('Recording stopped. Bytes captured: ' + recordedBytes, 'info');
+  appendLog('=== FINAL RESULTS ===', 'info');
+  const winners = [];
+  for (const name in results) {
+    const r = results[name];
+    const status = r.peak > 0.01 ? '✅ WORKS' : '❌ silent';
+    appendLog(`  ${status}  ${name}: ${r.db.toFixed(1)} dBFS`, r.peak > 0.01 ? 'ok' : 'err');
+    if (r.peak > 0.01) winners.push(name);
+  }
 
   // Make playback blob
   const blob = new Blob(chunks, { type: 'audio/webm' });
   document.getElementById('player').src = URL.createObjectURL(blob);
 
-  // Verdict
-  appendLog('=== ANALYSIS ===', 'info');
-  appendLog('Peak overall RMS: ' + peakOverall.toFixed(5) + ' (' + (20 * Math.log10(peakOverall || 1e-7)).toFixed(1) + ' dBFS)', 'info');
-  appendLog('Peak during speaking window: ' + speakingPeakWindow.toFixed(5) + ' (' + (20 * Math.log10(speakingPeakWindow || 1e-7)).toFixed(1) + ' dBFS)', 'info');
-
-  const peakDb = 20 * Math.log10(speakingPeakWindow || 1e-7);
-  if (speakingPeakWindow < 0.001) {
-    setVerdict('fail', '❌ FAIL — silence (' + peakDb.toFixed(1) + ' dBFS). Audio engine produced nothing.');
-    appendLog('No audio captured. Either speechSynthesis is broken on this Chrome, OR tab audio capture missed it.', 'err');
-  } else if (speakingPeakWindow < 0.01) {
-    setVerdict('fail', '⚠️ WEAK — ' + peakDb.toFixed(1) + ' dBFS. Audio is barely audible.');
+  if (winners.length === 0) {
+    setVerdict('fail', '❌ ALL 5 STRATEGIES SILENT — audio is completely blocked on this Chrome/tab');
+    appendLog('EVERY strategy produced silence. This is NOT a code bug — Chrome is not producing audio at all.', 'err');
   } else {
-    setVerdict('pass', '✅ PASS — ' + peakDb.toFixed(1) + ' dBFS peak. Audio engine is producing sound.');
-    appendLog('SUCCESS: tab audio capture detected speech synthesis output. Play the recording above to confirm by ear.', 'ok');
+    setVerdict('pass', '✅ ' + winners.length + '/5 strategies worked: ' + winners[0]);
+    appendLog('SUCCESS: ' + winners.length + ' working strategies found. Use: ' + winners.join(', '), 'ok');
   }
 
   document.getElementById('btnRun').disabled = false;
