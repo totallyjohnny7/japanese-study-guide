@@ -11543,12 +11543,13 @@ function speakViaMP3(text) {
   audio.onerror = () => {
     const code = audio.error && audio.error.code;
     const msg = audio.error && audio.error.message;
-    ttsTrace('mp3 error — falling back to Web Speech permanently this session', { text: t, code, msg });
+    ttsTrace('mp3 error — marking MP3 broken this session, NO retry from here', { text: t, code, msg });
     cleanup();
     window.__mp3Broken = true;
     __audioCache.clear();
-    // Fall back to Web Speech API immediately
-    speakViaWebSpeech(t);
+    // DO NOT call speakViaWebSpeech here — that runs OUTSIDE the user gesture
+    // frame and Chrome blocks it as autoplay. The user can re-click to retry,
+    // and the next call will route to Web Speech directly via the __mp3Broken flag.
   };
   audio.onplay = () => ttsTrace('mp3 playing', { text: t });
   const promise = audio.play();
@@ -11563,14 +11564,25 @@ function speakViaMP3(text) {
   return true;
 }
 
-// Play via Web Speech API (fallback)
+// Play via Web Speech API. State machine enforced:
+//  IDLE → SPEAKING via this function
+//  SPEAKING → IDLE via onend OR onerror (any error type)
+// 'interrupted' and 'canceled' are NOT failures — they fire when WE call
+// cancel() to stop the prior utterance, which is intentional. They never
+// trigger retry. Real errors (synthesis-failed, audio-busy, etc.) also
+// don't retry — they just log once and return to IDLE.
 function speakViaWebSpeech(t) {
   if (typeof speechSynthesis === 'undefined') {
     ttsTrace('aborted: no speechSynthesis API');
     return false;
   }
-  const isSpeaking = speechSynthesis.speaking || speechSynthesis.pending;
-  if (isSpeaking) { try { speechSynthesis.cancel(); } catch(_) {} }
+  // Cancel any prior utterance. This will fire its onerror with 'canceled'
+  // or 'interrupted' — handled below as expected, not retried.
+  const wasSpeaking = speechSynthesis.speaking || speechSynthesis.pending;
+  if (wasSpeaking) {
+    try { speechSynthesis.cancel(); } catch(_) {}
+  }
+
   const u = new SpeechSynthesisUtterance(t);
   u.lang = 'ja-JP';
   u.rate = 0.85;
@@ -11580,14 +11592,60 @@ function speakViaWebSpeech(t) {
   const jaVoice = voices.find(v => v.lang === 'ja-JP')
                || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
   if (jaVoice) u.voice = jaVoice;
+
+  // Hold reference to prevent GC mid-playback
   window.__ttsLive.push(u);
   const cleanup = () => {
     const idx = window.__ttsLive.indexOf(u);
     if (idx !== -1) window.__ttsLive.splice(idx, 1);
+    // Only transition to IDLE if THIS utterance was the active one
+    // (a newer cancel-and-replace would have already moved us forward)
+    if (window.__ttsCurrentUtterance === u) {
+      window.__ttsState = 'IDLE';
+      window.__ttsCurrentUtterance = null;
+      // Clear Chrome-pause keepalive
+      if (window.__ttsKeepAlive) {
+        clearInterval(window.__ttsKeepAlive);
+        window.__ttsKeepAlive = null;
+      }
+    }
   };
-  u.onstart = () => ttsTrace('web-speech started', { text: t, voice: jaVoice ? jaVoice.name : 'default' });
-  u.onend   = () => { ttsTrace('web-speech ended'); cleanup(); };
-  u.onerror = (e) => { ttsTrace('web-speech error', e && e.error); cleanup(); };
+
+  u.onstart = () => {
+    ttsTrace('web-speech started', { text: t, voice: jaVoice ? jaVoice.name : 'default' });
+    window.__ttsState = 'SPEAKING';
+    window.__ttsCurrentUtterance = u;
+    // Chrome 15s pause workaround: keep the engine alive by pinging pause/resume
+    if (window.__ttsKeepAlive) clearInterval(window.__ttsKeepAlive);
+    window.__ttsKeepAlive = setInterval(() => {
+      if (!speechSynthesis.speaking) {
+        clearInterval(window.__ttsKeepAlive);
+        window.__ttsKeepAlive = null;
+        return;
+      }
+      try { speechSynthesis.pause(); speechSynthesis.resume(); } catch(_) {}
+    }, 10000);
+  };
+
+  u.onend = () => {
+    ttsTrace('web-speech ended');
+    cleanup();
+  };
+
+  u.onerror = (e) => {
+    const errType = (e && e.error) || 'unknown';
+    // 'canceled' / 'interrupted' = WE called cancel() — completely expected,
+    // not a real failure. Just clean up silently and DO NOT retry.
+    if (errType === 'canceled' || errType === 'interrupted') {
+      ttsTrace('web-speech canceled (expected, no retry)', errType);
+    } else {
+      ttsTrace('web-speech REAL error (no retry)', errType);
+    }
+    cleanup();
+    // DO NOT call speakJP / speakViaWebSpeech / speakViaMP3 from here.
+    // That causes the infinite retry loop.
+  };
+
   try {
     speechSynthesis.speak(u);
     return true;
@@ -11598,38 +11656,56 @@ function speakViaWebSpeech(t) {
   }
 }
 
+// ═══ TTS STATE MACHINE ═══
+// states: IDLE → SPEAKING → IDLE
+// Only IDLE → SPEAKING transitions allowed from user gesture / card-flip events.
+// 'interrupted' / 'canceled' errors do NOT trigger retry (they mean OUR own
+// code cancelled the prior utterance — that's expected, not a failure).
+// Real errors log once and return to IDLE.
+window.__ttsState = window.__ttsState || 'IDLE';
+window.__ttsCallCount = window.__ttsCallCount || 0;
+window.__ttsLastCallAt = window.__ttsLastCallAt || 0;
+const TTS_DEBOUNCE_MS = 250;  // ignore back-to-back same-text calls within this window
+window.__ttsLastText = window.__ttsLastText || '';
+
 function speakJP(text) {
   const t = (text == null ? '' : String(text)).trim();
+  window.__ttsCallCount++;
+  // Capture caller (3rd line of stack = the actual caller, skipping speakJP itself)
+  const stack = (new Error().stack || '').split('\n').slice(1, 4).map(s => s.trim()).join(' ← ');
   const localJa = hasLocalJapaneseVoice();
-  ttsTrace('speakJP called', { text: t, voiceEnabled, localJa, mp3Broken: window.__mp3Broken });
+  ttsTrace('speakJP #' + window.__ttsCallCount + ' called', { text: t, voiceEnabled, localJa, mp3Broken: window.__mp3Broken, state: window.__ttsState, caller: stack });
+
   if (!t) return;
   if (!voiceEnabled) { ttsTrace('aborted: voice disabled'); return; }
 
-  // Stop whatever is currently playing
+  // DEBOUNCE: ignore identical back-to-back calls within 250ms.
+  // This kills any infinite-retry loop dead, no matter what triggered it.
+  const now = Date.now();
+  if (t === window.__ttsLastText && (now - window.__ttsLastCallAt) < TTS_DEBOUNCE_MS) {
+    ttsTrace('debounced (same text within ' + TTS_DEBOUNCE_MS + 'ms)', { text: t });
+    return;
+  }
+  window.__ttsLastText = t;
+  window.__ttsLastCallAt = now;
+
+  // Stop any pending MP3 audio elements
   try {
     window.__audioLive.forEach(a => { try { a.pause(); a.currentTime = 0; } catch(_) {} });
     window.__audioLive.length = 0;
   } catch(_) {}
 
-  // STRATEGY (corrected after real-browser testing):
-  // Web Speech API is the PRIMARY path. It must run synchronously in the
-  // user-gesture frame to satisfy Chrome/Safari autoplay policies. The MP3
-  // fallback was unreliable on real Chrome — Google Translate's translate_tts
-  // endpoint refuses cross-origin audio playback in many cases — so we only
-  // fall through to it when there's literally no local Japanese voice
-  // available.
+  // STRATEGY: Web Speech is primary when a local Japanese voice exists.
+  // Otherwise try MP3 (last resort, may also fail on some browsers).
   if (localJa) {
-    // User has a Japanese voice → Web Speech works perfectly (post-GC-fix)
     speakViaWebSpeech(t);
     return;
   }
-  // No local Japanese voice → try MP3 (last resort, may also fail on some
-  // browsers, but at least it's an attempt at audio)
   if (!window.__mp3Broken) {
     speakViaMP3(t);
   } else {
-    // Both paths exhausted — speak via default voice anyway (kana phonetic
-    // gibberish is still slightly better than total silence as feedback)
+    // Both paths exhausted — speak via default voice (kana phonetic gibberish
+    // is still slightly better than total silence as feedback)
     speakViaWebSpeech(t);
   }
 }
@@ -12747,22 +12823,14 @@ if (window.speechSynthesis) {
     document.querySelectorAll('.tts-active').forEach(el => el.classList.remove('tts-active'));
     ja.classList.add('tts-active');
 
-    // Use the existing speakJP if available and voice is enabled, otherwise use direct synthesis
-    if (typeof speechSynthesis !== 'undefined') {
-      speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'ja-JP';
-      u.rate = 0.85;
-      // Use the already-loaded jpVoice if available
-      if (typeof jpVoice !== 'undefined' && jpVoice) u.voice = jpVoice;
-      else {
-        const voices = speechSynthesis.getVoices();
-        const jv = voices.find(v => v.lang.startsWith('ja'));
-        if (jv) u.voice = jv;
-      }
-      u.onend = () => ja.classList.remove('tts-active');
-      u.onerror = () => ja.classList.remove('tts-active');
-      speechSynthesis.speak(u);
+    // Route through speakJP so the state machine + debounce + voice fallback
+    // logic apply here too. Avoids duplicate parallel TTS paths fighting
+    // each other for the speechSynthesis singleton.
+    if (typeof window.speakJP === 'function') {
+      window.speakJP(text);
+      // Visual feedback: clear after a reasonable estimate (~150ms/char + 600ms)
+      const clearMs = Math.min(8000, 600 + text.length * 150);
+      setTimeout(() => ja.classList.remove('tts-active'), clearMs);
     }
   });
 })();
