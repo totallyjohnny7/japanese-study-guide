@@ -1385,11 +1385,135 @@ body::before {
    FLASHCARDS PANEL (FSRS-4.5)
    ═══════════════════════════════════════════════════════════ */
 #panel_flashcards .ch-title { color: #c8a2ff; }
+.fc-chapter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 6px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.fc-chap-tab {
+  flex: 1 1 auto;
+  min-width: 70px;
+  padding: 9px 10px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: color 120ms ease, background 120ms ease, border 120ms ease;
+}
+.fc-chap-tab:hover { color: var(--gold); }
+.fc-chap-tab.active {
+  background: linear-gradient(135deg, rgba(200,162,255,0.18), rgba(200,162,255,0.08));
+  color: #e4d3ff;
+  border-color: rgba(200,162,255,0.4);
+  box-shadow: 0 0 0 1px rgba(200,162,255,0.12) inset;
+}
+@media (max-width: 560px) {
+  .fc-chap-tab { min-width: 56px; padding: 8px 6px; font-size: 10px; letter-spacing: 0.5px; }
+}
+
+.fc-pos-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  margin: 4px 0 10px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  border-radius: 20px;
+  background: rgba(200,162,255,0.1);
+  color: #c8a2ff;
+  border: 1px solid rgba(200,162,255,0.3);
+}
+.fc-pos-badge.verb { background: rgba(91,168,232,0.12); color: #5ba8e8; border-color: rgba(91,168,232,0.35); }
+.fc-pos-badge.noun { background: rgba(212,168,67,0.1); color: var(--gold); border-color: rgba(212,168,67,0.3); }
+.fc-pos-badge.i-adj, .fc-pos-badge.na-adj { background: rgba(140,200,130,0.12); color: #8cc882; border-color: rgba(140,200,130,0.35); }
+.fc-pos-badge.expression { background: rgba(232,140,91,0.1); color: #e88c5b; border-color: rgba(232,140,91,0.3); }
+
+.fc-mnemonic {
+  margin: 12px 0 8px;
+  padding: 10px 14px;
+  max-width: 460px;
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid #8cc882;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #c8c8c8;
+  font-style: italic;
+  text-align: left;
+}
+.fc-mnemonic::before {
+  content: '🧠 MEMORY HOOK';
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #8cc882;
+  font-style: normal;
+  margin-bottom: 4px;
+}
+
+.fc-example {
+  margin: 8px 0 12px;
+  padding: 10px 14px;
+  max-width: 460px;
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid var(--gold-dark);
+  border-radius: 6px;
+  text-align: left;
+}
+.fc-example::before {
+  content: '📝 EXAMPLE';
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.fc-example .fc-example-jp {
+  font-size: 15px;
+  color: #f0e4c3;
+  margin-bottom: 3px;
+  font-family: 'Noto Sans JP', 'Noto Serif JP', serif;
+}
+.fc-example .fc-example-en {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.fc-chapter-badge {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #c8a2ff;
+  background: rgba(200,162,255,0.12);
+  border: 1px solid rgba(200,162,255,0.35);
+  padding: 4px 9px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
 .fc-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  margin: 18px 0 14px;
+  margin: 14px 0 14px;
 }
 .fc-stat {
   background: var(--surface);
@@ -11051,6 +11175,16 @@ body::before {
     <span class="oe-hl">Press Space or Enter to flip</span>, <span class="oe-hl">1=Again 2=Hard 3=Good 4=Easy</span>.
   </div>
 
+  <div class="fc-chapter-tabs" role="tablist" aria-label="Filter flashcards by chapter">
+    <button class="fc-chap-tab active" data-chapter="all" onclick="fcSetChapter('all')" role="tab" aria-selected="true">All Chapters</button>
+    <button class="fc-chap-tab" data-chapter="1" onclick="fcSetChapter('1')" role="tab" aria-selected="false">Ch 1</button>
+    <button class="fc-chap-tab" data-chapter="2" onclick="fcSetChapter('2')" role="tab" aria-selected="false">Ch 2</button>
+    <button class="fc-chap-tab" data-chapter="3" onclick="fcSetChapter('3')" role="tab" aria-selected="false">Ch 3</button>
+    <button class="fc-chap-tab" data-chapter="4" onclick="fcSetChapter('4')" role="tab" aria-selected="false">Ch 4</button>
+    <button class="fc-chap-tab" data-chapter="5" onclick="fcSetChapter('5')" role="tab" aria-selected="false">Ch 5</button>
+    <button class="fc-chap-tab" data-chapter="6" onclick="fcSetChapter('6')" role="tab" aria-selected="false">Ch 6</button>
+  </div>
+
   <div class="fc-stats">
     <div class="fc-stat"><div class="fc-stat-num" id="fc-stat-total">—</div><div class="fc-stat-lbl">Total Cards</div></div>
     <div class="fc-stat due"><div class="fc-stat-num" id="fc-stat-due">—</div><div class="fc-stat-lbl">Due Today</div></div>
@@ -11143,24 +11277,72 @@ if (typeof speechSynthesis !== 'undefined') {
   speechSynthesis.onvoiceschanged = loadVoices;
 }
 
-const speakJP = t => {
-  if (!voiceEnabled || typeof speechSynthesis === 'undefined') return;
-  // Retry voice loading if not ready yet
-  if (!voicesReady) loadVoices();
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(t);
-  u.lang = 'ja-JP';
-  u.rate = 0.85;
-  if (jpVoice) u.voice = jpVoice;
-  // iOS fix: resume audio context
+// ═══ JAPANESE TEXT-TO-SPEECH ═══
+// Robust across Chrome, Firefox, Safari, iOS Safari. Handles:
+//   1. Voices loading async (retry until jpVoice or timeout)
+//   2. iOS Safari user-gesture unlock (first call primes the audio context)
+//   3. Long-utterance pause bug in Chrome (pause/resume every 10s)
+//   4. Benign 'canceled'/'interrupted' errors from cancel() chains
+let _ttsUnlocked = false;
+function _unlockTTS() {
+  if (_ttsUnlocked || typeof speechSynthesis === 'undefined') return;
   try {
-    speechSynthesis.speak(u);
-  } catch(e) {
-    console.warn('TTS error:', e);
-    showToast('Voice unavailable', 'Your browser cannot play Japanese audio right now. Try reloading the page, or check your audio settings.', 'error');
+    // Silent utterance primes iOS audio pipeline within the user gesture
+    const primer = new SpeechSynthesisUtterance(' ');
+    primer.volume = 0;
+    primer.rate = 2;
+    speechSynthesis.speak(primer);
+    _ttsUnlocked = true;
+  } catch(_) { /* best-effort */ }
+}
+// Unlock on the first tap/click anywhere in the app (captured once, then removed)
+if (typeof window !== 'undefined') {
+  const unlockOnce = () => {
+    _unlockTTS();
+    window.removeEventListener('pointerdown', unlockOnce, true);
+    window.removeEventListener('keydown', unlockOnce, true);
+  };
+  window.addEventListener('pointerdown', unlockOnce, true);
+  window.addEventListener('keydown', unlockOnce, true);
+}
+
+const speakJP = (rawText) => {
+  const t = (rawText == null ? '' : String(rawText)).trim();
+  if (!t) { console.warn('[speakJP] empty text'); return; }
+  if (!voiceEnabled) { console.info('[speakJP] voice disabled'); return; }
+  if (typeof speechSynthesis === 'undefined') {
+    showToast('Voice unavailable', 'Your browser does not support speech synthesis.', 'error');
     return;
   }
-  // Workaround: Chrome sometimes pauses long utterances
+  // Ensure unlock happens even if called from a non-user-gesture path (e.g. auto-speak on flip)
+  _unlockTTS();
+  // Retry voice loading if not ready yet
+  if (!voicesReady) loadVoices();
+  // If voices still aren't loaded, defer the real call until they are
+  if (!voicesReady || !jpVoice) {
+    let attempts = 0;
+    const retry = setInterval(() => {
+      attempts++;
+      loadVoices();
+      if ((voicesReady && jpVoice) || attempts > 10) {
+        clearInterval(retry);
+        _doSpeakJP(t);
+      }
+    }, 60);
+    return;
+  }
+  _doSpeakJP(t);
+};
+
+function _doSpeakJP(t) {
+  try { speechSynthesis.cancel(); } catch(_) {}
+  const u = new SpeechSynthesisUtterance(t);
+  u.lang = 'ja-JP';          // MANDATORY — guarantees Japanese pronunciation
+  u.rate = 0.85;
+  u.pitch = 1.0;
+  u.volume = 1.0;
+  if (jpVoice) u.voice = jpVoice;
+  // Chrome long-utterance pause bug workaround
   let resumeTimer = setInterval(() => {
     if (!speechSynthesis.speaking) { clearInterval(resumeTimer); return; }
     speechSynthesis.pause();
@@ -11169,15 +11351,26 @@ const speakJP = t => {
   u.onend = () => clearInterval(resumeTimer);
   u.onerror = (event) => {
     clearInterval(resumeTimer);
-    // 'canceled' and 'interrupted' are normal — fired when cancel() stops a previous utterance
-    // Only alert the user for genuine audio failures
+    // 'canceled' and 'interrupted' fire normally when cancel() stops a previous utterance
     const ignoredErrors = ['canceled', 'interrupted'];
-    if (!ignoredErrors.includes(event.error) && !window._ttsErrorShown) {
-      window._ttsErrorShown = true;
-      showToast('Audio unavailable', 'Tap 🔊 again to replay. If the problem persists, check your browser audio permissions.', 'warn');
+    if (!ignoredErrors.includes(event.error)) {
+      console.warn('[speakJP] error:', event.error, 'text:', t);
+      if (!window._ttsErrorShown) {
+        window._ttsErrorShown = true;
+        showToast('Audio unavailable', 'Tap 🔊 again to replay. If the problem persists, check your browser audio permissions.', 'warn');
+      }
     }
   };
-};
+  try {
+    speechSynthesis.speak(u);
+  } catch(e) {
+    clearInterval(resumeTimer);
+    console.warn('[speakJP] speak() threw:', e);
+    showToast('Voice unavailable', 'Your browser cannot play Japanese audio right now. Try reloading the page.', 'error');
+  }
+}
+// Expose for inline handlers and debugging
+window.speakJP = speakJP;
 const esc = s => s.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // ═══ TOAST NOTIFICATIONS ═══
@@ -12629,6 +12822,8 @@ function hideTooltip() {
 }
 
 function escHTML(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+// Stricter: safe for HTML attribute values (quotes matter here)
+function escAttr(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // Build a vocab lookup dictionary from all chapter data
 let vocabDict = null;
@@ -13693,64 +13888,152 @@ document.addEventListener('keydown', function(e) {
     return out;
   }
 
+  /* ─── PART-OF-SPEECH HEURISTIC ──────────────────────────────────── */
+  // Rule-based detector: accurate for most Nakama 1 vocabulary.
+  // Returns one of: 'verb', 'i-adj', 'na-adj', 'noun', 'expression', 'particle', 'adverb'
+  function detectPOS(jp, en, reading) {
+    const e = (en || '').toLowerCase().trim();
+    const r = (reading || '').toLowerCase().trim();
+    const j = (jp || '').trim();
+    // Greetings, expressions, set phrases
+    if (/^(good morning|good afternoon|good evening|goodbye|hello|thank|please|excuse|i'?m sorry|welcome|nice to meet|see you|sorry|you'?re welcome|that'?s|this is|how do you do|long time)/i.test(e)) return 'expression';
+    // Particles (usually 1–2 kana, specific words)
+    if (/^(wa|ga|wo|o|ni|de|to|ka|no|e|mo|ya|kara|made|yori|dake|shika|demo|ne|yo|na)$/i.test(r)) return 'particle';
+    // Verbs — Japanese verbs end in う-row kana (u-sound). Romaji: end in -u (but not -ou/-iu which are nouns often)
+    if (/^(to )/i.test(e)) return 'verb';
+    if (/る$|う$|く$|ぐ$|す$|つ$|ぬ$|ぶ$|む$|る$/.test(j) && /(to )/i.test(e)) return 'verb';
+    if (/(masu|imasu|kimasu|shimasu|arimasu)$/i.test(r)) return 'verb';
+    // i-adjectives end in い and English gloss is adjective-like
+    if (/い$/.test(j) && !/(sensei|gakusei|kirei|yuumei|shizuka|genki)/i.test(r)) {
+      // "nice", "big", "small", "cold", etc. usually plain word
+      if (/^[a-z\- ]+$/i.test(e) && !/^(a |an |the )/i.test(e) && e.split(' ').length <= 3) return 'i-adj';
+    }
+    // na-adjectives — common set
+    if (/^(kirei|yuumei|shizuka|genki|benri|suki|kirai|hima|nigiyaka|taihen|daijoubu|shinsetsu|joubu|tokui|heta|jouzu|daiji|muri|muzukashii|yasashii)$/i.test(r)) return 'na-adj';
+    // Adverbs
+    if (/^(very|really|often|sometimes|usually|quickly|slowly|always|never|well|a lot|a little|sometimes|today|tomorrow|yesterday|now|later|soon)$/i.test(e)) return 'adverb';
+    // Default: noun
+    return 'noun';
+  }
+
+  /* ─── SIMPLE MNEMONIC GENERATOR ─────────────────────────────────── */
+  // Creates a vivid memory hook from phonetic resemblance.
+  // Not AI-generated — just a clever join of romaji + English meaning using a template.
+  function makeMnemonic(jp, romaji, english) {
+    const r = (romaji || '').toLowerCase().replace(/[^a-z]/g, '');
+    const e = (english || '').toLowerCase().split(/[,\-()]/)[0].trim();
+    if (!r || !e) return '';
+    // Phonetic hook: find English word starting with same 1-2 letters
+    const templates = [
+      `Sounds like "${r}" → picture ${e} saying it out loud.`,
+      `"${r}" → imagine a ${e} whispering the word to you.`,
+      `Think "${r}" rhymes with your mental image of ${e}.`,
+      `Link: ${r.slice(0,3)}... ${e}! Repeat three times.`,
+    ];
+    // Hash romaji to pick a stable template per word
+    let h = 0; for (const c of r) h = (h * 31 + c.charCodeAt(0)) & 0xffff;
+    return templates[h % templates.length];
+  }
+
+  /* ─── SIMPLE EXAMPLE SENTENCE ───────────────────────────────────── */
+  // Builds a minimal template sentence using the word. Not perfect grammar
+  // for every word, but reliable for nouns/adjectives which make up ~80% of vocab.
+  function makeExample(jp, english, pos) {
+    if (!jp) return null;
+    const cleanJp = jp.replace(/⚠️/g, '').trim();
+    if (pos === 'verb') {
+      return { jp: `毎日 ${cleanJp}。`, en: `I ${english.replace(/^to /i,'')} every day.` };
+    }
+    if (pos === 'i-adj' || pos === 'na-adj') {
+      const suffix = pos === 'na-adj' ? 'な' : '';
+      return { jp: `これは ${cleanJp}${suffix} です。`, en: `This is ${english}.` };
+    }
+    if (pos === 'expression' || pos === 'particle' || pos === 'adverb') {
+      return { jp: `${cleanJp}`, en: english };
+    }
+    // Default noun
+    return { jp: `これは ${cleanJp} です。`, en: `This is ${english}.` };
+  }
+
   /* ─── BUILD VOCAB POOL ──────────────────────────────────────────── */
-  // Merges CHAPTER_DATA + DOM .oe-loc-item boxes, dedupes, attaches script breakdown.
-  // Each card: { id, hiragana, katakana, kanji, romaji, english, source, key }
+  // Merges CHAPTER_DATA + DOM .oe-loc-item boxes, dedupes, attaches script breakdown,
+  // POS detection, mnemonic, example sentence, and chapter tag.
+  // Each card: { id, hiragana, katakana, kanji, romaji, english, source, chapter, pos, mnemonic, example }
   function buildVocabPool() {
     const seen = new Map(); // key → card
-    function add(jp, rm, en, source) {
+    function add(jp, rm, en, source, chapter) {
       jp = (jp || '').replace(/⚠️/g, '').replace(/[（()].*?[）)]/g, '').trim();
       rm = (rm || '').trim();
       en = (en || '').trim();
       if (!jp || !en) return;
       const key = jp + '|' + en.toLowerCase();
-      if (seen.has(key)) return;
+      if (seen.has(key)) {
+        // If already seen but we now have a chapter and the old didn't, upgrade it
+        const existing = seen.get(key);
+        if (!existing.chapter && chapter) existing.chapter = chapter;
+        return;
+      }
 
       let hiragana = '', katakana = '', kanji = '';
+      // Detect if this is a katakana loanword (should preserve katakana form)
+      const katakanaOnly = isKatakana(jp);
       if (hasKanji(jp)) {
         kanji = jp;
-        // Derive hiragana from romaji if available
+        // Derive hiragana from romaji if available (more accurate than reading kanji)
         hiragana = romajiToHiragana(rm);
         if (hiragana) katakana = hiraganaToKatakana(hiragana);
-      } else if (isHiragana(jp)) {
-        hiragana = jp;
-        katakana = hiraganaToKatakana(jp);
-      } else if (isKatakana(jp)) {
+      } else if (katakanaOnly) {
         katakana = jp;
         hiragana = katakanaToHiragana(jp);
+      } else if (isHiragana(jp)) {
+        hiragana = jp;
+        // Only show katakana form for hiragana words that are likely loanwords
+        // (we don't know — leave empty unless the romaji hints at foreign origin)
+        katakana = '';
       } else {
         // Mixed kana — use as-is for hiragana
         hiragana = jp;
         katakana = hiraganaToKatakana(jp);
       }
 
+      const pos = detectPOS(jp, en, rm);
       seen.set(key, {
         id: key,
         hiragana, katakana, kanji,
         romaji: rm,
         english: en,
         source: source,
+        chapter: chapter || null,
+        pos: pos,
+        mnemonic: makeMnemonic(jp, rm, en),
+        example: makeExample(jp, en, pos),
         key: key,
       });
     }
 
-    // Source 1: CHAPTER_DATA
+    // Source 1: CHAPTER_DATA — authoritative, already chapter-tagged
     if (typeof CHAPTER_DATA !== 'undefined') {
       for (const [ch, data] of Object.entries(CHAPTER_DATA)) {
         if (!data.vocab) continue;
-        data.vocab.forEach(v => add(v.japanese, v.reading, v.english, ch.toUpperCase()));
+        const chNum = ch.replace(/\D/g, ''); // 'ch1' → '1'
+        data.vocab.forEach(v => add(v.japanese, v.reading, v.english, ch.toUpperCase(), chNum));
       }
     }
 
-    // Source 2: DOM .oe-loc-item boxes
+    // Source 2: DOM .oe-loc-item boxes (Atlas, ref-struct, etc.)
+    // The atlas encodes chapter in the English text as "(Ch2)", "(Ch3)", etc.
     document.querySelectorAll('.oe-loc-item').forEach(item => {
       const jp = item.querySelector('.oe-loc-jp')?.textContent || '';
       const rm = item.querySelector('.oe-loc-rm')?.textContent || '';
       const en = item.querySelector('.oe-loc-en')?.textContent || '';
-      // Find which panel it belongs to for source label
       const panel = item.closest('.chapter-panel');
       const src = panel ? (panel.id === 'panel_ref-vocab' ? 'ATLAS' : panel.id === 'panel_oral-exam' ? 'EXAM' : panel.id.replace('panel_','').toUpperCase()) : 'OTHER';
-      add(jp, rm, en, src);
+      // Try to parse "(Ch2)" chapter marker from English text
+      const chMatch = /\(Ch(?:apter)?\s*(\d)\)/i.exec(en);
+      const ch = chMatch ? chMatch[1] : null;
+      // Clean English by removing the marker so it displays nicely
+      const cleanEn = en.replace(/\s*\(Ch(?:apter)?\s*\d\)\s*$/i, '').trim();
+      add(jp, rm, cleanEn, src, ch);
     });
 
     return Array.from(seen.values());
@@ -13786,24 +14069,36 @@ document.addEventListener('keydown', function(e) {
   }
 
   /* ─── SESSION STATE ──────────────────────────────────────────────── */
-  let pool = [];          // all cards (vocab entries)
+  let pool = [];          // full vocab pool (all chapters)
+  let filteredPool = [];  // pool filtered by selectedChapter — the one used for session
   let state = {};         // card.id → fsrs state
   let queue = [];         // upcoming cards for this session (due first, then new)
   let currentCard = null;
   let isFlipped = false;
   let sessionStarted = 0;
   let sessionRated = 0;
+  let selectedChapter = 'all'; // 'all' | '1'..'6'
   const NEW_CARDS_PER_DAY = 20;
+  const CHAPTER_STORAGE_KEY = 'nakama_fc_chapter_v1';
 
   function getCardState(card) {
     return state[card.id] || { state: 'new', s: 0, d: 0, due: null, reps: 0, lapses: 0, last: null };
+  }
+
+  // Apply chapter filter to pool → filteredPool
+  function applyChapterFilter() {
+    if (selectedChapter === 'all') {
+      filteredPool = pool.slice();
+    } else {
+      filteredPool = pool.filter(c => c.chapter === selectedChapter);
+    }
   }
 
   function buildQueue() {
     const today = todayISO();
     const due = [], newCards = [];
     let newCount = 0;
-    pool.forEach(card => {
+    filteredPool.forEach(card => {
       const cs = getCardState(card);
       if (cs.state === 'new') {
         if (newCount < NEW_CARDS_PER_DAY) { newCards.push(card); newCount++; }
@@ -13823,9 +14118,9 @@ document.addEventListener('keydown', function(e) {
 
   function computeStats() {
     const today = todayISO();
-    let total = pool.length, due = 0, newToday = 0, mastered = 0;
+    let total = filteredPool.length, due = 0, newToday = 0, mastered = 0;
     let newCount = 0;
-    pool.forEach(card => {
+    filteredPool.forEach(card => {
       const cs = getCardState(card);
       if (cs.state === 'new') {
         if (newCount < NEW_CARDS_PER_DAY) { newToday++; newCount++; }
@@ -13850,14 +14145,21 @@ document.addEventListener('keydown', function(e) {
     if ($('fc-progress-fill')) $('fc-progress-fill').style.width = pct + '%';
   }
 
+  // Choose the best text for TTS: prefer hiragana (unambiguous), fall back to kanji, then katakana
+  function getSpeakableText(card) {
+    return card.hiragana || card.kanji || card.katakana || '';
+  }
+
   function renderCardFront(card) {
     const area = document.getElementById('fc-card-area');
     if (!area) return;
     isFlipped = false;
     const cs = getCardState(card);
     const stateLbl = cs.state === 'new' ? '✦ NEW' : (cs.state === 'review' ? '◉ REVIEW' : '⟲ LEARNING');
+    const chapterBadge = card.chapter ? `<div class="fc-chapter-badge">Ch ${escHTML(card.chapter)}</div>` : '';
     area.innerHTML = `
       <div class="fc-card">
+        ${chapterBadge}
         <div class="fc-prompt">${stateLbl} · what is the Japanese for…</div>
         <div class="fc-front-en">${escHTML(card.english)}</div>
         <button class="fc-flip-btn" onclick="fcFlip()">Flip ↻</button>
@@ -13884,13 +14186,29 @@ document.addEventListener('keydown', function(e) {
       scriptRows += `<div class="fc-script-row kanji"><span class="fc-script-lbl">Kanji</span><span class="fc-script-val">${escHTML(card.kanji)}</span></div>`;
     }
 
+    const chapterBadge = card.chapter ? `<div class="fc-chapter-badge">Ch ${escHTML(card.chapter)}</div>` : '';
+    const posBadge = card.pos ? `<div class="fc-pos-badge ${escHTML(card.pos)}">${escHTML(card.pos.replace('-',' '))}</div>` : '';
+    const mnemonicBlock = card.mnemonic ? `<div class="fc-mnemonic">${escHTML(card.mnemonic)}</div>` : '';
+    const exampleBlock = card.example ? `
+      <div class="fc-example">
+        <div class="fc-example-jp">${escHTML(card.example.jp)}</div>
+        <div class="fc-example-en">${escHTML(card.example.en)}</div>
+      </div>
+    ` : '';
+
+    const speakable = getSpeakableText(card);
+
     area.innerHTML = `
       <div class="fc-card fc-back">
-        <div class="fc-prompt">Answer · ${card.source}</div>
+        ${chapterBadge}
+        <div class="fc-prompt">Answer · ${escHTML(card.source)}</div>
+        ${posBadge}
         ${scriptRows}
         ${card.romaji ? `<div class="fc-romaji">${escHTML(card.romaji)}</div>` : ''}
         <div class="fc-en-confirm">${escHTML(card.english)}</div>
-        <button class="ut-speak" style="margin-top:14px" onclick="speakJP('${(card.kanji || card.hiragana || card.katakana).replace(/'/g,"\\'")}')">🔊 Listen</button>
+        ${mnemonicBlock}
+        ${exampleBlock}
+        <button class="ut-speak" style="margin-top:14px" data-speak="${escAttr(speakable)}" id="fc-listen-btn">🔊 Listen</button>
         <div class="fc-rating-row">
           <button class="fc-rate-btn again" onclick="fcGrade(1)">Again<span class="fc-key">[1]</span><span class="fc-interval">${intervals[1]}</span></button>
           <button class="fc-rate-btn hard"  onclick="fcGrade(2)">Hard<span class="fc-key">[2]</span><span class="fc-interval">${intervals[2]}</span></button>
@@ -13899,6 +14217,22 @@ document.addEventListener('keydown', function(e) {
         </div>
       </div>
     `;
+
+    // Wire up listen button via data attribute (avoids inline quote-escape pitfalls)
+    const listenBtn = document.getElementById('fc-listen-btn');
+    if (listenBtn) {
+      listenBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const txt = this.getAttribute('data-speak');
+        if (txt) speakJP(txt);
+      });
+    }
+
+    // Auto-speak the answer on flip — this is inside a user gesture (Flip button click)
+    // so it respects iOS Safari's user-activation requirement
+    if (speakable && voiceEnabled) {
+      setTimeout(() => speakJP(speakable), 60);
+    }
   }
 
   function nextCard() {
@@ -14015,6 +14349,13 @@ document.addEventListener('keydown', function(e) {
     if (pool.length === 0) {
       pool = buildVocabPool();
     }
+    // Load persisted chapter selection
+    try {
+      const saved = localStorage.getItem(CHAPTER_STORAGE_KEY);
+      if (saved && /^(all|[1-6])$/.test(saved)) selectedChapter = saved;
+    } catch(_) {}
+    applyChapterFilter();
+    updateChapterTabsUI();
     state = loadState();
     buildQueue();
     sessionStarted = queue.length;
@@ -14022,11 +14363,12 @@ document.addEventListener('keydown', function(e) {
     if (queue.length === 0) {
       const area = document.getElementById('fc-card-area');
       if (area) {
+        const chapLabel = selectedChapter === 'all' ? '' : ` for Chapter ${selectedChapter}`;
         area.innerHTML = `
           <div class="fc-empty">
             <div class="fc-empty-icon">✨</div>
-            <div class="fc-empty-msg">No cards due — you're caught up!</div>
-            <div class="fc-empty-sub">Come back tomorrow, or click "Restart Session" to study a fresh batch of new cards.</div>
+            <div class="fc-empty-msg">No cards due${chapLabel} — you're caught up!</div>
+            <div class="fc-empty-sub">Come back tomorrow, switch chapters above, or click "Restart Session" to study a fresh batch of new cards.</div>
           </div>
         `;
       }
@@ -14036,13 +14378,46 @@ document.addEventListener('keydown', function(e) {
     nextCard();
   }
 
+  function updateChapterTabsUI() {
+    document.querySelectorAll('.fc-chap-tab').forEach(btn => {
+      const isActive = btn.dataset.chapter === selectedChapter;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+  }
+
+  window.fcSetChapter = function(ch) {
+    if (selectedChapter === ch) return;
+    selectedChapter = ch;
+    try { localStorage.setItem(CHAPTER_STORAGE_KEY, ch); } catch(_) {}
+    updateChapterTabsUI();
+    // Rebuild queue and restart session for the new chapter
+    sessionStarted = 0;
+    sessionRated = 0;
+    isFlipped = false;
+    currentCard = null;
+    initFlashcards();
+  };
+
   window.initFlashcards = initFlashcards;
   // Debug helpers (safe to leave in — only used by tests / power users)
   window._fcDebug = {
     getPool: () => (pool.length === 0 && (pool = buildVocabPool()), pool),
+    getFilteredPool: () => filteredPool,
+    getChapter: () => selectedChapter,
     getState: () => state,
     getQueue: () => queue,
     getCurrent: () => currentCard,
+    chapterBreakdown: () => {
+      if (pool.length === 0) pool = buildVocabPool();
+      const b = { all: pool.length, untagged: 0 };
+      for (let i = 1; i <= 6; i++) b[i] = 0;
+      pool.forEach(c => {
+        if (c.chapter && b[c.chapter] !== undefined) b[c.chapter]++;
+        else b.untagged++;
+      });
+      return b;
+    },
     forceCard: (jpQuery) => {
       if (pool.length === 0) pool = buildVocabPool();
       const c = pool.find(p => p.kanji === jpQuery || p.hiragana === jpQuery || p.english === jpQuery);
