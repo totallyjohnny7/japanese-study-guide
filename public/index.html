@@ -1422,6 +1422,81 @@ body::before {
   .fc-chap-tab { min-width: 56px; padding: 8px 6px; font-size: 10px; letter-spacing: 0.5px; }
 }
 
+.fc-audio-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 14px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+.fc-audio-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: transparent;
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+  border-radius: 22px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: all 180ms ease;
+}
+.fc-audio-toggle:hover { transform: translateY(-1px); }
+.fc-audio-toggle.on {
+  background: linear-gradient(135deg, rgba(140,200,130,0.2), rgba(140,200,130,0.08));
+  color: #8cc882;
+  border-color: rgba(140,200,130,0.55);
+  box-shadow: 0 0 0 1px rgba(140,200,130,0.15) inset, 0 0 12px rgba(140,200,130,0.15);
+}
+.fc-audio-toggle.off {
+  background: linear-gradient(135deg, rgba(232,91,91,0.18), rgba(232,91,91,0.06));
+  color: #e85b5b;
+  border-color: rgba(232,91,91,0.5);
+}
+.fc-audio-icon { font-size: 15px; }
+.fc-audio-label { font-size: 11px; }
+.fc-audio-test {
+  padding: 9px 16px;
+  background: rgba(212,168,67,0.08);
+  color: var(--gold);
+  border: 1px solid rgba(212,168,67,0.4);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: all 150ms ease;
+}
+.fc-audio-test:hover { background: rgba(212,168,67,0.18); color: #f0d27f; }
+.fc-audio-test:disabled { opacity: 0.4; cursor: not-allowed; }
+.fc-audio-hint {
+  flex: 1;
+  min-width: 180px;
+  font-size: 10px;
+  color: var(--muted);
+  font-style: italic;
+  letter-spacing: 0.3px;
+}
+.fc-audio-hint.warn { color: #e85b5b; font-style: normal; font-weight: 600; }
+.fc-audio-hint.ok { color: #8cc882; font-style: normal; font-weight: 600; }
+@media (max-width: 560px) {
+  .fc-audio-row { padding: 8px 10px; gap: 8px; }
+  .fc-audio-toggle { padding: 8px 12px; }
+  .fc-audio-test { padding: 8px 12px; }
+  .fc-audio-hint { flex-basis: 100%; order: 3; }
+}
+
 .fc-pos-badge {
   display: inline-block;
   padding: 3px 10px;
@@ -11185,6 +11260,19 @@ body::before {
     <button class="fc-chap-tab" data-chapter="6" onclick="fcSetChapter('6')" role="tab" aria-selected="false">Ch 6</button>
   </div>
 
+  <div class="fc-audio-row">
+    <button class="fc-audio-toggle on" id="fc-audio-toggle" onclick="fcToggleAudio()" type="button"
+            aria-pressed="true" aria-label="Toggle flashcard audio">
+      <span class="fc-audio-icon">🔊</span>
+      <span class="fc-audio-label">Audio: ON</span>
+    </button>
+    <button class="fc-audio-test" id="fc-audio-test" onclick="fcTestAudio()" type="button"
+            aria-label="Play a test Japanese word">
+      Test 🎧
+    </button>
+    <div class="fc-audio-hint" id="fc-audio-hint">Cards auto-play when flipped. Tap Test to confirm.</div>
+  </div>
+
   <div class="fc-stats">
     <div class="fc-stat"><div class="fc-stat-num" id="fc-stat-total">—</div><div class="fc-stat-lbl">Total Cards</div></div>
     <div class="fc-stat due"><div class="fc-stat-num" id="fc-stat-due">—</div><div class="fc-stat-lbl">Due Today</div></div>
@@ -11318,13 +11406,16 @@ const speakJP = (rawText) => {
   _unlockTTS();
   // Retry voice loading if not ready yet
   if (!voicesReady) loadVoices();
-  // If voices still aren't loaded, defer the real call until they are
-  if (!voicesReady || !jpVoice) {
+  // If voices still aren't loaded AT ALL, defer briefly (voiceschanged event may fire)
+  // NOTE: We intentionally do NOT block on jpVoice — browsers without a Japanese voice
+  // still produce audible output (the default voice reads the kana phonetically),
+  // which is strictly better than silence.
+  if (!voicesReady) {
     let attempts = 0;
     const retry = setInterval(() => {
       attempts++;
       loadVoices();
-      if ((voicesReady && jpVoice) || attempts > 10) {
+      if (voicesReady || attempts > 10) {
         clearInterval(retry);
         _doSpeakJP(t);
       }
@@ -14227,12 +14318,9 @@ document.addEventListener('keydown', function(e) {
         if (txt) speakJP(txt);
       });
     }
-
-    // Auto-speak the answer on flip — this is inside a user gesture (Flip button click)
-    // so it respects iOS Safari's user-activation requirement
-    if (speakable && voiceEnabled) {
-      setTimeout(() => speakJP(speakable), 60);
-    }
+    // NOTE: Auto-speak is triggered from fcFlip() BEFORE renderCardBack so the
+    // speakJP() call stays synchronous inside the Flip button's click gesture —
+    // iOS Safari only honors speak() inside the original user-activation frame.
   }
 
   function nextCard() {
@@ -14260,6 +14348,13 @@ document.addEventListener('keydown', function(e) {
   window.fcFlip = function() {
     if (!currentCard) return;
     if (isFlipped) return;
+    // Speak synchronously in the Flip button's click gesture frame.
+    // iOS Safari requires the speak() call to happen before any async work
+    // (setTimeout, await, etc.) to count as user-activated.
+    if (voiceEnabled) {
+      const speakable = getSpeakableText(currentCard);
+      if (speakable) speakJP(speakable);
+    }
     renderCardBack(currentCard);
   };
 
@@ -14354,8 +14449,14 @@ document.addEventListener('keydown', function(e) {
       const saved = localStorage.getItem(CHAPTER_STORAGE_KEY);
       if (saved && /^(all|[1-6])$/.test(saved)) selectedChapter = saved;
     } catch(_) {}
+    // Load persisted audio preference (default to ON if never set)
+    try {
+      const audioPref = localStorage.getItem(AUDIO_STORAGE_KEY);
+      if (audioPref !== null) voiceEnabled = audioPref === '1';
+    } catch(_) {}
     applyChapterFilter();
     updateChapterTabsUI();
+    updateAudioToggleUI();
     state = loadState();
     buildQueue();
     sessionStarted = queue.length;
@@ -14397,6 +14498,108 @@ document.addEventListener('keydown', function(e) {
     isFlipped = false;
     currentCard = null;
     initFlashcards();
+  };
+
+  /* ─── AUDIO TOGGLE ─────────────────────────────────────────────────
+     This toggles the global voiceEnabled state. It's a dedicated button
+     inside the flashcard panel (vs the small floating fab) so the user
+     has an obvious, testable control for flashcard audio. The ON click
+     is a user gesture — we use it to force-unlock TTS and play a test
+     utterance, which both verifies and primes the audio pipeline.
+  */
+  const AUDIO_STORAGE_KEY = 'nakama_fc_audio_v1';
+  function updateAudioToggleUI() {
+    const btn = document.getElementById('fc-audio-toggle');
+    const hint = document.getElementById('fc-audio-hint');
+    if (!btn) return;
+    btn.classList.toggle('on', voiceEnabled);
+    btn.classList.toggle('off', !voiceEnabled);
+    btn.setAttribute('aria-pressed', voiceEnabled ? 'true' : 'false');
+    const icon = btn.querySelector('.fc-audio-icon');
+    const label = btn.querySelector('.fc-audio-label');
+    if (icon) icon.textContent = voiceEnabled ? '🔊' : '🔇';
+    if (label) label.textContent = voiceEnabled ? 'Audio: ON' : 'Audio: OFF';
+    if (hint && !hint.classList.contains('warn') && !hint.classList.contains('ok')) {
+      hint.textContent = voiceEnabled
+        ? 'Cards auto-play when flipped. Tap Test to confirm.'
+        : 'Audio is off. Click above to turn on.';
+    }
+  }
+  function setAudioHint(text, kind) {
+    const hint = document.getElementById('fc-audio-hint');
+    if (!hint) return;
+    hint.classList.remove('warn', 'ok');
+    if (kind) hint.classList.add(kind);
+    hint.textContent = text;
+    // Reset to default after 4s
+    if (kind) {
+      setTimeout(() => {
+        hint.classList.remove('warn', 'ok');
+        updateAudioToggleUI();
+      }, 4000);
+    }
+  }
+
+  window.fcToggleAudio = function() {
+    voiceEnabled = !voiceEnabled;
+    try { localStorage.setItem(AUDIO_STORAGE_KEY, voiceEnabled ? '1' : '0'); } catch(_) {}
+    // Also sync the global voice fab if it exists
+    const fab = document.getElementById('voiceFab');
+    if (fab) {
+      fab.textContent = voiceEnabled ? '🔊' : '🔇';
+      fab.classList.toggle('off', !voiceEnabled);
+      if (fab.title !== undefined) fab.title = voiceEnabled ? 'Voice ON (V)' : 'Voice OFF (V)';
+    }
+    updateAudioToggleUI();
+    if (voiceEnabled) {
+      // This click IS a user gesture → perfect moment to unlock iOS audio
+      _unlockTTS();
+      // Play a friendly test utterance so user hears confirmation immediately.
+      // Synchronous call inside the user gesture frame = iOS-safe.
+      _doSpeakJP('こんにちは');
+      setAudioHint('Playing test audio — you should hear "konnichiwa"', 'ok');
+    } else {
+      try { speechSynthesis.cancel(); } catch(_) {}
+      setAudioHint('Audio muted', 'warn');
+    }
+  };
+
+  window.fcTestAudio = function() {
+    // Force-unlock and speak a known-good test phrase.
+    // If voiceEnabled is off, temporarily bypass it (user clicked Test, clear intent).
+    _unlockTTS();
+    if (!voiceEnabled) {
+      // Flip it on so the user hears something
+      voiceEnabled = true;
+      try { localStorage.setItem(AUDIO_STORAGE_KEY, '1'); } catch(_) {}
+      updateAudioToggleUI();
+    }
+    // Diagnose: is a Japanese voice available?
+    loadVoices();
+    if (!voicesReady) {
+      setAudioHint('Voices still loading… try again in a moment', 'warn');
+      // Retry after voices load
+      let attempts = 0;
+      const iv = setInterval(() => {
+        attempts++;
+        loadVoices();
+        if (voicesReady || attempts > 15) {
+          clearInterval(iv);
+          if (voicesReady) {
+            _doSpeakJP('こんにちは');
+            setAudioHint(jpVoice ? 'Playing test…' : 'No Japanese voice — speaking anyway', 'ok');
+          } else {
+            setAudioHint('Your browser has no speech voices installed', 'warn');
+          }
+        }
+      }, 80);
+      return;
+    }
+    if (!jpVoice) {
+      setAudioHint('No ja-JP voice found — falling back to default', 'warn');
+    }
+    _doSpeakJP('こんにちは');
+    setTimeout(() => setAudioHint('Playing "こんにちは" (konnichiwa)', 'ok'), 10);
   };
 
   window.initFlashcards = initFlashcards;
