@@ -11600,7 +11600,8 @@ function speakViaWebSpeech(t) {
 
 function speakJP(text) {
   const t = (text == null ? '' : String(text)).trim();
-  ttsTrace('speakJP called', { text: t, voiceEnabled, mp3Broken: window.__mp3Broken });
+  const localJa = hasLocalJapaneseVoice();
+  ttsTrace('speakJP called', { text: t, voiceEnabled, localJa, mp3Broken: window.__mp3Broken });
   if (!t) return;
   if (!voiceEnabled) { ttsTrace('aborted: voice disabled'); return; }
 
@@ -11610,19 +11611,32 @@ function speakJP(text) {
     window.__audioLive.length = 0;
   } catch(_) {}
 
-  // Strategy: try Google Translate TTS MP3 first (guaranteed correct pronunciation
-  // on any device with internet). If MP3 is marked broken for this session (the
-  // onerror handler flips __mp3Broken after a real failure), fall back to Web
-  // Speech API for the rest of the session.
-  if (window.__mp3Broken) {
+  // STRATEGY (corrected after real-browser testing):
+  // Web Speech API is the PRIMARY path. It must run synchronously in the
+  // user-gesture frame to satisfy Chrome/Safari autoplay policies. The MP3
+  // fallback was unreliable on real Chrome — Google Translate's translate_tts
+  // endpoint refuses cross-origin audio playback in many cases — so we only
+  // fall through to it when there's literally no local Japanese voice
+  // available.
+  if (localJa) {
+    // User has a Japanese voice → Web Speech works perfectly (post-GC-fix)
     speakViaWebSpeech(t);
-  } else {
+    return;
+  }
+  // No local Japanese voice → try MP3 (last resort, may also fail on some
+  // browsers, but at least it's an attempt at audio)
+  if (!window.__mp3Broken) {
     speakViaMP3(t);
+  } else {
+    // Both paths exhausted — speak via default voice anyway (kana phonetic
+    // gibberish is still slightly better than total silence as feedback)
+    speakViaWebSpeech(t);
   }
 }
 window.speakJP = speakJP;
 window.speakViaMP3 = speakViaMP3;
 window.speakViaWebSpeech = speakViaWebSpeech;
+window.hasLocalJapaneseVoice = hasLocalJapaneseVoice;
 const esc = s => s.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // ═══ TOAST NOTIFICATIONS ═══
@@ -14761,14 +14775,14 @@ document.addEventListener('keydown', function(e) {
     if (hint && !hint.dataset.sticky) {
       if (!voiceEnabled) {
         hint.textContent = 'Audio is off. Click the green button to enable.';
-      } else if (window.__mp3Broken) {
+      } else {
         const voices = typeof speechSynthesis !== 'undefined' ? speechSynthesis.getVoices() : [];
         const ja = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
-        hint.textContent = ja
-          ? `Ready — using local voice "${ja.name}" (MP3 fallback unavailable)`
-          : 'Ready — using local voices (MP3 fallback unavailable)';
-      } else {
-        hint.textContent = 'Ready — using Google Translate TTS (high-quality native Japanese)';
+        if (ja) {
+          hint.textContent = `Ready — using local voice "${ja.name}" (${ja.lang})`;
+        } else {
+          hint.textContent = 'No local ja voice — falling back to Google Translate TTS';
+        }
       }
     }
   }
