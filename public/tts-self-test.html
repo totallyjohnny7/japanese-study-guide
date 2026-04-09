@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TTS Self-Test — Records Its Own Audio</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, sans-serif; max-width: 760px; margin: 30px auto; padding: 24px; background: #0a0a0a; color: #e8e8e8; line-height: 1.5; }
+  h1 { color: #d4a843; margin-top: 0; }
+  h2 { color: #5ba8e8; font-size: 16px; margin: 24px 0 8px; }
+  .step { background: #1a1a1a; padding: 14px 18px; border-radius: 8px; margin: 10px 0; border-left: 3px solid #d4a843; }
+  .step b { color: #f0d27f; }
+  button { padding: 14px 26px; font-size: 16px; background: linear-gradient(135deg, #d4a843, #b8893a); color: #000; border: none; border-radius: 8px; cursor: pointer; margin: 8px 6px 8px 0; font-weight: 700; box-shadow: 0 2px 8px rgba(212,168,67,0.3); }
+  button:hover { transform: translateY(-1px); filter: brightness(1.1); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  button.secondary { background: #2a2a2a; color: #d4a843; border: 1px solid #444; box-shadow: none; }
+  .log { background: #000; padding: 14px; border-radius: 8px; font-family: 'Cascadia Mono', Consolas, monospace; font-size: 12px; max-height: 360px; overflow-y: auto; border: 1px solid #333; }
+  .log .line { padding: 1px 0; white-space: pre-wrap; word-break: break-all; }
+  .log .ok { color: #8cc882; }
+  .log .err { color: #e85b5b; }
+  .log .info { color: #5ba8e8; }
+  .log .dim { color: #888; }
+  .verdict { font-size: 22px; padding: 22px; margin: 18px 0; border-radius: 12px; text-align: center; font-weight: 700; }
+  .verdict.pass { background: linear-gradient(135deg, rgba(140,200,130,0.2), rgba(140,200,130,0.08)); color: #8cc882; border: 2px solid #8cc882; }
+  .verdict.fail { background: linear-gradient(135deg, rgba(232,91,91,0.2), rgba(232,91,91,0.08)); color: #e85b5b; border: 2px solid #e85b5b; }
+  .verdict.pending { background: rgba(91,168,232,0.1); color: #5ba8e8; border: 2px solid #5ba8e8; }
+  .meter { height: 14px; background: #222; border-radius: 7px; overflow: hidden; margin: 6px 0; }
+  .meter-fill { height: 100%; background: linear-gradient(90deg, #8cc882, #d4a843, #e85b5b); width: 0%; transition: width 50ms linear; }
+  audio { width: 100%; margin: 10px 0; }
+</style>
+</head>
+<body>
+<h1>🎤 TTS Self-Test</h1>
+<p>This page records its own tab audio while triggering <code>speakJP()</code>, then analyzes the captured WAV blob in-browser. No tools required — runs entirely in this tab.</p>
+
+<h2>How to run</h2>
+<div class="step">
+  <b>1.</b> Click <b>RUN AUTO TEST</b> below.
+</div>
+<div class="step">
+  <b>2.</b> Chrome will ask permission to share tab audio. Click <b>"This Tab"</b> in the picker. <b>You MUST tick "Also share tab audio"</b>.
+</div>
+<div class="step">
+  <b>3.</b> The test will record for 4 seconds while it speaks "こんにちは" three times.
+</div>
+<div class="step">
+  <b>4.</b> The verdict appears below — PASS means audio was captured at audible levels.
+</div>
+
+<div id="verdict" class="verdict pending">⏳ Click RUN AUTO TEST to begin</div>
+
+<button onclick="runAutoTest()" id="btnRun">🎤 RUN AUTO TEST</button>
+<button class="secondary" onclick="speakJP('こんにちは')">▶ Speak Once (manual)</button>
+<button class="secondary" onclick="document.getElementById('log').innerHTML=''">Clear Log</button>
+
+<h2>Live Audio Meter</h2>
+<div class="meter"><div class="meter-fill" id="meter"></div></div>
+<div id="meterLabel" class="log dim" style="padding:6px 12px;font-size:11px;">Idle</div>
+
+<h2>Captured Audio Playback</h2>
+<audio id="player" controls></audio>
+
+<h2>Log</h2>
+<div class="log" id="log"></div>
+
+<script>
+// ─── EXACT COPY of production speakJP ─────────────────────────────
+window.__tts = window.__tts || { live: [], log: [] };
+let voiceEnabled = true;
+
+function ttsLog(msg, data) {
+  const e = { t: Date.now(), msg, data };
+  window.__tts.log.push(e);
+  if (window.__tts.log.length > 50) window.__tts.log.shift();
+  appendLog('[tts] ' + msg + (data ? ' ' + JSON.stringify(data) : ''),
+            msg.includes('ERROR') ? 'err' : 'dim');
+}
+
+function speakJP(text) {
+  const t = (text == null ? '' : String(text)).trim();
+  if (!t) { ttsLog('skipped: empty text'); return; }
+  if (!voiceEnabled) { ttsLog('skipped: voice disabled'); return; }
+  if (typeof speechSynthesis === 'undefined') { ttsLog('no speechSynthesis API'); return; }
+  try { speechSynthesis.cancel(); } catch (_) {}
+  const u = new SpeechSynthesisUtterance(t);
+  u.lang = 'ja-JP';
+  u.rate = 0.9;
+  u.pitch = 1.0;
+  u.volume = 1.0;
+  const voices = speechSynthesis.getVoices();
+  const jp = voices.find(v => v.lang === 'ja-JP') || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja')) || null;
+  if (jp) u.voice = jp;
+  window.__tts.live.push(u);
+  const release = () => {
+    const i = window.__tts.live.indexOf(u);
+    if (i >= 0) window.__tts.live.splice(i, 1);
+  };
+  u.onstart = () => ttsLog('started', { text: t, voice: jp ? jp.name : '(default)' });
+  u.onend = () => { ttsLog('ended', { text: t }); release(); };
+  u.onerror = (e) => {
+    const err = (e && e.error) || 'unknown';
+    if (err !== 'canceled' && err !== 'interrupted') ttsLog('ERROR', err);
+    release();
+  };
+  try {
+    speechSynthesis.speak(u);
+    ttsLog('speak() invoked', { voices: voices.length, jp: jp ? jp.name : 'none' });
+  } catch (err) {
+    ttsLog('speak() threw', String(err));
+    release();
+  }
+  return u;
+}
+
+// ─── UI helpers ──────────────────────────────────────────────────
+function appendLog(text, cls) {
+  const log = document.getElementById('log');
+  const line = document.createElement('div');
+  line.className = 'line ' + (cls || '');
+  const t = new Date().toLocaleTimeString();
+  line.textContent = '[' + t + '] ' + text;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+function setVerdict(kind, text) {
+  const v = document.getElementById('verdict');
+  v.className = 'verdict ' + kind;
+  v.textContent = text;
+}
+
+// ─── Auto test: capture self via getDisplayMedia ─────────────────
+async function runAutoTest() {
+  document.getElementById('btnRun').disabled = true;
+  document.getElementById('log').innerHTML = '';
+  setVerdict('pending', '⏳ Requesting tab capture permission…');
+  appendLog('=== AUTO TEST START ===', 'info');
+
+  // Voice availability
+  const voices = speechSynthesis.getVoices();
+  const jp = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
+  appendLog('Voices: ' + voices.length + ' total, ' + jp.length + ' Japanese', 'info');
+  if (jp.length === 0) {
+    appendLog('WARNING: no Japanese voices — engine will use default voice', 'err');
+  } else {
+    appendLog('Japanese voice: ' + jp[0].name, 'ok');
+  }
+
+  // Request tab capture
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getDisplayMedia({
+      video: true,
+      audio: true,
+      preferCurrentTab: true,
+      systemAudio: 'include'
+    });
+    appendLog('Got stream. Audio tracks: ' + stream.getAudioTracks().length, 'ok');
+    if (stream.getAudioTracks().length === 0) {
+      setVerdict('fail', '❌ No audio track — did you tick "Also share tab audio"?');
+      document.getElementById('btnRun').disabled = false;
+      try { stream.getTracks().forEach(t => t.stop()); } catch (_) {}
+      return;
+    }
+  } catch (err) {
+    appendLog('Permission denied or error: ' + err.message, 'err');
+    setVerdict('fail', '❌ Tab capture permission denied');
+    document.getElementById('btnRun').disabled = false;
+    return;
+  }
+
+  // Set up MediaRecorder + live RMS meter
+  const audioStream = new MediaStream(stream.getAudioTracks());
+  const ac = new AudioContext();
+  const src = ac.createMediaStreamSource(audioStream);
+  const analyser = ac.createAnalyser();
+  analyser.fftSize = 1024;
+  src.connect(analyser);
+  const dataArr = new Uint8Array(analyser.fftSize);
+
+  let peakOverall = 0;
+  let speakingPeakWindow = 0;
+  let inSpeakingWindow = false;
+  let recordedBytes = 0;
+
+  const meterEl = document.getElementById('meter');
+  const meterLabel = document.getElementById('meterLabel');
+  const meterTimer = setInterval(() => {
+    analyser.getByteTimeDomainData(dataArr);
+    let sumSq = 0;
+    for (let i = 0; i < dataArr.length; i++) {
+      const v = (dataArr[i] - 128) / 128;
+      sumSq += v * v;
+    }
+    const rms = Math.sqrt(sumSq / dataArr.length);
+    if (rms > peakOverall) peakOverall = rms;
+    if (inSpeakingWindow && rms > speakingPeakWindow) speakingPeakWindow = rms;
+    const pct = Math.min(100, rms * 200);
+    meterEl.style.width = pct + '%';
+    meterLabel.textContent = 'RMS ' + rms.toFixed(4) + ' (' + (20 * Math.log10(rms || 1e-7)).toFixed(1) + ' dBFS)';
+  }, 50);
+
+  // Recorder for playback
+  const chunks = [];
+  const recorder = new MediaRecorder(audioStream, { mimeType: 'audio/webm' });
+  recorder.ondataavailable = (e) => { if (e.data.size > 0) { chunks.push(e.data); recordedBytes += e.data.size; } };
+  recorder.start(100);
+  appendLog('MediaRecorder started', 'info');
+
+  setVerdict('pending', '🔴 Recording — speaking now…');
+
+  // Speak 3x with gaps
+  inSpeakingWindow = true;
+  speakJP('こんにちは');
+  await new Promise(r => setTimeout(r, 1500));
+  speakJP('ありがとう');
+  await new Promise(r => setTimeout(r, 1500));
+  speakJP('さようなら');
+  await new Promise(r => setTimeout(r, 1500));
+  inSpeakingWindow = false;
+
+  // Stop everything
+  recorder.stop();
+  await new Promise(r => recorder.onstop = r);
+  clearInterval(meterTimer);
+  stream.getTracks().forEach(t => t.stop());
+  await ac.close();
+
+  appendLog('Recording stopped. Bytes captured: ' + recordedBytes, 'info');
+
+  // Make playback blob
+  const blob = new Blob(chunks, { type: 'audio/webm' });
+  document.getElementById('player').src = URL.createObjectURL(blob);
+
+  // Verdict
+  appendLog('=== ANALYSIS ===', 'info');
+  appendLog('Peak overall RMS: ' + peakOverall.toFixed(5) + ' (' + (20 * Math.log10(peakOverall || 1e-7)).toFixed(1) + ' dBFS)', 'info');
+  appendLog('Peak during speaking window: ' + speakingPeakWindow.toFixed(5) + ' (' + (20 * Math.log10(speakingPeakWindow || 1e-7)).toFixed(1) + ' dBFS)', 'info');
+
+  const peakDb = 20 * Math.log10(speakingPeakWindow || 1e-7);
+  if (speakingPeakWindow < 0.001) {
+    setVerdict('fail', '❌ FAIL — silence (' + peakDb.toFixed(1) + ' dBFS). Audio engine produced nothing.');
+    appendLog('No audio captured. Either speechSynthesis is broken on this Chrome, OR tab audio capture missed it.', 'err');
+  } else if (speakingPeakWindow < 0.01) {
+    setVerdict('fail', '⚠️ WEAK — ' + peakDb.toFixed(1) + ' dBFS. Audio is barely audible.');
+  } else {
+    setVerdict('pass', '✅ PASS — ' + peakDb.toFixed(1) + ' dBFS peak. Audio engine is producing sound.');
+    appendLog('SUCCESS: tab audio capture detected speech synthesis output. Play the recording above to confirm by ear.', 'ok');
+  }
+
+  document.getElementById('btnRun').disabled = false;
+}
+
+window.addEventListener('load', () => {
+  appendLog('Page loaded. speechSynthesis: ' + (typeof speechSynthesis), 'info');
+  appendLog('Initial voices: ' + speechSynthesis.getVoices().length, 'info');
+  speechSynthesis.addEventListener('voiceschanged', () => {
+    appendLog('voiceschanged: ' + speechSynthesis.getVoices().length + ' voices loaded', 'info');
+  });
+});
+</script>
+</body>
+</html>

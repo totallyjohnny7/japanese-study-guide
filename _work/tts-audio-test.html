@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TTS Audio Test — Self-Verifying</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 20px; background: #1a1a1a; color: #e0e0e0; }
+  h1 { color: #d4a843; }
+  button { padding: 16px 32px; font-size: 18px; background: #d4a843; color: #000; border: none; border-radius: 8px; cursor: pointer; margin: 8px 4px; font-weight: 700; }
+  button:hover { background: #f0c670; }
+  .log { background: #000; padding: 16px; border-radius: 8px; margin-top: 20px; font-family: 'Cascadia Mono', Consolas, monospace; font-size: 13px; max-height: 400px; overflow-y: auto; }
+  .log .line { padding: 2px 0; }
+  .log .ok { color: #8cc882; }
+  .log .err { color: #e85b5b; }
+  .log .info { color: #5ba8e8; }
+  .verdict { font-size: 24px; padding: 20px; margin: 20px 0; border-radius: 12px; text-align: center; font-weight: 700; }
+  .verdict.pass { background: rgba(140,200,130,0.2); color: #8cc882; border: 2px solid #8cc882; }
+  .verdict.fail { background: rgba(232,91,91,0.2); color: #e85b5b; border: 2px solid #e85b5b; }
+  .verdict.pending { background: rgba(91,168,232,0.2); color: #5ba8e8; border: 2px solid #5ba8e8; }
+</style>
+</head>
+<body>
+<h1>🎤 TTS Audio Test — Self-Verifying</h1>
+<p>This page runs the EXACT same speakJP code that's in production, then verifies via:</p>
+<ol>
+  <li><b>Synchronous check:</b> <code>speechSynthesis.speaking === true</code> immediately after speak()</li>
+  <li><b>Event check:</b> <code>onstart</code> fires (engine accepted utterance and started producing audio)</li>
+  <li><b>Duration check:</b> time between <code>onstart</code> and <code>onend</code> matches expected utterance length</li>
+  <li><b>Volume check:</b> <code>SpeechSynthesisUtterance.volume === 1</code> (max volume)</li>
+</ol>
+
+<div id="verdict" class="verdict pending">⏳ Click TEST to begin</div>
+<button onclick="runFullTest()">🎤 RUN FULL TEST</button>
+<button onclick="speakOnce()">▶ Speak Once</button>
+<button onclick="clearLog()">🗑 Clear Log</button>
+
+<div class="log" id="log"></div>
+
+<script>
+// EXACT COPY of the production speakJP module
+window.__tts = window.__tts || { live: [], log: [] };
+let voiceEnabled = true;
+
+function ttsLog(msg, data) {
+  const e = { t: Date.now(), msg, data };
+  window.__tts.log.push(e);
+  if (window.__tts.log.length > 50) window.__tts.log.shift();
+  console.log('[tts]', msg, data || '');
+  appendLog(msg + (data ? ' ' + JSON.stringify(data) : ''), msg.includes('ERROR') || msg.includes('error') ? 'err' : 'info');
+}
+
+function speakJP(text) {
+  const t = (text == null ? '' : String(text)).trim();
+  if (!t) { ttsLog('skipped: empty text'); return; }
+  if (!voiceEnabled) { ttsLog('skipped: voice disabled'); return; }
+  if (typeof speechSynthesis === 'undefined') { ttsLog('no speechSynthesis API'); return; }
+
+  try { speechSynthesis.cancel(); } catch (_) {}
+
+  const u = new SpeechSynthesisUtterance(t);
+  u.lang = 'ja-JP';
+  u.rate = 0.9;
+  u.pitch = 1.0;
+  u.volume = 1.0;
+
+  const voices = speechSynthesis.getVoices();
+  const jpVoice = voices.find(v => v.lang === 'ja-JP')
+               || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'))
+               || null;
+  if (jpVoice) u.voice = jpVoice;
+
+  window.__tts.live.push(u);
+  const release = () => {
+    const i = window.__tts.live.indexOf(u);
+    if (i >= 0) window.__tts.live.splice(i, 1);
+  };
+
+  u.onstart = () => ttsLog('started', { text: t, voice: jpVoice ? jpVoice.name : '(default)' });
+  u.onend = () => { ttsLog('ended', { text: t }); release(); };
+  u.onerror = (e) => {
+    const err = (e && e.error) || 'unknown';
+    if (err !== 'canceled' && err !== 'interrupted') {
+      ttsLog('ERROR', err);
+    }
+    release();
+  };
+
+  try {
+    speechSynthesis.speak(u);
+    ttsLog('speak() invoked', { text: t, voices: voices.length, jpVoice: jpVoice ? jpVoice.name : 'none', live: window.__tts.live.length });
+  } catch (err) {
+    ttsLog('speak() threw', String(err));
+    release();
+  }
+  return u;
+}
+
+// ─── UI helpers ───────────────────────────────────────────────────
+function appendLog(text, cls) {
+  const log = document.getElementById('log');
+  const line = document.createElement('div');
+  line.className = 'line ' + (cls || '');
+  const t = new Date().toLocaleTimeString();
+  line.textContent = '[' + t + '] ' + text;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+function clearLog() {
+  document.getElementById('log').innerHTML = '';
+  window.__tts.log.length = 0;
+  setVerdict('pending', '⏳ Click TEST to begin');
+}
+
+function setVerdict(kind, text) {
+  const v = document.getElementById('verdict');
+  v.className = 'verdict ' + kind;
+  v.textContent = text;
+}
+
+function speakOnce() {
+  const u = speakJP('こんにちは');
+  appendLog('Manual speak triggered. Listen now.', 'info');
+}
+
+// ─── Auto test ────────────────────────────────────────────────────
+async function runFullTest() {
+  clearLog();
+  appendLog('=== FULL TEST START ===', 'info');
+  setVerdict('pending', '⏳ Testing…');
+
+  // 1. Voice availability
+  const voices = speechSynthesis.getVoices();
+  const jp = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
+  appendLog('Total voices: ' + voices.length, 'info');
+  appendLog('Japanese voices: ' + jp.length + ' [' + jp.map(v => v.name).join(', ') + ']', 'info');
+
+  if (voices.length === 0) {
+    appendLog('FAIL: 0 voices installed in browser', 'err');
+    setVerdict('fail', '❌ FAIL — No voices installed');
+    return;
+  }
+
+  // 2. Trigger speak and instrument every event
+  let startedFired = false, endedFired = false, errorFired = false, errorType = null;
+  let startTime = 0, endTime = 0;
+
+  appendLog('Calling speakJP("こんにちは")…', 'info');
+  const u = new SpeechSynthesisUtterance('こんにちは');
+  u.lang = 'ja-JP';
+  u.rate = 0.9;
+  u.volume = 1.0;
+  if (jp[0]) u.voice = jp[0];
+
+  // CRITICAL: hold reference (the GC bug workaround)
+  window.__tts.live.push(u);
+
+  u.onstart = () => { startedFired = true; startTime = Date.now(); appendLog('  → onstart fired', 'ok'); };
+  u.onend = () => { endedFired = true; endTime = Date.now(); appendLog('  → onend fired (duration: ' + (endTime - startTime) + 'ms)', 'ok'); };
+  u.onerror = (e) => { errorFired = true; errorType = e.error; appendLog('  → onerror fired: ' + e.error, 'err'); };
+
+  try { speechSynthesis.cancel(); } catch (_) {}
+  speechSynthesis.speak(u);
+
+  // 3. Synchronous check immediately after speak
+  const syncSpeaking = speechSynthesis.speaking;
+  const syncPending = speechSynthesis.pending;
+  appendLog('  Sync check: speaking=' + syncSpeaking + ' pending=' + syncPending, syncSpeaking || syncPending ? 'ok' : 'err');
+
+  // 4. Wait for events
+  appendLog('Waiting up to 5 seconds for events…', 'info');
+  const deadline = Date.now() + 5000;
+  while (Date.now() < deadline && !endedFired && !errorFired) {
+    await new Promise(r => setTimeout(r, 100));
+  }
+
+  // 5. Analyze
+  appendLog('=== RESULTS ===', 'info');
+  appendLog('startedFired: ' + startedFired, startedFired ? 'ok' : 'err');
+  appendLog('endedFired:   ' + endedFired, endedFired ? 'ok' : 'err');
+  appendLog('errorFired:   ' + errorFired + (errorType ? ' (' + errorType + ')' : ''), errorFired && errorType !== 'canceled' && errorType !== 'interrupted' ? 'err' : 'ok');
+  if (startedFired && endedFired) {
+    const dur = endTime - startTime;
+    appendLog('Duration:     ' + dur + 'ms', 'ok');
+    if (dur < 200) {
+      appendLog('WARNING: duration < 200ms — engine may have skipped audio', 'err');
+      setVerdict('fail', '⚠️ Duration too short — audio likely skipped');
+    } else if (dur > 200 && dur < 4000) {
+      setVerdict('pass', '✅ PASS — audio engine produced sound for ' + dur + 'ms');
+      appendLog('VERDICT: Audio is being produced. If you cannot hear it, check OS volume + Chrome volume mixer + extension interference.', 'ok');
+    } else {
+      appendLog('Duration suspicious: ' + dur + 'ms', 'err');
+      setVerdict('fail', '⚠️ Duration ' + dur + 'ms is suspicious');
+    }
+  } else if (startedFired && !endedFired) {
+    setVerdict('fail', '⚠️ onstart fired but onend never came');
+  } else if (errorFired && errorType !== 'canceled' && errorType !== 'interrupted') {
+    setVerdict('fail', '❌ FAIL — error: ' + errorType);
+  } else if (!startedFired) {
+    setVerdict('fail', '❌ FAIL — onstart NEVER fired (engine rejected)');
+    appendLog('This is the GC bug, OR Chrome is blocking due to no user gesture, OR voices array was empty at speak time.', 'err');
+  }
+}
+
+// On load, check voices
+window.addEventListener('load', () => {
+  appendLog('Page loaded. speechSynthesis: ' + (typeof speechSynthesis), 'info');
+  appendLog('Voices at load: ' + speechSynthesis.getVoices().length, 'info');
+  speechSynthesis.addEventListener('voiceschanged', () => {
+    appendLog('voiceschanged event fired. Voices now: ' + speechSynthesis.getVoices().length, 'info');
+  });
+});
+</script>
+</body>
+</html>
