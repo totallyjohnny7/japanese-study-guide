@@ -158,7 +158,12 @@ textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,
 
 <script>
 // ═══ DEFAULT DATA ═══
-let DATA = {"vocab":[{"english":"Now, the present","japanese":"今","reading":"いま / こん"},{"english":"Moon, month","japanese":"月","reading":"つき / げつ・がつ"},{"english":"Fire","japanese":"火","reading":"ひ / か"},{"english":"Water","japanese":"水","reading":"みず / すい"},{"english":"Tree, wood (also Thursday)","japanese":"木","reading":"き / もく・ぼく"},{"english":"Gold, money, metal","japanese":"金","reading":"かね / きん"},{"english":"Earth, soil, ground","japanese":"土","reading":"つち / ど"},{"english":"Day of the week","japanese":"曜","reading":"よう (on reading only)"},{"english":"What, how many","japanese":"何","reading":"なに・なん / なに"},{"english":"Week","japanese":"週","reading":"しゅう (on reading only)"},{"english":"End, tip","japanese":"末","reading":"すえ / まつ"},{"english":"Rest, vacation, day off","japanese":"休","reading":"やす / きゅう"},{"english":"Monday","japanese":"月曜日","reading":"げつようび (getsuyoubi)"},{"english":"Tuesday","japanese":"火曜日","reading":"かようび (kayoubi)"},{"english":"Wednesday","japanese":"水曜日","reading":"すいようび (suiyoubi)"},{"english":"Thursday","japanese":"木曜日","reading":"もくようび (mokuyoubi)"},{"english":"Friday","japanese":"金曜日","reading":"きんようび (kin'youbi)"},{"english":"Saturday","japanese":"土曜日","reading":"どようび (doyoubi)"},{"english":"Sunday","japanese":"日曜日","reading":"にちようび (nichiyoubi)"},{"english":"Weekend","japanese":"週末","reading":"しゅうまつ (shuumatsu)"},{"english":"This week","japanese":"今週","reading":"こんしゅう (konshuu)"},{"english":"What day of the week?","japanese":"何曜日","reading":"なんようび (nan'youbi)"},{"english":"Day off, holiday","japanese":"休み","reading":"やすみ (yasumi)"}],"dialogues":[],"readings":[]};
+let DATA = {"vocab":[{"english":"Now / present","japanese":"今","hiragana":"いま","reading":"いま / こん (ima / kon)"},{"english":"I / me","japanese":"私","hiragana":"わたし","reading":"わたし (watashi)"},{"english":"Moon / month","japanese":"月","hiragana":"つき","reading":"つき / げつ・がつ (tsuki / getsu·gatsu)"},{"english":"Fire","japanese":"火","hiragana":"ひ","reading":"ひ / か (hi / ka)"},{"english":"Water","japanese":"水","hiragana":"みず","reading":"みず / すい (mizu / sui)"},{"english":"Tree / wood","japanese":"木","hiragana":"き","reading":"き / もく (ki / moku)"},{"english":"Gold / money","japanese":"金","hiragana":"かね","reading":"かね / きん (kane / kin)"},{"english":"Earth / soil","japanese":"土","hiragana":"つち","reading":"つち / ど (tsuchi / do)"},{"english":"Day of week (suffix)","japanese":"曜","hiragana":"よう","reading":"よう (you) — always a suffix"},{"english":"What","japanese":"何","hiragana":"なに","reading":"なに / なん (nani / nan)"},{"english":"Week","japanese":"週","hiragana":"しゅう","reading":"しゅう (shuu)"},{"english":"End","japanese":"末","hiragana":"すえ","reading":"すえ / まつ (sue / matsu)"},{"english":"Rest / day off","japanese":"休","hiragana":"やすみ","reading":"やすみ / きゅう (yasumi / kyuu)"}],"dialogues":[],"readings":[]};
+
+function hiraLine(c){
+  if(!c||!c.hiragana||c.hiragana===c.japanese)return '';
+  return `<div style="color:var(--dim);font-size:14px;font-family:'Klee One','Noto Sans JP';margin-top:2px">${c.hiragana}</div>`;
+}
 
 const $=id=>document.getElementById(id);
 const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
@@ -293,7 +298,7 @@ function wCheckAnswer(){
       <div style="display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap">
         <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">YOUR DRAWING</div><img src="${img}" class="your-img"></div>
         <div style="font-size:24px;color:var(--dim)">→</div>
-        <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">CORRECT</div><div class="handwritten">${c.japanese}</div><div style="color:var(--accent2);font-size:13px;margin-top:4px">${c.reading}</div></div>
+        <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">CORRECT</div><div class="handwritten">${c.japanese}</div>${hiraLine(c)}<div style="color:var(--accent2);font-size:13px;margin-top:4px">${c.reading}</div></div>
       </div>
       ${strokeHTML}
       <div style="color:var(--muted);font-size:11px;text-align:center;margin:14px 0 6px">Did you get it right?</div>
@@ -356,7 +361,7 @@ function showDictCard(el){
 function dCheck(){
   const c=dCards[dIdx];
   const ans=($('dAnswer').value||'').trim();
-  const ok=ans===c.japanese||ans===c.reading;
+  const ok=ans===c.japanese||ans===c.reading||ans===c.hiragana;
   if(ok)dScore++;
   dResults.push({expected:c.japanese,given:ans,english:c.english,correct:ok});
   $('dFeedback').innerHTML=`
@@ -364,6 +369,7 @@ function dCheck(){
       <div style="font-size:40px;margin-bottom:6px">${ok?'✅':'❌'}</div>
       ${!ok?`<div style="margin-bottom:8px"><span style="color:var(--muted);font-size:11px">You typed: </span><span style="color:var(--red);font-size:18px">${esc(ans)||'(empty)'}</span></div>`:''}
       <div><span style="color:var(--muted);font-size:11px">Answer: </span><span class="jp" style="color:var(--accent2);font-size:24px;font-weight:700;font-family:'Klee One'">${c.japanese}</span></div>
+      ${hiraLine(c)}
       <div style="color:var(--muted);font-size:12px;margin-top:4px">${c.reading} — "${c.english}"</div>
       <button class="btn mt12" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="dIdx++;showDictCard($('mainArea'))">${dIdx+1>=dCards.length?'🏁 Results':'Next →'}</button>
     </div>`;
@@ -957,6 +963,7 @@ function showFlashBack(el){
     <div class="card center slide-up" style="position:relative;min-height:160px">
       <div style="color:var(--muted);font-size:11px;margin-bottom:4px;letter-spacing:2px;text-transform:uppercase">Answer</div>
       <div class="handwritten" style="font-size:52px">${c.japanese}</div>
+      ${hiraLine(c)}
       <div style="color:var(--accent2);font-size:13px;margin-top:8px">${c.reading}</div>
     </div>
     <div class="gap8 mt8">

@@ -158,7 +158,14 @@ textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,
 
 <script>
 // ═══ DEFAULT DATA ═══
-let DATA = {"vocab":[{"english":"Part-time job","japanese":"アルバイト","reading":"arubaito"},{"english":"Shopping","japanese":"買い物","reading":"kaimono"},{"english":"Job, work","japanese":"仕事","reading":"shigoto"},{"english":"Laundry","japanese":"洗濯","reading":"sentaku"},{"english":"Cleaning","japanese":"掃除","reading":"souji"},{"english":"Cooking, cuisine","japanese":"料理","reading":"ryouri"},{"english":"Parents","japanese":"両親","reading":"ryoushin"},{"english":"Rest, a day off","japanese":"休み","reading":"yasumi"},{"english":"A day off, holiday","japanese":"休みの日","reading":"yasumi no hi"},{"english":"Newspaper","japanese":"新聞","reading":"shinbun"},{"english":"Question","japanese":"質問","reading":"shitsumon"},{"english":"Letter","japanese":"手紙","reading":"tegami"},{"english":"E-mail","japanese":"メール","reading":"meeru"},{"english":"To fix a meal / cook","japanese":"料理をします","reading":"ryouri o shimasu"},{"english":"To do laundry","japanese":"洗濯をします","reading":"sentaku o shimasu"},{"english":"To clean a room","japanese":"掃除をします","reading":"souji o shimasu"},{"english":"To have a part-time job","japanese":"アルバイトをします","reading":"arubaito o shimasu"},{"english":"To work","japanese":"仕事をします","reading":"shigoto o shimasu"},{"english":"To read a newspaper","japanese":"新聞を読みます","reading":"shinbun o yomimasu"},{"english":"To go shopping","japanese":"買い物に行きます","reading":"kaimono ni ikimasu"},{"english":"To write e-mail","japanese":"メールを書きます","reading":"meeru o kakimasu"},{"english":"To ask the teacher","japanese":"先生に聞きます","reading":"sensei ni kikimasu"},{"english":"To ask a question","japanese":"質問します","reading":"shitsumon shimasu"},{"english":"To talk in Japanese","japanese":"日本語で話します","reading":"nihongo de hanashimasu"},{"english":"To make a phone call","japanese":"電話をかけます","reading":"denwa o kakemasu"},{"english":"To go out","japanese":"出かけます","reading":"dekakemasu"},{"english":"To meet (someone)","japanese":"会います","reading":"aimasu"},{"english":"To wait (for)","japanese":"待ちます","reading":"machimasu"},{"english":"To write","japanese":"書きます","reading":"kakimasu"},{"english":"To read","japanese":"読みます","reading":"yomimasu"}],"dialogues":[],"readings":[]};
+let DATA = {"vocab":[{"english":"Fix a meal / cook","japanese":"料理をします","hiragana":"りょうりをします","reading":"ryouri wo shimasu"},{"english":"Do laundry","japanese":"洗濯をします","hiragana":"せんたくをします","reading":"sentaku wo shimasu"},{"english":"Clean a room","japanese":"掃除をします","hiragana":"そうじをします","reading":"souji wo shimasu"},{"english":"Have a part-time job","japanese":"アルバイトをします","hiragana":"あるばいとをします","reading":"arubaito wo shimasu"},{"english":"Work","japanese":"仕事をします","hiragana":"しごとをします","reading":"shigoto wo shimasu"},{"english":"Read a newspaper","japanese":"新聞を読みます","hiragana":"しんぶんをよみます","reading":"shinbun wo yomimasu"},{"english":"Do shopping / go shopping","japanese":"買い物をします／買い物に行きます","hiragana":"かいものをします／かいものにいきます","reading":"kaimono wo shimasu / kaimono ni ikimasu"},{"english":"Write an email","japanese":"メールを書きます","hiragana":"めーるをかきます","reading":"meeru wo kakimasu"},{"english":"Ask the teacher","japanese":"先生に聞きます","hiragana":"せんせいにききます","reading":"sensei ni kikimasu"},{"english":"Ask a question","japanese":"質問します","hiragana":"しつもんします","reading":"shitsumon shimasu"},{"english":"Talk in Japanese","japanese":"日本語で話します","hiragana":"にほんごではなします","reading":"nihongo de hanashimasu"},{"english":"Make a phone call","japanese":"電話をします／かけます","hiragana":"でんわをします／かけます","reading":"denwa wo shimasu / kakemasu"}],"dialogues":[],"readings":[]};
+
+// Show hiragana under japanese only when the form contains kanji or katakana (i.e., differs from pure hiragana)
+function hiraLine(c,size){
+  if(!c||!c.hiragana||c.hiragana===c.japanese)return '';
+  const fs=size||'18px';
+  return `<div style="color:#b8afa0;font-size:${fs};font-family:'Klee One','Noto Sans JP';margin-top:4px;letter-spacing:1px;opacity:.85">${c.hiragana}</div>`;
+}
 
 const $=id=>document.getElementById(id);
 const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
@@ -293,7 +300,7 @@ function wCheckAnswer(){
       <div style="display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap">
         <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">YOUR DRAWING</div><img src="${img}" class="your-img"></div>
         <div style="font-size:24px;color:var(--dim)">→</div>
-        <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">CORRECT</div><div class="handwritten">${c.japanese}</div><div style="color:var(--accent2);font-size:13px;margin-top:4px">${c.reading}</div></div>
+        <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">CORRECT</div><div class="handwritten">${c.japanese}</div>${hiraLine(c)}<div style="color:var(--accent2);font-size:13px;margin-top:4px">${c.reading}</div></div>
       </div>
       ${strokeHTML}
       <div style="color:var(--muted);font-size:11px;text-align:center;margin:14px 0 6px">Did you get it right?</div>
@@ -356,7 +363,7 @@ function showDictCard(el){
 function dCheck(){
   const c=dCards[dIdx];
   const ans=($('dAnswer').value||'').trim();
-  const ok=ans===c.japanese||ans===c.reading;
+  const ok=ans===c.japanese||ans===c.reading||ans===c.hiragana;
   if(ok)dScore++;
   dResults.push({expected:c.japanese,given:ans,english:c.english,correct:ok});
   $('dFeedback').innerHTML=`
@@ -364,6 +371,7 @@ function dCheck(){
       <div style="font-size:40px;margin-bottom:6px">${ok?'✅':'❌'}</div>
       ${!ok?`<div style="margin-bottom:8px"><span style="color:var(--muted);font-size:11px">You typed: </span><span style="color:var(--red);font-size:18px">${esc(ans)||'(empty)'}</span></div>`:''}
       <div><span style="color:var(--muted);font-size:11px">Answer: </span><span class="jp" style="color:var(--accent2);font-size:24px;font-weight:700;font-family:'Klee One'">${c.japanese}</span></div>
+      ${hiraLine(c)}
       <div style="color:var(--muted);font-size:12px;margin-top:4px">${c.reading} — "${c.english}"</div>
       <button class="btn mt12" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="dIdx++;showDictCard($('mainArea'))">${dIdx+1>=dCards.length?'🏁 Results':'Next →'}</button>
     </div>`;
@@ -511,8 +519,8 @@ let mQuestions=[],mIdx=0,mScore=0,mResults=[];
 
 function renderMix(el){
   mQuestions=[];mScore=0;mResults=[];
-  DATA.vocab.forEach(v=>mQuestions.push({type:'en2jp',q:`What is "${v.english}" in Japanese?`,a:v.japanese,hint:v.reading}));
-  DATA.vocab.forEach(v=>mQuestions.push({type:'jp2en',q:`What does "${v.japanese}" mean?`,a:v.english,hint:v.reading}));
+  DATA.vocab.forEach(v=>mQuestions.push({type:'en2jp',q:`What is "${v.english}" in Japanese?`,a:v.japanese,hiragana:v.hiragana,jp:v.japanese,hint:v.reading}));
+  DATA.vocab.forEach(v=>mQuestions.push({type:'jp2en',q:`What does "${v.japanese}" mean?`,a:v.english,hiragana:v.hiragana,jp:v.japanese,hint:v.reading}));
   DATA.readings.forEach(r=>r.questions.forEach(q=>mQuestions.push({type:'reading',q:q.q,a:q.a,context:r.text,title:r.title})));
   DATA.dialogues.forEach(d=>d.lines.forEach(l=>mQuestions.push({type:'dialogue',q:`In "${d.title}", how do you say: "${l.en}"`,a:l.jp,hint:'dialogue'})));
 
@@ -538,7 +546,8 @@ function showMixQ(el){
     <div class="progress-bar"><div class="progress-fill" style="width:${((mIdx+1)/mQuestions.length)*100}%"></div></div>
     ${contextHTML}
     <div class="card">
-      <div style="font-size:16px;color:#fff;margin-bottom:12px;line-height:1.5">${esc(q.q)}</div>
+      <div style="font-size:16px;color:#fff;margin-bottom:6px;line-height:1.5">${esc(q.q)}</div>
+      ${(q.type==='jp2en' && q.hiragana && q.jp && q.hiragana!==q.jp) ? `<div style="font-size:15px;color:#b8afa0;font-family:'Klee One','Noto Sans JP';margin-bottom:12px;letter-spacing:1px;opacity:.85">(${q.hiragana})</div>` : '<div style="margin-bottom:6px"></div>'}
       <input class="answer-input" id="mAnswer" placeholder="Your answer..." onkeydown="if(event.key==='Enter')mCheck()">
       <button class="btn w100 mt8" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="mCheck()">Submit</button>
     </div>
@@ -550,7 +559,7 @@ function mCheck(){
   const q=mQuestions[mIdx];
   const ans=($('mAnswer').value||'').trim();
   const aLow=ans.toLowerCase(), eLow=q.a.toLowerCase();
-  const ok=ans===q.a||aLow===eLow||aLow.includes(eLow)||eLow.includes(aLow)||(q.hint&&ans===q.hint);
+  const ok=ans===q.a||aLow===eLow||aLow.includes(eLow)||eLow.includes(aLow)||(q.hint&&ans===q.hint)||(q.hiragana&&ans===q.hiragana);
   if(ok)mScore++;
   mResults.push({q:q.q,expected:q.a,given:ans,correct:ok,type:q.type});
   $('mFeedback').innerHTML=`
@@ -558,6 +567,7 @@ function mCheck(){
       <div style="font-size:36px;margin-bottom:6px">${ok?'✅':'❌'}</div>
       ${!ok?`<div style="margin-bottom:6px"><span style="color:var(--muted);font-size:11px">You: </span><span style="color:var(--red)">${esc(ans)||'(empty)'}</span></div>`:''}
       <div><span style="color:var(--muted);font-size:11px">Answer: </span><span style="color:var(--green);font-weight:700;font-size:18px;font-family:'Klee One'">${esc(q.a)}</span></div>
+      ${(q.type==='en2jp' && q.hiragana && q.hiragana!==q.a) ? `<div style="color:#b8afa0;font-size:15px;font-family:'Klee One','Noto Sans JP';margin-top:4px;letter-spacing:1px;opacity:.85">${q.hiragana}</div>` : ''}
       <button class="btn mt12" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="mIdx++;showMixQ($('mainArea'))">${mIdx+1>=mQuestions.length?'🏁 Results':'Next →'}</button>
     </div>`;
 }
@@ -957,6 +967,7 @@ function showFlashBack(el){
     <div class="card center slide-up" style="position:relative;min-height:160px">
       <div style="color:var(--muted);font-size:11px;margin-bottom:4px;letter-spacing:2px;text-transform:uppercase">Answer</div>
       <div class="handwritten" style="font-size:52px">${c.japanese}</div>
+      ${hiraLine(c)}
       <div style="color:var(--accent2);font-size:13px;margin-top:8px">${c.reading}</div>
     </div>
     <div class="gap8 mt8">

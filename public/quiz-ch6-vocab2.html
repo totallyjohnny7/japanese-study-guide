@@ -158,7 +158,12 @@ textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,
 
 <script>
 // ═══ DEFAULT DATA ═══
-let DATA = {"vocab":[{"english":"Music","japanese":"音楽","reading":"ongaku"},{"english":"Game","japanese":"ゲーム","reading":"geemu"},{"english":"Concert","japanese":"コンサート","reading":"konsaato"},{"english":"Walk, stroll","japanese":"散歩","reading":"sanpo"},{"english":"Jogging","japanese":"ジョギング","reading":"jogingu"},{"english":"Tennis","japanese":"テニス","reading":"tenisu"},{"english":"Party","japanese":"パーティー","reading":"paatii"},{"english":"Picnic","japanese":"ピクニック","reading":"pikunikku"},{"english":"Pool","japanese":"プール","reading":"puuru"},{"english":"Exercise, physical activity","japanese":"運動","reading":"undou"},{"english":"Friend","japanese":"友達","reading":"tomodachi"},{"english":"Magazine","japanese":"雑誌","reading":"zasshi"},{"english":"Together","japanese":"一緒に","reading":"issho ni"},{"english":"By all means / I'd love to","japanese":"ぜひ","reading":"zehi"},{"english":"Slowly, to relax","japanese":"ゆっくり","reading":"yukkuri"},{"english":"How?","japanese":"どう","reading":"dou"},{"english":"Free, idle, unscheduled","japanese":"暇（な）","reading":"hima (na)"},{"english":"To listen to music","japanese":"音楽を聞きます","reading":"ongaku o kikimasu"},{"english":"To go to a concert","japanese":"コンサートに行きます","reading":"konsaato ni ikimasu"},{"english":"To exercise","japanese":"運動します","reading":"undou shimasu"},{"english":"To play tennis","japanese":"テニスをします","reading":"tenisu o shimasu"},{"english":"To go jogging","japanese":"ジョギングをします","reading":"jogingu o shimasu"},{"english":"To swim in the pool","japanese":"プールで泳ぎます","reading":"puuru de oyogimasu"},{"english":"To meet a friend","japanese":"友達に会います","reading":"tomodachi ni aimasu"},{"english":"To wait for a friend","japanese":"友達を待ちます","reading":"tomodachi o machimasu"},{"english":"To take a walk","japanese":"散歩をします","reading":"sanpo o shimasu"},{"english":"To play a game","japanese":"ゲームをします","reading":"geemu o shimasu"},{"english":"To relax at home","japanese":"家でゆっくりします","reading":"uchi de yukkuri shimasu"},{"english":"To write a letter","japanese":"手紙を書きます","reading":"tegami o kakimasu"},{"english":"To read a magazine","japanese":"雑誌を読みます","reading":"zasshi o yomimasu"},{"english":"To have a party","japanese":"パーティーをします","reading":"paatii o shimasu"},{"english":"To invite a friend over","japanese":"友達を家に呼びます","reading":"tomodachi o uchi ni yobimasu"},{"english":"To go on a picnic","japanese":"ピクニックに行きます","reading":"pikunikku ni ikimasu"},{"english":"To play (have fun)","japanese":"遊びます","reading":"asobimasu"},{"english":"To walk","japanese":"歩きます","reading":"arukimasu"},{"english":"To say","japanese":"言います","reading":"iimasu"},{"english":"To swim","japanese":"泳ぎます","reading":"oyogimasu"},{"english":"To talk","japanese":"話します","reading":"hanashimasu"},{"english":"To call / invite","japanese":"呼びます","reading":"yobimasu"}],"dialogues":[],"readings":[]};
+let DATA = {"vocab":[{"english":"Listen to music","japanese":"音楽を聞きます","hiragana":"おんがくをききます","reading":"ongaku wo kikimasu"},{"english":"Go to a concert","japanese":"コンサートに行きます","hiragana":"こんさーとにいきます","reading":"konsaato ni ikimasu"},{"english":"Go on a picnic","japanese":"ピクニックに行きます","hiragana":"ぴくにっくにいきます","reading":"pikunikku ni ikimasu"},{"english":"Exercise","japanese":"運動します","hiragana":"うんどうします","reading":"undou shimasu"},{"english":"Play tennis","japanese":"テニスをします","hiragana":"てにすをします","reading":"tenisu wo shimasu"},{"english":"Go jogging","japanese":"ジョギングをします","hiragana":"じょぎんぐをします","reading":"jogingu wo shimasu"},{"english":"Swim in the pool","japanese":"プールで泳ぎます","hiragana":"ぷーるでおよぎます","reading":"puuru de oyogimasu"},{"english":"Go out","japanese":"出かけます","hiragana":"でかけます","reading":"dekakemasu"},{"english":"Meet a friend","japanese":"友達に／と会います","hiragana":"ともだちに／とあいます","reading":"tomodachi ni/to aimasu"},{"english":"Wait for a friend","japanese":"友達を待ちます","hiragana":"ともだちをまちます","reading":"tomodachi wo machimasu"},{"english":"Take a walk","japanese":"散歩をします","hiragana":"さんぽをします","reading":"sanpo wo shimasu"},{"english":"Play / have fun","japanese":"遊びます","hiragana":"あそびます","reading":"asobimasu"},{"english":"Play a game","japanese":"ゲームをします","hiragana":"げーむをします","reading":"geemu wo shimasu"},{"english":"Relax at home","japanese":"家でゆっくりします","hiragana":"うちでゆっくりします","reading":"uchi de yukkuri shimasu"},{"english":"Write a letter","japanese":"手紙を書きます","hiragana":"てがみをかきます","reading":"tegami wo kakimasu"},{"english":"Read a magazine","japanese":"雑誌を読みます","hiragana":"ざっしをよみます","reading":"zasshi wo yomimasu"},{"english":"Have a party","japanese":"パーティをします","hiragana":"ぱーてぃをします","reading":"paatii wo shimasu"},{"english":"Invite a friend over","japanese":"友達を家に呼びます","hiragana":"ともだちをうちによびます","reading":"tomodachi wo uchi ni yobimasu"}],"dialogues":[],"readings":[]};
+
+function hiraLine(c){
+  if(!c||!c.hiragana||c.hiragana===c.japanese)return '';
+  return `<div style="color:var(--dim);font-size:14px;font-family:'Klee One','Noto Sans JP';margin-top:2px">${c.hiragana}</div>`;
+}
 
 const $=id=>document.getElementById(id);
 const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
@@ -293,7 +298,7 @@ function wCheckAnswer(){
       <div style="display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap">
         <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">YOUR DRAWING</div><img src="${img}" class="your-img"></div>
         <div style="font-size:24px;color:var(--dim)">→</div>
-        <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">CORRECT</div><div class="handwritten">${c.japanese}</div><div style="color:var(--accent2);font-size:13px;margin-top:4px">${c.reading}</div></div>
+        <div class="center"><div style="font-size:10px;color:var(--muted);margin-bottom:4px">CORRECT</div><div class="handwritten">${c.japanese}</div>${hiraLine(c)}<div style="color:var(--accent2);font-size:13px;margin-top:4px">${c.reading}</div></div>
       </div>
       ${strokeHTML}
       <div style="color:var(--muted);font-size:11px;text-align:center;margin:14px 0 6px">Did you get it right?</div>
@@ -356,7 +361,7 @@ function showDictCard(el){
 function dCheck(){
   const c=dCards[dIdx];
   const ans=($('dAnswer').value||'').trim();
-  const ok=ans===c.japanese||ans===c.reading;
+  const ok=ans===c.japanese||ans===c.reading||ans===c.hiragana;
   if(ok)dScore++;
   dResults.push({expected:c.japanese,given:ans,english:c.english,correct:ok});
   $('dFeedback').innerHTML=`
@@ -364,6 +369,7 @@ function dCheck(){
       <div style="font-size:40px;margin-bottom:6px">${ok?'✅':'❌'}</div>
       ${!ok?`<div style="margin-bottom:8px"><span style="color:var(--muted);font-size:11px">You typed: </span><span style="color:var(--red);font-size:18px">${esc(ans)||'(empty)'}</span></div>`:''}
       <div><span style="color:var(--muted);font-size:11px">Answer: </span><span class="jp" style="color:var(--accent2);font-size:24px;font-weight:700;font-family:'Klee One'">${c.japanese}</span></div>
+      ${hiraLine(c)}
       <div style="color:var(--muted);font-size:12px;margin-top:4px">${c.reading} — "${c.english}"</div>
       <button class="btn mt12" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="dIdx++;showDictCard($('mainArea'))">${dIdx+1>=dCards.length?'🏁 Results':'Next →'}</button>
     </div>`;
@@ -957,6 +963,7 @@ function showFlashBack(el){
     <div class="card center slide-up" style="position:relative;min-height:160px">
       <div style="color:var(--muted);font-size:11px;margin-bottom:4px;letter-spacing:2px;text-transform:uppercase">Answer</div>
       <div class="handwritten" style="font-size:52px">${c.japanese}</div>
+      ${hiraLine(c)}
       <div style="color:var(--accent2);font-size:13px;margin-top:8px">${c.reading}</div>
     </div>
     <div class="gap8 mt8">
