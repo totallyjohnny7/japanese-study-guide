@@ -1910,8 +1910,64 @@ body::before {
   border-radius: 6px;
   cursor: pointer;
   font-family: 'DM Sans';
+  transition: all 150ms ease;
 }
-.fc-controls .fc-ctl-btn:hover { color: var(--gold); border-color: var(--gold-dark); }
+.fc-controls .fc-ctl-btn:hover { color: var(--gold); border-color: var(--gold-dark); transform: translateY(-1px); }
+.fc-controls .fc-ctl-btn:active { transform: translateY(0); }
+.fc-controls .fc-ctl-btn.fc-ctl-primary {
+  background: linear-gradient(135deg, rgba(200,162,255,0.22), rgba(200,162,255,0.08));
+  border-color: rgba(200,162,255,0.5);
+  color: #e4d3ff;
+  font-size: 11px;
+  padding: 8px 14px;
+  box-shadow: 0 0 0 1px rgba(200,162,255,0.12) inset, 0 0 10px rgba(200,162,255,0.1);
+}
+.fc-controls .fc-ctl-btn.fc-ctl-primary:hover {
+  color: #fff;
+  border-color: rgba(200,162,255,0.75);
+  background: linear-gradient(135deg, rgba(200,162,255,0.32), rgba(200,162,255,0.14));
+}
+
+.fc-complete-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+.fc-complete-btn {
+  padding: 12px 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: all 150ms ease;
+}
+.fc-complete-btn:hover {
+  color: var(--gold);
+  border-color: var(--gold-dark);
+  transform: translateY(-2px);
+}
+.fc-complete-btn.primary {
+  background: linear-gradient(135deg, rgba(200,162,255,0.28), rgba(200,162,255,0.12));
+  border-color: rgba(200,162,255,0.6);
+  color: #e4d3ff;
+  font-size: 13px;
+  padding: 14px 26px;
+  box-shadow: 0 0 0 1px rgba(200,162,255,0.15) inset, 0 4px 14px rgba(200,162,255,0.12);
+}
+.fc-complete-btn.primary:hover {
+  color: #fff;
+  border-color: rgba(200,162,255,0.85);
+  background: linear-gradient(135deg, rgba(200,162,255,0.38), rgba(200,162,255,0.18));
+  box-shadow: 0 0 0 1px rgba(200,162,255,0.25) inset, 0 6px 20px rgba(200,162,255,0.2);
+}
 
 @media (max-width: 600px) {
   .fc-stats { grid-template-columns: repeat(2, 1fr); }
@@ -11330,6 +11386,7 @@ body::before {
   </div>
 
   <div class="fc-controls">
+    <button class="fc-ctl-btn fc-ctl-primary" onclick="fcStudyAll()" title="Cram mode — studies every card in the current chapter, shuffled. Bypasses spaced-repetition daily limits.">📚 Study All Cards</button>
     <button class="fc-ctl-btn" onclick="fcSkipCard()">⤳ Skip</button>
     <button class="fc-ctl-btn" onclick="fcResetSession()">⟲ Restart Session</button>
     <button class="fc-ctl-btn" onclick="fcShowStats()">📊 All Stats</button>
@@ -14371,11 +14428,20 @@ document.addEventListener('keydown', function(e) {
     if (queue.length === 0) {
       const area = document.getElementById('fc-card-area');
       if (area) {
+        // Compute how many MORE cards exist in the current filter vs the session we just finished
+        const total = filteredPool.length;
+        const chapLabel = selectedChapter === 'all' ? 'all chapters' : 'Chapter ' + selectedChapter;
+        const hasMore = total > sessionRated;
         area.innerHTML = `
           <div class="fc-empty">
             <div class="fc-empty-icon">🎉</div>
             <div class="fc-empty-msg">Session complete!</div>
-            <div class="fc-empty-sub">${sessionRated} cards reviewed. Come back tomorrow for more, or restart the session.</div>
+            <div class="fc-empty-sub">${sessionRated} cards reviewed from ${escHTML(chapLabel)}.${hasMore ? ` There are <b>${total}</b> total cards available.` : ''}</div>
+            <div class="fc-complete-actions">
+              ${hasMore ? `<button class="fc-complete-btn primary" onclick="fcStudyAll()">📚 Study All ${total} Cards</button>` : ''}
+              <button class="fc-complete-btn" onclick="fcResetSession()">⟲ Restart Session</button>
+              <button class="fc-complete-btn" onclick="fcShowStats()">📊 View Stats</button>
+            </div>
           </div>
         `;
       }
@@ -14423,6 +14489,45 @@ document.addEventListener('keydown', function(e) {
     sessionRated = 0;
     isFlipped = false;
     initFlashcards();
+  };
+
+  // "Study All" mode: cram through every card in the current chapter,
+  // bypassing FSRS spacing entirely. Grades still get recorded so progress
+  // is maintained for the spaced system, but the queue is the ENTIRE
+  // filtered pool, shuffled.
+  window.fcStudyAll = function() {
+    if (pool.length === 0) pool = buildVocabPool();
+    applyChapterFilter();
+    if (filteredPool.length === 0) {
+      const area = document.getElementById('fc-card-area');
+      if (area) {
+        area.innerHTML = `
+          <div class="fc-empty">
+            <div class="fc-empty-icon">🤷</div>
+            <div class="fc-empty-msg">No cards in this chapter</div>
+            <div class="fc-empty-sub">Try a different chapter tab above.</div>
+          </div>
+        `;
+      }
+      return;
+    }
+    // Ensure state is loaded (needed so grades persist)
+    state = loadState();
+    // Fresh shuffle of the entire filtered pool
+    queue = filteredPool.slice();
+    for (let i = queue.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [queue[i], queue[j]] = [queue[j], queue[i]];
+    }
+    sessionStarted = queue.length;
+    sessionRated = 0;
+    isFlipped = false;
+    currentCard = null;
+    nextCard();
+    if (typeof showToast === 'function') {
+      const label = selectedChapter === 'all' ? 'all chapters' : 'Chapter ' + selectedChapter;
+      showToast('Cram mode', `Studying all ${queue.length} cards from ${label}`, 'ok', 3000);
+    }
   };
 
   window.fcShowStats = function() {
