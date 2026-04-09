@@ -1701,7 +1701,50 @@ body::before {
   width: 100%;
   max-width: 460px;
   text-align: left;
+  cursor: pointer;
+  transition: background 150ms ease, transform 120ms ease;
+  position: relative;
 }
+.fc-back .fc-script-row::after {
+  content: '🔊';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  opacity: 0.35;
+  transition: opacity 150ms ease, transform 150ms ease;
+  pointer-events: none;
+}
+.fc-back .fc-script-row:hover {
+  background: rgba(212,168,67,0.12);
+  transform: translateX(2px);
+}
+.fc-back .fc-script-row:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.15);
+}
+.fc-back .fc-script-row:active,
+.fc-back .fc-script-row.fc-tapped {
+  transform: translateX(0) scale(0.99);
+  background: rgba(212,168,67,0.22);
+}
+.fc-back .fc-script-row.fc-tapped::after {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.3);
+}
+.fc-back .fc-script-row .fc-tap-hint {
+  position: absolute;
+  bottom: -14px;
+  right: 10px;
+  font-size: 8px;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.fc-back .fc-script-row:hover .fc-tap-hint { opacity: 0.8; }
 .fc-back .fc-script-lbl {
   font-size: 9px;
   color: var(--gold);
@@ -11380,6 +11423,11 @@ function ttsTrace(msg, data) {
   console.log('[tts]', msg, data || '');
 }
 
+// Keep utterances alive until they finish. Chrome/Safari GC the SpeechSynthesisUtterance
+// mid-playback if you don't hold a reference — the onstart/onend/onerror handlers
+// never fire, and audio silently dies. See https://talkrapp.com/speechSynthesis.html
+if (!Array.isArray(window.__ttsLive)) window.__ttsLive = [];
+
 function speakJP(text) {
   const t = (text == null ? '' : String(text)).trim();
   ttsTrace('speakJP called', { text: t, voiceEnabled });
@@ -11389,29 +11437,43 @@ function speakJP(text) {
     ttsTrace('aborted: no speechSynthesis API');
     return;
   }
-  try {
-    // Kill anything currently playing so we don't queue up
-    speechSynthesis.cancel();
-  } catch(e) { ttsTrace('cancel threw', String(e)); }
+  // Race-avoidance: Chrome has a known bug where cancel() immediately followed by
+  // speak() drops the utterance. If we're speaking, cancel only — let the onerror
+  // cleanup trigger the next speak. If we're NOT speaking, speak directly.
+  const isSpeaking = speechSynthesis.speaking || speechSynthesis.pending;
+  if (isSpeaking) {
+    try { speechSynthesis.cancel(); } catch(e) { ttsTrace('cancel threw', String(e)); }
+  }
+
   const u = new SpeechSynthesisUtterance(t);
   u.lang = 'ja-JP';
   u.rate = 0.85;
   u.pitch = 1.0;
   u.volume = 1.0;
-  // Pick best available Japanese voice at the moment of speaking
+  // Pick best available Japanese voice at the moment of speaking (not cached)
   const voices = speechSynthesis.getVoices();
   const jaVoice = voices.find(v => v.lang === 'ja-JP')
                || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'))
                || null;
   if (jaVoice) u.voice = jaVoice;
+
+  // CRITICAL: push into a persistent array so the utterance can't be GC'd
+  // while speaking. Remove on end/error so the array doesn't grow forever.
+  window.__ttsLive.push(u);
+  const cleanup = () => {
+    const idx = window.__ttsLive.indexOf(u);
+    if (idx !== -1) window.__ttsLive.splice(idx, 1);
+  };
   u.onstart = () => ttsTrace('utterance started', { text: t, voice: jaVoice ? jaVoice.name : 'default' });
-  u.onend   = () => ttsTrace('utterance ended');
-  u.onerror = (e) => ttsTrace('utterance error', e && e.error);
+  u.onend   = () => { ttsTrace('utterance ended'); cleanup(); };
+  u.onerror = (e) => { ttsTrace('utterance error', e && e.error); cleanup(); };
+
   try {
     speechSynthesis.speak(u);
-    ttsTrace('speak() called', { voices: voices.length, jaVoice: jaVoice ? jaVoice.name : 'none' });
+    ttsTrace('speak() called', { voices: voices.length, jaVoice: jaVoice ? jaVoice.name : 'none', liveCount: window.__ttsLive.length });
   } catch(e) {
     ttsTrace('speak() threw', String(e));
+    cleanup();
   }
 }
 window.speakJP = speakJP;
@@ -14219,15 +14281,18 @@ document.addEventListener('keydown', function(e) {
     const cs = getCardState(card);
     const intervals = previewIntervals(cs);
 
+    // Each script row is individually clickable — tap to hear that specific form.
+    // data-speak attribute holds the text to send to speakJP; event delegation
+    // catches the click on any .fc-script-row inside the card area.
     let scriptRows = '';
     if (card.hiragana) {
-      scriptRows += `<div class="fc-script-row"><span class="fc-script-lbl">Hiragana</span><span class="fc-script-val">${escHTML(card.hiragana)}</span></div>`;
+      scriptRows += `<div class="fc-script-row" data-speak="${escAttr(card.hiragana)}" role="button" tabindex="0" aria-label="Play hiragana pronunciation"><span class="fc-script-lbl">Hiragana</span><span class="fc-script-val">${escHTML(card.hiragana)}</span><span class="fc-tap-hint">tap to hear</span></div>`;
     }
     if (card.katakana && card.katakana !== card.hiragana) {
-      scriptRows += `<div class="fc-script-row kata"><span class="fc-script-lbl">Katakana</span><span class="fc-script-val">${escHTML(card.katakana)}</span></div>`;
+      scriptRows += `<div class="fc-script-row kata" data-speak="${escAttr(card.katakana)}" role="button" tabindex="0" aria-label="Play katakana pronunciation"><span class="fc-script-lbl">Katakana</span><span class="fc-script-val">${escHTML(card.katakana)}</span><span class="fc-tap-hint">tap to hear</span></div>`;
     }
     if (card.kanji) {
-      scriptRows += `<div class="fc-script-row kanji"><span class="fc-script-lbl">Kanji</span><span class="fc-script-val">${escHTML(card.kanji)}</span></div>`;
+      scriptRows += `<div class="fc-script-row kanji" data-speak="${escAttr(card.kanji)}" role="button" tabindex="0" aria-label="Play kanji pronunciation"><span class="fc-script-lbl">Kanji</span><span class="fc-script-val">${escHTML(card.kanji)}</span><span class="fc-tap-hint">tap to hear</span></div>`;
     }
 
     const chapterBadge = card.chapter ? `<div class="fc-chapter-badge">Ch ${escHTML(card.chapter)}</div>` : '';
@@ -14262,18 +14327,44 @@ document.addEventListener('keydown', function(e) {
       </div>
     `;
 
-    // Wire up listen button via data attribute (avoids inline quote-escape pitfalls)
-    const listenBtn = document.getElementById('fc-listen-btn');
-    if (listenBtn) {
-      listenBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const txt = this.getAttribute('data-speak');
-        if (txt) speakJP(txt);
-      });
-    }
+    // Click delegation is attached ONCE at init time (see initFlashcards).
+    // Every .fc-script-row and #fc-listen-btn inside #fc-card-area will have
+    // its data-speak attribute read and spoken via speakJP.
     // NOTE: Auto-speak is triggered from fcFlip() BEFORE renderCardBack so the
     // speakJP() call stays synchronous inside the Flip button's click gesture —
     // iOS Safari only honors speak() inside the original user-activation frame.
+  }
+
+  // Bind delegated click listener ONCE on the stable #fc-card-area container.
+  // Survives rerenders because we never replace the container itself.
+  function bindCardAreaClickDelegation() {
+    const area = document.getElementById('fc-card-area');
+    if (!area || area.dataset.clickBound === '1') return;
+    area.dataset.clickBound = '1';
+    area.addEventListener('click', function(e) {
+      // Walk up the DOM tree from the click target to find a data-speak ancestor
+      let el = e.target;
+      while (el && el !== area) {
+        if (el.dataset && el.dataset.speak) {
+          e.stopPropagation();
+          speakJP(el.dataset.speak);
+          // Visual feedback: brief "tapped" flash
+          el.classList.add('fc-tapped');
+          setTimeout(() => el.classList.remove('fc-tapped'), 260);
+          return;
+        }
+        el = el.parentElement;
+      }
+    });
+    // Keyboard a11y: Enter/Space on focused script rows
+    area.addEventListener('keydown', function(e) {
+      if (e.key !== ' ' && e.key !== 'Enter') return;
+      const el = e.target.closest('[data-speak]');
+      if (el) {
+        e.preventDefault();
+        speakJP(el.dataset.speak);
+      }
+    });
   }
 
   function nextCard() {
@@ -14394,6 +14485,7 @@ document.addEventListener('keydown', function(e) {
   };
 
   function initFlashcards() {
+    bindCardAreaClickDelegation();
     if (pool.length === 0) {
       pool = buildVocabPool();
     }
