@@ -11480,60 +11480,149 @@ function ttsTrace(msg, data) {
   console.log('[tts]', msg, data || '');
 }
 
-// Keep utterances alive until they finish. Chrome/Safari GC the SpeechSynthesisUtterance
-// mid-playback if you don't hold a reference — the onstart/onend/onerror handlers
-// never fire, and audio silently dies. See https://talkrapp.com/speechSynthesis.html
+// ═══ LAYERED JAPANESE TTS ═══════════════════════════════════════════
+// Strategy: Google Translate TTS MP3 is the most reliable path (guaranteed
+// correct pronunciation, no OS voice dependency, works on any device with
+// internet). Web Speech API is the fallback because it can be unreliable.
+//
+// Runtime detection: if the browser can't decode MP3 (rare — only happens
+// on Chromium OSS builds without proprietary codecs), we flip a flag and
+// use Web Speech API for the rest of the session.
+//
+// The keep-alive __ttsLive and __audioLive arrays prevent premature GC —
+// documented bug at talkrapp.com/speechSynthesis.html for utterances, and
+// same risk applies to short-lived Audio objects.
 if (!Array.isArray(window.__ttsLive)) window.__ttsLive = [];
+if (!Array.isArray(window.__audioLive)) window.__audioLive = [];
+window.__mp3Broken = false; // flipped true after first MP3 failure
 
-function speakJP(text) {
+// MP3 URL cache: same text produces the same MP3. Cache Audio objects
+// so repeat-reviews don't re-download the file.
+const __audioCache = new Map();
+const MAX_AUDIO_CACHE = 60;
+
+function hasLocalJapaneseVoice() {
+  if (typeof speechSynthesis === 'undefined') return false;
+  const voices = speechSynthesis.getVoices();
+  return voices.some(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
+}
+
+// Play via Google Translate TTS MP3
+function speakViaMP3(text) {
   const t = (text == null ? '' : String(text)).trim();
-  ttsTrace('speakJP called', { text: t, voiceEnabled });
-  if (!t) return;
-  if (!voiceEnabled) { ttsTrace('aborted: voice disabled'); return; }
+  if (!t) return false;
+  if (window.__mp3Broken) {
+    ttsTrace('MP3 disabled (previously failed) — using Web Speech');
+    return speakViaWebSpeech(t);
+  }
+  // Google translate_tts truncates around ~200 chars — flashcard vocab is safe
+  const url = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=' + encodeURIComponent(t);
+  let audio = __audioCache.get(t);
+  if (!audio) {
+    audio = new Audio(url);
+    audio.preload = 'auto';
+    // NO crossOrigin — we only need playback, not byte access. Setting
+    // crossOrigin='anonymous' would force a CORS request that Google
+    // Translate's TTS endpoint does not permit.
+    __audioCache.set(t, audio);
+    // Trim cache if it gets too big
+    if (__audioCache.size > MAX_AUDIO_CACHE) {
+      const firstKey = __audioCache.keys().next().value;
+      __audioCache.delete(firstKey);
+    }
+  } else {
+    try { audio.currentTime = 0; } catch(_) {}
+  }
+  // Hold a reference to prevent GC mid-playback
+  window.__audioLive.push(audio);
+  const cleanup = () => {
+    const idx = window.__audioLive.indexOf(audio);
+    if (idx !== -1) window.__audioLive.splice(idx, 1);
+  };
+  audio.onended = () => { ttsTrace('mp3 ended', { text: t }); cleanup(); };
+  audio.onerror = () => {
+    const code = audio.error && audio.error.code;
+    const msg = audio.error && audio.error.message;
+    ttsTrace('mp3 error — falling back to Web Speech permanently this session', { text: t, code, msg });
+    cleanup();
+    window.__mp3Broken = true;
+    __audioCache.clear();
+    // Fall back to Web Speech API immediately
+    speakViaWebSpeech(t);
+  };
+  audio.onplay = () => ttsTrace('mp3 playing', { text: t });
+  const promise = audio.play();
+  if (promise && promise.catch) {
+    promise.catch(err => {
+      ttsTrace('mp3 play() rejected', String(err && err.name || err));
+      // DON'T mark broken here — NotAllowedError is a temporary user-gesture issue
+      // Only the onerror handler marks the MP3 path permanently broken
+      cleanup();
+    });
+  }
+  return true;
+}
+
+// Play via Web Speech API (fallback)
+function speakViaWebSpeech(t) {
   if (typeof speechSynthesis === 'undefined') {
     ttsTrace('aborted: no speechSynthesis API');
-    return;
+    return false;
   }
-  // Race-avoidance: Chrome has a known bug where cancel() immediately followed by
-  // speak() drops the utterance. If we're speaking, cancel only — let the onerror
-  // cleanup trigger the next speak. If we're NOT speaking, speak directly.
   const isSpeaking = speechSynthesis.speaking || speechSynthesis.pending;
-  if (isSpeaking) {
-    try { speechSynthesis.cancel(); } catch(e) { ttsTrace('cancel threw', String(e)); }
-  }
-
+  if (isSpeaking) { try { speechSynthesis.cancel(); } catch(_) {} }
   const u = new SpeechSynthesisUtterance(t);
   u.lang = 'ja-JP';
   u.rate = 0.85;
   u.pitch = 1.0;
   u.volume = 1.0;
-  // Pick best available Japanese voice at the moment of speaking (not cached)
   const voices = speechSynthesis.getVoices();
   const jaVoice = voices.find(v => v.lang === 'ja-JP')
-               || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'))
-               || null;
+               || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
   if (jaVoice) u.voice = jaVoice;
-
-  // CRITICAL: push into a persistent array so the utterance can't be GC'd
-  // while speaking. Remove on end/error so the array doesn't grow forever.
   window.__ttsLive.push(u);
   const cleanup = () => {
     const idx = window.__ttsLive.indexOf(u);
     if (idx !== -1) window.__ttsLive.splice(idx, 1);
   };
-  u.onstart = () => ttsTrace('utterance started', { text: t, voice: jaVoice ? jaVoice.name : 'default' });
-  u.onend   = () => { ttsTrace('utterance ended'); cleanup(); };
-  u.onerror = (e) => { ttsTrace('utterance error', e && e.error); cleanup(); };
-
+  u.onstart = () => ttsTrace('web-speech started', { text: t, voice: jaVoice ? jaVoice.name : 'default' });
+  u.onend   = () => { ttsTrace('web-speech ended'); cleanup(); };
+  u.onerror = (e) => { ttsTrace('web-speech error', e && e.error); cleanup(); };
   try {
     speechSynthesis.speak(u);
-    ttsTrace('speak() called', { voices: voices.length, jaVoice: jaVoice ? jaVoice.name : 'none', liveCount: window.__ttsLive.length });
-  } catch(e) {
-    ttsTrace('speak() threw', String(e));
+    return true;
+  } catch(err) {
+    ttsTrace('web-speech threw', String(err));
     cleanup();
+    return false;
+  }
+}
+
+function speakJP(text) {
+  const t = (text == null ? '' : String(text)).trim();
+  ttsTrace('speakJP called', { text: t, voiceEnabled, mp3Broken: window.__mp3Broken });
+  if (!t) return;
+  if (!voiceEnabled) { ttsTrace('aborted: voice disabled'); return; }
+
+  // Stop whatever is currently playing
+  try {
+    window.__audioLive.forEach(a => { try { a.pause(); a.currentTime = 0; } catch(_) {} });
+    window.__audioLive.length = 0;
+  } catch(_) {}
+
+  // Strategy: try Google Translate TTS MP3 first (guaranteed correct pronunciation
+  // on any device with internet). If MP3 is marked broken for this session (the
+  // onerror handler flips __mp3Broken after a real failure), fall back to Web
+  // Speech API for the rest of the session.
+  if (window.__mp3Broken) {
+    speakViaWebSpeech(t);
+  } else {
+    speakViaMP3(t);
   }
 }
 window.speakJP = speakJP;
+window.speakViaMP3 = speakViaMP3;
+window.speakViaWebSpeech = speakViaWebSpeech;
 const esc = s => s.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // ═══ TOAST NOTIFICATIONS ═══
@@ -14672,18 +14761,14 @@ document.addEventListener('keydown', function(e) {
     if (hint && !hint.dataset.sticky) {
       if (!voiceEnabled) {
         hint.textContent = 'Audio is off. Click the green button to enable.';
-      } else if (typeof speechSynthesis === 'undefined') {
-        hint.textContent = 'This browser does not support speech synthesis.';
-      } else {
-        const voices = speechSynthesis.getVoices();
+      } else if (window.__mp3Broken) {
+        const voices = typeof speechSynthesis !== 'undefined' ? speechSynthesis.getVoices() : [];
         const ja = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
-        if (ja) {
-          hint.textContent = `Ready — using "${ja.name}" (${ja.lang}) · ${voices.length} voices available`;
-        } else if (voices.length === 0) {
-          hint.textContent = 'Voices still loading — click Test once they load.';
-        } else {
-          hint.textContent = `No Japanese voice installed — will use default (${voices.length} voices total)`;
-        }
+        hint.textContent = ja
+          ? `Ready — using local voice "${ja.name}" (MP3 fallback unavailable)`
+          : 'Ready — using local voices (MP3 fallback unavailable)';
+      } else {
+        hint.textContent = 'Ready — using Google Translate TTS (high-quality native Japanese)';
       }
     }
   }
