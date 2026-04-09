@@ -11167,12 +11167,14 @@ const speakJP = t => {
     speechSynthesis.resume();
   }, 10000);
   u.onend = () => clearInterval(resumeTimer);
-  u.onerror = () => {
+  u.onerror = (event) => {
     clearInterval(resumeTimer);
-    // Only warn once per session for transient errors (voice not loaded, interrupted)
-    if (!window._ttsErrorShown) {
+    // 'canceled' and 'interrupted' are normal — fired when cancel() stops a previous utterance
+    // Only alert the user for genuine audio failures
+    const ignoredErrors = ['canceled', 'interrupted'];
+    if (!ignoredErrors.includes(event.error) && !window._ttsErrorShown) {
       window._ttsErrorShown = true;
-      showToast('Audio interrupted', 'Tap 🔊 again to replay. If the problem persists, check your browser audio permissions.', 'warn');
+      showToast('Audio unavailable', 'Tap 🔊 again to replay. If the problem persists, check your browser audio permissions.', 'warn');
     }
   };
 };
