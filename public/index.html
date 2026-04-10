@@ -1968,6 +1968,20 @@ body::before {
   background: linear-gradient(135deg, rgba(200,162,255,0.38), rgba(200,162,255,0.18));
   box-shadow: 0 0 0 1px rgba(200,162,255,0.25) inset, 0 6px 20px rgba(200,162,255,0.2);
 }
+.fc-complete-btn.danger {
+  background: linear-gradient(135deg, rgba(232,84,84,0.28), rgba(232,84,84,0.12));
+  border-color: rgba(232,84,84,0.6);
+  color: #ffd6d6;
+  font-size: 13px;
+  padding: 14px 26px;
+  box-shadow: 0 0 0 1px rgba(232,84,84,0.15) inset, 0 4px 14px rgba(232,84,84,0.12);
+}
+.fc-complete-btn.danger:hover {
+  color: #fff;
+  border-color: rgba(232,84,84,0.85);
+  background: linear-gradient(135deg, rgba(232,84,84,0.38), rgba(232,84,84,0.18));
+  box-shadow: 0 0 0 1px rgba(232,84,84,0.25) inset, 0 6px 20px rgba(232,84,84,0.2);
+}
 
 @media (max-width: 600px) {
   .fc-stats { grid-template-columns: repeat(2, 1fr); }
@@ -11474,21 +11488,25 @@ if (typeof speechSynthesis !== 'undefined') {
 //   Web Audio API oscillator:                       -17.2 dBFS  ✅ WORKS
 //   fetch → decodeAudioData → BufferSource:         -14.2 dBFS  ✅ WORKS
 //
-// The winner: same-origin MP3 files served from /audio/{hash}.mp3, played
-// through a fresh HTMLAudioElement. This path is immune to the Chrome
-// speechSynthesis stale-endpoint bug that triggers on Bluetooth device
-// switches (Chrome's SAPI pipeline caches the old audio endpoint).
+// Playback path: fetch → decodeAudioData → AudioBufferSourceNode.
+// Chosen over HTMLAudioElement because <audio> claims exclusive media
+// audio focus, which pauses the user's background audio (e.g. novel
+// narration on wtr-lab). BufferSource is classified as a transient
+// sound effect and mixes with background media instead of interrupting.
 //
 // Pre-rendered pack: 578 unique Japanese phrases × ~12 KB each = 7 MB.
 // Generated at build time by _work/generate-audio-pack.mjs using the
 // Google Translate TTS endpoint via Node (CORS-free from server side).
 // Manifest at /audio/manifest.json maps text → SHA1-truncated filename.
 //
-// Fallback: if the manifest doesn't have an entry (new vocab not yet
-// generated), we try Web Speech API as last resort. But for everything
-// in CHAPTER_DATA and the Atlas, MP3 is guaranteed to hit.
+// Strict no-interruption policy (user decision 2026-04-09):
+// If the manifest doesn't have an entry OR Web Audio API fails, we
+// SILENTLY SKIP — no speechSynthesis fallback, no HTMLAudioElement
+// fallback. Either would break the mixing guarantee. For phrases in
+// CHAPTER_DATA and the Atlas, MP3 is guaranteed to hit; for new vocab,
+// re-run _work/generate-audio-pack.mjs to extend the pack.
 
-window.__tts = window.__tts || { live: [], log: [], manifest: null, manifestLoading: false };
+window.__tts = window.__tts || { live: [], log: [], manifest: null, manifestPromise: null };
 
 function ttsLog(msg, data) {
   const e = { t: Date.now(), msg, data };
@@ -11497,96 +11515,152 @@ function ttsLog(msg, data) {
   console.log('[tts]', msg, data || '');
 }
 
-// Load the audio manifest asynchronously. Kick this off immediately on
-// script load so the first speakJP() call has a populated manifest.
-async function loadTTSManifest() {
-  if (window.__tts.manifest || window.__tts.manifestLoading) return;
-  window.__tts.manifestLoading = true;
-  try {
-    const res = await fetch('/audio/manifest.json', { cache: 'force-cache' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    window.__tts.manifest = await res.json();
-    ttsLog('manifest loaded', { entries: Object.keys(window.__tts.manifest).length });
-  } catch (err) {
-    ttsLog('manifest load failed', String(err));
-    window.__tts.manifest = {}; // empty manifest = fall through to Web Speech
-  } finally {
-    window.__tts.manifestLoading = false;
-  }
+// Load the audio manifest asynchronously. Kicked off immediately on script
+// load so the first speakJP() call has a populated manifest. The returned
+// promise is cached on __tts.manifestPromise so concurrent callers can
+// await the same fetch (critical: speakJP uses this to wait instead of
+// falling through to speechSynthesis on cold loads).
+function loadTTSManifest() {
+  if (window.__tts.manifest) return Promise.resolve(window.__tts.manifest);
+  if (window.__tts.manifestPromise) return window.__tts.manifestPromise;
+  window.__tts.manifestPromise = (async () => {
+    try {
+      const res = await fetch('/audio/manifest.json', { cache: 'force-cache' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      window.__tts.manifest = await res.json();
+      ttsLog('manifest loaded', { entries: Object.keys(window.__tts.manifest).length });
+    } catch (err) {
+      ttsLog('manifest load failed', String(err));
+      window.__tts.manifest = {}; // empty manifest: all lookups miss → silent skip
+    }
+    return window.__tts.manifest;
+  })();
+  return window.__tts.manifestPromise;
 }
 loadTTSManifest();
 
-// Fallback: Web Speech API (known to be broken on some Chromes, but
-// still worth trying as a last resort for un-prerendered phrases)
-function _speakViaWebSpeech(t) {
-  if (typeof speechSynthesis === 'undefined') return false;
-  try { speechSynthesis.cancel(); } catch (_) {}
-  const u = new SpeechSynthesisUtterance(t);
-  u.lang = 'ja-JP';
-  u.rate = 0.9;
-  u.volume = 1.0;
-  const voices = speechSynthesis.getVoices();
-  const jp = voices.find(v => v.lang === 'ja-JP') || voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
-  if (jp) u.voice = jp;
-  window.__tts.live.push(u);
-  const release = () => {
-    const i = window.__tts.live.indexOf(u);
-    if (i >= 0) window.__tts.live.splice(i, 1);
-  };
-  u.onend = () => { ttsLog('web-speech ended', { text: t }); release(); };
-  u.onerror = (e) => {
-    if (e.error !== 'canceled' && e.error !== 'interrupted') ttsLog('web-speech ERROR', e.error);
-    release();
-  };
-  try { speechSynthesis.speak(u); return true; }
-  catch (err) { release(); return false; }
+// Shared Web Audio context + decoded buffer cache. Lazily created so
+// it's initialized inside a user gesture (required on iOS/Safari).
+window.__tts._bufferCache = window.__tts._bufferCache || new Map();
+window.__tts._inflight    = window.__tts._inflight    || new Map();
+
+function _getAudioCtx() {
+  let ctx = window.__tts._audioCtx;
+  if (!ctx) {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    try { ctx = new Ctx({ latencyHint: 'interactive' }); }
+    catch (_) { return null; }
+    window.__tts._audioCtx = ctx;
+  }
+  // Safari/mobile suspend the context when the tab backgrounds.
+  if (ctx.state === 'suspended') {
+    try { ctx.resume(); } catch (_) {}
+  }
+  return ctx;
 }
 
-// Primary: play the pre-rendered MP3 via a fresh HTMLAudioElement
+// Fetch + decode an MP3 once, then reuse the decoded AudioBuffer forever.
+// De-dupes concurrent calls for the same filename via an in-flight map.
+function _loadAudioBuffer(ctx, filename) {
+  const cached = window.__tts._bufferCache.get(filename);
+  if (cached) return Promise.resolve(cached);
+  const inflight = window.__tts._inflight.get(filename);
+  if (inflight) return inflight;
+  const p = fetch('/audio/' + filename)
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); })
+    .then(ab => ctx.decodeAudioData(ab))
+    .then(buf => {
+      window.__tts._bufferCache.set(filename, buf);
+      window.__tts._inflight.delete(filename);
+      return buf;
+    })
+    .catch(err => { window.__tts._inflight.delete(filename); throw err; });
+  window.__tts._inflight.set(filename, p);
+  return p;
+}
+
+// Play the pre-rendered MP3 via Web Audio API BufferSource.
+//
+// Strict no-interruption policy: this is the ONLY audio playback path
+// for vocab. We deliberately do NOT fall back to HTMLAudioElement on
+// failure — <audio> elements claim exclusive media audio focus, which
+// would pause the user's background audio (novels on wtr-lab, etc).
+// If Web Audio API fails for any reason, we silently log and skip.
+// The MP3s are standard-compliant Google TTS output, so decode failures
+// are virtually impossible on modern browsers.
 function _speakViaMP3(filename) {
-  // Stop any currently-playing audio elements we own
-  for (const a of window.__tts.live) {
-    if (a && typeof a.pause === 'function') {
-      try { a.pause(); } catch (_) {}
-    }
+  // Cancel anything currently playing (or pending decode) that we own.
+  for (const s of window.__tts.live) {
+    try {
+      if (s && typeof s.stop === 'function') s.stop(0);
+      else if (s && typeof s.pause === 'function') s.pause();
+    } catch (_) {}
   }
   window.__tts.live.length = 0;
 
-  // New fresh audio element — bypasses Chrome's stale speechSynthesis endpoint
-  const audio = new Audio('/audio/' + filename);
-  audio.volume = 1.0;
-  window.__tts.live.push(audio);
-  const release = () => {
-    const i = window.__tts.live.indexOf(audio);
-    if (i >= 0) window.__tts.live.splice(i, 1);
-  };
-  audio.onended = () => { ttsLog('mp3 ended', { file: filename }); release(); };
-  audio.onerror = () => {
-    const errCode = audio.error && audio.error.code;
-    ttsLog('mp3 error', { file: filename, code: errCode });
-    release();
-  };
-  const p = audio.play();
-  if (p && p.catch) {
-    p.catch(err => {
-      ttsLog('mp3 play() rejected', { file: filename, name: err.name, msg: err.message });
-      release();
-    });
+  const ctx = _getAudioCtx();
+  if (!ctx) {
+    ttsLog('mp3 (wa) skipped: no AudioContext support', { file: filename });
+    return true;
   }
+
+  // Marker token: lets us cancel a pending decode if the user clicks
+  // something else before decodeAudioData resolves.
+  const marker = { pending: filename };
+  window.__tts.live.push(marker);
+
+  _loadAudioBuffer(ctx, filename).then(buffer => {
+    if (!window.__tts.live.includes(marker)) {
+      ttsLog('mp3 (wa) canceled before start', { file: filename });
+      return;
+    }
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    src.connect(ctx.destination);
+    src.onended = () => {
+      ttsLog('mp3 (wa) ended', { file: filename });
+      const i = window.__tts.live.indexOf(src);
+      if (i >= 0) window.__tts.live.splice(i, 1);
+    };
+    // Swap the placeholder marker for the real source so future calls
+    // can cancel it via src.stop(0).
+    const idx = window.__tts.live.indexOf(marker);
+    if (idx >= 0) window.__tts.live[idx] = src; else window.__tts.live.push(src);
+    src.start(0);
+  }).catch(err => {
+    // Silent skip — do NOT fall through to HTMLAudioElement or
+    // speechSynthesis. Either would interrupt background audio.
+    ttsLog('mp3 (wa) failed → silent skip (no interruption)', { file: filename, msg: String(err && err.message || err) });
+    const i = window.__tts.live.indexOf(marker);
+    if (i >= 0) window.__tts.live.splice(i, 1);
+  });
+
   return true;
 }
 
+// Strict no-interruption policy for vocab audio:
+//   1. Only the MP3 pack (via Web Audio API) plays sound.
+//   2. Manifest miss → silent skip (NO speechSynthesis fallback — it
+//      would claim media focus and pause the user's background audio).
+//   3. Manifest not loaded yet → await load, then retry once.
+//   4. Voice disabled → silent skip.
+// Note: The Oral Exam feature (oeSpeakLine, speakAllOE) still uses
+// speechSynthesis directly and is NOT affected by this policy.
 function speakJP(text) {
   const t = (text == null ? '' : String(text)).trim();
   if (!t) { ttsLog('skipped: empty text'); return; }
   if (!voiceEnabled) { ttsLog('skipped: voice disabled'); return; }
 
-  // If manifest isn't loaded yet, kick off the fetch and fall through to
-  // Web Speech for this first call — by the next click it'll be ready
+  // Cold-start case: manifest still loading. Wait for it and retry
+  // instead of falling through to speechSynthesis, which would
+  // interrupt the user's background audio.
   if (!window.__tts.manifest) {
-    loadTTSManifest();
-    ttsLog('manifest not yet loaded → Web Speech fallback', { text: t });
-    return _speakViaWebSpeech(t);
+    ttsLog('manifest pending → awaiting load', { text: t });
+    loadTTSManifest().then(() => {
+      if (window.__tts.manifest) speakJP(t);
+    });
+    return;
   }
 
   const filename = window.__tts.manifest[t];
@@ -11595,8 +11669,7 @@ function speakJP(text) {
     return _speakViaMP3(filename);
   }
 
-  // Manifest miss: phrase isn't in the pre-rendered pack. Try a
-  // normalized lookup (strip whitespace variations, parenthetical marks)
+  // Normalized lookup: strip whitespace, parenthetical marks, warning glyphs.
   const normalized = t.replace(/⚠️/g, '').replace(/[（()].*?[）)]/g, '').replace(/\s+/g, '').trim();
   if (normalized !== t && window.__tts.manifest[normalized]) {
     const fn = window.__tts.manifest[normalized];
@@ -11604,8 +11677,11 @@ function speakJP(text) {
     return _speakViaMP3(fn);
   }
 
-  ttsLog('MP3 miss → Web Speech fallback', { text: t });
-  return _speakViaWebSpeech(t);
+  // Silent skip: phrase is not in the pre-rendered pack. We do NOT
+  // fall through to speechSynthesis because it would pause background
+  // media (novels, podcasts, etc). If this phrase needs audio, add it
+  // to CHAPTER_DATA and re-run _work/generate-audio-pack.mjs.
+  ttsLog('MP3 miss → silent skip (no interruption)', { text: t });
 }
 window.speakJP = speakJP;
 const esc = s => s.replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -14306,6 +14382,7 @@ document.addEventListener('keydown', function(e) {
   let isFlipped = false;
   let sessionStarted = 0;
   let sessionRated = 0;
+  let sessionMissed = []; // cards graded "Again" (1) this session — drives Review Missed button
   let selectedChapter = 'all'; // 'all' | '1'..'6'
   const NEW_CARDS_PER_DAY = 20;
   const CHAPTER_STORAGE_KEY = 'nakama_fc_chapter_v1';
@@ -14498,13 +14575,26 @@ document.addEventListener('keydown', function(e) {
         const total = filteredPool.length;
         const chapLabel = selectedChapter === 'all' ? 'all chapters' : 'Chapter ' + selectedChapter;
         const hasMore = total > sessionRated;
+        const missedCount = sessionMissed.length;
+        // Review Missed becomes the primary action when there are misses;
+        // otherwise Study All keeps the primary glow.
+        const reviewMissedBtn = missedCount > 0
+          ? `<button class="fc-complete-btn danger" onclick="fcReviewMissed()">🔁 Review ${missedCount} Missed</button>`
+          : '';
+        const studyAllBtn = hasMore
+          ? `<button class="fc-complete-btn${missedCount === 0 ? ' primary' : ''}" onclick="fcStudyAll()">📚 Study All ${total} Cards</button>`
+          : '';
+        const missedSummary = missedCount > 0
+          ? ` <span style="color:var(--red)">${missedCount} marked Again.</span>`
+          : '';
         area.innerHTML = `
           <div class="fc-empty">
             <div class="fc-empty-icon">🎉</div>
             <div class="fc-empty-msg">Session complete!</div>
-            <div class="fc-empty-sub">${sessionRated} cards reviewed from ${escHTML(chapLabel)}.${hasMore ? ` There are <b>${total}</b> total cards available.` : ''}</div>
+            <div class="fc-empty-sub">${sessionRated} cards reviewed from ${escHTML(chapLabel)}.${missedSummary}${hasMore ? ` There are <b>${total}</b> total cards available.` : ''}</div>
             <div class="fc-complete-actions">
-              ${hasMore ? `<button class="fc-complete-btn primary" onclick="fcStudyAll()">📚 Study All ${total} Cards</button>` : ''}
+              ${reviewMissedBtn}
+              ${studyAllBtn}
               <button class="fc-complete-btn" onclick="fcResetSession()">⟲ Restart Session</button>
               <button class="fc-complete-btn" onclick="fcShowStats()">📊 View Stats</button>
             </div>
@@ -14541,6 +14631,9 @@ document.addEventListener('keydown', function(e) {
     state[currentCard.id] = updated;
     saveState(state);
     sessionRated++;
+    // Track misses (Again = grade 1) so the session-complete screen can
+    // offer a focused drill of just the cards the user got wrong.
+    if (grade === 1) sessionMissed.push(currentCard);
     nextCard();
   };
 
@@ -14553,8 +14646,27 @@ document.addEventListener('keydown', function(e) {
   window.fcResetSession = function() {
     sessionStarted = 0;
     sessionRated = 0;
+    sessionMissed = [];
     isFlipped = false;
     initFlashcards();
+  };
+
+  // Drill the cards graded "Again" during the session that just ended.
+  // Snapshots sessionMissed into the queue and resets the tracker so the
+  // user can recursively re-drill any cards they miss again on this pass.
+  window.fcReviewMissed = function() {
+    if (sessionMissed.length === 0) return;
+    queue = sessionMissed.slice();
+    sessionMissed = [];
+    sessionStarted = queue.length;
+    sessionRated = 0;
+    isFlipped = false;
+    currentCard = null;
+    nextCard();
+    if (typeof showToast === 'function') {
+      const n = queue.length;
+      showToast('Drill mode', `Reviewing ${n} missed card${n === 1 ? '' : 's'}`, 'ok', 3000);
+    }
   };
 
   // "Study All" mode: cram through every card in the current chapter,
@@ -14587,6 +14699,7 @@ document.addEventListener('keydown', function(e) {
     }
     sessionStarted = queue.length;
     sessionRated = 0;
+    sessionMissed = [];
     isFlipped = false;
     currentCard = null;
     nextCard();
@@ -14652,6 +14765,7 @@ document.addEventListener('keydown', function(e) {
     state = {};
     sessionStarted = 0;
     sessionRated = 0;
+    sessionMissed = [];
     initFlashcards();
   };
 
@@ -14677,6 +14791,7 @@ document.addEventListener('keydown', function(e) {
     buildQueue();
     sessionStarted = queue.length;
     sessionRated = 0;
+    sessionMissed = [];
     if (queue.length === 0) {
       const area = document.getElementById('fc-card-area');
       if (area) {
@@ -14711,6 +14826,7 @@ document.addEventListener('keydown', function(e) {
     // Rebuild queue and restart session for the new chapter
     sessionStarted = 0;
     sessionRated = 0;
+    sessionMissed = [];
     isFlipped = false;
     currentCard = null;
     initFlashcards();
