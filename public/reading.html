@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nakama 1 — Reading Comprehension</title>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --card: #161616;
+  --card-alt: #1a1a1a;
+  --border: #2a2a2a;
+  --gold: #d4a843;
+  --gold-bright: #f0c85a;
+  --gold-dark: #8b6d1e;
+  --gold-glow: rgba(212,168,67,0.15);
+  --gold-subtle: rgba(212,168,67,0.08);
+  --green: #4ecf7a;
+  --red: #e85454;
+  --yellow: #f0c85a;
+  --blue: #5ba8e8;
+  --text: #e0ddd5;
+  --text-dim: #8a8578;
+  --muted: #5a5548;
+  --white: #f5f2ea;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(212,168,67,0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(212,168,67,0.02) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══ MASTHEAD ═══ */
+.masthead {
+  text-align: center;
+  padding: 36px 20px 14px;
+  position: relative;
+  z-index: 1;
+}
+.masthead h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+.masthead .sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+.masthead .line {
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  margin: 14px auto;
+  opacity: 0.5;
+}
+.masthead .back {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 14px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 150ms ease;
+}
+.masthead .back:hover { color: var(--gold); border-color: var(--gold-dark); }
+
+/* ═══ MAIN CONTAINER ═══ */
+.main {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 24px 18px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══ LANDING ═══ */
+.landing-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+  margin-bottom: 22px;
+}
+.landing-section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.landing-section .blurb {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 22px;
+  line-height: 1.6;
+}
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.cat-card {
+  padding: 18px 16px;
+  background: var(--card-alt);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+}
+.cat-card:hover {
+  border-color: var(--gold-dark);
+  background: var(--gold-subtle);
+  transform: translateY(-2px);
+}
+.cat-card.active {
+  border-color: var(--gold);
+  background: var(--gold-glow);
+  box-shadow: 0 0 0 1px var(--gold-glow) inset;
+}
+.cat-card .lbl-jp {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.cat-card .lbl-en {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.cat-card .desc {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.count-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.count-row label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.count-pills { display: flex; gap: 4px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.count-pill {
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  background: var(--card-alt);
+  color: var(--muted);
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: all 150ms ease;
+}
+.count-pill.active { background: var(--gold); color: #1a1300; }
+.count-pill:hover:not(.active) { color: var(--gold); }
+
+.start-btn {
+  display: block;
+  width: 100%;
+  padding: 16px 22px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  color: #1a1300;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: all 150ms ease;
+}
+.start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,168,67,0.25); }
+.start-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ═══ EXAM SCREEN ═══ */
+.exam-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.exam-header .meta {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.exam-header .meta b { color: var(--gold); }
+.exam-header .quit {
+  padding: 6px 14px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: all 150ms ease;
+}
+.exam-header .quit:hover { color: var(--red); border-color: var(--red); }
+
+.passage-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 30px 28px;
+  margin-bottom: 22px;
+  position: relative;
+}
+.passage-card .passage-num {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.passage-card .audio-btn {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--card-alt);
+  color: var(--gold);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.passage-card .audio-btn:hover { border-color: var(--gold); background: var(--gold-subtle); }
+.passage-card .audio-btn.playing { background: var(--gold-glow); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.passage-text {
+  font-family: 'Klee One', 'Noto Sans JP', sans-serif;
+  font-size: 21px;
+  line-height: 2.0;
+  color: var(--white);
+  margin-top: 18px;
+  white-space: pre-wrap;
+}
+.passage-text ruby { ruby-position: over; }
+.passage-text rt { font-size: 0.5em; color: var(--gold); font-family: 'Noto Sans JP', sans-serif; }
+
+.q-section {
+  margin-bottom: 20px;
+}
+.q-section-head {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  border-bottom: 1px solid var(--gold-dark);
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
+.q-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+.q-card:hover { border-color: var(--gold-dark); background: var(--gold-subtle); }
+.q-card.revealed { cursor: default; }
+.q-card.revealed.correct { border-color: var(--green); background: rgba(78,207,122,0.06); }
+.q-card.revealed.wrong { border-color: var(--red); background: rgba(232,84,84,0.06); }
+.q-card .q-num {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  margin-right: 8px;
+}
+.q-card .q-jp {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  color: var(--white);
+  line-height: 1.7;
+}
+.q-card .q-en {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.q-card .tf-options {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.q-card .tf-btn {
+  flex: 1;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: var(--card-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: all 150ms ease;
+}
+.q-card .tf-btn:hover { border-color: var(--gold-dark); color: var(--gold); }
+.q-card .tf-btn.selected { border-color: var(--gold); color: var(--gold); background: var(--gold-glow); }
+.q-card .reveal {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--card-alt);
+  border-left: 3px solid var(--gold);
+  border-radius: 6px;
+  font-size: 13px;
+}
+.q-card .reveal .ans-jp {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 15px;
+}
+.q-card .reveal .ans-en {
+  color: var(--text-dim);
+  font-size: 11px;
+  margin-top: 4px;
+}
+.q-card .reveal .verdict {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 4px;
+}
+.q-card .reveal .verdict.correct { background: rgba(78,207,122,0.15); color: var(--green); }
+.q-card .reveal .verdict.wrong { background: rgba(232,84,84,0.15); color: var(--red); }
+.q-card .sa-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.q-card .sa-input {
+  flex: 1;
+  padding: 10px 12px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 15px;
+  background: var(--card-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--white);
+  outline: none;
+}
+.q-card .sa-input:focus { border-color: var(--gold-dark); }
+.q-card .reveal-btn {
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: var(--card-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: 'DM Sans';
+}
+.q-card .reveal-btn:hover { color: var(--gold); border-color: var(--gold-dark); }
+
+.passage-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 22px;
+}
+.passage-nav button {
+  padding: 12px 22px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: all 150ms ease;
+}
+.passage-nav button:hover:not(:disabled) { color: var(--gold); border-color: var(--gold-dark); }
+.passage-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+.passage-nav .next {
+  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  color: #1a1300;
+  border-color: var(--gold);
+}
+.passage-nav .next:hover:not(:disabled) { box-shadow: 0 6px 18px rgba(212,168,67,0.25); }
+
+/* ═══ RESULTS ═══ */
+.results-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 36px 28px;
+  text-align: center;
+}
+.results-card .icon { font-size: 52px; margin-bottom: 14px; }
+.results-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+.score-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+.score-stat {
+  text-align: center;
+  min-width: 80px;
+}
+.score-stat .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  color: var(--gold);
+  font-weight: 700;
+}
+.score-stat .lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.results-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+.results-actions button {
+  padding: 12px 22px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: var(--card-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'DM Sans';
+  transition: all 150ms ease;
+}
+.results-actions button:hover { color: var(--gold); border-color: var(--gold-dark); }
+.results-actions .primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  color: #1a1300;
+  border-color: var(--gold);
+}
+
+/* ═══ TEST RUNNER PANEL (dev) ═══ */
+.test-panel {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  z-index: 200;
+  font-family: 'DM Sans';
+  cursor: pointer;
+  user-select: none;
+}
+.test-panel.pass { color: var(--green); border-color: rgba(78,207,122,0.3); }
+.test-panel.fail { color: var(--red); border-color: var(--red); }
+
+@media (max-width: 600px) {
+  .masthead h1 { font-size: 28px; letter-spacing: 2px; }
+  .cat-grid { grid-template-columns: 1fr; }
+  .main { padding: 16px 12px 80px; }
+  .passage-card { padding: 22px 18px; }
+  .passage-text { font-size: 18px; }
+  .passage-card .audio-btn { width: 32px; height: 32px; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <h1>Reading</h1>
+  <div class="line"></div>
+  <div class="sub">Nakama 1 · Comprehension Drill</div>
+  <a href="index.html" class="back">← Study Guide</a>
+</div>
+
+<div class="main">
+  <div id="root"></div>
+</div>
+
+<div id="test-panel" class="test-panel" title="Click to see schema validation report">⏳ validating…</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════
+// READING COMPREHENSION ENGINE
+// ═══════════════════════════════════════════════════════════════════════
+//
+// Architecture: template-based variant generator + schema validator.
+// We do NOT parse Japanese — instead, every passage is built by filling
+// slots in a known-good seed template with values drawn from typed
+// substitution banks. As long as the seed is grammatical and bank
+// values are semantically equivalent, every variant is grammatical
+// by construction. The validator's job is to confirm structural
+// integrity: all slots filled, values from valid banks, predicates intact.
+//
+// Three categories (CH 1-6 vocab + grammar):
+//   A. Campus  — university life, intro/identity (CH 1-2 patterns)
+//   B. Room    — spatial description, location words (CH 5)
+//   C. Weekend — temporal sequence, past tense (CH 3, 6)
+
+// ─── SUBSTITUTION BANKS ───────────────────────────────────────────────
+// Each bank ≥ 8 entries to guarantee 8 unique variants per category.
+
+// Kanji-and-ruby strings use only kanji from the site's kanji.html (60 chars).
+// Available: 日曜週学今先校生月大山田水下中小何川木火土金上私末休漢字地毎手年明昨来人高長富士登口舎村花泳道台色見本野国身説立鉄語時夏
+// Slot values that contain kanji are stored as <ruby>kanji<rt>reading</rt></ruby>
+// HTML — the validator and audio code call stripHtml() before doing any
+// plain-text comparison, so the markup is transparent to those layers.
+const BANKS = {
+  // Japanese family names — every one composed only from the 60-kanji set.
+  NAME: [
+    '<ruby>田中<rt>たなか</rt></ruby>',
+    '<ruby>山田<rt>やまだ</rt></ruby>',
+    '<ruby>中村<rt>なかむら</rt></ruby>',
+    '<ruby>田口<rt>たぐち</rt></ruby>',
+    '<ruby>山口<rt>やまぐち</rt></ruby>',
+    '<ruby>川口<rt>かわぐち</rt></ruby>',
+    '<ruby>本田<rt>ほんだ</rt></ruby>',
+    '<ruby>大山<rt>おおやま</rt></ruby>'
+  ],
+  // Friend names — kept as katakana foreign names (realistic for an
+  // American university classmate; no kanji required).
+  FRIEND_NAME: ['ジョン', 'メアリー', 'デイビッド', 'リサ', 'マイケル', 'エミリー', 'ジェームズ', 'アンナ'],
+
+  // US universities + states (Nakama 1 ch 2 pattern: 'X is a student at Y')
+  UNIV_NAME: ['コロラド', 'カリフォルニア', 'テキサス', 'ニューヨーク', 'ボストン', 'シカゴ', 'シアトル', 'ハワイ'],
+  STATE: ['コロラド', 'カリフォルニア', 'テキサス', 'ニューヨーク', 'マサチューセッツ', 'イリノイ', 'ワシントン', 'ハワイ'],
+
+  // Academic majors. 日本語 uses 日/本/語 — all in the 60-set.
+  MAJOR: [
+    '<ruby>日本語<rt>にほんご</rt></ruby>',
+    'えいご',
+    'すうがく',
+    'けいざい',
+    'ぶんがく',
+    'れきし',
+    'びじゅつ',
+    'おんがく'
+  ],
+  FRIEND_MAJOR: [
+    'すうがく',
+    'けいざい',
+    'ぶんがく',
+    'れきし',
+    'びじゅつ',
+    'おんがく',
+    '<ruby>日本語<rt>にほんご</rt></ruby>',
+    'えいご'
+  ],
+
+  // i-adjectives ONLY — mixing i-adj and na-adj here is a category
+  // error because their inflection rules differ entirely (na-adj
+  // negate via ではない, not くない). All entries are CH 1-6 vocab.
+  // 大 / 小 / 高 / 長 are in the 60-kanji set; the rest are kana-only.
+  ADJ_SIZE: [
+    '<ruby>大<rt>おお</rt></ruby>きい',
+    '<ruby>小<rt>ちい</rt></ruby>さい',
+    'あたらしい',
+    'ふるい',
+    '<ruby>高<rt>たか</rt></ruby>い',
+    'ひろい',
+    '<ruby>長<rt>なが</rt></ruby>い',
+    'せまい'
+  ],
+
+  // Room objects (CH 5 vocab — things in a room). 本 is in the 60-set.
+  OBJECT1: [
+    '<ruby>本<rt>ほん</rt></ruby>',
+    'ノート',
+    'えんぴつ',
+    'コンピューター',
+    'カップ',
+    'とけい',
+    'かばん',
+    'ペン'
+  ],
+  OBJECT2: ['ざっし', 'しゃしん', 'はな', 'カメラ', 'てがみ', 'けいたい', 'じしょ', 'めがね'],
+
+  // Spatial SIDE positions only — chairs and bedside objects can't
+  // sit ABOVE or BELOW their reference furniture in a normal room, so
+  // 上 (above) / 下 (below) are excluded from these slots. The only
+  // 60-set kanji that fit (前/後/右/左/横/近) are NOT in the site's
+  // kanji.html, so all values stay hiragana for consistency.
+  LOC1: ['よこ', 'ちかく', 'まえ', 'うしろ', 'みぎ', 'ひだり', 'よこ', 'ちかく'],
+  LOC2: ['みぎ', 'ひだり', 'よこ', 'ちかく', 'まえ', 'うしろ', 'みぎ', 'ひだり'],
+
+  // What's visible from the window. 山 / 川 are in the 60-set.
+  SCENERY: [
+    '<ruby>山<rt>やま</rt></ruby>',
+    'うみ',
+    'こうえん',
+    'まち',
+    '<ruby>川<rt>かわ</rt></ruby>',
+    'にわ',
+    'もり',
+    'がっこう'
+  ],
+
+  // Days of the week (CH 3). 月火水木金土日曜 are all in the 60-set.
+  DAY1: [
+    '<ruby>月曜日<rt>げつようび</rt></ruby>',
+    '<ruby>火曜日<rt>かようび</rt></ruby>',
+    '<ruby>水曜日<rt>すいようび</rt></ruby>',
+    '<ruby>木曜日<rt>もくようび</rt></ruby>',
+    '<ruby>金曜日<rt>きんようび</rt></ruby>',
+    '<ruby>土曜日<rt>どようび</rt></ruby>',
+    '<ruby>日曜日<rt>にちようび</rt></ruby>',
+    '<ruby>月曜日<rt>げつようび</rt></ruby>'
+  ],
+  DAY2: [
+    '<ruby>火曜日<rt>かようび</rt></ruby>',
+    '<ruby>水曜日<rt>すいようび</rt></ruby>',
+    '<ruby>木曜日<rt>もくようび</rt></ruby>',
+    '<ruby>金曜日<rt>きんようび</rt></ruby>',
+    '<ruby>土曜日<rt>どようび</rt></ruby>',
+    '<ruby>日曜日<rt>にちようび</rt></ruby>',
+    '<ruby>月曜日<rt>げつようび</rt></ruby>',
+    '<ruby>火曜日<rt>かようび</rt></ruby>'
+  ],
+
+  // Places to go. PLACE1 and PLACE2 are intentionally DISJOINT — if
+  // they shared values, the variant generator could land on the same
+  // place for both slots and produce a passage that says "went to
+  // the park, then went to the park". 山 uses the 60-set kanji for 山(やま).
+  PLACE1: ['としょかん', 'スーパー', 'こうえん', 'カフェ', 'ぎんこう', 'ゆうびんきょく', 'えき', 'デパート'],
+  PLACE2: ['レストラン', 'えいがかん', 'ともだちのうち', 'カラオケ', 'プール', '<ruby>山<rt>やま</rt></ruby>', 'ジム', 'ホテル'],
+
+  // Activities (verbs in past polite — ました form). 本 / 見 / 来 / 立 are
+  // in the 60-set, so a few activities can use those kanji.
+  ACTIVITY1: [
+    '<ruby>本<rt>ほん</rt></ruby>をよみました',
+    'コーヒーをのみました',
+    'やさいをかいました',
+    'ともだちとはなしました',
+    'べんきょうしました',
+    'おかねをおろしました',
+    'てがみをだしました',
+    'プレゼントをかいました'
+  ],
+  ACTIVITY2: [
+    'ばんごはんをたべました',
+    'ケーキをたべました',
+    'えいがを<ruby>見<rt>み</rt></ruby>ました',
+    'おかねをおろしました',
+    'ふくをかいました',
+    'うんどうしました',
+    'ばんごはんをたべました',
+    'やさいをかいました'
+  ],
+
+  // Time of day (CH 3 — relative time words). No site kanji for these.
+  TIME: ['あさ', 'ひる', 'ごご', 'ゆうがた', 'よる', 'よる', 'ごぜんちゅう', 'ばん']
+};
+
+// ─── SEED TEMPLATES ────────────────────────────────────────────────────
+// Each seed has:
+//   - id, category, title
+//   - sentences: array of strings with {SLOT} placeholders
+//   - questions: array of question templates
+// Question types: 'tf' (true/false), 'sa' (short answer), 'st' (spatial/temporal)
+
+// Site-set kanji used in the static parts of the SEEDS below:
+//   大学(だいがく) 学生(がくせい) 先生(せんせい) 私(わたし) 何(なに/なん)
+//   日本(にほん) 日本語(にほんご) 山(やま) 川(かわ) 上(うえ) 下(した) 中(なか)
+//   週末(しゅうまつ) 先週(せんしゅう) 今週(こんしゅう) 大(おお) 小(ちい) 高(たか)
+//   月曜日 火曜日 水曜日 木曜日 金曜日 土曜日 日曜日
+//   見(み) 立(た)
+const SEEDS = [
+  // ─── CATEGORY A: CAMPUS ─────────────────────────────────────────────
+  {
+    id: 'campus',
+    category: 'A',
+    titleJp: '<ruby>大学<rt>だいがく</rt></ruby>のせいかつ',
+    titleEn: 'University Life',
+    sentences: [
+      '{NAME}さんはアメリカの<ruby>大学<rt>だいがく</rt></ruby>の<ruby>学生<rt>がくせい</rt></ruby>です。',
+      '<ruby>大学<rt>だいがく</rt></ruby>のなまえは{UNIV_NAME}<ruby>大学<rt>だいがく</rt></ruby>です。',
+      '{UNIV_NAME}<ruby>大学<rt>だいがく</rt></ruby>は{STATE}しゅうにあります。',
+      'とても{ADJ_SIZE}<ruby>大学<rt>だいがく</rt></ruby>です。',
+      '{NAME}さんのせんこうは{MAJOR}です。',
+      '{NAME}さんのともだちは{FRIEND_NAME}さんです。',
+      '{FRIEND_NAME}さんのせんこうは{FRIEND_MAJOR}です。'
+    ],
+    questions: [
+      // T/F — true (matches passage)
+      { type: 'tf', answer: true,
+        jp: '{NAME}さんは<ruby>学生<rt>がくせい</rt></ruby>です。',
+        en: '{NAME} is a student.',
+        explainJp: 'はい、{NAME}さんは<ruby>大学<rt>だいがく</rt></ruby>の<ruby>学生<rt>がくせい</rt></ruby>です。',
+        explainEn: 'Yes — {NAME} is a university student.' },
+      // T/F — false (trap: 先生 instead of 学生)
+      { type: 'tf', answer: false,
+        jp: '{NAME}さんは<ruby>先生<rt>せんせい</rt></ruby>です。',
+        en: '{NAME} is a teacher.',
+        explainJp: 'いいえ、{NAME}さんは<ruby>先生<rt>せんせい</rt></ruby>ではありません。<ruby>学生<rt>がくせい</rt></ruby>です。',
+        explainEn: 'No — {NAME} is not a teacher; they are a student.' },
+      // T/F — true
+      { type: 'tf', answer: true,
+        jp: '{UNIV_NAME}<ruby>大学<rt>だいがく</rt></ruby>は{STATE}しゅうにあります。',
+        en: '{UNIV_NAME} University is in {STATE}.',
+        explainJp: 'はい、そうです。',
+        explainEn: 'Yes — that is correct.' },
+      // T/F — false (trap: swap majors)
+      { type: 'tf', answer: false,
+        jp: '{NAME}さんのせんこうは{FRIEND_MAJOR}です。',
+        en: "{NAME}'s major is {FRIEND_MAJOR}.",
+        explainJp: 'いいえ、{NAME}さんのせんこうは{MAJOR}です。{FRIEND_MAJOR}は{FRIEND_NAME}さんのせんこうです。',
+        explainEn: "No — {NAME}'s major is {MAJOR}. {FRIEND_MAJOR} is {FRIEND_NAME}'s major." },
+      // T/F — true
+      { type: 'tf', answer: true,
+        jp: '{NAME}さんのともだちは{FRIEND_NAME}さんです。',
+        en: "{NAME}'s friend is {FRIEND_NAME}.",
+        explainJp: 'はい、そうです。',
+        explainEn: 'Yes — that is correct.' },
+      // SA — major
+      { type: 'sa',
+        jp: '{NAME}さんのせんこうは<ruby>何<rt>なん</rt></ruby>ですか。',
+        en: "What is {NAME}'s major?",
+        answerJp: '{MAJOR}です。',
+        answerEn: 'It is {MAJOR}.' },
+      // SA — university name
+      { type: 'sa',
+        jp: '<ruby>大学<rt>だいがく</rt></ruby>のなまえは<ruby>何<rt>なん</rt></ruby>ですか。',
+        en: "What is the university's name?",
+        answerJp: '{UNIV_NAME}<ruby>大学<rt>だいがく</rt></ruby>です。',
+        answerEn: 'It is {UNIV_NAME} University.' },
+      // SA — location
+      { type: 'sa',
+        jp: '<ruby>大学<rt>だいがく</rt></ruby>はどこにありますか。',
+        en: 'Where is the university?',
+        answerJp: '{STATE}しゅうにあります。',
+        answerEn: 'It is in {STATE}.' },
+      // SA — friend's major
+      { type: 'sa',
+        jp: '{FRIEND_NAME}さんのせんこうは<ruby>何<rt>なん</rt></ruby>ですか。',
+        en: "What is {FRIEND_NAME}'s major?",
+        answerJp: '{FRIEND_MAJOR}です。',
+        answerEn: 'It is {FRIEND_MAJOR}.' }
+    ]
+  },
+
+  // ─── CATEGORY B: ROOM ───────────────────────────────────────────────
+  {
+    id: 'room',
+    category: 'B',
+    titleJp: '<ruby>私<rt>わたし</rt></ruby>のへや',
+    titleEn: 'My Room',
+    sentences: [
+      'これは{NAME}さんのへやです。',
+      '{NAME}さんのへやはとても{ADJ_SIZE}です。',
+      'へやの<ruby>中<rt>なか</rt></ruby>にベッドとテーブルといすがあります。',
+      'テーブルの<ruby>上<rt>うえ</rt></ruby>に{OBJECT1}があります。',
+      'テーブルの{LOC1}にいすがあります。',
+      'ベッドの{LOC2}に{OBJECT2}があります。',
+      'へやのまどから{SCENERY}が<ruby>見<rt>み</rt></ruby>えます。'
+    ],
+    questions: [
+      // T/F — true (object on table)
+      { type: 'tf', answer: true,
+        jp: 'テーブルの<ruby>上<rt>うえ</rt></ruby>に{OBJECT1}があります。',
+        en: 'There is a {OBJECT1} on the table.',
+        explainJp: 'はい、<ruby>本<rt>ほん</rt></ruby>のとおりです。',
+        explainEn: 'Yes — that is what the passage says.' },
+      // T/F — trap (swap object1 and object2)
+      { type: 'tf', answer: false,
+        jp: 'テーブルの<ruby>上<rt>うえ</rt></ruby>に{OBJECT2}があります。',
+        en: 'There is a {OBJECT2} on the table.',
+        explainJp: 'いいえ、テーブルの<ruby>上<rt>うえ</rt></ruby>には{OBJECT1}があります。{OBJECT2}はベッドの{LOC2}にあります。',
+        explainEn: 'No — there is a {OBJECT1} on the table. The {OBJECT2} is {LOC2} of the bed.' },
+      // T/F — true (window scenery)
+      { type: 'tf', answer: true,
+        jp: 'まどから{SCENERY}が<ruby>見<rt>み</rt></ruby>えます。',
+        en: 'You can see {SCENERY} from the window.',
+        explainJp: 'はい、まどから{SCENERY}が<ruby>見<rt>み</rt></ruby>えます。',
+        explainEn: 'Yes — {SCENERY} is visible from the window.' },
+      // T/F — trap (chair location swapped)
+      { type: 'tf', answer: false,
+        jp: 'ベッドの{LOC1}にいすがあります。',
+        en: 'The chair is {LOC1} of the bed.',
+        explainJp: 'いいえ、いすはテーブルの{LOC1}にあります。',
+        explainEn: 'No — the chair is {LOC1} of the table, not the bed.' },
+      // T/F — true (room is very ADJ)
+      { type: 'tf', answer: true,
+        jp: '{NAME}さんのへやはとても{ADJ_SIZE}です。',
+        en: "{NAME}'s room is very {ADJ_SIZE}.",
+        explainJp: 'はい、<ruby>本<rt>ほん</rt></ruby>のとおりです。',
+        explainEn: 'Yes — that is what the passage says.' },
+      // SA — what's on the table
+      { type: 'sa',
+        jp: 'テーブルの<ruby>上<rt>うえ</rt></ruby>に<ruby>何<rt>なに</rt></ruby>がありますか。',
+        en: 'What is on the table?',
+        answerJp: '{OBJECT1}があります。',
+        answerEn: 'There is a {OBJECT1}.' },
+      // SA — chair location
+      { type: 'sa',
+        jp: 'いすはどこにありますか。',
+        en: 'Where is the chair?',
+        answerJp: 'テーブルの{LOC1}にあります。',
+        answerEn: 'It is {LOC1} of the table.' },
+      // SA — what's visible from window
+      { type: 'sa',
+        jp: 'まどから<ruby>何<rt>なに</rt></ruby>が<ruby>見<rt>み</rt></ruby>えますか。',
+        en: 'What can you see from the window?',
+        answerJp: '{SCENERY}が<ruby>見<rt>み</rt></ruby>えます。',
+        answerEn: 'You can see {SCENERY}.' },
+      // ST — spatial reasoning (object 2 location)
+      { type: 'st',
+        jp: '{OBJECT2}はどこにありますか。',
+        en: 'Where is the {OBJECT2}?',
+        answerJp: 'ベッドの{LOC2}にあります。',
+        answerEn: 'It is {LOC2} of the bed.' },
+      // ST — spatial reasoning (whose room)
+      { type: 'st',
+        jp: 'これはだれのへやですか。',
+        en: 'Whose room is this?',
+        answerJp: '{NAME}さんのへやです。',
+        answerEn: "It is {NAME}'s room." }
+    ]
+  },
+
+  // ─── CATEGORY C: WEEKEND ────────────────────────────────────────────
+  // Note: 週末 (しゅうまつ) = "weekend" — both 週 and 末 are in the 60-set.
+  // 先週 (せんしゅう) = "last week" — both 先 and 週 are in the 60-set.
+  {
+    id: 'weekend',
+    category: 'C',
+    titleJp: '<ruby>先週<rt>せんしゅう</rt></ruby>の<ruby>週末<rt>しゅうまつ</rt></ruby>',
+    titleEn: 'Last Weekend',
+    sentences: [
+      // 来 (くる) means "to come TOWARD the speaker" — wrong for "X went
+      // to a library". Plain いきました is correct; 行 isn't in the 60-set.
+      '<ruby>先週<rt>せんしゅう</rt></ruby>の{DAY1}に{NAME}さんは{PLACE1}にいきました。',
+      '{PLACE1}で{ACTIVITY1}。',
+      'それから、{PLACE2}にいきました。',
+      '{PLACE2}で{ACTIVITY2}。',
+      '{TIME}、{NAME}さんはうちにかえりました。',
+      'つぎの{DAY2}に{NAME}さんは{FRIEND_NAME}さんとあいました。'
+    ],
+    questions: [
+      // T/F — true (first place)
+      { type: 'tf', answer: true,
+        jp: '{NAME}さんは{DAY1}に{PLACE1}にいきました。',
+        en: '{NAME} went to {PLACE1} on {DAY1}.',
+        explainJp: 'はい、<ruby>本<rt>ほん</rt></ruby>のとおりです。',
+        explainEn: 'Yes — that is what the passage says.' },
+      // T/F — trap (swap activities)
+      { type: 'tf', answer: false,
+        jp: '{PLACE1}で{ACTIVITY2}。',
+        en: 'At {PLACE1}, [activity 2 description].',
+        explainJp: 'いいえ、{PLACE1}では{ACTIVITY1}。{ACTIVITY2}は{PLACE2}でしました。',
+        explainEn: 'No — that activity happened at {PLACE2}, not {PLACE1}.' },
+      // T/F — true (returned home)
+      { type: 'tf', answer: true,
+        jp: '{NAME}さんは{TIME}にうちにかえりました。',
+        en: '{NAME} returned home in the {TIME}.',
+        explainJp: 'はい、そうです。',
+        explainEn: 'Yes — that is correct.' },
+      // T/F — trap (wrong friend day)
+      { type: 'tf', answer: false,
+        jp: '{NAME}さんは{DAY1}に{FRIEND_NAME}さんとあいました。',
+        en: '{NAME} met {FRIEND_NAME} on {DAY1}.',
+        explainJp: 'いいえ、{NAME}さんは{DAY2}に{FRIEND_NAME}さんとあいました。{DAY1}は{PLACE1}と{PLACE2}にいきました。',
+        explainEn: 'No — they met on {DAY2}, not {DAY1}. {DAY1} was for {PLACE1} and {PLACE2}.' },
+      // SA — first place
+      { type: 'sa',
+        jp: '{NAME}さんは{DAY1}にどこにいきましたか。',
+        en: 'Where did {NAME} go on {DAY1}?',
+        answerJp: '{PLACE1}と{PLACE2}にいきました。',
+        answerEn: 'They went to {PLACE1} and {PLACE2}.' },
+      // SA — what they did first
+      { type: 'sa',
+        jp: '{PLACE1}で<ruby>何<rt>なに</rt></ruby>をしましたか。',
+        en: 'What did they do at {PLACE1}?',
+        answerJp: '{ACTIVITY1}。',
+        answerEn: 'They did the first activity there.' },
+      // SA — what they did at place 2
+      { type: 'sa',
+        jp: '{PLACE2}で<ruby>何<rt>なに</rt></ruby>をしましたか。',
+        en: 'What did they do at {PLACE2}?',
+        answerJp: '{ACTIVITY2}。',
+        answerEn: 'They did the second activity there.' },
+      // ST — temporal sequence (when met friend)
+      { type: 'st',
+        jp: '{NAME}さんはいつ{FRIEND_NAME}さんとあいましたか。',
+        en: 'When did {NAME} meet {FRIEND_NAME}?',
+        answerJp: '{DAY2}にあいました。',
+        answerEn: 'They met on {DAY2}.' },
+      // ST — temporal sequence (return home time)
+      { type: 'st',
+        jp: '{NAME}さんはいつうちにかえりましたか。',
+        en: 'When did {NAME} return home?',
+        answerJp: '{TIME}にかえりました。',
+        answerEn: 'They returned in the {TIME}.' }
+    ]
+  }
+];
+
+// ─── DETERMINISTIC SUBSTITUTION GENERATOR ──────────────────────────────
+// For variant N of seed S, pick bank[s] = banks[(N + offset) % length]
+// where offset varies per slot to maximize uniqueness across variants.
+// Result: 8 variants per seed where each variant has a unique combination
+// of substitutions, AND no two variants share the same NAME (the most
+// salient identifier).
+
+function generateVariant(seed, variantIdx) {
+  // Find all unique slot names referenced in this seed's sentences + questions
+  const slotSet = new Set();
+  const slotRe = /\{([A-Z_0-9]+)\}/g;
+  const collect = s => { let m; while ((m = slotRe.exec(s)) !== null) slotSet.add(m[1]); };
+  seed.sentences.forEach(collect);
+  seed.questions.forEach(q => {
+    collect(q.jp || ''); collect(q.en || '');
+    collect(q.explainJp || ''); collect(q.explainEn || '');
+    collect(q.answerJp || ''); collect(q.answerEn || '');
+  });
+
+  // Build the substitution map for this variant. Each slot rotates
+  // through its bank using variantIdx + a stable per-slot offset, so
+  // no two variants share the same slot vector.
+  const slots = {};
+  let offset = 0;
+  for (const slotName of [...slotSet].sort()) {
+    const bank = BANKS[slotName];
+    if (!bank || bank.length === 0) {
+      throw new Error(`Slot {${slotName}} in seed "${seed.id}" has no bank entry`);
+    }
+    slots[slotName] = bank[(variantIdx + offset) % bank.length];
+    offset += 3; // co-prime-ish step to spread combinations
+  }
+
+  // Apply substitutions to a string (idempotent — runs until no slots left)
+  const fill = s => {
+    if (!s) return s;
+    return s.replace(/\{([A-Z_0-9]+)\}/g, (_, k) => slots[k] !== undefined ? slots[k] : `{${k}}`);
+  };
+
+  const variant = {
+    id: `${seed.id}-v${variantIdx + 1}`,
+    seedId: seed.id,
+    category: seed.category,
+    variantIdx,
+    titleJp: seed.titleJp,
+    titleEn: seed.titleEn,
+    slots,
+    sentences: seed.sentences.map(fill),
+    passage: seed.sentences.map(fill).join(''),
+    questions: seed.questions.map((q, qi) => {
+      const filled = {
+        idx: qi,
+        type: q.type,
+        jp: fill(q.jp),
+        en: fill(q.en)
+      };
+      if (q.type === 'tf') {
+        filled.answer = q.answer;
+        filled.explainJp = fill(q.explainJp);
+        filled.explainEn = fill(q.explainEn);
+      } else {
+        filled.answerJp = fill(q.answerJp);
+        filled.answerEn = fill(q.answerEn);
+      }
+      return filled;
+    })
+  };
+  return variant;
+}
+
+function generateAllVariants() {
+  const all = [];
+  for (const seed of SEEDS) {
+    for (let i = 0; i < 8; i++) {
+      all.push(generateVariant(seed, i));
+    }
+  }
+  return all;
+}
+
+// ─── SCHEMA VALIDATOR (Phase 3) ────────────────────────────────────────
+// Validates: no orphaned slots, no empty fields, predicates intact,
+// bank-sourced values, slot uniqueness across variants of the same seed.
+
+// Strip HTML tags (ruby/rt etc.) — used by the validator and audio
+// playback so they operate on plain Japanese text, not display markup.
+function stripHtml(s) {
+  return String(s == null ? '' : s).replace(/<[^>]+>/g, '');
+}
+
+function validateVariant(variant) {
+  const errors = [];
+  const SLOT_RE = /\{[A-Z_0-9]+\}/;
+  const VALID_END_RE = /(です|ます|ました|でした|ません|でしょう|ね|よ|か。)$/;
+
+  // 1. No orphan slot markers in passage or questions
+  for (let i = 0; i < variant.sentences.length; i++) {
+    const plain = stripHtml(variant.sentences[i]);
+    if (SLOT_RE.test(variant.sentences[i])) {
+      errors.push(`sentence ${i}: orphan slot in "${variant.sentences[i]}"`);
+    }
+    if (!plain.trim()) {
+      errors.push(`sentence ${i}: empty`);
+    }
+    // Length check operates on plain text (HTML tags don't count)
+    if (plain.length < 5 || plain.length > 120) {
+      errors.push(`sentence ${i}: length out of bounds (${plain.length})`);
+    }
+  }
+  for (const q of variant.questions) {
+    if (!q.jp || SLOT_RE.test(q.jp)) errors.push(`q${q.idx} jp: missing or orphan`);
+    if (!q.en || SLOT_RE.test(q.en)) errors.push(`q${q.idx} en: missing or orphan`);
+    if (q.type === 'tf') {
+      if (typeof q.answer !== 'boolean') errors.push(`q${q.idx}: tf answer not boolean`);
+      if (SLOT_RE.test(q.explainJp || '')) errors.push(`q${q.idx} explainJp: orphan slot`);
+    } else {
+      if (!q.answerJp || SLOT_RE.test(q.answerJp)) errors.push(`q${q.idx} answerJp: missing or orphan`);
+    }
+  }
+
+  // 2. Predicate check: passage should end with a Japanese-final verb form.
+  // Strip HTML first so ruby/rt tags don't break the regex anchor.
+  const plainPassage = stripHtml(variant.passage).replace(/[\s\n]+$/, '');
+  const endStripped = plainPassage.replace(/。$/, '');
+  if (!VALID_END_RE.test(endStripped)) {
+    errors.push(`passage end: "${endStripped.slice(-12)}" doesn't match valid Japanese predicate`);
+  }
+
+  // 3. Every slot value came from a registered bank
+  for (const [slotName, value] of Object.entries(variant.slots)) {
+    const bank = BANKS[slotName];
+    if (!bank || !bank.includes(value)) {
+      errors.push(`slot ${slotName}: value "${value}" not in bank`);
+    }
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
+function validateAll(allVariants) {
+  let pass = 0, fail = 0;
+  const failures = [];
+  for (const v of allVariants) {
+    const r = validateVariant(v);
+    if (r.valid) pass++;
+    else { fail++; failures.push({ id: v.id, errors: r.errors }); }
+  }
+  // Uniqueness check: no two variants of the same seed should have
+  // identical passages
+  const seenBySeed = {};
+  let dupes = 0;
+  for (const v of allVariants) {
+    seenBySeed[v.seedId] = seenBySeed[v.seedId] || new Set();
+    if (seenBySeed[v.seedId].has(v.passage)) {
+      dupes++;
+      failures.push({ id: v.id, errors: ['duplicate passage within seed'] });
+    } else {
+      seenBySeed[v.seedId].add(v.passage);
+    }
+  }
+  return { pass, fail: fail + dupes, total: allVariants.length, failures };
+}
+
+// ─── BUILD UI ──────────────────────────────────────────────────────────
+const ALL_VARIANTS = generateAllVariants();
+const VALIDATION = validateAll(ALL_VARIANTS);
+
+// Group variants by category for the picker
+const BY_CAT = { A: [], B: [], C: [] };
+for (const v of ALL_VARIANTS) BY_CAT[v.category].push(v);
+
+const CAT_META = {
+  A: { jp: '<ruby>大学<rt>だいがく</rt></ruby>のせいかつ', en: 'Campus', desc: 'University life — names, places, majors' },
+  B: { jp: '<ruby>私<rt>わたし</rt></ruby>のへや',         en: 'Room',   desc: 'Spatial description — location words' },
+  C: { jp: '<ruby>週末<rt>しゅうまつ</rt></ruby>',          en: 'Weekend', desc: 'Temporal sequence — past tense events' }
+};
+
+// State
+let pickedCats = new Set(['A', 'B', 'C']); // default: all
+let pickedCount = 3;
+let session = null;
+
+const root = document.getElementById('root');
+const $ = id => document.getElementById(id);
+
+function renderLanding() {
+  session = null;
+  root.innerHTML = `
+    <div class="landing-section">
+      <h2>Reading Drill</h2>
+      <div class="blurb">Pick a category (or several), choose how many passages, then read and answer in Japanese. Every passage is a variant of a Nakama 1 ch 1–6 template — same grammar, different details, so you can't memorize and have to actually read.</div>
+      <div class="cat-grid" id="cat-grid"></div>
+      <div class="count-row">
+        <label>Passages</label>
+        <div class="count-pills" id="count-pills"></div>
+      </div>
+      <button class="start-btn" id="start-btn">Start Drill →</button>
+    </div>
+  `;
+
+  const grid = $('cat-grid');
+  for (const c of ['A', 'B', 'C']) {
+    const meta = CAT_META[c];
+    const card = document.createElement('button');
+    card.className = 'cat-card' + (pickedCats.has(c) ? ' active' : '');
+    card.innerHTML = `
+      <div class="lbl-jp">${meta.jp}</div>
+      <div class="lbl-en">${c}. ${meta.en}</div>
+      <div class="desc">${meta.desc}</div>
+    `;
+    card.onclick = () => {
+      if (pickedCats.has(c)) {
+        if (pickedCats.size > 1) pickedCats.delete(c);
+      } else {
+        pickedCats.add(c);
+      }
+      renderLanding();
+    };
+    grid.appendChild(card);
+  }
+
+  const pills = $('count-pills');
+  for (const n of [1, 2, 3, 5, 8]) {
+    const b = document.createElement('button');
+    b.className = 'count-pill' + (pickedCount === n ? ' active' : '');
+    b.textContent = n;
+    b.onclick = () => { pickedCount = n; renderLanding(); };
+    pills.appendChild(b);
+  }
+
+  $('start-btn').onclick = startSession;
+}
+
+// Seeded shuffle so successive sessions rotate through variants without
+// repeating the exact same set in a row.
+let SHUFFLE_SEED = (Date.now() * 9301 + 49297) % 233280;
+function nextRand() {
+  SHUFFLE_SEED = (SHUFFLE_SEED * 9301 + 49297) % 233280;
+  return SHUFFLE_SEED / 233280;
+}
+function shuffled(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(nextRand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startSession() {
+  // Pick variants: shuffle each picked category, take pickedCount total
+  // (round-robin across picked categories so the user gets a mix)
+  const pools = [...pickedCats].map(c => shuffled(BY_CAT[c]));
+  const picked = [];
+  let i = 0;
+  while (picked.length < pickedCount && pools.some(p => p.length > 0)) {
+    const pool = pools[i % pools.length];
+    if (pool.length > 0) picked.push(pool.shift());
+    i++;
+  }
+  session = {
+    variants: picked,
+    idx: 0,
+    answers: {}, // key: `${variantIdx}-${qIdx}` → user answer
+    correct: 0,
+    answered: 0,
+    totalQs: picked.reduce((sum, v) => sum + v.questions.length, 0)
+  };
+  renderExam();
+}
+
+function renderExam() {
+  const v = session.variants[session.idx];
+  const totalP = session.variants.length;
+  const tfQs = v.questions.filter(q => q.type === 'tf');
+  const saQs = v.questions.filter(q => q.type === 'sa');
+  const stQs = v.questions.filter(q => q.type === 'st');
+
+  // Note on innerHTML: passage / title / question text contain author-
+  // controlled <ruby> tags for furigana. The DATA is hardcoded by us
+  // (no user input), so injecting as raw HTML is safe and necessary
+  // for ruby rendering. Free-text fields (user SA input) still go
+  // through escHTML below.
+  root.innerHTML = `
+    <div class="exam-header">
+      <div class="meta">Passage <b>${session.idx + 1}</b> of <b>${totalP}</b> · Category <b>${v.category}</b> · ${CAT_META[v.category].en}</div>
+      <button class="quit" onclick="quitToLanding()">Quit</button>
+    </div>
+    <div class="passage-card">
+      <button class="audio-btn" id="audio-btn" title="Read passage aloud">🔊</button>
+      <div class="passage-num">${v.titleJp}</div>
+      <div class="passage-text" id="passage-text">${v.passage}</div>
+    </div>
+
+    ${tfQs.length > 0 ? `
+      <div class="q-section">
+        <div class="q-section-head">○✕ True / False</div>
+        <div id="tf-list"></div>
+      </div>
+    ` : ''}
+
+    ${saQs.length > 0 ? `
+      <div class="q-section">
+        <div class="q-section-head">Short Answer</div>
+        <div id="sa-list"></div>
+      </div>
+    ` : ''}
+
+    ${stQs.length > 0 ? `
+      <div class="q-section">
+        <div class="q-section-head">Spatial / Temporal Reasoning</div>
+        <div id="st-list"></div>
+      </div>
+    ` : ''}
+
+    <div class="passage-nav">
+      <button onclick="prevPassage()" ${session.idx === 0 ? 'disabled' : ''}>← Prev</button>
+      <button class="next" onclick="nextPassage()">${session.idx === totalP - 1 ? 'Finish →' : 'Next →'}</button>
+    </div>
+  `;
+
+  if (tfQs.length > 0) renderTFList(v, tfQs, $('tf-list'));
+  if (saQs.length > 0) renderSAList(v, saQs, $('sa-list'));
+  if (stQs.length > 0) renderSAList(v, stQs, $('st-list'));
+
+  const audioBtn = $('audio-btn');
+  if (audioBtn) audioBtn.onclick = () => playPassageAudio(v, audioBtn);
+}
+
+function renderTFList(v, qs, container) {
+  container.innerHTML = '';
+  qs.forEach(q => {
+    const key = `${session.idx}-${q.idx}`;
+    const prev = session.answers[key];
+    const card = document.createElement('div');
+    card.className = 'q-card' + (prev !== undefined ? ' revealed ' + (prev.correct ? 'correct' : 'wrong') : '');
+    // q.jp / q.explainJp contain author-controlled <ruby> markup; inject as HTML.
+    // q.en stays escaped (English text).
+    card.innerHTML = `
+      <div><span class="q-num">Q${q.idx + 1}</span><span class="q-jp">${q.jp}</span></div>
+      <div class="q-en">${escHTML(q.en)}</div>
+      ${prev === undefined ? `
+        <div class="tf-options">
+          <button class="tf-btn" data-val="true">○ True</button>
+          <button class="tf-btn" data-val="false">✕ False</button>
+        </div>
+      ` : `
+        <div class="reveal">
+          <div class="ans-jp">${q.explainJp}</div>
+          <div class="ans-en">${escHTML(q.explainEn)}</div>
+          <span class="verdict ${prev.correct ? 'correct' : 'wrong'}">${prev.correct ? '✓ Correct' : '✕ Wrong'} (you said ${prev.value ? '○' : '✕'}, answer ${q.answer ? '○' : '✕'})</span>
+        </div>
+      `}
+    `;
+    if (prev === undefined) {
+      card.querySelectorAll('.tf-btn').forEach(btn => {
+        btn.onclick = () => {
+          const val = btn.dataset.val === 'true';
+          const correct = (val === q.answer);
+          session.answers[key] = { value: val, correct };
+          session.answered++;
+          if (correct) session.correct++;
+          renderTFList(v, qs, container);
+        };
+      });
+    }
+    container.appendChild(card);
+  });
+}
+
+function renderSAList(v, qs, container) {
+  container.innerHTML = '';
+  qs.forEach(q => {
+    const key = `${session.idx}-${q.idx}`;
+    const prev = session.answers[key];
+    const card = document.createElement('div');
+    card.className = 'q-card' + (prev !== undefined ? ' revealed' : '');
+    // q.jp / q.answerJp contain author <ruby> markup; user-typed text
+    // (prev.userText) MUST be escaped because it's free input.
+    card.innerHTML = `
+      <div><span class="q-num">Q${q.idx + 1}</span><span class="q-jp">${q.jp}</span></div>
+      <div class="q-en">${escHTML(q.en)}</div>
+      ${prev === undefined ? `
+        <div class="sa-input-row">
+          <input type="text" class="sa-input" placeholder="こたえをかいてください" />
+          <button class="reveal-btn">Reveal</button>
+        </div>
+      ` : `
+        <div class="reveal">
+          <div class="ans-jp">${q.answerJp}</div>
+          <div class="ans-en">${escHTML(q.answerEn)}</div>
+          ${prev.userText ? `<div class="ans-en" style="margin-top:6px">your answer: <span style="color:var(--text)">${escHTML(prev.userText)}</span></div>` : ''}
+        </div>
+      `}
+    `;
+    if (prev === undefined) {
+      const input = card.querySelector('.sa-input');
+      const btn = card.querySelector('.reveal-btn');
+      btn.onclick = () => {
+        const userText = input.value.trim();
+        // Self-graded: short-answer comparison is intentionally lenient — we
+        // just record what the user wrote and let them compare with the answer.
+        // Auto-grading kana/kanji equivalence is out of scope for v0.1.
+        session.answers[key] = { value: userText, correct: false, userText };
+        session.answered++;
+        renderSAList(v, qs, container);
+      };
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+    }
+    container.appendChild(card);
+  });
+}
+
+function nextPassage() {
+  if (session.idx < session.variants.length - 1) {
+    session.idx++;
+    renderExam();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    renderResults();
+  }
+}
+
+function prevPassage() {
+  if (session.idx > 0) {
+    session.idx--;
+    renderExam();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function quitToLanding() {
+  if (session && session.answered > 0) {
+    if (!confirm('Quit this drill? Your progress will be lost.')) return;
+  }
+  renderLanding();
+}
+window.quitToLanding = quitToLanding;
+window.nextPassage = nextPassage;
+window.prevPassage = prevPassage;
+
+function renderResults() {
+  // Count only T/F as auto-graded; SA + ST are self-graded
+  let tfTotal = 0, tfCorrect = 0;
+  for (const v of session.variants) {
+    for (const q of v.questions) {
+      if (q.type === 'tf') {
+        tfTotal++;
+        const key = `${session.variants.indexOf(v)}-${q.idx}`;
+        if (session.answers[key] && session.answers[key].correct) tfCorrect++;
+      }
+    }
+  }
+  const pct = tfTotal > 0 ? Math.round((tfCorrect / tfTotal) * 100) : 0;
+  root.innerHTML = `
+    <div class="results-card">
+      <div class="icon">${pct >= 80 ? '🏆' : pct >= 50 ? '🎯' : '📚'}</div>
+      <h2>Drill Complete</h2>
+      <div class="score-row">
+        <div class="score-stat"><div class="num">${tfCorrect}/${tfTotal}</div><div class="lbl">T/F Correct</div></div>
+        <div class="score-stat"><div class="num">${pct}%</div><div class="lbl">Score</div></div>
+        <div class="score-stat"><div class="num">${session.variants.length}</div><div class="lbl">Passages</div></div>
+      </div>
+      <div class="results-actions">
+        <button class="primary" onclick="startSession()">⟲ Another Drill</button>
+        <button onclick="renderLanding()">← Categories</button>
+        <a href="index.html" style="text-decoration:none"><button>📚 Study Guide</button></a>
+      </div>
+    </div>
+  `;
+}
+window.startSession = startSession;
+window.renderLanding = renderLanding;
+
+// ─── HTML ESCAPE ───────────────────────────────────────────────────────
+function escHTML(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// ─── AUDIO (mixing-safe Web Audio path, copied from main site) ─────────
+// Plays passage sentences via the pre-rendered MP3 pack at /audio/.
+// Uses BufferSource (not <audio>) so background media keeps playing.
+// Silent skip on miss — we don't fall back to speechSynthesis.
+window.__rd = { live: [], audioCtx: null, bufferCache: new Map(), inflight: new Map(), manifest: null };
+
+async function loadManifest() {
+  if (window.__rd.manifest) return window.__rd.manifest;
+  try {
+    const res = await fetch('/audio/manifest.json', { cache: 'force-cache' });
+    if (res.ok) window.__rd.manifest = await res.json();
+    else window.__rd.manifest = {};
+  } catch (_) { window.__rd.manifest = {}; }
+  return window.__rd.manifest;
+}
+loadManifest();
+
+function getCtx() {
+  if (!window.__rd.audioCtx) {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    try { window.__rd.audioCtx = new Ctx({ latencyHint: 'interactive' }); }
+    catch (_) { return null; }
+  }
+  if (window.__rd.audioCtx.state === 'suspended') {
+    try { window.__rd.audioCtx.resume(); } catch (_) {}
+  }
+  return window.__rd.audioCtx;
+}
+
+function loadBuffer(ctx, filename) {
+  if (window.__rd.bufferCache.has(filename)) return Promise.resolve(window.__rd.bufferCache.get(filename));
+  if (window.__rd.inflight.has(filename)) return window.__rd.inflight.get(filename);
+  const p = fetch('/audio/' + filename)
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); })
+    .then(ab => ctx.decodeAudioData(ab))
+    .then(buf => { window.__rd.bufferCache.set(filename, buf); window.__rd.inflight.delete(filename); return buf; })
+    .catch(err => { window.__rd.inflight.delete(filename); throw err; });
+  window.__rd.inflight.set(filename, p);
+  return p;
+}
+
+async function playPassageAudio(variant, btn) {
+  // Stop any current playback
+  for (const s of window.__rd.live) {
+    try { if (s && typeof s.stop === 'function') s.stop(0); } catch (_) {}
+  }
+  window.__rd.live.length = 0;
+
+  const ctx = getCtx();
+  const manifest = await loadManifest();
+  if (!ctx) return;
+
+  btn.classList.add('playing');
+  const sentences = variant.sentences;
+  // Play sentences sequentially. Strip HTML (ruby tags) and trailing 。
+  // for manifest lookup — the manifest keys are plain hiragana phrases.
+  for (let i = 0; i < sentences.length; i++) {
+    const text = stripHtml(sentences[i]).replace(/。$/, '');
+    const filename = manifest[text];
+    if (!filename) continue; // silent skip — no fallback to speechSynthesis
+    try {
+      const buffer = await loadBuffer(ctx, filename);
+      const src = ctx.createBufferSource();
+      src.buffer = buffer;
+      src.connect(ctx.destination);
+      window.__rd.live.push(src);
+      // Wait for the sentence to finish before playing the next one
+      await new Promise(resolve => {
+        src.onended = resolve;
+        src.start(0);
+      });
+    } catch (_) { /* silent skip on decode failure */ }
+  }
+  btn.classList.remove('playing');
+}
+
+// ─── BOOT + TEST PANEL ─────────────────────────────────────────────────
+renderLanding();
+
+// Update test panel with validation results
+const tp = $('test-panel');
+if (VALIDATION.fail === 0) {
+  tp.className = 'test-panel pass';
+  tp.textContent = `✓ ${VALIDATION.pass}/${VALIDATION.total} passages valid`;
+} else {
+  tp.className = 'test-panel fail';
+  tp.textContent = `✕ ${VALIDATION.fail}/${VALIDATION.total} failed — click for details`;
+}
+tp.onclick = () => {
+  console.group('[reading] Schema validation report');
+  console.log(`Total: ${VALIDATION.total}, Pass: ${VALIDATION.pass}, Fail: ${VALIDATION.fail}`);
+  if (VALIDATION.failures.length > 0) {
+    console.table(VALIDATION.failures);
+  }
+  console.groupEnd();
+  alert(`Schema validation: ${VALIDATION.pass}/${VALIDATION.total} pass.\nOpen the browser console for details.`);
+};
+
+// Expose for browser-console verification
+window.__reading = { ALL_VARIANTS, VALIDATION, SEEDS, BANKS, generateVariant, validateVariant };
+</script>
+</body>
+</html>
