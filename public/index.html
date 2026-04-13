@@ -15698,6 +15698,38 @@ document.addEventListener('keydown', function(e) {
       window.fcGrade(parseInt(e.key, 10));
     }
   });
+
+  // ── Flashcard swipe (touch) ──────────────────────
+  (function(){
+    const area = document.getElementById('fc-card-area');
+    if (!area) return;
+    let startX = 0, startY = 0, dx = 0, swiping = false;
+    const THRESHOLD = 50;
+    area.addEventListener('touchstart', function(e) {
+      if (e.touches.length !== 1) return;
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+      dx = 0; swiping = false;
+    }, { passive: true });
+    area.addEventListener('touchmove', function(e) {
+      if (e.touches.length !== 1) return;
+      dx = e.touches[0].clientX - startX;
+      const dy = Math.abs(e.touches[0].clientY - startY);
+      if (Math.abs(dx) > dy && Math.abs(dx) > 10) { swiping = true; e.preventDefault(); }
+    }, { passive: false });
+    area.addEventListener('touchend', function() {
+      if (!swiping) return;
+      if (!currentCard) return;
+      if (!isFlipped) {
+        // Swipe on front = flip
+        window.fcFlip();
+      } else {
+        // Swipe left = Again (1), swipe right = Good (3)
+        if (dx < -THRESHOLD) window.fcGrade(1);
+        else if (dx > THRESHOLD) window.fcGrade(3);
+      }
+    }, { passive: true });
+    area.style.touchAction = 'pan-y';
+  })();
 })();
 </script>
 
