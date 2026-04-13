@@ -352,7 +352,7 @@ function showDictCard(el){
       <div style="color:var(--dim);font-size:10px;margin-top:8px">Click multiple times to replay</div>
     </div>
     <div class="card">
-      <input class="answer-input" id="dAnswer" placeholder="Type what you heard in Japanese..." style="font-size:20px;text-align:center" onkeydown="if(event.key==='Enter')dCheck()">
+      <input class="answer-input" id="dAnswer" placeholder="Type what you heard in Japanese..." style="font-size:20px;text-align:center" onkeydown="if(!event.isComposing&&event.key==='Enter')dCheck()">
       <button class="btn w100 mt12" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="dCheck()">Check Answer</button>
     </div>
     <div id="dFeedback"></div>`;
@@ -420,7 +420,7 @@ function showReadQuestion(){
     <div class="card slide-up">
       <div style="color:var(--yellow);font-size:12px;font-weight:700;margin-bottom:8px">Question ${rQIdx+1}/${r.questions.length}</div>
       <div style="font-size:16px;color:#fff;margin-bottom:12px">${esc(q.q)}</div>
-      <input class="answer-input" id="rAnswer" placeholder="Your answer..." onkeydown="if(event.key==='Enter')rCheck()">
+      <input class="answer-input" id="rAnswer" placeholder="Your answer..." onkeydown="if(!event.isComposing&&event.key==='Enter')rCheck()">
       <button class="btn w100 mt8" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="rCheck()">Submit</button>
     </div>`;
   setTimeout(()=>$('rAnswer').focus(),50);
@@ -551,7 +551,7 @@ function showMixQ(el){
     ${contextHTML}
     <div class="card">
       <div style="font-size:16px;color:#fff;margin-bottom:12px;line-height:1.5">${esc(q.q)}</div>
-      <input class="answer-input" id="mAnswer" placeholder="Your answer..." onkeydown="if(event.key==='Enter')mCheck()">
+      <input class="answer-input" id="mAnswer" placeholder="Your answer..." onkeydown="if(!event.isComposing&&event.key==='Enter')mCheck()">
       <button class="btn w100 mt8" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="mCheck()">Submit</button>
     </div>
     <div id="mFeedback"></div>`;

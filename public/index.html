@@ -12629,7 +12629,7 @@ function showDictCard(el, ch) {
       <div style="color:var(--muted);font-size:10px;margin-top:8px">Click multiple times to replay</div>
     </div>
     <div class="pcard">
-      <input class="answer-input" id="dAns_${ch}" placeholder="Type what you heard..." style="font-size:20px;text-align:center" onkeydown="if(event.key==='Enter')dCheck('${ch}')">
+      <input class="answer-input" id="dAns_${ch}" placeholder="Type what you heard..." style="font-size:20px;text-align:center" onkeydown="if(!event.isComposing&&event.key==='Enter')dCheck('${ch}')">
       <button class="btn btn-gold w100 mt12" onclick="dCheck('${ch}')">Check Answer</button>
     </div>
     <div id="dFb_${ch}"></div>`;
@@ -12698,7 +12698,7 @@ function showReadQuestion(ch, data) {
     <div class="pcard slide-up">
       <div style="color:var(--gold-bright);font-size:12px;font-weight:700;margin-bottom:8px">Question ${s.rQIdx + 1}/${r.questions.length}</div>
       <div style="font-size:16px;color:var(--white);margin-bottom:12px">${esc(q.q)}</div>
-      <input class="answer-input" id="rAns_${ch}" placeholder="Type your answer (English)…" onkeydown="if(event.key==='Enter')rCheck('${ch}')">
+      <input class="answer-input" id="rAns_${ch}" placeholder="Type your answer (English)…" onkeydown="if(!event.isComposing&&event.key==='Enter')rCheck('${ch}')">
       <button class="btn btn-gold w100 mt8" onclick="rCheck('${ch}')">Check Answer</button>
     </div>`;
   setTimeout(() => $('rAns_' + ch).focus(), 50);
@@ -12819,7 +12819,7 @@ function showMixQ(el, ch) {
     ${ctxHTML}
     <div class="pcard">
       <div style="font-size:16px;color:var(--white);margin-bottom:12px;line-height:1.5">${esc(q.q)}</div>
-      <input class="answer-input" id="mAns_${ch}" placeholder="Type your answer…" onkeydown="if(event.key==='Enter')mCheck('${ch}')">
+      <input class="answer-input" id="mAns_${ch}" placeholder="Type your answer…" onkeydown="if(!event.isComposing&&event.key==='Enter')mCheck('${ch}')">
       <button class="btn btn-gold w100 mt8" onclick="mCheck('${ch}')">Check Answer</button>
     </div>
     <div id="mFb_${ch}"></div>`;
