@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Nakama 1 — Complete Japanese Study Guide</title>
 <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -29,13 +29,15 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-tap-highlight-color: transparent; }
 
 body {
   background: var(--bg);
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
+  min-height: 100dvh; min-height: 100vh;
   overflow-x: hidden;
+  touch-action: manipulation;
 }
 
 /* Grain overlay */
@@ -2071,6 +2073,12 @@ body::before {
   .cs-ch5 .cs-section h3 { background:#f3e8ff!important;color:#7a40cc!important;border-left-color:#7a40cc!important; }
   .cs-ch6 .cs-section h3 { background:#e8f7fa!important;color:#2a8da0!important;border-left-color:#2a8da0!important; }
   @page { size:letter;margin:0; }
+}
+/* ── Hover guard (touch devices) ── */
+@media(hover:none){
+  .nav-tab:hover{color:var(--muted)}
+  .view-btn:hover{color:var(--muted);background:none}
+  .mode-btn:hover{color:var(--muted);background:var(--surface);border-color:var(--border)}
 }
 </style>
 </head>
