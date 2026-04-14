@@ -298,6 +298,15 @@ h1,h2,h3{font-weight:700;}
 .dl-btn:hover{background:#27ae60;}
 .dl-btn[hidden]{display:none;}
 
+/* ── TTS CLICKABLE ── */
+.speak{cursor:pointer;border-radius:4px;padding:1px 3px;margin:-1px -3px;
+  transition:background 0.15s,box-shadow 0.15s;position:relative;}
+.speak:hover{background:rgba(212,175,55,0.13);box-shadow:0 0 0 1px rgba(212,175,55,0.2);}
+.speak:active{background:rgba(212,175,55,0.28);}
+.speak::after{content:'🔊';font-size:9px;opacity:0;margin-left:5px;
+  transition:opacity 0.15s;vertical-align:middle;pointer-events:none;}
+.speak:hover::after{opacity:0.55;}
+
 /* ── RESPONSIVE ── */
 @media(max-width:500px){
   #timerDisplay{font-size:24px;}
@@ -371,6 +380,7 @@ h1,h2,h3{font-weight:700;}
       <div id="recStatus">● REC</div>
     </div>
     <div id="timerBar"><div id="timerFill" style="width:100%"></div></div>
+    <div style="font-size:10px;color:var(--text3);white-space:nowrap;flex-shrink:0;">🔊 tap text</div>
     <div class="section-dots">
       <div class="sdot active" id="dot1">1</div>
       <div class="sdot" id="dot2">2</div>
@@ -566,6 +576,46 @@ let waveAnimId = null;
 let recStream = null;
 
 // ══════════════════════════════════════════
+//  TEXT-TO-SPEECH
+// ══════════════════════════════════════════
+
+let jpVoice = null;
+let voicesLoaded = false;
+
+function loadVoices() {
+  const vs = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+  jpVoice = vs.find(v => v.lang === 'ja-JP' && v.localService)
+          || vs.find(v => v.lang === 'ja-JP')
+          || vs.find(v => v.lang.startsWith('ja'))
+          || null;
+  voicesLoaded = vs.length > 0;
+}
+if (window.speechSynthesis) {
+  speechSynthesis.addEventListener('voiceschanged', loadVoices);
+  loadVoices();
+}
+
+function speakJP(text) {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  if (!voicesLoaded) loadVoices();
+  const clean = text.replace(/🔊/g, '').trim();
+  if (!clean) return;
+  const utt = new SpeechSynthesisUtterance(clean);
+  utt.lang = 'ja-JP';
+  utt.rate = 0.82;
+  if (jpVoice) utt.voice = jpVoice;
+  // Chrome bug: synthesis stalls after ~15s — kick it
+  const fix = setInterval(() => {
+    if (!speechSynthesis.speaking) { clearInterval(fix); return; }
+    speechSynthesis.pause(); speechSynthesis.resume();
+  }, 10000);
+  utt.onend = () => clearInterval(fix);
+  utt.onerror = () => clearInterval(fix);
+  speechSynthesis.speak(utt);
+}
+
+// ══════════════════════════════════════════
 //  EXAM FLOW
 // ══════════════════════════════════════════
 
@@ -674,42 +724,42 @@ function buildSection1() {
       <div class="topic-row">
         <div class="topic-num">①</div>
         <div>
-          <div class="topic-jp">お名前は何ですか。</div>
+          <div class="topic-jp speak" onclick="speakJP(this.textContent)">お名前は何ですか。</div>
           <div class="topic-en">Your name</div>
         </div>
       </div>
       <div class="topic-row">
         <div class="topic-num">②</div>
         <div>
-          <div class="topic-jp">学校の名前は何ですか。</div>
+          <div class="topic-jp speak" onclick="speakJP(this.textContent)">学校の名前は何ですか。</div>
           <div class="topic-en">Name of your school / university</div>
         </div>
       </div>
       <div class="topic-row">
         <div class="topic-num">③</div>
         <div>
-          <div class="topic-jp">何年生ですか。</div>
+          <div class="topic-jp speak" onclick="speakJP(this.textContent)">何年生ですか。</div>
           <div class="topic-en">Your year in school (一年生、二年生…)</div>
         </div>
       </div>
       <div class="topic-row">
         <div class="topic-num">④</div>
         <div>
-          <div class="topic-jp">専攻は何ですか。</div>
+          <div class="topic-jp speak" onclick="speakJP(this.textContent)">専攻は何ですか。</div>
           <div class="topic-en">Your major</div>
         </div>
       </div>
       <div class="topic-row">
         <div class="topic-num">⑤</div>
         <div>
-          <div class="topic-jp">出身はどこですか。</div>
+          <div class="topic-jp speak" onclick="speakJP(this.textContent)">出身はどこですか。</div>
           <div class="topic-en">Your hometown</div>
         </div>
       </div>
       <div class="topic-row">
         <div class="topic-num">＋</div>
         <div>
-          <div class="topic-jp">その他 — Any additional information!</div>
+          <div class="topic-jp speak" onclick="speakJP(this.textContent)">その他 — Any additional information!</div>
           <div class="topic-en">e.g. hobbies, interests, family, schedule…</div>
         </div>
       </div>
@@ -719,9 +769,9 @@ function buildSection1() {
   <div class="card">
     <div class="card-title">Useful patterns</div>
     <div class="dialogue-lines">
-      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp">○○大学の○○学部の一年生です。</div><div class="dl-en">I am a first-year in the ___ department at ___ University.</div></div></div>
-      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp">出身は〔City〕です。</div><div class="dl-en">I am from [City].</div></div></div>
-      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp">せんこうは〔Major〕です。</div><div class="dl-en">My major is [Major].</div></div></div>
+      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">○○大学の○○学部の一年生です。</div><div class="dl-en">I am a first-year in the ___ department at ___ University.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">出身は〔City〕です。</div><div class="dl-en">I am from [City].</div></div></div>
+      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">せんこうは〔Major〕です。</div><div class="dl-en">My major is [Major].</div></div></div>
     </div>
   </div>
 
@@ -741,7 +791,7 @@ function buildSection2() {
     <div class="dl-row">
       <div class="dl-speaker">${l.sp}</div>
       <div>
-        <div class="dl-jp">${l.jp}</div>
+        <div class="dl-jp speak" onclick="speakJP(this.textContent)">${l.jp}</div>
         <div class="dl-en dim small">${l.en}</div>
       </div>
     </div>`).join('');
@@ -794,7 +844,7 @@ function switchDialogue(key) {
 // ── SECTION 3: Picture Description ──
 function buildSection3() {
   const locWords = LOCATION_WORDS.map(w =>
-    `<div class="lw">${w.jp}<span>${w.en}</span></div>`).join('');
+    `<div class="lw speak" onclick="speakJP(this.firstChild.textContent||this.textContent)">${w.jp}<span>${w.en}</span></div>`).join('');
 
   let picContent = '';
   if (!selectedPicture) {
@@ -832,16 +882,16 @@ function buildSection3() {
     <div class="location-words" style="margin-bottom:12px;">${locWords}</div>
     <div class="te-reminder">
       ⚡ て-form requirement: Use <strong>て</strong> to connect ≥2 sentences!<br>
-      <span class="small dim" style="font-family:var(--en)">e.g. 「つくえの 下に ねこがいて、まどのそとに きがあります。」</span>
+      <span class="small speak" style="font-family:var(--jp);cursor:pointer;" onclick="speakJP(this.textContent)">つくえの 下に ねこがいて、まどのそとに きがあります。</span>
     </div>
   </div>
 
   <div class="card">
     <div class="card-title">Sentence starters</div>
     <div class="dialogue-lines">
-      <div class="dl-row"><div class="dl-speaker dim small">1.</div><div class="dl-jp">〔Object〕の うえに 〔Object〕があります/います。</div></div>
-      <div class="dl-row"><div class="dl-speaker dim small">2.</div><div class="dl-jp">〔Object〕の ひだりに 〔adj〕〔Object〕があります。</div></div>
-      <div class="dl-row"><div class="dl-speaker dim small">3.</div><div class="dl-jp">〔Location〕に 〔Object〕があって、〔…〕があります。</div></div>
+      <div class="dl-row"><div class="dl-speaker dim small">1.</div><div class="dl-jp speak" onclick="speakJP(this.textContent)">〔Object〕の うえに 〔Object〕があります。</div></div>
+      <div class="dl-row"><div class="dl-speaker dim small">2.</div><div class="dl-jp speak" onclick="speakJP(this.textContent)">〔Object〕の ひだりに 〔adj〕〔Object〕があります。</div></div>
+      <div class="dl-row"><div class="dl-speaker dim small">3.</div><div class="dl-jp speak" onclick="speakJP(this.textContent)">〔Location〕に 〔Object〕があって、〔…〕があります。</div></div>
     </div>
   </div>
 
@@ -864,7 +914,7 @@ function buildSection4() {
   const items = slice.map((q, i) =>
     `<div class="qa-item">
       <div class="qa-num">${qOffset + i + 1}</div>
-      <div class="qa-text">${q}</div>
+      <div class="qa-text speak" onclick="speakJP(this.textContent)">${q}</div>
     </div>`).join('');
 
   const hasMore = qOffset + Q_PER_PAGE < shuffledQuestions.length;
