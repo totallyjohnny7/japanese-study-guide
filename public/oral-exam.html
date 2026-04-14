@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>オーラルテスト シミュレーター | Nakama 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0a0a;--bg2:#111111;--bg3:#181818;--bg4:#222222;--bg5:#2a2a2a;
+  --text:#f0ece0;--text2:#aaa;--text3:#666;
+  --gold:#d4af37;--gold-dim:rgba(212,175,55,0.18);--gold-glow:rgba(212,175,55,0.3);
+  --green:#2ecc71;--orange:#e67e22;--red:#e74c3c;--blue:#3498db;
+  --border:rgba(212,175,55,0.2);--border2:rgba(255,255,255,0.08);
+  --jp:'Noto Sans JP',sans-serif;--en:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --radius:12px;--radius-sm:8px;
+}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:var(--en);font-size:15px;line-height:1.6;display:flex;flex-direction:column;}
+
+/* ── SCROLLABLE CONTAINERS ── */
+.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll::-webkit-scrollbar{width:4px;}
+.scroll::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:4px;}
+
+/* ── TYPOGRAPHY ── */
+.jp{font-family:var(--jp);}
+.mono{font-family:var(--mono);}
+h1,h2,h3{font-weight:700;}
+.gold{color:var(--gold);}
+.dim{color:var(--text2);}
+.small{font-size:12px;}
+
+/* ══════════════════════════════════════════
+   START SCREEN
+══════════════════════════════════════════ */
+#startScreen{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px 20px;overflow-y:auto;gap:20px;
+}
+.start-logo{
+  text-align:center;
+}
+.start-logo .kana{
+  font-family:var(--jp);font-size:36px;font-weight:700;color:var(--gold);
+  letter-spacing:4px;display:block;
+}
+.start-logo .sub{
+  font-size:13px;color:var(--text2);letter-spacing:2px;text-transform:uppercase;
+  margin-top:4px;
+}
+.start-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;width:100%;max-width:600px;
+}
+.start-card h3{color:var(--gold);margin-bottom:12px;font-size:14px;letter-spacing:1px;text-transform:uppercase;}
+.section-row{
+  display:flex;align-items:flex-start;gap:10px;padding:8px 0;
+  border-bottom:1px solid var(--border2);
+}
+.section-row:last-child{border-bottom:none;}
+.sec-num{
+  width:28px;height:28px;border-radius:50%;background:var(--gold-dim);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;
+  color:var(--gold);flex-shrink:0;margin-top:1px;
+}
+.sec-info{flex:1;}
+.sec-title{font-weight:600;font-size:14px;}
+.sec-pts{font-size:11px;color:var(--gold);font-weight:700;margin-left:6px;
+  background:var(--gold-dim);padding:1px 6px;border-radius:10px;}
+.sec-desc{font-size:12px;color:var(--text2);margin-top:2px;}
+
+.name-row{display:flex;gap:10px;align-items:center;width:100%;max-width:600px;}
+.name-row label{font-size:13px;color:var(--text2);white-space:nowrap;}
+.name-input{
+  flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);
+  color:var(--text);font-family:var(--en);font-size:14px;padding:10px 14px;
+  outline:none;transition:border 0.2s;
+}
+.name-input:focus{border-color:var(--gold);}
+
+.start-btn{
+  background:var(--gold);color:#000;font-family:var(--en);font-size:15px;font-weight:700;
+  padding:14px 40px;border:none;border-radius:var(--radius);cursor:pointer;
+  letter-spacing:1px;transition:all 0.2s;width:100%;max-width:600px;
+  box-shadow:0 4px 20px var(--gold-glow);
+}
+.start-btn:hover{background:#e8c53e;transform:translateY(-1px);box-shadow:0 6px 28px var(--gold-glow);}
+.start-btn:active{transform:translateY(0);}
+
+.back-link{font-size:12px;color:var(--text3);text-decoration:none;text-align:center;}
+.back-link:hover{color:var(--text2);}
+
+/* ══════════════════════════════════════════
+   EXAM SCREEN
+══════════════════════════════════════════ */
+#examScreen{flex:1;display:flex;flex-direction:column;height:100%;overflow:hidden;}
+#examScreen[hidden]{display:none;}
+
+/* ── TIMER HEADER ── */
+#examHeader{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:10px 16px;flex-shrink:0;
+  display:flex;align-items:center;gap:12px;
+}
+#timerDisplay{
+  font-family:var(--mono);font-size:32px;font-weight:500;
+  color:var(--gold);letter-spacing:2px;min-width:90px;
+  transition:color 0.5s;
+}
+#timerDisplay.warn{color:var(--orange);}
+#timerDisplay.urgent{color:var(--red);animation:pulse 0.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+#timerBar{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;}
+#timerFill{height:100%;background:var(--gold);border-radius:3px;transition:width 1s linear,background 0.5s;}
+.section-dots{display:flex;gap:6px;flex-shrink:0;}
+.sdot{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--bg4);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;
+  color:var(--text3);transition:all 0.3s;cursor:default;
+}
+.sdot.active{background:var(--gold);color:#000;border-color:var(--gold);}
+.sdot.done{background:var(--bg4);border-color:var(--gold);color:var(--gold);}
+
+/* ── SECTION AREA ── */
+#sectionArea{
+  flex:1;overflow-y:auto;padding:16px;
+  display:flex;flex-direction:column;gap:12px;
+}
+#sectionArea::-webkit-scrollbar{width:4px;}
+#sectionArea::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:4px;}
+
+.section-header{
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+}
+.section-header h2{
+  font-family:var(--jp);font-size:18px;color:var(--gold);
+}
+.section-badge{
+  font-size:11px;font-weight:700;color:#000;background:var(--gold);
+  padding:2px 8px;border-radius:10px;white-space:nowrap;
+}
+.section-note{font-size:12px;color:var(--text2);font-style:italic;}
+
+/* ── CARDS ── */
+.card{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);
+  padding:16px;
+}
+.card.highlight{border-color:var(--border);background:var(--bg3);}
+.card-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:10px;}
+
+/* ── SECTION 1: SELF INTRO ── */
+.intro-topics{display:flex;flex-direction:column;gap:8px;}
+.topic-row{
+  display:flex;align-items:flex-start;gap:10px;padding:8px 12px;
+  background:var(--bg3);border-radius:var(--radius-sm);border:1px solid var(--border2);
+}
+.topic-num{
+  font-size:11px;font-weight:700;color:var(--gold);min-width:18px;margin-top:1px;
+}
+.topic-jp{font-family:var(--jp);font-size:15px;}
+.topic-en{font-size:11px;color:var(--text2);}
+
+/* ── SECTION 2: DIALOGUE ── */
+.dialogue-meta{
+  font-size:12px;color:var(--text2);margin-bottom:12px;padding-bottom:8px;
+  border-bottom:1px solid var(--border2);
+}
+.dialogue-meta strong{color:var(--gold);}
+.dialogue-lines{display:flex;flex-direction:column;gap:8px;}
+.dl-row{display:flex;gap:10px;align-items:flex-start;}
+.dl-speaker{
+  font-size:11px;font-weight:700;color:var(--gold);min-width:36px;
+  padding-top:2px;white-space:nowrap;
+}
+.dl-jp{font-family:var(--jp);font-size:15px;line-height:1.7;}
+.dl-en{font-size:11px;color:var(--text2);margin-top:1px;}
+.ch-selector{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.ch-btn{
+  font-size:12px;font-weight:700;padding:6px 14px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:var(--bg3);color:var(--text2);
+  cursor:pointer;transition:all 0.2s;
+}
+.ch-btn:hover,.ch-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+
+/* ── SECTION 3: PICTURE ── */
+.card-draw-container{text-align:center;}
+.card-draw-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--gold);color:#000;font-size:14px;font-weight:700;
+  padding:12px 28px;border-radius:var(--radius);border:none;cursor:pointer;
+  transition:all 0.2s;box-shadow:0 4px 20px var(--gold-glow);
+}
+.card-draw-btn:hover{background:#e8c53e;transform:translateY(-1px);}
+.card-draw-btn:disabled{background:var(--bg4);color:var(--text3);box-shadow:none;cursor:default;transform:none;}
+.drawn-label{
+  display:inline-block;font-size:28px;font-weight:700;color:var(--gold);
+  font-family:var(--mono);margin-bottom:12px;letter-spacing:2px;
+  animation:slideIn 0.4s ease;
+}
+@keyframes slideIn{from{transform:scale(0.7);opacity:0}to{transform:scale(1);opacity:1}}
+.pic-img{
+  width:100%;max-width:680px;border-radius:var(--radius-sm);
+  border:2px solid var(--border);background:#fff;display:block;margin:0 auto 10px;
+}
+.pic-note{
+  font-size:12px;color:var(--text2);text-align:center;margin-bottom:10px;
+  font-family:var(--jp);
+}
+.location-words{
+  display:flex;flex-wrap:wrap;gap:6px;
+}
+.lw{
+  font-family:var(--jp);font-size:13px;padding:4px 10px;
+  background:var(--bg4);border:1px solid var(--border2);border-radius:20px;
+  color:var(--text);
+}
+.lw span{font-size:10px;color:var(--text2);font-family:var(--en);display:block;text-align:center;}
+.te-reminder{
+  font-size:12px;color:var(--orange);padding:8px 12px;
+  background:rgba(230,126,34,0.08);border:1px solid rgba(230,126,34,0.2);
+  border-radius:var(--radius-sm);font-family:var(--jp);
+}
+
+/* ── SECTION 4: Q&A ── */
+.qa-questions{display:flex;flex-direction:column;gap:8px;}
+.qa-item{
+  display:flex;gap:10px;align-items:flex-start;padding:10px 12px;
+  background:var(--bg3);border-radius:var(--radius-sm);border:1px solid var(--border2);
+  transition:border 0.2s;
+}
+.qa-item:hover{border-color:var(--border);}
+.qa-num{font-size:11px;color:var(--gold);font-weight:700;min-width:20px;padding-top:2px;}
+.qa-text{font-family:var(--jp);font-size:14px;line-height:1.7;}
+.qa-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.shuffle-btn{
+  font-size:12px;font-weight:700;padding:7px 16px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:var(--bg3);color:var(--text2);
+  cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;
+}
+.shuffle-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── NEXT SECTION BUTTON ── */
+.next-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+  color:var(--gold);font-size:14px;font-weight:700;padding:12px 20px;
+  cursor:pointer;transition:all 0.2s;width:100%;margin-top:4px;
+  font-family:var(--en);letter-spacing:0.5px;
+}
+.next-btn:hover{background:var(--gold-dim);border-color:var(--gold);}
+.end-msg{
+  text-align:center;padding:20px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:var(--radius);
+}
+.end-msg .big{font-size:40px;margin-bottom:8px;}
+.end-msg h2{color:var(--gold);font-size:20px;margin-bottom:8px;}
+.end-msg p{font-size:13px;color:var(--text2);}
+
+/* ── RECORDER FOOTER ── */
+#recorderBar{
+  background:var(--bg2);border-top:1px solid var(--border);
+  padding:10px 16px;flex-shrink:0;
+  display:flex;align-items:center;gap:12px;
+}
+#waveCanvas{
+  flex:1;height:48px;border-radius:var(--radius-sm);
+  background:var(--bg4);border:1px solid var(--border2);
+}
+.rec-controls{display:flex;gap:8px;flex-shrink:0;}
+.rec-btn{
+  width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  transition:all 0.2s;flex-shrink:0;
+}
+.rec-btn.record{background:#e74c3c;color:#fff;}
+.rec-btn.record:hover{background:#c0392b;transform:scale(1.05);}
+.rec-btn.record.recording{animation:recPulse 1s ease-in-out infinite;}
+@keyframes recPulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,0.5)}50%{box-shadow:0 0 0 8px rgba(231,76,60,0)}}
+.rec-btn.stop{background:var(--bg4);color:var(--text2);border:1px solid var(--border2);}
+.rec-btn.stop:hover:not(:disabled){background:var(--bg5);color:var(--text);}
+.rec-btn:disabled{opacity:0.4;cursor:default;}
+.rec-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--text3);margin-top:2px;text-align:center;}
+.rec-col{display:flex;flex-direction:column;align-items:center;gap:2px;}
+#recStatus{font-size:11px;color:var(--text2);white-space:nowrap;}
+#recStatus.live{color:#e74c3c;}
+#recTime{font-family:var(--mono);font-size:11px;color:var(--text3);}
+.dl-btn{
+  display:flex;align-items:center;gap:6px;padding:8px 14px;
+  background:var(--green);color:#000;font-size:12px;font-weight:700;
+  border:none;border-radius:var(--radius-sm);cursor:pointer;
+  transition:all 0.2s;white-space:nowrap;flex-shrink:0;text-decoration:none;
+}
+.dl-btn:hover{background:#27ae60;}
+.dl-btn[hidden]{display:none;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:500px){
+  #timerDisplay{font-size:24px;}
+  .start-logo .kana{font-size:26px;}
+  .section-header h2{font-size:16px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ START SCREEN ══════════════ -->
+<div id="startScreen">
+  <div class="start-logo">
+    <span class="kana">オーラルテスト</span>
+    <span class="sub">Japanese 1 — Oral Exam Simulator</span>
+  </div>
+
+  <div class="start-card">
+    <h3>試験のフォーマット (13 minutes)</h3>
+    <div class="section-row">
+      <div class="sec-num">1</div>
+      <div class="sec-info">
+        <span class="sec-title">自己紹介 Self-Introduction</span>
+        <span class="sec-pts">10 pts</span>
+        <div class="sec-desc">Name, school, year, major, hometown — refer to Ch. 1 &amp; 2</div>
+      </div>
+    </div>
+    <div class="section-row">
+      <div class="sec-num">2</div>
+      <div class="sec-info">
+        <span class="sec-title">ダイアローグ Dialogue Reading</span>
+        <span class="sec-pts">20 pts</span>
+        <div class="sec-desc">Read a dialogue from Chapter 4, 5, or 6</div>
+      </div>
+    </div>
+    <div class="section-row">
+      <div class="sec-num">3</div>
+      <div class="sec-info">
+        <span class="sec-title">絵の説明 Picture Description</span>
+        <span class="sec-pts">50 pts</span>
+        <div class="sec-desc">Describe 5 locations using あります／います + adjectives. Use ≥2 て-form connected phrases.</div>
+      </div>
+    </div>
+    <div class="section-row">
+      <div class="sec-num">4</div>
+      <div class="sec-info">
+        <span class="sec-title">Q &amp; A 質問と回答</span>
+        <span class="sec-pts">20 pts</span>
+        <div class="sec-desc">Answer your instructor's questions in Japanese. Use もういちど いってください if needed.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="name-row">
+    <label>お名前：</label>
+    <input id="nameInput" class="name-input" type="text" placeholder="Your name (for recording filename)" autocomplete="off">
+  </div>
+
+  <button class="start-btn" onclick="startExam()">▶ テストを始める　Start Exam</button>
+
+  <a href="./index.html" class="back-link">← Back to Study Guide</a>
+</div>
+
+<!-- ══════════════ EXAM SCREEN ══════════════ -->
+<div id="examScreen" hidden>
+
+  <!-- HEADER: Timer + Progress -->
+  <div id="examHeader">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;">
+      <div id="timerDisplay" class="mono">13:00</div>
+      <div id="recStatus">● REC</div>
+    </div>
+    <div id="timerBar"><div id="timerFill" style="width:100%"></div></div>
+    <div class="section-dots">
+      <div class="sdot active" id="dot1">1</div>
+      <div class="sdot" id="dot2">2</div>
+      <div class="sdot" id="dot3">3</div>
+      <div class="sdot" id="dot4">4</div>
+    </div>
+  </div>
+
+  <!-- SECTION CONTENT AREA -->
+  <div id="sectionArea" class="scroll"></div>
+
+  <!-- RECORDER BAR -->
+  <div id="recorderBar">
+    <canvas id="waveCanvas"></canvas>
+    <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0;align-items:flex-end;">
+      <div id="recTime" class="mono">00:00</div>
+      <div class="rec-controls">
+        <div class="rec-col">
+          <button class="rec-btn record" id="btnRecord" onclick="toggleRecord()" title="Record">🎙</button>
+          <div class="rec-label">REC</div>
+        </div>
+        <div class="rec-col">
+          <button class="rec-btn stop" id="btnStop" onclick="stopRecording()" title="Stop" disabled>⏹</button>
+          <div class="rec-label">STOP</div>
+        </div>
+      </div>
+    </div>
+    <a id="btnDownload" class="dl-btn" hidden download>⬇ Download</a>
+  </div>
+
+</div>
+
+<script>
+'use strict';
+
+// ══════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════
+
+const DIALOGUES = {
+  ch4: {
+    chapter: 4,
+    title: "このへんにぎんこうがありますか",
+    titleEn: "Is there a bank around here?",
+    lines: [
+      {sp:"上田", jp:"すみません。このへんにぎんこうがありますか。", en:"Excuse me. Is there a bank around here?"},
+      {sp:"ひと", jp:"ぎんこうですか。ええ、ありますよ。あそこにおおきいたてものがありますね。", en:"A bank? Yes, there is. Do you see that big building over there?"},
+      {sp:"上田", jp:"ええ。", en:"Yes."},
+      {sp:"ひと", jp:"あのたてものがぎんこうです。", en:"That building is the bank."},
+      {sp:"上田", jp:"そうですか。どうもありがとうございます。", en:"I see. Thank you very much."},
+      {sp:"ひと", jp:"いいえ。", en:"You're welcome."}
+    ]
+  },
+  ch5: {
+    chapter: 5,
+    title: "リーさんのアパート",
+    titleEn: "Mr. Li's Apartment",
+    lines: [
+      {sp:"上田", jp:"ごめん下さい。", en:"Excuse me."},
+      {sp:"リー", jp:"あ、上田さん。いらっしゃい。どうぞ上がって下さい。", en:"Oh, Ueda-san. Welcome. Please come in."},
+      {sp:"上田", jp:"おじゃまします。", en:"Excuse me for intruding."},
+      {sp:"上田", jp:"わあ、とてもあかるいですね。", en:"Wow, it's very bright, isn't it!"},
+      {sp:"リー", jp:"ええ。このアパートはたかいところにありますから。", en:"Yes, because this apartment is in a high location."},
+      {sp:"上田", jp:"あそこにりっぱなたてものがありますね。あれは大学ですか。", en:"There's a splendid building over there. Is that a university?"},
+      {sp:"リー", jp:"ええ、あれはじょうとう大学のたいいくかんですよ。", en:"Yes, that's Joto University's gymnasium."},
+      {sp:"上田", jp:"え、じゃあ、たいいくかんのとなりのちゃいろいビルはなんですか。", en:"Oh, then what's the brown building next to the gymnasium?"},
+      {sp:"リー", jp:"あれはとしょかんです。そして、そのまえのが学生会館です。", en:"That's the library. And the one in front of it is the student union."},
+      {sp:"上田", jp:"そうですか。ここから大学までどのくらいかかりますか。", en:"I see. About how long does it take to get to the university from here?"},
+      {sp:"リー", jp:"バスでにじゅっぷんぐらいかかります。でも、ぼくはたいていじてんしゃでいきますよ。", en:"About 20 minutes by bus. But I usually go by bicycle."},
+      {sp:"上田", jp:"そうですか。じてんしゃではどのくらいかかりますか。", en:"Really? About how long does it take by bicycle?"},
+      {sp:"リー", jp:"じゅうごふんぐらいです。", en:"About 15 minutes."},
+      {sp:"上田", jp:"へえ、はやいですね。", en:"Wow, that's fast!"}
+    ]
+  },
+  ch6: {
+    chapter: 6,
+    title: "週末はどうでしたか",
+    titleEn: "How was your weekend?",
+    lines: [
+      {sp:"上田", jp:"リーさん、おはようございます。", en:"Good morning, Li-san."},
+      {sp:"リー", jp:"あ、上田さん、おはようございます。週末はどうでしたか。", en:"Oh, good morning Ueda-san. How was your weekend?"},
+      {sp:"上田", jp:"とてもたのしかったです。", en:"It was very fun."},
+      {sp:"リー", jp:"それはよかったですね。", en:"That's good."},
+      {sp:"上田", jp:"ええ、みちこさんとしぶやにかいものにいって、コンサートへいきました。", en:"Yes, I went shopping in Shibuya with Michiko-san and went to a concert."},
+      {sp:"リー", jp:"そうですか。いいですね。", en:"Really. That sounds nice."},
+      {sp:"上田", jp:"リーさんの週末はどうでしたか。", en:"How was your weekend, Li-san?"},
+      {sp:"リー", jp:"先週はしゅくだいがたくさんあって、週末はずっとうちでべんきょうしました。", en:"I had a lot of homework last week and studied at home all weekend."},
+      {sp:"上田", jp:"それは大変でしたね。", en:"That must have been tough."},
+      {sp:"リー", jp:"ええ。だから、いそがしくて、ぜんぜんおもしろくなかったです。", en:"Yes. So I was busy and it was not fun at all."},
+      {sp:"上田", jp:"じゃあ、来週の週末はどうですか。", en:"Well then, how about next weekend?"},
+      {sp:"リー", jp:"来週はあまりいそがしくありません。", en:"I'm not very busy next week."},
+      {sp:"上田", jp:"じゃあ、うちにあそびにきませんか。", en:"Then, won't you come visit my house?"},
+      {sp:"リー", jp:"えっ、いいんですか。", en:"Oh, is that okay?"},
+      {sp:"上田", jp:"ええ。土曜日はどうですか。", en:"Yes. How about Saturday?"},
+      {sp:"リー", jp:"ええ、大丈夫です。", en:"Yes, that's fine."},
+      {sp:"上田", jp:"じゃあ、くるとき、でんわしてくれませんか。", en:"Then, when you come, could you call me?"},
+      {sp:"リー", jp:"わかりました。じゃあ、土曜日に。", en:"Understood. See you Saturday."}
+    ]
+  }
+};
+
+const PICTURES = [
+  { id: 1, src: "./oral_pic1.png", label: "Picture ①", note: "Living room scene — describe what you see!" },
+  { id: 2, src: "./oral_pic2.png", label: "Picture ②", note: "Classroom/office scene — use location words carefully." },
+  { id: 3, src: "./oral_pic3.png", label: "Picture ③", note: "〒 = post office (ゆうびんきょく)" }
+];
+
+const LOCATION_WORDS = [
+  {jp:"うえ", en:"above"},
+  {jp:"した", en:"below"},
+  {jp:"まえ", en:"in front"},
+  {jp:"うしろ", en:"behind"},
+  {jp:"みぎ", en:"right"},
+  {jp:"ひだり", en:"left"},
+  {jp:"よこ", en:"beside"},
+  {jp:"なか", en:"inside"},
+  {jp:"そと", en:"outside"},
+  {jp:"ちかく", en:"near"},
+  {jp:"となり", en:"next to"},
+  {jp:"あいだ", en:"between"},
+];
+
+const ALL_QUESTIONS = [
+  "なんじに ひるごはんを たべますか。だれと たべますか。",
+  "バスで 学校に きますか。",
+  "なんじに いえに かえりますか。",
+  "UNO はどんな大学ですか。新しいですか。",
+  "こんばん、何をしますか。",
+  "いつも あさごはんを たべますか。なんじごろ たべますか。",
+  "どこで しゅくだいを しますか。だれと しますか。",
+  "なんじに おきますか。",
+  "おなまえは 何ですか。",
+  "きょう、なんで 学校に きましたか。",
+  "なんじに ばんごはんを たべますか。どこで たべますか。",
+  "週末、よく どこに いきますか。",
+  "せんこうは 何ですか。",
+  "オマハはどんなまちですか。大きいですか。",
+  "あした、何を しますか。",
+  "きのう、どこに いきましたか。",
+  "いつも どこで べんきょうしますか。",
+  "きのうの ばん、何をしましたか。",
+  "よく 本を よみますか。",
+  "きょう、なんのじゅぎょうが ありますか。",
+  "まいにち、なんじごろ がっこうに きますか。",
+  "きのう シャワーを あびましたか。",
+  "まいにち シャワーを あびますか。",
+  "レストランで よく 何を たべますか。",
+  "ドアは どこに ありますか。",
+  "ASHビルは あたらしいですか。",
+  "うちに ペットが いますか。",
+  "うちから 学校まで じてんしゃで きますか。",
+  "うちは どんな うちですか。",
+  "いま、どんな ところに すんでいますか。",
+  "へやに どんなものが ありますか。",
+  "うちから 学校まで どのぐらい かかりますか。",
+  "ここから としょかんまで あるいて どのぐらい かかりますか。",
+  "日本語の じゅぎょうは なんじから なんじまで ですか。",
+  "学校から うちに かえって 何をしますか。（て-formで！）",
+  "休みの日に よく 何をしますか。",
+  "よく だれに テキスト(texting)しますか。一日に どれぐらい しますか。",
+  "よく りょうりしますか。",
+  "アルバイトを しますか。どこで しますか。",
+  "このへんでは どのカフェが いいですか。",
+  "こうこうせいかつは どうでしたか。",
+  "あさ おきて、何をしますか。",
+  "あさごはんを たべて、何をしますか。",
+  "いつも シャワーを あびて、何を しますか。",
+  "日本語の じゅぎょうは どうですか。",
+];
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+
+let timerInterval = null;
+let timerSeconds = 13 * 60;
+let currentSection = 1;
+let selectedPicture = null;
+let selectedDialogue = null;
+let shuffledQuestions = [];
+let qOffset = 0;
+const Q_PER_PAGE = 5;
+
+// Recorder state
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+let recTimerInterval = null;
+let recSeconds = 0;
+let audioCtx = null;
+let analyser = null;
+let waveAnimId = null;
+let recStream = null;
+
+// ══════════════════════════════════════════
+//  EXAM FLOW
+// ══════════════════════════════════════════
+
+function startExam() {
+  document.getElementById('startScreen').hidden = true;
+  document.getElementById('examScreen').hidden = false;
+  startTimer();
+  renderSection(1);
+  setupWaveCanvas();
+  startRecording(); // auto-start recording
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ══════════════════════════════════════════
+//  TIMER
+// ══════════════════════════════════════════
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    updateTimerDisplay();
+    if (timerSeconds <= 0) {
+      clearInterval(timerInterval);
+      timerExpired();
+    }
+  }, 1000);
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timerSeconds / 60);
+  const s = timerSeconds % 60;
+  const disp = document.getElementById('timerDisplay');
+  const fill = document.getElementById('timerFill');
+  disp.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  fill.style.width = `${(timerSeconds / (13*60)) * 100}%`;
+
+  disp.classList.remove('warn','urgent');
+  fill.style.background = 'var(--gold)';
+  if (timerSeconds <= 60) {
+    disp.classList.add('urgent');
+    fill.style.background = 'var(--red)';
+  } else if (timerSeconds <= 180) {
+    disp.classList.add('warn');
+    fill.style.background = 'var(--orange)';
+  }
+}
+
+function timerExpired() {
+  const area = document.getElementById('sectionArea');
+  const existing = area.innerHTML;
+  area.innerHTML = `
+    <div class="end-msg">
+      <div class="big">⏰</div>
+      <h2>時間です！ Time's up!</h2>
+      <p style="margin-top:8px">13 minutes — your oral exam is complete.<br>Stop the recording below to download your audio.</p>
+    </div>` + existing;
+  stopRecording();
+}
+
+// ══════════════════════════════════════════
+//  SECTION RENDERING
+// ══════════════════════════════════════════
+
+function goToSection(n) {
+  currentSection = n;
+  renderSection(n);
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot' + i);
+    dot.classList.remove('active','done');
+    if (i < n) dot.classList.add('done');
+    else if (i === n) dot.classList.add('active');
+  }
+  document.getElementById('sectionArea').scrollTop = 0;
+}
+
+function renderSection(n) {
+  const area = document.getElementById('sectionArea');
+  if (n === 1) area.innerHTML = buildSection1();
+  else if (n === 2) area.innerHTML = buildSection2();
+  else if (n === 3) area.innerHTML = buildSection3();
+  else if (n === 4) area.innerHTML = buildSection4();
+  area.scrollTop = 0;
+}
+
+// ── SECTION 1: Self Introduction ──
+function buildSection1() {
+  return `
+  <div class="section-header">
+    <h2 class="jp">セクション 1: 自己紹介</h2>
+    <span class="section-badge">10 pts</span>
+  </div>
+  <div class="section-note">Self-Introduction — refer to Chapter 1 &amp; 2. Speak naturally and fluently.</div>
+
+  <div class="card highlight">
+    <div class="card-title">Include these topics:</div>
+    <div class="intro-topics">
+      <div class="topic-row">
+        <div class="topic-num">①</div>
+        <div>
+          <div class="topic-jp">お名前は何ですか。</div>
+          <div class="topic-en">Your name</div>
+        </div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-num">②</div>
+        <div>
+          <div class="topic-jp">学校の名前は何ですか。</div>
+          <div class="topic-en">Name of your school / university</div>
+        </div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-num">③</div>
+        <div>
+          <div class="topic-jp">何年生ですか。</div>
+          <div class="topic-en">Your year in school (一年生、二年生…)</div>
+        </div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-num">④</div>
+        <div>
+          <div class="topic-jp">専攻は何ですか。</div>
+          <div class="topic-en">Your major</div>
+        </div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-num">⑤</div>
+        <div>
+          <div class="topic-jp">出身はどこですか。</div>
+          <div class="topic-en">Your hometown</div>
+        </div>
+      </div>
+      <div class="topic-row">
+        <div class="topic-num">＋</div>
+        <div>
+          <div class="topic-jp">その他 — Any additional information!</div>
+          <div class="topic-en">e.g. hobbies, interests, family, schedule…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Useful patterns</div>
+    <div class="dialogue-lines">
+      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp">○○大学の○○学部の一年生です。</div><div class="dl-en">I am a first-year in the ___ department at ___ University.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp">出身は〔City〕です。</div><div class="dl-en">I am from [City].</div></div></div>
+      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp">せんこうは〔Major〕です。</div><div class="dl-en">My major is [Major].</div></div></div>
+    </div>
+  </div>
+
+  <button class="next-btn" onclick="goToSection(2)">Section 2: Dialogue Reading →</button>
+  `;
+}
+
+// ── SECTION 2: Dialogue Reading ──
+function buildSection2() {
+  const chKeys = ['ch4','ch5','ch6'];
+  if (!selectedDialogue) {
+    // random pick
+    selectedDialogue = chKeys[Math.floor(Math.random() * 3)];
+  }
+  const dlg = DIALOGUES[selectedDialogue];
+  const lines = dlg.lines.map(l => `
+    <div class="dl-row">
+      <div class="dl-speaker">${l.sp}</div>
+      <div>
+        <div class="dl-jp">${l.jp}</div>
+        <div class="dl-en dim small">${l.en}</div>
+      </div>
+    </div>`).join('');
+
+  const chBtns = chKeys.map(k => {
+    const d = DIALOGUES[k];
+    return `<button class="ch-btn ${k === selectedDialogue ? 'active' : ''}" onclick="switchDialogue('${k}')">&nbsp;Ch.${d.chapter}&nbsp;</button>`;
+  }).join('');
+
+  return `
+  <div class="section-header">
+    <h2 class="jp">セクション 2: ダイアローグ</h2>
+    <span class="section-badge">20 pts</span>
+  </div>
+  <div class="section-note">Read aloud — focus on pronunciation, pitch, and natural flow.</div>
+
+  <div class="card highlight">
+    <div class="dialogue-meta">
+      <div style="margin-bottom:6px;">
+        <strong>Random draw:</strong> Chapter ${dlg.chapter} — <span style="font-family:var(--jp)">${dlg.title}</span>
+        <span class="dim small"> (${dlg.titleEn})</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span class="dim small">Switch chapter:</span>
+        ${chBtns}
+      </div>
+    </div>
+    <div class="dialogue-lines">${lines}</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Tips</div>
+    <div class="dim small" style="line-height:1.8">
+      • Practice reading the dialogue on Canvas / MindTap audio<br>
+      • Record yourself and compare your pronunciation<br>
+      • Focus on natural speed, pitch accent, and flow<br>
+      • Both speakers' roles will be read by you in a solo test
+    </div>
+  </div>
+
+  <button class="next-btn" onclick="goToSection(3)">Section 3: Picture Description →</button>
+  `;
+}
+
+function switchDialogue(key) {
+  selectedDialogue = key;
+  renderSection(2);
+}
+
+// ── SECTION 3: Picture Description ──
+function buildSection3() {
+  const locWords = LOCATION_WORDS.map(w =>
+    `<div class="lw">${w.jp}<span>${w.en}</span></div>`).join('');
+
+  let picContent = '';
+  if (!selectedPicture) {
+    picContent = `
+      <div class="card-draw-container" style="padding:20px 0;">
+        <div class="dim small" style="margin-bottom:16px;font-family:var(--jp)">カードを引いてください</div>
+        <button class="card-draw-btn" onclick="drawCard()">
+          🎴 Draw a Card
+        </button>
+      </div>`;
+  } else {
+    const p = selectedPicture;
+    picContent = `
+      <div style="text-align:center;margin-bottom:6px;">
+        <div class="drawn-label">${p.label}</div>
+      </div>
+      <img src="${p.src}" alt="${p.label}" class="pic-img" onerror="this.style.border='2px solid red'">
+      <div class="pic-note">${p.note}</div>
+      <button class="card-draw-btn" onclick="drawCard()" style="margin:0 auto 12px;display:flex;font-size:12px;padding:8px 18px;background:var(--bg4);color:var(--text2);box-shadow:none;" title="Redraw">↺ Redraw Card</button>`;
+  }
+
+  return `
+  <div class="section-header">
+    <h2 class="jp">セクション 3: 絵の説明</h2>
+    <span class="section-badge">50 pts</span>
+  </div>
+  <div class="section-note">Describe 5 locations using あります/います + adjectives. Use ≥ 2 て-form connected phrases.</div>
+
+  <div class="card highlight">
+    ${picContent}
+  </div>
+
+  <div class="card">
+    <div class="card-title">📍 Location words (ばしょのことば)</div>
+    <div class="location-words" style="margin-bottom:12px;">${locWords}</div>
+    <div class="te-reminder">
+      ⚡ て-form requirement: Use <strong>て</strong> to connect ≥2 sentences!<br>
+      <span class="small dim" style="font-family:var(--en)">e.g. 「つくえの 下に ねこがいて、まどのそとに きがあります。」</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Sentence starters</div>
+    <div class="dialogue-lines">
+      <div class="dl-row"><div class="dl-speaker dim small">1.</div><div class="dl-jp">〔Object〕の うえに 〔Object〕があります/います。</div></div>
+      <div class="dl-row"><div class="dl-speaker dim small">2.</div><div class="dl-jp">〔Object〕の ひだりに 〔adj〕〔Object〕があります。</div></div>
+      <div class="dl-row"><div class="dl-speaker dim small">3.</div><div class="dl-jp">〔Location〕に 〔Object〕があって、〔…〕があります。</div></div>
+    </div>
+  </div>
+
+  <button class="next-btn" onclick="goToSection(4)">Section 4: Q&amp;A →</button>
+  `;
+}
+
+function drawCard() {
+  const idx = Math.floor(Math.random() * PICTURES.length);
+  selectedPicture = PICTURES[idx];
+  renderSection(3);
+}
+
+// ── SECTION 4: Q&A ──
+function buildSection4() {
+  if (shuffledQuestions.length === 0) {
+    shuffledQuestions = shuffle(ALL_QUESTIONS);
+  }
+  const slice = shuffledQuestions.slice(qOffset, qOffset + Q_PER_PAGE);
+  const items = slice.map((q, i) =>
+    `<div class="qa-item">
+      <div class="qa-num">${qOffset + i + 1}</div>
+      <div class="qa-text">${q}</div>
+    </div>`).join('');
+
+  const hasMore = qOffset + Q_PER_PAGE < shuffledQuestions.length;
+
+  return `
+  <div class="section-header">
+    <h2 class="jp">セクション 4: Q &amp; A</h2>
+    <span class="section-badge">20 pts</span>
+  </div>
+  <div class="section-note">Answer in Japanese only. If you don't understand: <strong class="jp gold">もういちど いってください</strong> / <strong class="jp gold">ゆっくり いってください</strong></div>
+
+  <div class="card highlight">
+    <div class="card-title">Practice questions (instructor picks randomly)</div>
+    <div class="qa-questions" id="qaList">${items}</div>
+  </div>
+
+  <div class="qa-actions">
+    <button class="shuffle-btn" onclick="nextQPage()">
+      🔀 New Questions ${hasMore ? `(${qOffset + Q_PER_PAGE + 1}–${Math.min(qOffset + Q_PER_PAGE*2, shuffledQuestions.length)}/${shuffledQuestions.length})` : '(restart)'}
+    </button>
+    <button class="shuffle-btn" onclick="reshuffleQ()">
+      ♻ Reshuffle All
+    </button>
+  </div>
+
+  <div class="card" style="margin-top:8px;">
+    <div class="card-title">Grading criteria</div>
+    <div class="dim small" style="line-height:2;">
+      1. <strong style="color:var(--text)">Fluency</strong> — speed, natural flow, language performance<br>
+      2. <strong style="color:var(--text)">Accuracy</strong> — grammar, pronunciation, vocabulary<br>
+      3. <strong style="color:var(--text)">Listening comprehension</strong> — understanding and responding appropriately
+    </div>
+  </div>
+
+  <div class="end-msg" style="margin-top:8px;">
+    <div class="big">🎌</div>
+    <h2>がんばってください！</h2>
+    <p style="margin-top:6px">Stop the recording when done — then download your audio.</p>
+    <button class="start-btn" onclick="stopRecording()" style="margin-top:14px;font-size:13px;padding:10px 24px;max-width:260px;">⏹ Stop &amp; Save Recording</button>
+  </div>
+  `;
+}
+
+function nextQPage() {
+  qOffset += Q_PER_PAGE;
+  if (qOffset >= shuffledQuestions.length) qOffset = 0;
+  renderSection(4);
+}
+
+function reshuffleQ() {
+  shuffledQuestions = shuffle(ALL_QUESTIONS);
+  qOffset = 0;
+  renderSection(4);
+}
+
+// ══════════════════════════════════════════
+//  VOICE RECORDER
+// ══════════════════════════════════════════
+
+async function startRecording() {
+  try {
+    recStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+  } catch(e) {
+    document.getElementById('recStatus').textContent = '⚠ Mic denied';
+    return;
+  }
+
+  // Audio context for waveform
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 256;
+  const source = audioCtx.createMediaStreamSource(recStream);
+  source.connect(analyser);
+
+  // MediaRecorder
+  const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+    ? 'audio/webm;codecs=opus'
+    : MediaRecorder.isTypeSupported('audio/webm')
+    ? 'audio/webm'
+    : 'audio/ogg;codecs=opus';
+
+  mediaRecorder = new MediaRecorder(recStream, { mimeType });
+  audioChunks = [];
+  mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+  mediaRecorder.onstop = handleRecordingStop;
+  mediaRecorder.start(250);
+  isRecording = true;
+
+  document.getElementById('btnRecord').classList.add('recording');
+  document.getElementById('btnStop').disabled = false;
+  document.getElementById('recStatus').textContent = '● REC';
+  document.getElementById('recStatus').classList.add('live');
+
+  startRecTimer();
+  drawWaveform();
+}
+
+function toggleRecord() {
+  if (isRecording) {
+    // pause not supported in all browsers — just toggle visual
+    return;
+  }
+  startRecording();
+}
+
+function stopRecording() {
+  if (!mediaRecorder || mediaRecorder.state === 'inactive') return;
+  mediaRecorder.stop();
+  recStream.getTracks().forEach(t => t.stop());
+  isRecording = false;
+  clearInterval(recTimerInterval);
+  cancelAnimationFrame(waveAnimId);
+  if (audioCtx) audioCtx.close();
+
+  document.getElementById('btnRecord').classList.remove('recording');
+  document.getElementById('btnRecord').disabled = true;
+  document.getElementById('btnStop').disabled = true;
+  document.getElementById('recStatus').textContent = '✓ Saved';
+  document.getElementById('recStatus').classList.remove('live');
+}
+
+function handleRecordingStop() {
+  const mimeType = mediaRecorder.mimeType || 'audio/webm';
+  const blob = new Blob(audioChunks, { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const ext = mimeType.includes('ogg') ? 'ogg' : 'webm';
+  const name = document.getElementById('nameInput')?.value.trim() || 'student';
+  const date = new Date().toISOString().slice(0,10);
+  const filename = `oral_exam_${name}_${date}.${ext}`;
+
+  const btn = document.getElementById('btnDownload');
+  btn.href = url;
+  btn.download = filename;
+  btn.textContent = `⬇ Download (${(blob.size/1024/1024).toFixed(1)} MB)`;
+  btn.hidden = false;
+}
+
+// ── Recording timer ──
+function startRecTimer() {
+  recSeconds = 0;
+  recTimerInterval = setInterval(() => {
+    recSeconds++;
+    const m = Math.floor(recSeconds / 60);
+    const s = recSeconds % 60;
+    document.getElementById('recTime').textContent =
+      `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }, 1000);
+}
+
+// ── Waveform ──
+function setupWaveCanvas() {
+  const canvas = document.getElementById('waveCanvas');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.floor(rect.width * dpr) || 300;
+  canvas.height = Math.floor(rect.height * dpr) || 96;
+}
+
+function drawWaveform() {
+  const canvas = document.getElementById('waveCanvas');
+  const ctx2 = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  if (!analyser) {
+    ctx2.clearRect(0,0,W,H);
+    waveAnimId = requestAnimationFrame(drawWaveform);
+    return;
+  }
+
+  const bufLen = analyser.fftSize;
+  const buf = new Uint8Array(bufLen);
+  analyser.getByteTimeDomainData(buf);
+
+  ctx2.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg4').trim() || '#222';
+  ctx2.fillRect(0,0,W,H);
+
+  ctx2.lineWidth = 2;
+  ctx2.strokeStyle = isRecording ? '#e74c3c' : '#d4af37';
+  ctx2.beginPath();
+
+  const sliceW = W / bufLen;
+  let x = 0;
+  for (let i = 0; i < bufLen; i++) {
+    const v = buf[i] / 128.0;
+    const y = (v * H) / 2;
+    if (i === 0) ctx2.moveTo(x, y);
+    else ctx2.lineTo(x, y);
+    x += sliceW;
+  }
+  ctx2.lineTo(W, H / 2);
+  ctx2.stroke();
+
+  waveAnimId = requestAnimationFrame(drawWaveform);
+}
+
+// Resize wave canvas on layout changes
+window.addEventListener('resize', setupWaveCanvas);
+</script>
+</body>
+</html>
