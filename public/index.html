@@ -4,28 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Nakama 1 — Complete Japanese Study Guide</title>
-<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a0a;
-  --surface: #111111;
-  --card: #161616;
-  --card-alt: #1a1a1a;
-  --border: #2a2a2a;
-  --gold: #d4a843;
-  --gold-bright: #f0c85a;
-  --gold-dark: #8b6d1e;
-  --gold-dim: #7a6320;
-  --gold-glow: rgba(212,168,67,0.15);
-  --gold-subtle: rgba(212,168,67,0.08);
+  --bg: #141414;
+  --surface: #1c1c1e;
+  --card: #242424;
+  --card-alt: #2c2c2c;
+  --border: #333333;
+  --gold: #e85a2a;
+  --gold-bright: #ff6d40;
+  --gold-dark: #c03a18;
+  --gold-dim: #a83218;
+  --gold-glow: rgba(232,90,42,0.15);
+  --gold-subtle: rgba(232,90,42,0.08);
   --green: #4ecf7a;
   --red: #e85454;
-  --yellow: #f0c85a;
+  --yellow: #e85a2a;
   --blue: #5ba8e8;
-  --text: #e0ddd5;
-  --text-dim: #8a8578;
-  --muted: #5a5548;
-  --white: #f5f2ea;
+  --text: #e8e8e8;
+  --text-dim: #888888;
+  --muted: #555555;
+  --white: #ffffff;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,47 +40,40 @@ body {
   touch-action: manipulation;
 }
 
-/* Grain overlay */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: 
-    radial-gradient(circle at 20% 20%, rgba(212,168,67,0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(212,168,67,0.02) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-}
-
 /* ═══ MASTHEAD ═══ */
 .masthead {
   text-align: center;
-  padding: 40px 20px 20px;
+  padding: 28px 20px 14px;
   position: relative;
   z-index: 1;
 }
 .masthead h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 42px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 32px;
   font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0;
+  text-transform: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.masthead h1::before {
+  content: '●';
   color: var(--gold);
-  letter-spacing: 4px;
-  text-transform: uppercase;
+  font-size: 10px;
+  line-height: 1;
 }
 .masthead .sub {
   font-size: 11px;
   color: var(--text-dim);
-  letter-spacing: 6px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  margin-top: 6px;
+  margin-top: 4px;
+  font-size: 10px;
 }
-.masthead .line {
-  width: 60px;
-  height: 1px;
-  background: var(--gold);
-  margin: 14px auto;
-  opacity: 0.5;
-}
+.masthead .line { display: none; }
 
 /* ═══ CHAPTER TABS ═══ */
 .nav-wrap {
@@ -89,38 +82,32 @@ body::before {
   z-index: 100;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
-  padding: 0 10px;
+  padding: 0 8px;
 }
 .nav-scroll {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
   gap: 0;
   max-width: 1100px;
   margin: 0 auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-@media (max-width: 768px) {
-  .nav-scroll {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  .nav-scroll::-webkit-scrollbar { display: none; }
-}
+.nav-scroll::-webkit-scrollbar { display: none; }
 
 .nav-tab {
   flex-shrink: 0;
-  padding: 14px 16px 12px;
+  padding: 10px 14px 8px;
   font-size: 11px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
   border-bottom: 2px solid transparent;
-  transition: all 0.2s;
+  transition: color 0.15s, border-color 0.15s;
   text-align: center;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   background: none;
   border-top: none;
   border-left: none;
@@ -128,20 +115,21 @@ body::before {
   font-family: 'DM Sans';
   white-space: nowrap;
 }
-.nav-tab:hover { color: var(--text-dim); }
+.nav-tab:hover { color: var(--text); }
 .nav-tab.active {
-  color: var(--gold);
+  color: var(--white);
   border-bottom-color: var(--gold);
 }
 .nav-tab .kanji {
   display: block;
   font-family: 'Noto Sans JP';
-  font-size: 16px;
-  margin-bottom: 2px;
+  font-size: 18px;
+  margin-bottom: 1px;
   font-weight: 700;
+  color: inherit;
 }
 .nav-tab.ref-tab { color: var(--muted); font-size: 10px; }
-.nav-tab.ref-tab.active { color: var(--gold-bright); border-bottom-color: var(--gold-bright); }
+.nav-tab.ref-tab.active { color: var(--text); border-bottom-color: var(--gold); }
 
 /* ═══ MAIN CONTENT ═══ */
 .main-container {
@@ -228,9 +216,9 @@ body::before {
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 .study-content .card-header {
-  background: linear-gradient(135deg, var(--gold-dark), #6b5518);
+  background: var(--gold-dark);
   color: var(--white);
-  font-family: 'DM Sans', monospace;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   font-size: 12px;
   padding: 8px 14px;
@@ -270,7 +258,7 @@ body::before {
   font-weight: 700;
   letter-spacing: 0.5px;
   color: var(--gold);
-  background: rgba(212,168,67,0.08);
+  background: rgba(232,90,42,0.08);
   border-left: 3px solid var(--gold-dark);
   border-radius: 0 6px 6px 0;
 }
@@ -288,14 +276,14 @@ body::before {
 .rich-body table { margin: 8px 0 14px 0; }
 .pl-keyterm {
   display: inline-block;
-  background: rgba(212,168,67,0.12);
+  background: rgba(232,90,42,0.12);
   color: var(--gold);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 1.5px;
   padding: 2px 8px;
   border-radius: 4px;
-  border: 1px solid rgba(212,168,67,0.3);
+  border: 1px solid rgba(232,90,42,0.3);
   vertical-align: middle;
   margin-right: 4px;
 }
@@ -306,7 +294,7 @@ body::before {
   font-weight: 700;
   margin-top: 10px;
   padding: 4px 8px;
-  background: rgba(212,168,67,0.07);
+  background: rgba(232,90,42,0.07);
   border-left: 2px solid var(--gold-dark);
   border-radius: 0 4px 4px 0;
 }
@@ -325,7 +313,7 @@ body::before {
   font-weight: 700;
   letter-spacing: 1px;
   color: var(--gold);
-  background: rgba(212,168,67,0.08);
+  background: rgba(232,90,42,0.08);
   border-left: 3px solid var(--gold-dark);
   border-radius: 0 4px 4px 0;
   text-transform: uppercase;
@@ -339,7 +327,7 @@ body::before {
 .expansion p { margin: 0; font-size: 13px; line-height: 1.7; color: var(--text); }
 .expansion table { margin-top: 0; }
 .study-content .trap {
-  background: rgba(212,168,67,0.1);
+  background: rgba(232,90,42,0.1);
   border: 2px solid var(--gold-dark);
   border-radius: 8px;
   padding: 10px 14px;
@@ -360,7 +348,7 @@ body::before {
   word-wrap: break-word;
 }
 .study-content th {
-  background: linear-gradient(135deg, var(--gold-dark), #6b5518);
+  background: linear-gradient(135deg, var(--gold-dark), #a83218);
   color: var(--white);
   font-size: 11px;
   font-weight: 700;
@@ -426,7 +414,7 @@ body::before {
 .btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
 .btn:active { transform: scale(0.97); }
 .btn:disabled { opacity: 0.4; cursor: default; transform: none; }
-.btn-gold { background: linear-gradient(135deg, var(--gold-dark), var(--gold)); }
+.btn-gold { background: var(--gold); }
 .btn-ghost { background: var(--surface); border: 1px solid var(--border) !important; }
 .btn-green { background: var(--green); }
 .btn-red { background: var(--red); }
@@ -435,11 +423,11 @@ body::before {
   width: 100%;
   max-width: 380px;
   height: 240px;
-  border-radius: 12px;
-  border: 2px solid var(--gold-dark);
+  border-radius: 16px;
+  border: 2px solid var(--border);
   cursor: crosshair;
   touch-action: none;
-  background: #050508;
+  background: var(--surface);
 }
 
 .handwritten {
@@ -449,7 +437,7 @@ body::before {
   line-height: 1.2;
   padding: 14px;
   background: var(--gold-subtle);
-  border: 1px solid rgba(212,168,67,0.2);
+  border: 1px solid rgba(232,90,42,0.2);
   border-radius: 12px;
   min-height: 90px;
   display: flex;
@@ -495,7 +483,7 @@ body::before {
 }
 .dialogue-line.a {
   background: var(--gold-subtle);
-  border: 1px solid rgba(212,168,67,0.2);
+  border: 1px solid rgba(232,90,42,0.2);
   margin-right: auto;
 }
 .dialogue-line.b {
@@ -552,19 +540,19 @@ body::before {
 
 /* Chapter title inside panels */
 .ch-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 24px;
   font-weight: 700;
-  color: var(--gold);
+  color: var(--white);
   text-align: center;
   margin: 24px 0 4px;
-  letter-spacing: 2px;
+  letter-spacing: -0.3px;
 }
 .ch-subtitle {
   text-align: center;
   font-size: 11px;
   color: var(--text-dim);
-  letter-spacing: 4px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   margin-bottom: 20px;
 }
@@ -575,10 +563,10 @@ body::before {
 .nav-tab.practice-tab .kanji { color: var(--green); }
 /* Oral Exam Tab */
 #tab_oral-exam.active { color: #e85454; border-bottom-color: #e85454; }
-.oe-weight { display:inline-block;background:linear-gradient(135deg,#8b6d1e,#6b5518);color:#f5f2ea;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:10px; }
+.oe-weight { display:inline-block;background:linear-gradient(135deg,#c03a18,#a83218);color:#f5f2ea;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:10px; }
 .oe-weight.big { background:linear-gradient(135deg,#a82020,#d44); }
 .oe-intro { background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin:20px 0; }
-.oe-intro h2 { font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);margin-bottom:8px; }
+.oe-intro h2 { font-family:'DM Sans',sans-serif;font-size:22px;color:var(--gold);margin-bottom:8px; }
 .oe-intro p { font-size:13px;line-height:1.7;color:var(--text-dim); }
 .oe-tip { background:rgba(91,168,232,0.08);border:1px solid rgba(91,168,232,0.25);border-radius:10px;padding:14px 16px;margin:14px 0;font-size:12px;line-height:1.7; }
 .oe-tip b { color:var(--blue); }
@@ -594,9 +582,9 @@ body::before {
 .oe-rm { font-size:12px;color:var(--blue);font-style:italic;line-height:1.5; }
 .oe-en { font-size:12px;color:var(--text-dim);line-height:1.5; }
 .oe-te { background:rgba(78,207,122,0.12);border:1px solid rgba(78,207,122,0.3);border-radius:4px;padding:1px 4px;color:var(--green); }
-.oe-hl { background:rgba(212,168,67,0.15);border:1px solid rgba(212,168,67,0.3);border-radius:4px;padding:1px 4px; }
+.oe-hl { background:rgba(232,90,42,0.15);border:1px solid rgba(232,90,42,0.3);border-radius:4px;padding:1px 4px; }
 .oe-d-line { padding:10px 14px;border-radius:10px;margin-bottom:6px;max-width:88%; }
-.oe-d-a { background:var(--gold-subtle);border:1px solid rgba(212,168,67,0.2);margin-right:auto; }
+.oe-d-a { background:var(--gold-subtle);border:1px solid rgba(232,90,42,0.2);margin-right:auto; }
 .oe-d-b { background:rgba(78,207,122,0.06);border:1px solid rgba(78,207,122,0.15);margin-left:auto; }
 .oe-d-name { font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text-dim);margin-bottom:4px;text-transform:uppercase; }
 .oe-loc-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:10px 0; }
@@ -646,7 +634,7 @@ body::before {
 /* Comprehension Q&A details/summary */
 .oe-qa { background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:8px;cursor:pointer;transition:all 0.2s; }
 .oe-qa:hover { border-color:var(--gold-dim); }
-.oe-qa[open] { background:rgba(212,168,67,0.06);border-color:var(--gold-dim); }
+.oe-qa[open] { background:rgba(232,90,42,0.06);border-color:var(--gold-dim); }
 .oe-qa summary { list-style:none;font-size:13px;line-height:1.6;outline:none; }
 .oe-qa summary::-webkit-details-marker { display:none; }
 .oe-qa summary::before { content:'▸ ';color:var(--gold);font-weight:700;margin-right:4px; }
@@ -808,7 +796,7 @@ body::before {
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 4px;
-  background: rgba(212,168,67,0.12);
+  background: rgba(232,90,42,0.12);
   color: var(--gold);
   white-space: nowrap;
   margin-top: 4px;
@@ -871,7 +859,7 @@ body::before {
 .plab-card:hover {
   border-color: var(--gold-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(212,168,67,0.12);
+  box-shadow: 0 6px 24px rgba(232,90,42,0.12);
 }
 .plab-card .plab-icon { font-size: 28px; margin-bottom: 10px; }
 .plab-card .plab-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
@@ -997,7 +985,7 @@ body::before {
   position: fixed;
   z-index: 9999;
   background: #1a1a2e;
-  border: 1px solid var(--gold-dark);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px 16px;
   max-width: 320px;
@@ -1071,13 +1059,13 @@ body::before {
   font-size: 22px;
   cursor: pointer;
   z-index: 9000;
-  box-shadow: 0 4px 20px rgba(212,168,67,0.3);
+  box-shadow: 0 4px 20px rgba(232,90,42,0.3);
   transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.float-search-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(212,168,67,0.4); }
+.float-search-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(232,90,42,0.4); }
 .float-search-btn.hidden { display: none; }
 
 .float-search-panel {
@@ -1088,7 +1076,7 @@ body::before {
   max-width: calc(100vw - 40px);
   max-height: calc(100vh - 120px);
   background: var(--card);
-  border: 1px solid var(--gold-dark);
+  border: 1px solid var(--border);
   border-radius: 14px;
   box-shadow: 0 12px 48px rgba(0,0,0,0.6);
   z-index: 9001;
@@ -1190,7 +1178,7 @@ body::before {
   z-index: 9999;
   max-width: min(420px, 88vw);
   background: #0d0e15;
-  border: 1px solid #6b5518;
+  border: 1px solid #a83218;
   border-radius: 8px;
   padding: 10px 14px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.65);
@@ -1225,15 +1213,15 @@ body::before {
 
 /* VA-EX-ENRICHED-CSS */
 #va-cursor-tip { max-height: 72vh; max-width: min(520px, 92vw); overflow: hidden; }
-#va-cursor-tip .va-row { margin: 6px 0; padding: 6px 8px; background: rgba(158,204,255,0.04); border-left: 2px solid #6b5518; border-radius: 4px; }
+#va-cursor-tip .va-row { margin: 6px 0; padding: 6px 8px; background: rgba(158,204,255,0.04); border-left: 2px solid #a83218; border-radius: 4px; }
 #va-cursor-tip .va-row.combo { border-left-color: #e2b449; background: rgba(226,180,73,0.08); }
 #va-cursor-tip .va-row:first-child { margin-top: 0; }
 #va-cursor-tip .va-row b { color: #e2b449; font-size: 9px; letter-spacing: 0.8px; display: block; margin-bottom: 3px; }
 #va-cursor-tip .va-row .oe-ja { color: var(--white); font-size: 12px; line-height: 1.5; display: block; }
 #va-cursor-tip .va-row .oe-en { color: var(--text-dim); font-size: 10px; display: block; margin-top: 2px; line-height: 1.4; }
 /* CH56-DEPTH-CSS */
-.depth-card { border:1px solid #6b5518; border-radius:10px; margin-bottom:18px; overflow:hidden; background:rgba(255,255,255,0.02); }
-.depth-card .depth-header { background:linear-gradient(135deg,#6b5518,#8a6e1f); color:#fff; padding:10px 14px; font-weight:700; font-size:13px; letter-spacing:1px; }
+.depth-card { border:1px solid #a83218; border-radius:10px; margin-bottom:18px; overflow:hidden; background:rgba(255,255,255,0.02); }
+.depth-card .depth-header { background:linear-gradient(135deg,#a83218,#8a6e1f); color:#fff; padding:10px 14px; font-weight:700; font-size:13px; letter-spacing:1px; }
 .depth-card .depth-body { padding:14px 16px; font-size:13px; line-height:1.6; color:var(--text); }
 .depth-step { background:rgba(158,204,255,0.05); border-left:3px solid #9eccff; border-radius:6px; padding:10px 12px; margin:10px 0; }
 .depth-step b.step-label { display:block; color:#9eccff; font-size:10px; letter-spacing:1px; margin-bottom:4px; }
@@ -1242,7 +1230,7 @@ body::before {
 .depth-row .dr-en { color:var(--text-dim); font-size:11px; display:block; margin-top:3px; }
 .depth-row .dr-tag { display:inline-block; font-size:9px; font-weight:700; letter-spacing:0.6px; color:#e2b449; background:rgba(226,180,73,0.15); padding:2px 6px; border-radius:3px; margin-bottom:4px; }
 .depth-recipe { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin:10px 0; }
-.depth-recipe > div { background:rgba(158,204,255,0.06); border:1px solid #6b5518; border-radius:6px; padding:8px; text-align:center; font-size:12px; }
+.depth-recipe > div { background:rgba(158,204,255,0.06); border:1px solid #a83218; border-radius:6px; padding:8px; text-align:center; font-size:12px; }
 .depth-recipe > div b { display:block; color:#e2b449; font-size:10px; margin-bottom:4px; letter-spacing:0.5px; }
 .depth-trap { background:rgba(232,84,84,0.08); border-left:3px solid #e85454; border-radius:6px; padding:10px 12px; margin:10px 0; font-size:12px; }
 @media (max-width:600px) { .depth-recipe { grid-template-columns:1fr; } }
@@ -1266,7 +1254,7 @@ body::before {
 }
 .jsg-toast {
   background: #1a1a2e;
-  border: 1px solid var(--gold-dark);
+  border: 1px solid var(--border);
   border-left: 4px solid var(--gold);
   border-radius: 8px;
   padding: 12px 16px;
@@ -1294,7 +1282,7 @@ body::before {
   z-index: 9999;
   max-width: min(360px, 88vw);
   background: #0d0e15;
-  border: 1px solid var(--gold-dark);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 14px;
   box-shadow: 0 12px 36px rgba(0,0,0,0.7);
@@ -1343,7 +1331,7 @@ body::before {
   color: var(--text-dim);
   margin-top: 8px;
   padding-top: 8px;
-  border-top: 1px dashed rgba(212,168,67,0.25);
+  border-top: 1px dashed rgba(232,90,42,0.25);
   font-style: italic;
   line-height: 1.55;
 }
@@ -1381,7 +1369,7 @@ body::before {
 
 /* Visual cue on every hoverable vocab box */
 .oe-loc-item { cursor: help; transition: background 120ms; }
-.oe-loc-item:hover { background: rgba(212,168,67,0.08); }
+.oe-loc-item:hover { background: rgba(232,90,42,0.08); }
 
 /* ═══════════════════════════════════════════════════════════
    FLASHCARDS PANEL (FSRS-4.5)
@@ -1468,9 +1456,9 @@ body::before {
 .fc-audio-label { font-size: 11px; }
 .fc-audio-test {
   padding: 9px 16px;
-  background: rgba(212,168,67,0.08);
+  background: rgba(232,90,42,0.08);
   color: var(--gold);
-  border: 1px solid rgba(212,168,67,0.4);
+  border: 1px solid rgba(232,90,42,0.4);
   border-radius: 20px;
   font-size: 11px;
   font-weight: 700;
@@ -1480,7 +1468,7 @@ body::before {
   font-family: 'DM Sans';
   transition: all 150ms ease;
 }
-.fc-audio-test:hover { background: rgba(212,168,67,0.18); color: #f0d27f; }
+.fc-audio-test:hover { background: rgba(232,90,42,0.18); color: #ff8a60; }
 .fc-audio-test:disabled { opacity: 0.4; cursor: not-allowed; }
 .fc-audio-hint {
   flex: 1;
@@ -1513,7 +1501,7 @@ body::before {
   border: 1px solid rgba(200,162,255,0.3);
 }
 .fc-pos-badge.verb { background: rgba(91,168,232,0.12); color: #5ba8e8; border-color: rgba(91,168,232,0.35); }
-.fc-pos-badge.noun { background: rgba(212,168,67,0.1); color: var(--gold); border-color: rgba(212,168,67,0.3); }
+.fc-pos-badge.noun { background: rgba(232,90,42,0.1); color: var(--gold); border-color: rgba(232,90,42,0.3); }
 .fc-pos-badge.i-adj, .fc-pos-badge.na-adj { background: rgba(140,200,130,0.12); color: #8cc882; border-color: rgba(140,200,130,0.35); }
 .fc-pos-badge.expression { background: rgba(232,140,91,0.1); color: #e88c5b; border-color: rgba(232,140,91,0.3); }
 
@@ -1593,50 +1581,63 @@ body::before {
   margin: 14px 0 14px;
 }
 .fc-stat {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 8px;
+  background: var(--card);
+  border: none;
+  border-radius: 14px;
+  padding: 14px 8px;
   text-align: center;
 }
 .fc-stat .fc-stat-num {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -1px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 1px;
+}
+.fc-stat .fc-stat-num::before {
+  content: '●';
+  font-size: 7px;
   color: var(--gold);
-  font-family: 'Cormorant Garamond', serif;
+  margin-right: 3px;
+  line-height: 1;
+  align-self: center;
 }
 .fc-stat .fc-stat-lbl {
   font-size: 9px;
   color: var(--muted);
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  margin-top: 2px;
+  margin-top: 3px;
 }
-.fc-stat.due .fc-stat-num { color: var(--yellow); }
-.fc-stat.new .fc-stat-num { color: var(--blue); }
-.fc-stat.mastered .fc-stat-num { color: var(--green); }
+.fc-stat.due .fc-stat-num::before { color: var(--yellow); }
+.fc-stat.new .fc-stat-num::before { color: var(--blue); }
+.fc-stat.mastered .fc-stat-num::before { color: var(--green); }
 
 .fc-progress {
-  height: 6px;
+  height: 4px;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 18px;
 }
 .fc-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+  background: var(--gold);
   transition: width 250ms ease-out;
 }
 
 .fc-card {
-  background: linear-gradient(180deg, var(--card), var(--card-alt));
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 40px 28px;
-  min-height: 280px;
+  background: var(--card);
+  border: none;
+  border-radius: 24px;
+  padding: 36px 28px 28px;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1645,141 +1646,131 @@ body::before {
   position: relative;
   overflow: hidden;
 }
-.fc-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  opacity: 0.4;
-}
+.fc-card::before { display: none; }
 
 .fc-card .fc-prompt {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--muted);
   letter-spacing: 2px;
   text-transform: uppercase;
-  margin-bottom: 14px;
-  font-weight: 700;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 .fc-card .fc-front-en {
-  font-size: 32px;
+  font-size: 42px;
   font-weight: 700;
   color: var(--white);
-  font-family: 'Cormorant Garamond', serif;
-  line-height: 1.3;
-  margin-bottom: 24px;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.15;
+  margin-bottom: 28px;
+  letter-spacing: -0.5px;
 }
 .fc-flip-btn {
-  padding: 12px 28px;
-  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-  color: #0a0a0a;
+  padding: 14px 32px;
+  background: var(--gold);
+  color: #ffffff;
   border: none;
-  border-radius: 8px;
-  font-size: 13px;
+  border-radius: 50px;
+  font-size: 14px;
   font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
   font-family: 'DM Sans';
+  transition: transform 0.15s, filter 0.15s;
 }
-.fc-flip-btn:hover { filter: brightness(1.1); }
+.fc-flip-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
 .fc-flip-hint {
   font-size: 10px;
   color: var(--muted);
-  margin-top: 10px;
-  letter-spacing: 0.5px;
+  margin-top: 12px;
+  letter-spacing: 0.3px;
 }
+
+/* ── Large featured kanji on the back ── */
+.fc-featured {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 96px;
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1;
+  text-align: center;
+  padding: 8px 0 12px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  letter-spacing: -2px;
+}
+.fc-featured:hover { opacity: 0.75; }
+.fc-featured.fc-tapped { opacity: 0.55; }
+@media (max-width: 600px) { .fc-featured { font-size: 72px; } }
 
 .fc-back .fc-script-row {
   display: flex;
-  align-items: baseline;
-  gap: 14px;
-  padding: 10px 14px;
-  margin: 6px 0;
-  background: rgba(212,168,67,0.05);
-  border-left: 3px solid var(--gold-dark);
-  border-radius: 6px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  margin: 4px 0;
+  background: rgba(255,255,255,0.05);
+  border: none;
+  border-radius: 10px;
   width: 100%;
-  max-width: 460px;
+  max-width: 400px;
   text-align: left;
   cursor: pointer;
-  transition: background 150ms ease, transform 120ms ease;
+  transition: background 150ms ease;
   position: relative;
 }
 .fc-back .fc-script-row::after {
   content: '🔊';
   position: absolute;
-  right: 12px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 14px;
-  opacity: 0.35;
-  transition: opacity 150ms ease, transform 150ms ease;
+  font-size: 12px;
+  opacity: 0.3;
+  transition: opacity 150ms ease;
   pointer-events: none;
 }
-.fc-back .fc-script-row:hover {
-  background: rgba(212,168,67,0.12);
-  transform: translateX(2px);
-}
-.fc-back .fc-script-row:hover::after {
-  opacity: 1;
-  transform: translateY(-50%) scale(1.15);
-}
+.fc-back .fc-script-row:hover { background: rgba(255,255,255,0.09); }
+.fc-back .fc-script-row:hover::after { opacity: 0.8; }
 .fc-back .fc-script-row:active,
-.fc-back .fc-script-row.fc-tapped {
-  transform: translateX(0) scale(0.99);
-  background: rgba(212,168,67,0.22);
-}
-.fc-back .fc-script-row.fc-tapped::after {
-  opacity: 1;
-  transform: translateY(-50%) scale(1.3);
-}
-.fc-back .fc-script-row .fc-tap-hint {
-  position: absolute;
-  bottom: -14px;
-  right: 10px;
-  font-size: 8px;
-  color: var(--muted);
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  opacity: 0;
-  transition: opacity 180ms ease;
-}
-.fc-back .fc-script-row:hover .fc-tap-hint { opacity: 0.8; }
+.fc-back .fc-script-row.fc-tapped { background: rgba(255,255,255,0.14); }
+.fc-back .fc-script-row.fc-tapped::after { opacity: 1; }
+.fc-back .fc-script-row .fc-tap-hint { display: none; }
 .fc-back .fc-script-lbl {
   font-size: 9px;
-  color: var(--gold);
+  color: var(--muted);
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   flex-shrink: 0;
-  width: 70px;
+  width: 60px;
 }
 .fc-back .fc-script-val {
-  font-size: 26px;
-  font-family: 'Klee One', 'Noto Sans JP', cursive;
-  color: var(--white);
-  font-weight: 600;
-  line-height: 1.2;
+  font-size: 20px;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--text);
+  font-weight: 500;
+  line-height: 1.3;
 }
-.fc-back .fc-script-row.kanji { border-left-color: #c8a2ff; background: rgba(200,162,255,0.07); }
-.fc-back .fc-script-row.kanji .fc-script-lbl { color: #c8a2ff; }
-.fc-back .fc-script-row.kata { border-left-color: var(--blue); background: rgba(91,168,232,0.06); }
-.fc-back .fc-script-row.kata .fc-script-lbl { color: var(--blue); }
+.fc-back .fc-script-row.kanji { background: rgba(255,255,255,0.05); }
+.fc-back .fc-script-row.kanji .fc-script-lbl { color: var(--muted); }
+.fc-back .fc-script-row.kata { background: rgba(255,255,255,0.05); }
+.fc-back .fc-script-row.kata .fc-script-lbl { color: var(--muted); }
 .fc-back .fc-romaji {
-  font-size: 14px;
-  color: #9eccff;
-  font-style: italic;
-  margin-top: 12px;
-  letter-spacing: 0.3px;
+  font-size: 13px;
+  color: var(--text-dim);
+  font-style: normal;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
 }
 .fc-back .fc-en-confirm {
-  font-size: 16px;
-  color: var(--text);
-  margin-top: 6px;
-  font-weight: 600;
-  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  color: var(--white);
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -0.3px;
 }
 
 .fc-rating-row {
@@ -1848,7 +1839,7 @@ body::before {
 .fc-modal-backdrop.show { display: flex; }
 .fc-modal {
   background: linear-gradient(180deg, var(--card), var(--card-alt));
-  border: 1px solid var(--gold-dark);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 24px 28px;
   max-width: 420px;
@@ -1856,7 +1847,7 @@ body::before {
   box-shadow: 0 16px 48px rgba(0,0,0,0.8);
 }
 .fc-modal h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'DM Sans', sans-serif;
   color: var(--gold);
   font-size: 24px;
   margin-bottom: 16px;
@@ -1866,7 +1857,7 @@ body::before {
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(212,168,67,0.12);
+  border-bottom: 1px solid rgba(232,90,42,0.12);
   font-size: 13px;
 }
 .fc-modal-row:last-of-type { border-bottom: none; }
@@ -1987,9 +1978,9 @@ body::before {
 
 @media (max-width: 600px) {
   .fc-stats { grid-template-columns: repeat(2, 1fr); }
-  .fc-card { padding: 28px 18px; min-height: 240px; }
-  .fc-card .fc-front-en { font-size: 24px; }
-  .fc-back .fc-script-val { font-size: 22px; }
+  .fc-card { padding: 24px 16px; min-height: 260px; }
+  .fc-card .fc-front-en { font-size: 32px; }
+  .fc-back .fc-script-val { font-size: 18px; }
   .fc-rating-row { gap: 6px; }
   .fc-rate-btn { padding: 11px 4px; font-size: 10px; }
   #uni-tip { max-width: 280px; padding: 10px 12px; }
@@ -2002,7 +1993,7 @@ body::before {
 .cs-print-btn:hover { background:var(--gold); }
 .cs-page { padding:16px 20px;margin-bottom:20px;background:var(--card);border:1px solid var(--border);border-radius:10px; }
 .cs-page-header { text-align:center;margin-bottom:12px;border-bottom:2px solid var(--border);padding-bottom:6px; }
-.cs-page-header h2 { font-family:'Cormorant Garamond',serif;font-size:20px;margin:0;color:var(--gold); }
+.cs-page-header h2 { font-family:'DM Sans',sans-serif;font-size:20px;margin:0;color:var(--gold); }
 .cs-page-header .cs-sub { font-size:10px;color:var(--text-dim);margin-top:2px; }
 .cs-section { margin-bottom:10px; }
 .cs-section h3 { font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0 0 5px;padding:3px 8px;border-radius:4px;font-family:'DM Sans'; }
@@ -2032,7 +2023,7 @@ body::before {
 .cs-conj td.hdr { font-family:'DM Sans';font-weight:600;font-size:9px;color:var(--text);background:var(--card-alt); }
 .cs-ch1 .cs-section h3 { background:rgba(91,168,232,0.12);color:#5ba8e8;border-left:3px solid #5ba8e8; }
 .cs-ch2 .cs-section h3 { background:rgba(78,207,122,0.12);color:#4ecf7a;border-left:3px solid #4ecf7a; }
-.cs-ch3 .cs-section h3 { background:rgba(212,168,67,0.12);color:#d4a843;border-left:3px solid #d4a843; }
+.cs-ch3 .cs-section h3 { background:rgba(232,90,42,0.12);color:#e85a2a;border-left:3px solid #e85a2a; }
 .cs-ch4 .cs-section h3 { background:rgba(232,84,84,0.12);color:#e85454;border-left:3px solid #e85454; }
 .cs-ch5 .cs-section h3 { background:rgba(200,162,255,0.12);color:#c8a2ff;border-left:3px solid #c8a2ff; }
 .cs-ch6 .cs-section h3 { background:rgba(91,200,232,0.12);color:#5bc8e8;border-left:3px solid #5bc8e8; }
@@ -2095,7 +2086,7 @@ body::before {
   <div style="position:relative;">
     <input type="text" id="globalSearch" placeholder="Search — English, romaji, ひらがな, カタカナ, 漢字..." 
       style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--white);padding:12px 14px 12px 38px;font-size:14px;font-family:'DM Sans';outline:none;caret-color:var(--gold);"
-      onfocus="this.style.borderColor='var(--gold-dark)';this.style.boxShadow='0 0 16px rgba(212,168,67,0.12)'"
+      onfocus="this.style.borderColor='var(--gold-dark)';this.style.boxShadow='0 0 16px rgba(232,90,42,0.12)'"
       onblur="if(!this.value){this.style.borderColor='var(--border)';this.style.boxShadow='none'}"
       oninput="globalSearchHandler(this.value)">
     <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:16px;pointer-events:none;">🔍</span>
@@ -2104,7 +2095,7 @@ body::before {
   <div id="searchResults" class="hidden" style="position:absolute;left:16px;right:16px;top:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;max-height:420px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.6);z-index:200;margin-top:4px;"></div>
 </div>
 
-<div class="nav-wrap"><div class="nav-scroll"><button class="nav-tab" onclick="showChapter('ch1')" id="tab_ch1"><span class="kanji">第一章</span>Ch 1: Sounds & Hiragana</button><button class="nav-tab" onclick="showChapter('ch2')" id="tab_ch2"><span class="kanji">第二章</span>Ch 2: Introductions</button><button class="nav-tab" onclick="showChapter('ch3')" id="tab_ch3"><span class="kanji">第三章</span>Ch 3: Daily Routines</button><button class="nav-tab" onclick="showChapter('ch4')" id="tab_ch4"><span class="kanji">第四章</span>Ch 4: Japanese Cities</button><button class="nav-tab" onclick="showChapter('ch5')" id="tab_ch5"><span class="kanji">第五章</span>Ch 5: Japanese Homes</button><button class="nav-tab" onclick="showChapter('ch6')" id="tab_ch6"><span class="kanji">第六章</span>Ch 6: Leisure Time</button><button class="nav-tab practice-tab" onclick="showChapter('practice-lab')" id="tab_practice-lab"><span class="kanji">練</span>Practice Lab</button><button class="nav-tab" style="color:#e85454" onclick="window.location.href='oral-exam.html'" id="tab_oral-exam"><span class="kanji" style="color:#e85454">🎤</span>Oral Exam</button><button class="nav-tab" style="color:#f0c85a" onclick="window.location.href='exam-ch456.html'" id="tab_exam-sim"><span class="kanji" style="color:#f0c85a">📝</span>Exam Sim</button><button class="nav-tab" style="color:#5ba8e8;border-bottom-color:transparent" onclick="window.location.href='reading.html'" id="tab_reading"><span class="kanji" style="color:#5ba8e8">読</span>Reading</button><button class="nav-tab" style="color:var(--gold-bright);border-bottom-color:transparent" onclick="window.location.href='kanji.html'" id="tab_kanji"><span class="kanji" style="color:var(--gold-bright)">&#28450;&#23383;</span>Kanji</button><button class="nav-tab ref-tab" onclick="showChapter('ref-numbers')" id="tab_ref-numbers"><span class="kanji">数</span>Numbers & Time</button><button class="nav-tab ref-tab" onclick="showChapter('ref-patterns')" id="tab_ref-patterns"><span class="kanji">文</span>Patterns</button><button class="nav-tab ref-tab" onclick="showChapter('ref-conv')" id="tab_ref-conv"><span class="kanji">話</span>Conversations</button><button class="nav-tab ref-tab" onclick="showChapter('ref-struct')" id="tab_ref-struct"><span class="kanji">構</span>Structure</button><button class="nav-tab ref-tab" style="color:#9eccff;border-bottom-color:transparent" onclick="showChapter('ref-vocab')" id="tab_ref-vocab"><span class="kanji" style="color:#9eccff">語</span>Vocab Atlas</button><button class="nav-tab" style="color:#c8a2ff;border-bottom-color:transparent" onclick="showChapter('flashcards')" id="tab_flashcards"><span class="kanji" style="color:#c8a2ff">札</span>Flashcards</button><button class="nav-tab ref-tab" style="color:#e8b84c" onclick="showChapter('cheatsheet')" id="tab_cheatsheet"><span class="kanji" style="color:#e8b84c">📋</span>Cheat Sheet</button></div></div><div class="main-container">
+<div class="nav-wrap"><div class="nav-scroll"><button class="nav-tab" onclick="showChapter('ch1')" id="tab_ch1"><span class="kanji">第一章</span>Ch 1: Sounds & Hiragana</button><button class="nav-tab" onclick="showChapter('ch2')" id="tab_ch2"><span class="kanji">第二章</span>Ch 2: Introductions</button><button class="nav-tab" onclick="showChapter('ch3')" id="tab_ch3"><span class="kanji">第三章</span>Ch 3: Daily Routines</button><button class="nav-tab" onclick="showChapter('ch4')" id="tab_ch4"><span class="kanji">第四章</span>Ch 4: Japanese Cities</button><button class="nav-tab" onclick="showChapter('ch5')" id="tab_ch5"><span class="kanji">第五章</span>Ch 5: Japanese Homes</button><button class="nav-tab" onclick="showChapter('ch6')" id="tab_ch6"><span class="kanji">第六章</span>Ch 6: Leisure Time</button><button class="nav-tab practice-tab" onclick="showChapter('practice-lab')" id="tab_practice-lab"><span class="kanji">練</span>Practice Lab</button><button class="nav-tab" style="color:#e85454" onclick="window.location.href='oral-exam.html'" id="tab_oral-exam"><span class="kanji" style="color:#e85454">🎤</span>Oral Exam</button><button class="nav-tab" style="color:#e85a2a" onclick="window.location.href='exam-ch456.html'" id="tab_exam-sim"><span class="kanji" style="color:#e85a2a">📝</span>Exam Sim</button><button class="nav-tab" style="color:#5ba8e8;border-bottom-color:transparent" onclick="window.location.href='reading.html'" id="tab_reading"><span class="kanji" style="color:#5ba8e8">読</span>Reading</button><button class="nav-tab" style="color:var(--gold-bright);border-bottom-color:transparent" onclick="window.location.href='kanji.html'" id="tab_kanji"><span class="kanji" style="color:var(--gold-bright)">&#28450;&#23383;</span>Kanji</button><button class="nav-tab ref-tab" onclick="showChapter('ref-numbers')" id="tab_ref-numbers"><span class="kanji">数</span>Numbers & Time</button><button class="nav-tab ref-tab" onclick="showChapter('ref-patterns')" id="tab_ref-patterns"><span class="kanji">文</span>Patterns</button><button class="nav-tab ref-tab" onclick="showChapter('ref-conv')" id="tab_ref-conv"><span class="kanji">話</span>Conversations</button><button class="nav-tab ref-tab" onclick="showChapter('ref-struct')" id="tab_ref-struct"><span class="kanji">構</span>Structure</button><button class="nav-tab ref-tab" style="color:#9eccff;border-bottom-color:transparent" onclick="showChapter('ref-vocab')" id="tab_ref-vocab"><span class="kanji" style="color:#9eccff">語</span>Vocab Atlas</button><button class="nav-tab" style="color:#c8a2ff;border-bottom-color:transparent" onclick="showChapter('flashcards')" id="tab_flashcards"><span class="kanji" style="color:#c8a2ff">札</span>Flashcards</button><button class="nav-tab ref-tab" style="color:var(--text-dim)" onclick="showChapter('cheatsheet')" id="tab_cheatsheet"><span class="kanji" style="color:var(--text-dim)">📋</span>Cheat Sheet</button></div></div><div class="main-container">
 <div class="chapter-panel" id="panel_ch1">
   <div class="ch-title">第一章 — THE JAPANESE SOUND SYSTEM</div>
   <div class="ch-subtitle">Ch 1: Sounds & Hiragana · 42 vocabulary items</div>
@@ -2531,10 +2522,10 @@ body::before {
       <tbody>
         <tr><td><b>Vowels</b></td><td><span lang="ja">あ</span></td><td><span lang="ja">い</span></td><td><span lang="ja">う</span></td><td><span lang="ja">え</span></td><td><span lang="ja">お</span></td><td><span lang="ja">う</span> = relaxed lips!</td></tr>
         <tr><td><b>K</b></td><td><span lang="ja">か</span></td><td><span lang="ja">き</span></td><td><span lang="ja">く</span></td><td><span lang="ja">け</span></td><td><span lang="ja">こ</span></td><td>&mdash;</td></tr>
-        <tr><td><b>S</b></td><td><span lang="ja">さ</span></td><td style="background:rgba(212,168,67,0.12)"><span lang="ja">し</span> <b>shi</b></td><td><span lang="ja">す</span></td><td><span lang="ja">せ</span></td><td><span lang="ja">そ</span></td><td><span lang="ja">し</span> not "si"</td></tr>
-        <tr><td><b>T</b></td><td><span lang="ja">た</span></td><td style="background:rgba(212,168,67,0.12)"><span lang="ja">ち</span> <b>chi</b></td><td style="background:rgba(212,168,67,0.12)"><span lang="ja">つ</span> <b>tsu</b></td><td><span lang="ja">て</span></td><td><span lang="ja">と</span></td><td>2 irregulars!</td></tr>
+        <tr><td><b>S</b></td><td><span lang="ja">さ</span></td><td style="background:rgba(232,90,42,0.12)"><span lang="ja">し</span> <b>shi</b></td><td><span lang="ja">す</span></td><td><span lang="ja">せ</span></td><td><span lang="ja">そ</span></td><td><span lang="ja">し</span> not "si"</td></tr>
+        <tr><td><b>T</b></td><td><span lang="ja">た</span></td><td style="background:rgba(232,90,42,0.12)"><span lang="ja">ち</span> <b>chi</b></td><td style="background:rgba(232,90,42,0.12)"><span lang="ja">つ</span> <b>tsu</b></td><td><span lang="ja">て</span></td><td><span lang="ja">と</span></td><td>2 irregulars!</td></tr>
         <tr><td><b>N</b></td><td><span lang="ja">な</span></td><td><span lang="ja">に</span></td><td><span lang="ja">ぬ</span></td><td><span lang="ja">ね</span></td><td><span lang="ja">の</span></td><td>&mdash;</td></tr>
-        <tr><td><b>H</b></td><td><span lang="ja">は</span></td><td><span lang="ja">ひ</span></td><td style="background:rgba(212,168,67,0.12)"><span lang="ja">ふ</span> <b>fu</b></td><td><span lang="ja">へ</span></td><td><span lang="ja">ほ</span></td><td><span lang="ja">ふ</span> = blow candle</td></tr>
+        <tr><td><b>H</b></td><td><span lang="ja">は</span></td><td><span lang="ja">ひ</span></td><td style="background:rgba(232,90,42,0.12)"><span lang="ja">ふ</span> <b>fu</b></td><td><span lang="ja">へ</span></td><td><span lang="ja">ほ</span></td><td><span lang="ja">ふ</span> = blow candle</td></tr>
       </tbody>
     </table>
   </div>
@@ -2566,7 +2557,7 @@ body::before {
             <tr><td style="padding:6px;border:1px solid #ddd;font-weight:bold;background:rgba(124,111,247,0.08)">y</td><td style="padding:8px;border:1px solid #ddd;font-size:18px"><span lang="ja">や</span></td><td style="padding:8px;border:1px solid #ddd;font-size:12px;color:#999">&mdash;</td><td style="padding:8px;border:1px solid #ddd;font-size:18px"><span lang="ja">ゆ</span></td><td style="padding:8px;border:1px solid #ddd;font-size:12px;color:#999">&mdash;</td><td style="padding:8px;border:1px solid #ddd;font-size:18px"><span lang="ja">よ</span></td></tr>
             <tr><td style="padding:6px;border:1px solid #ddd;font-weight:bold;background:rgba(124,111,247,0.08)">r</td><td style="padding:8px;border:1px solid #ddd;font-size:18px"><span lang="ja">ら</span></td><td style="padding:8px;border:1px solid #ddd;font-size:18px"><span lang="ja">り</span></td><td style="padding:8px;border:1px solid #ddd;font-size:18px"><span lang="ja">る</span></td><td style="padding:8px;border:1px solid #ddd;font-size:18px"><span lang="ja">れ</span></td><td style="padding:8px;border:1px solid #ddd;font-size:18px"><span lang="ja">ろ</span></td></tr>
             <tr><td style="padding:6px;border:1px solid #ddd;font-weight:bold;background:rgba(124,111,247,0.08)">w</td><td style="padding:8px;border:1px solid #ddd;font-size:18px"><span lang="ja">わ</span></td><td style="padding:8px;border:1px solid #ddd;font-size:12px;color:#999">&mdash;</td><td style="padding:8px;border:1px solid #ddd;font-size:12px;color:#999">&mdash;</td><td style="padding:8px;border:1px solid #ddd;font-size:12px;color:#999">&mdash;</td><td style="padding:8px;border:1px solid #ddd;font-size:18px;color:#dc3545"><span lang="ja">を</span> <small>(particle)</small></td></tr>
-            <tr><td style="padding:6px;border:1px solid #ddd;font-weight:bold;background:rgba(124,111,247,0.08)">n</td><td colspan="5" style="padding:8px;border:1px solid #ddd;font-size:18px;background:rgba(212,168,67,0.12)"><span lang="ja">ん</span> &mdash; standalone consonant, never starts a word</td></tr>
+            <tr><td style="padding:6px;border:1px solid #ddd;font-weight:bold;background:rgba(124,111,247,0.08)">n</td><td colspan="5" style="padding:8px;border:1px solid #ddd;font-size:18px;background:rgba(232,90,42,0.12)"><span lang="ja">ん</span> &mdash; standalone consonant, never starts a word</td></tr>
           </tbody>
         </table>
         <div style="margin-top:6px;font-size:11px;color:#dc3545;text-align:center"><b>を</b> is pronounced "o" but written with w-row. <b>R-row</b> sounds like "tt" in "butter".</div>
@@ -2632,7 +2623,7 @@ body::before {
                 <span lang="ja">ほ(ho)→<b style="color:#2a9d8f">ぽ(po)</b></span>
               </div>
             </div>
-            <div style="margin-top:10px;padding:8px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px">
+            <div style="margin-top:10px;padding:8px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px">
               <b>Duplicate sounds:</b><br>
               <span lang="ja">じ</span> (ji) = <span lang="ja">ぢ</span> (ji) — use <span lang="ja">じ</span> 95%<br>
               <span lang="ja">ず</span> (zu) = <span lang="ja">づ</span> (zu) — use <span lang="ja">ず</span> 95%
@@ -2656,8 +2647,8 @@ body::before {
       <thead><tr><th>Base Row</th><th>Mark</th><th>Result</th><th>a</th><th>i</th><th>u</th><th>e</th><th>o</th></tr></thead>
       <tbody>
         <tr><td><b>K &rarr; G</b></td><td>゛</td><td>Voiced</td><td><span lang="ja">が</span> ga</td><td><span lang="ja">ぎ</span> gi</td><td><span lang="ja">ぐ</span> gu</td><td><span lang="ja">げ</span> ge</td><td><span lang="ja">ご</span> go</td></tr>
-        <tr><td><b>S &rarr; Z</b></td><td>゛</td><td>Voiced</td><td><span lang="ja">ざ</span> za</td><td style="background:rgba(212,168,67,0.12)"><span lang="ja">じ</span> <b>ji</b></td><td><span lang="ja">ず</span> zu</td><td><span lang="ja">ぜ</span> ze</td><td><span lang="ja">ぞ</span> zo</td></tr>
-        <tr><td><b>T &rarr; D</b></td><td>゛</td><td>Voiced</td><td><span lang="ja">だ</span> da</td><td style="background:rgba(212,168,67,0.12)"><span lang="ja">ぢ</span> <b>ji</b></td><td style="background:rgba(212,168,67,0.12)"><span lang="ja">づ</span> <b>zu</b></td><td><span lang="ja">で</span> de</td><td><span lang="ja">ど</span> do</td></tr>
+        <tr><td><b>S &rarr; Z</b></td><td>゛</td><td>Voiced</td><td><span lang="ja">ざ</span> za</td><td style="background:rgba(232,90,42,0.12)"><span lang="ja">じ</span> <b>ji</b></td><td><span lang="ja">ず</span> zu</td><td><span lang="ja">ぜ</span> ze</td><td><span lang="ja">ぞ</span> zo</td></tr>
+        <tr><td><b>T &rarr; D</b></td><td>゛</td><td>Voiced</td><td><span lang="ja">だ</span> da</td><td style="background:rgba(232,90,42,0.12)"><span lang="ja">ぢ</span> <b>ji</b></td><td style="background:rgba(232,90,42,0.12)"><span lang="ja">づ</span> <b>zu</b></td><td><span lang="ja">で</span> de</td><td><span lang="ja">ど</span> do</td></tr>
         <tr><td><b>H &rarr; B</b></td><td>゛</td><td>Voiced</td><td><span lang="ja">ば</span> ba</td><td><span lang="ja">び</span> bi</td><td><span lang="ja">ぶ</span> bu</td><td><span lang="ja">べ</span> be</td><td><span lang="ja">ぼ</span> bo</td></tr>
         <tr><td><b>H &rarr; P</b></td><td>゜</td><td>Popped</td><td><span lang="ja">ぱ</span> pa</td><td><span lang="ja">ぴ</span> pi</td><td><span lang="ja">ぷ</span> pu</td><td><span lang="ja">ぺ</span> pe</td><td><span lang="ja">ぽ</span> po</td></tr>
       </tbody>
@@ -2977,7 +2968,7 @@ body::before {
             <div style="padding:5px 6px;background:rgba(91,168,232,0.08);border-radius:6px;text-align:center">
               <b>Superior/Prof</b><br><span lang="ja">しつれい します</span><br><span style="color:#888;font-size:11px">"Pardon my rudeness"</span>
             </div>
-            <div style="padding:5px 6px;background:rgba(212,168,67,0.08);border-radius:6px;text-align:center">
+            <div style="padding:5px 6px;background:rgba(232,90,42,0.08);border-radius:6px;text-align:center">
               <b>Friends</b><br><span lang="ja">じゃあ、また</span><br><span style="color:#888;font-size:11px">"See ya!"</span>
             </div>
             <div style="padding:5px 6px;background:rgba(124,111,247,0.06);border-radius:6px;text-align:center">
@@ -3488,7 +3479,7 @@ body::before {
             </div>
           </div>
         </div>
-        <div style="margin-top:10px;padding:8px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:8px;font-size:12px;text-align:center">
+        <div style="margin-top:10px;padding:8px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:8px;font-size:12px;text-align:center">
           <b>Memory:</b> 4, 7, 9 are the "cursed numbers" — they ALWAYS have irregular readings with counters.
         </div>
       </div>
@@ -3967,8 +3958,8 @@ body::before {
         <tr><td>aa</td><td><span lang="ja">あ</span></td><td><span lang="ja">おかあさん</span></td><td>okaasan (mother)</td><td>&mdash;</td><td>&mdash;</td></tr>
         <tr><td>ii</td><td><span lang="ja">い</span></td><td><span lang="ja">おにいさん</span></td><td>oniisan (older brother)</td><td>&mdash;</td><td>&mdash;</td></tr>
         <tr><td>uu</td><td><span lang="ja">う</span></td><td><span lang="ja">くうこう</span></td><td>kuukou (airport)</td><td>&mdash;</td><td>&mdash;</td></tr>
-        <tr style="background:rgba(212,168,67,0.12)"><td>ee</td><td><span lang="ja">い</span> (surprising!)</td><td><span lang="ja">せんせい</span></td><td>sensee (teacher)</td><td><span lang="ja">え</span> (rare)</td><td><span lang="ja">おねえさん</span> (onesan, older sister)</td></tr>
-        <tr style="background:rgba(212,168,67,0.12)"><td>oo</td><td><span lang="ja">う</span> (surprising!)</td><td><span lang="ja">おとうさん</span></td><td>otousan (father)</td><td><span lang="ja">お</span> (rare)</td><td><span lang="ja">おおきい</span> (ookii, big), <span lang="ja">とおい</span> (tooi, far)</td></tr>
+        <tr style="background:rgba(232,90,42,0.12)"><td>ee</td><td><span lang="ja">い</span> (surprising!)</td><td><span lang="ja">せんせい</span></td><td>sensee (teacher)</td><td><span lang="ja">え</span> (rare)</td><td><span lang="ja">おねえさん</span> (onesan, older sister)</td></tr>
+        <tr style="background:rgba(232,90,42,0.12)"><td>oo</td><td><span lang="ja">う</span> (surprising!)</td><td><span lang="ja">おとうさん</span></td><td>otousan (father)</td><td><span lang="ja">お</span> (rare)</td><td><span lang="ja">おおきい</span> (ookii, big), <span lang="ja">とおい</span> (tooi, far)</td></tr>
       </tbody>
     </table>
 
@@ -4356,8 +4347,8 @@ body::before {
     <table>
       <thead><tr><th>Pair</th><th>Character 1</th><th>Character 2</th><th>How to Tell Apart</th></tr></thead>
       <tbody>
-        <tr style="background:rgba(212,168,67,0.12)"><td><b><span lang="ja">シ</span> vs <span lang="ja">ツ</span></b></td><td><span lang="ja" style="font-size:24px">シ</span> (shi)</td><td><span lang="ja" style="font-size:24px">ツ</span> (tsu)</td><td><span lang="ja">シ</span>: dots go LEFT-to-RIGHT, curve sweeps UP. <span lang="ja">ツ</span>: dots go TOP-to-BOTTOM, curve sweeps DOWN.</td></tr>
-        <tr style="background:rgba(212,168,67,0.12)"><td><b><span lang="ja">ン</span> vs <span lang="ja">ソ</span></b></td><td><span lang="ja" style="font-size:24px">ン</span> (n)</td><td><span lang="ja" style="font-size:24px">ソ</span> (so)</td><td><span lang="ja">ン</span>: dot LOW-LEFT, stroke goes UP-right. <span lang="ja">ソ</span>: dot HIGH-LEFT, stroke goes DOWN-right.</td></tr>
+        <tr style="background:rgba(232,90,42,0.12)"><td><b><span lang="ja">シ</span> vs <span lang="ja">ツ</span></b></td><td><span lang="ja" style="font-size:24px">シ</span> (shi)</td><td><span lang="ja" style="font-size:24px">ツ</span> (tsu)</td><td><span lang="ja">シ</span>: dots go LEFT-to-RIGHT, curve sweeps UP. <span lang="ja">ツ</span>: dots go TOP-to-BOTTOM, curve sweeps DOWN.</td></tr>
+        <tr style="background:rgba(232,90,42,0.12)"><td><b><span lang="ja">ン</span> vs <span lang="ja">ソ</span></b></td><td><span lang="ja" style="font-size:24px">ン</span> (n)</td><td><span lang="ja" style="font-size:24px">ソ</span> (so)</td><td><span lang="ja">ン</span>: dot LOW-LEFT, stroke goes UP-right. <span lang="ja">ソ</span>: dot HIGH-LEFT, stroke goes DOWN-right.</td></tr>
         <tr><td><b><span lang="ja">ウ</span> vs <span lang="ja">ワ</span></b></td><td><span lang="ja" style="font-size:24px">ウ</span> (u)</td><td><span lang="ja" style="font-size:24px">ワ</span> (wa)</td><td><span lang="ja">ウ</span> has 3 strokes (top dot). <span lang="ja">ワ</span> has 2 strokes (no top dot).</td></tr>
         <tr><td><b><span lang="ja">ク</span> vs <span lang="ja">タ</span></b></td><td><span lang="ja" style="font-size:24px">ク</span> (ku)</td><td><span lang="ja" style="font-size:24px">タ</span> (ta)</td><td><span lang="ja">タ</span> has horizontal crossbar. <span lang="ja">ク</span> does not.</td></tr>
         <tr><td><b><span lang="ja">ヌ</span> vs <span lang="ja">ス</span></b></td><td><span lang="ja" style="font-size:24px">ヌ</span> (nu)</td><td><span lang="ja" style="font-size:24px">ス</span> (su)</td><td><span lang="ja">ヌ</span> has a loop. <span lang="ja">ス</span> has a straight cross.</td></tr>
@@ -4572,7 +4563,7 @@ body::before {
           <div style="padding:6px;background:rgba(220,53,69,0.1);border-radius:6px;border:2px solid #dc3545"><b>This week</b><br><span lang="ja" style="color:#dc3545;font-weight:bold">こんしゅう</span></div>
           <div style="padding:6px;background:rgba(42,157,143,0.08);border-radius:6px"><b>Next week</b><br><span lang="ja">らいしゅう</span></div>
         </div>
-        <div style="margin-top:8px;padding:6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
+        <div style="margin-top:8px;padding:6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
           <b>Rule:</b> Relative time words (きょう, あした, etc.) do NOT take the particle <span lang="ja">に</span>. Only absolute times (はちじ, げつようび) take <span lang="ja">に</span>.
         </div>
       </div>
@@ -4904,7 +4895,7 @@ body::before {
             </div>
           </div>
         </div>
-        <div style="margin-top:10px;padding:8px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:8px;font-size:11px;text-align:center">
+        <div style="margin-top:10px;padding:8px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:8px;font-size:11px;text-align:center">
           <b>に vs で Quick Rule:</b> Being there? → <span lang="ja">に</span> &nbsp;|&nbsp; Doing something there? → <span lang="ja">で</span>
         </div>
       </div>
@@ -4996,7 +4987,7 @@ body::before {
         <tr style="background:rgba(78,207,122,0.08)"><td>Always</td><td><span lang="ja">いつも</span></td><td>always</td><td>100%</td><td>Affirmative (<span lang="ja">〜ます</span>)</td><td>Before verb</td></tr>
         <tr style="background:rgba(78,207,122,0.08)"><td>Usually</td><td><span lang="ja">たいてい</span></td><td>usually</td><td>~80%</td><td>Affirmative (<span lang="ja">〜ます</span>)</td><td>Before verb</td></tr>
         <tr style="background:rgba(78,207,122,0.08)"><td>Often</td><td><span lang="ja">よく</span></td><td>often</td><td>~60%</td><td>Affirmative (<span lang="ja">〜ます</span>)</td><td>Before verb</td></tr>
-        <tr style="background:rgba(212,168,67,0.06)"><td>Sometimes</td><td><span lang="ja">ときどき</span></td><td>sometimes</td><td>~40%</td><td>Affirmative (<span lang="ja">〜ます</span>)</td><td>Before verb or sentence start</td></tr>
+        <tr style="background:rgba(232,90,42,0.06)"><td>Sometimes</td><td><span lang="ja">ときどき</span></td><td>sometimes</td><td>~40%</td><td>Affirmative (<span lang="ja">〜ます</span>)</td><td>Before verb or sentence start</td></tr>
         <tr style="background:rgba(232,84,84,0.08)"><td>Not often</td><td><span lang="ja">あまり</span></td><td>not very often</td><td>~20%</td><td><b>NEGATIVE only</b> (<span lang="ja">〜ません</span>)</td><td>Before verb</td></tr>
         <tr style="background:rgba(232,84,84,0.08)"><td>Never</td><td><span lang="ja">ぜんぜん</span></td><td>not at all</td><td>0%</td><td><b>NEGATIVE only</b> (<span lang="ja">〜ません</span>)</td><td>Before verb</td></tr>
       </tbody>
@@ -5093,7 +5084,7 @@ body::before {
             </div>
           </div>
         </div>
-        <div style="margin-top:8px;padding:6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
+        <div style="margin-top:8px;padding:6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
           <b>Past negative</b> is always 〜ません<b>でした</b>. Never 〜ませんです.
         </div>
       </div>
@@ -5257,7 +5248,7 @@ body::before {
             </div>
           </div>
         </div>
-        <div style="margin-top:8px;padding:6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
+        <div style="margin-top:8px;padding:6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
           <b>Pattern:</b> [Place] <span lang="ja">に</span> [Thing] <span lang="ja">が</span> あります/います &nbsp;|&nbsp; Plants are alive but use <span lang="ja">あります</span> (they don't move!)
         </div>
       </div>
@@ -5303,32 +5294,32 @@ body::before {
               <td style="padding:8px;border:1px solid #ddd;background:rgba(69,123,157,0.06)"><span lang="ja" style="color:#457b9d;font-size:16px">これ</span><br><small>this one</small></td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(220,53,69,0.06)"><span lang="ja" style="color:#dc3545;font-size:16px">それ</span><br><small>that one</small></td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(42,157,143,0.06)"><span lang="ja" style="color:#2a9d8f;font-size:16px">あれ</span><br><small>that one (far)</small></td>
-              <td style="padding:8px;border:1px solid #ddd;background:rgba(212,168,67,0.12)"><span lang="ja" style="font-size:16px">どれ</span><br><small>which one?</small></td>
+              <td style="padding:8px;border:1px solid #ddd;background:rgba(232,90,42,0.12)"><span lang="ja" style="font-size:16px">どれ</span><br><small>which one?</small></td>
             </tr>
             <tr>
               <td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:rgba(124,111,247,0.08)">Thing+Noun<br>(modifier)</td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(69,123,157,0.06)"><span lang="ja" style="color:#457b9d;font-size:16px">この</span>N</td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(220,53,69,0.06)"><span lang="ja" style="color:#dc3545;font-size:16px">その</span>N</td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(42,157,143,0.06)"><span lang="ja" style="color:#2a9d8f;font-size:16px">あの</span>N</td>
-              <td style="padding:8px;border:1px solid #ddd;background:rgba(212,168,67,0.12)"><span lang="ja" style="font-size:16px">どの</span>N</td>
+              <td style="padding:8px;border:1px solid #ddd;background:rgba(232,90,42,0.12)"><span lang="ja" style="font-size:16px">どの</span>N</td>
             </tr>
             <tr>
               <td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:rgba(124,111,247,0.08)">Place</td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(69,123,157,0.06)"><span lang="ja" style="color:#457b9d;font-size:16px">ここ</span><br><small>here</small></td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(220,53,69,0.06)"><span lang="ja" style="color:#dc3545;font-size:16px">そこ</span><br><small>there</small></td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(42,157,143,0.06)"><span lang="ja" style="color:#2a9d8f;font-size:16px">あそこ</span><br><small>over there</small></td>
-              <td style="padding:8px;border:1px solid #ddd;background:rgba(212,168,67,0.12)"><span lang="ja" style="font-size:16px">どこ</span><br><small>where?</small></td>
+              <td style="padding:8px;border:1px solid #ddd;background:rgba(232,90,42,0.12)"><span lang="ja" style="font-size:16px">どこ</span><br><small>where?</small></td>
             </tr>
             <tr>
               <td style="padding:8px;border:1px solid #ddd;font-weight:bold;background:rgba(124,111,247,0.08)">Direction</td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(69,123,157,0.06)"><span lang="ja" style="color:#457b9d;font-size:16px">こちら</span><br><small>this way</small></td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(220,53,69,0.06)"><span lang="ja" style="color:#dc3545;font-size:16px">そちら</span><br><small>that way</small></td>
               <td style="padding:8px;border:1px solid #ddd;background:rgba(42,157,143,0.06)"><span lang="ja" style="color:#2a9d8f;font-size:16px">あちら</span><br><small>that way (far)</small></td>
-              <td style="padding:8px;border:1px solid #ddd;background:rgba(212,168,67,0.12)"><span lang="ja" style="font-size:16px">どちら</span><br><small>which way?</small></td>
+              <td style="padding:8px;border:1px solid #ddd;background:rgba(232,90,42,0.12)"><span lang="ja" style="font-size:16px">どちら</span><br><small>which way?</small></td>
             </tr>
           </tbody>
         </table>
-        <div style="margin-top:8px;padding:6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
+        <div style="margin-top:8px;padding:6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
           <b>これ/それ/あれ</b> stand ALONE. <b>この/その/あの</b> MUST attach to a noun. "これほん" ❌ "このほん" ✅
         </div>
       </div>
@@ -5444,7 +5435,7 @@ body::before {
                 <b>Past:</b> drop い, add かったです<br>
                 <span lang="ja" style="color:#457b9d">おおき<b>かったです</b></span>
               </div>
-              <div style="padding:5px 6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px">
+              <div style="padding:5px 6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px">
                 <b>⚠ いい is IRREGULAR</b><br>
                 いいです → <span lang="ja" style="color:#dc3545"><b>よく</b>ありません</span><br>
                 いいです → <span lang="ja" style="color:#dc3545"><b>よかった</b>です</span>
@@ -5471,7 +5462,7 @@ body::before {
                 <b>Past:</b> adj + でした<br>
                 <span lang="ja" style="color:#dc3545">きれい<b>でした</b></span>
               </div>
-              <div style="padding:5px 6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px">
+              <div style="padding:5px 6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px">
                 <b>⚠ FAKE い-adjectives!</b><br>
                 <span lang="ja" style="color:#dc3545">きれい、ゆうめい、きらい</span><br>
                 <span style="color:#888">End in い but are な-adjectives!</span><br>
@@ -5639,7 +5630,7 @@ body::before {
             </div>
           </div>
         </div>
-        <div style="margin-top:8px;padding:6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
+        <div style="margin-top:8px;padding:6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
           <b>ね</b> with new info = weird &nbsp;|&nbsp; <b>よ</b> with shared info = bossy. Match particle to context!
         </div>
       </div>
@@ -6095,7 +6086,7 @@ body::before {
             <span lang="ja" style="color:#27ae60;font-weight:bold">ちかく</span><br><span style="color:#888">near/vicinity</span>
           </div>
         </div>
-        <div style="margin-top:8px;padding:6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
+        <div style="margin-top:8px;padding:6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
           <b>Pattern:</b> [Place] <span lang="ja">の</span> [Position] <span lang="ja">に</span> [Thing] <span lang="ja">が</span> あります/います &nbsp;|&nbsp; <b>となり</b>=same category, <b>よこ</b>=different category
         </div>
       </div>
@@ -6178,7 +6169,7 @@ body::before {
             </div>
           </div>
         </div>
-        <div style="margin-top:8px;padding:6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
+        <div style="margin-top:8px;padding:6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px;font-size:11px;text-align:center">
           <b>この/その/あの</b> MUST have a noun after them. "このは..." ❌ WRONG. Use これ if no noun follows.
         </div>
       </div>
@@ -6341,7 +6332,7 @@ body::before {
                 <span style="color:#888">"about 2 hours"</span><br>
                 <span style="color:#dc3545">⚠ Duration/quantity ONLY!</span>
               </div>
-              <div style="padding:5px 6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px">
+              <div style="padding:5px 6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px">
                 <b>❌ Never mix them!</b><br>
                 <span lang="ja" style="color:#dc3545">くじぐらい</span> ❌<br>
                 <span lang="ja" style="color:#dc3545">にじかんごろ</span> ❌
@@ -6899,13 +6890,13 @@ body::before {
           <td>にぎやか<b>でした</b></td>
           <td>にぎやか<b>じゃなかったです</b></td>
         </tr>
-        <tr style="background:rgba(212,168,67,0.12);">
+        <tr style="background:rgba(232,90,42,0.12);">
           <td><b>Irregular</b></td>
           <td><b>いいです</b></td>
           <td><b>よかったです</b></td>
           <td><b>よくなかったです</b></td>
         </tr>
-        <tr style="background:rgba(212,168,67,0.12);">
+        <tr style="background:rgba(232,90,42,0.12);">
           <td><b>Sneaky な</b></td>
           <td><b>きれいです</b></td>
           <td><b>きれいでした</b></td>
@@ -7106,7 +7097,7 @@ body::before {
         <tr><td>Group 2</td><td>Any</td><td>〜て</td><td><span lang="ja">たべます &rarr; たべて</span> / <span lang="ja">みます &rarr; みて</span></td></tr>
         <tr style="background:rgba(78,207,122,0.08)"><td colspan="4"><b>Group 3 (Irregular) &mdash; Memorize</b></td></tr>
         <tr><td>Group 3</td><td><span lang="ja">き/し</span></td><td>〜て</td><td><span lang="ja">きます &rarr; きて</span> / <span lang="ja">します &rarr; して</span></td></tr>
-        <tr style="background:rgba(212,168,67,0.12)"><td colspan="4"><b>Group 1 (う-verbs) &mdash; Rules vary by final sound</b></td></tr>
+        <tr style="background:rgba(232,90,42,0.12)"><td colspan="4"><b>Group 1 (う-verbs) &mdash; Rules vary by final sound</b></td></tr>
         <tr><td>Group 1</td><td><span lang="ja">し</span></td><td><span lang="ja">して</span></td><td><span lang="ja">はなします &rarr; はなして</span></td></tr>
         <tr><td>Group 1</td><td><span lang="ja">き</span></td><td><span lang="ja">いて</span></td><td><span lang="ja">ききます &rarr; きいて</span></td></tr>
         <tr><td>Group 1</td><td><span lang="ja">ぎ</span></td><td><span lang="ja">いで</span></td><td><span lang="ja">およぎます &rarr; およいで</span></td></tr>
@@ -7346,7 +7337,7 @@ body::before {
                 <span lang="ja" style="color:#2a9d8f">せんせい<b>と</b>はなします</span><br>
                 <span style="color:#888">"I talk WITH the teacher."</span>
               </div>
-              <div style="padding:5px 6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px">
+              <div style="padding:5px 6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px">
                 <b>❌ Never use と to connect verbs!</b><br>
                 <span style="color:#888">Use て-form instead.</span>
               </div>
@@ -7397,7 +7388,7 @@ body::before {
             <tr><td>Noun</td><td>Noun + で</td><td class="ja">がくせい<b>で</b>、にほんじんです</td><td>student AND Japanese</td></tr>
           </tbody>
         </table>
-        <div style="margin-top:12px;padding:10px 14px;background:rgba(212,168,67,0.07);border-left:3px solid var(--gold-dark);border-radius:0 6px 6px 0;font-size:12px;line-height:1.8">
+        <div style="margin-top:12px;padding:10px 14px;background:rgba(232,90,42,0.07);border-left:3px solid var(--gold-dark);border-radius:0 6px 6px 0;font-size:12px;line-height:1.8">
           <b style="color:var(--gold)">TENSE RULE:</b> Tense lives only on the <b>final</b> word.<br>
           <span lang="ja">おおきくて、きれい<b>でした</b></span> = "was big and pretty" ✓<br>
           <span lang="ja" style="color:#e55">おおき<b>かったくて</b></span> = ✗ (never put past tense on a chained adjective)
@@ -7474,7 +7465,7 @@ body::before {
                 <span lang="ja" style="color:#dc3545">すみません、ちょっとつごうがわるくて。</span><br>
                 <span style="color:#888">"Sorry, it's a bit inconvenient..."</span>
               </div>
-              <div style="padding:5px 6px;background:rgba(212,168,67,0.12);border:1px solid #f0a500;border-radius:6px">
+              <div style="padding:5px 6px;background:rgba(232,90,42,0.12);border:1px solid #f0a500;border-radius:6px">
                 <b>Never say flat "いいえ"!</b><br>
                 <span style="color:#888">Always soften rejections in Japanese.</span>
               </div>
@@ -8007,12 +7998,12 @@ body::before {
         <tr><th>#</th><th>Japanese</th><th>Reading</th><th>Notes</th></tr>
         <tr><td>100</td><td>百</td><td>ひゃく</td><td></td></tr>
         <tr><td>200</td><td>二百</td><td>にひゃく</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>300</td><td>三百</td><td><b>さんびゃく</b></td><td>Sound change!</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>300</td><td>三百</td><td><b>さんびゃく</b></td><td>Sound change!</td></tr>
         <tr><td>400</td><td>四百</td><td>よんひゃく</td><td></td></tr>
         <tr><td>500</td><td>五百</td><td>ごひゃく</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>600</td><td>六百</td><td><b>ろっぴゃく</b></td><td>Sound change!</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>600</td><td>六百</td><td><b>ろっぴゃく</b></td><td>Sound change!</td></tr>
         <tr><td>700</td><td>七百</td><td>ななひゃく</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>800</td><td>八百</td><td><b>はっぴゃく</b></td><td>Sound change!</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>800</td><td>八百</td><td><b>はっぴゃく</b></td><td>Sound change!</td></tr>
         <tr><td>900</td><td>九百</td><td>きゅうひゃく</td><td></td></tr>
       </table>
 
@@ -8021,12 +8012,12 @@ body::before {
         <tr><th>#</th><th>Japanese</th><th>Reading</th><th>Notes</th></tr>
         <tr><td>1,000</td><td>千</td><td>せん</td><td></td></tr>
         <tr><td>2,000</td><td>二千</td><td>にせん</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>3,000</td><td>三千</td><td><b>さんぜん</b></td><td>Sound change!</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>3,000</td><td>三千</td><td><b>さんぜん</b></td><td>Sound change!</td></tr>
         <tr><td>4,000</td><td>四千</td><td>よんせん</td><td></td></tr>
         <tr><td>5,000</td><td>五千</td><td>ごせん</td><td></td></tr>
         <tr><td>6,000</td><td>六千</td><td>ろくせん</td><td></td></tr>
         <tr><td>7,000</td><td>七千</td><td>ななせん</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>8,000</td><td>八千</td><td><b>はっせん</b></td><td>Sound change!</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>8,000</td><td>八千</td><td><b>はっせん</b></td><td>Sound change!</td></tr>
         <tr><td>9,000</td><td>九千</td><td>きゅうせん</td><td></td></tr>
         <tr><td>10,000</td><td>一万</td><td>いちまん</td><td></td></tr>
       </table>
@@ -8037,22 +8028,22 @@ body::before {
         <tr><td>1 hour</td><td>いちじかん</td><td></td></tr>
         <tr><td>2 hours</td><td>にじかん</td><td></td></tr>
         <tr><td>3 hours</td><td>さんじかん</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>4 hours</td><td><b>よじかん</b></td><td>NOT よんじかん</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>4 hours</td><td><b>よじかん</b></td><td>NOT よんじかん</td></tr>
         <tr><td>5 hours</td><td>ごじかん</td><td></td></tr>
         <tr><td>6 hours</td><td>ろくじかん</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>7 hours</td><td><b>しちじかん</b></td><td>NOT ななじかん</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>7 hours</td><td><b>しちじかん</b></td><td>NOT ななじかん</td></tr>
         <tr><td>8 hours</td><td>はちじかん</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>9 hours</td><td><b>くじかん</b></td><td>NOT きゅうじかん</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>9 hours</td><td><b>くじかん</b></td><td>NOT きゅうじかん</td></tr>
         <tr><td>10 hours</td><td>じゅうじかん</td><td></td></tr>
       </table>
 
       <h3 style="color: var(--gold);">Minutes (ふん / ぷん)</h3>
       <table>
         <tr><th>Min</th><th>Japanese</th><th>Min</th><th>Japanese</th></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>1</td><td><b>いっぷん</b></td><td>6</td><td><b>ろっぷん</b></td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>1</td><td><b>いっぷん</b></td><td>6</td><td><b>ろっぷん</b></td></tr>
         <tr><td>2</td><td>にふん</td><td>7</td><td>ななふん</td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>3</td><td><b>さんぷん</b></td><td>8</td><td><b>はっぷん / はちふん</b></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>4</td><td><b>よんぷん</b></td><td>9</td><td>きゅうふん</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>3</td><td><b>さんぷん</b></td><td>8</td><td><b>はっぷん / はちふん</b></td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>4</td><td><b>よんぷん</b></td><td>9</td><td>きゅうふん</td></tr>
         <tr><td>5</td><td>ごふん</td><td>10</td><td><b>じゅっぷん / じっぷん</b></td></tr>
       </table>
 
@@ -8069,17 +8060,17 @@ body::before {
       <h3 style="color: var(--gold);">Age (さい)</h3>
       <table>
         <tr><th>Age</th><th>Japanese</th><th>Notes</th></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>1</td><td><b>いっさい</b></td><td>Sound change</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>1</td><td><b>いっさい</b></td><td>Sound change</td></tr>
         <tr><td>2</td><td>にさい</td><td></td></tr>
         <tr><td>3</td><td>さんさい</td><td></td></tr>
         <tr><td>4</td><td>よんさい</td><td></td></tr>
         <tr><td>5</td><td>ごさい</td><td></td></tr>
         <tr><td>6</td><td>ろくさい</td><td></td></tr>
         <tr><td>7</td><td>ななさい</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>8</td><td><b>はっさい</b></td><td>Sound change</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>8</td><td><b>はっさい</b></td><td>Sound change</td></tr>
         <tr><td>9</td><td>きゅうさい</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>10</td><td><b>じゅっさい</b></td><td>Sound change</td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>20</td><td><b>はたち</b></td><td>Completely irregular!</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>10</td><td><b>じゅっさい</b></td><td>Sound change</td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>20</td><td><b>はたち</b></td><td>Completely irregular!</td></tr>
       </table>
 
       <h3 style="color: var(--gold);">Approximation</h3>
@@ -8280,7 +8271,7 @@ body::before {
         <tr><td>う-verb (い/ち/り)</td><td>→ って</td><td>まちます → まって</td></tr>
         <tr><td>う-verb (み/び/に)</td><td>→ んで</td><td>よみます → よんで</td></tr>
         <tr><td>Irregular</td><td>きます → きて, します → して</td><td></td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>EXCEPTION</td><td>いきます → いって (NOT いきて)</td><td></td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>EXCEPTION</td><td>いきます → いって (NOT いきて)</td><td></td></tr>
       </table>
 
       <h4>G2: Adjective Past Tense</h4>
@@ -8288,7 +8279,7 @@ body::before {
         <tr><th>Type</th><th>Past (+)</th><th>Past (-)</th></tr>
         <tr><td>い-adj</td><td>〜かったです</td><td>〜くなかったです</td></tr>
         <tr><td>な-adj / Noun</td><td>〜でした</td><td>〜じゃなかったです</td></tr>
-        <tr style="background:rgba(212,168,67,0.12);"><td>いい (irregular)</td><td><b>よかったです</b></td><td><b>よくなかったです</b></td></tr>
+        <tr style="background:rgba(232,90,42,0.12);"><td>いい (irregular)</td><td><b>よかったです</b></td><td><b>よくなかったです</b></td></tr>
       </table>
 
       <h4>G3: Adjective て-Form (Connecting)</h4>
@@ -9744,7 +9735,7 @@ body::before {
       <tr><th>Verb (dict)</th><th>Class</th><th><span lang="ja">ます</span></th><th><span lang="ja">ません</span></th><th><span lang="ja">ました</span></th><th><span lang="ja">ませんでした</span></th><th><span lang="ja">て</span>-form</th><th>Ch</th></tr>
       <tr><td><span lang="ja" class="ja">たべる</span></td><td>v2 (<span lang="ja">る</span>)</td><td><span lang="ja">たべます</span></td><td><span lang="ja">たべません</span></td><td><span lang="ja">たべました</span></td><td><span lang="ja">たべませんでした</span></td><td><span lang="ja">たべて</span></td><td>3</td></tr>
       <tr><td><span lang="ja" class="ja">のむ</span></td><td>v1 (<span lang="ja">う</span>)</td><td><span lang="ja">のみます</span></td><td><span lang="ja">のみません</span></td><td><span lang="ja">のみました</span></td><td><span lang="ja">のみませんでした</span></td><td><span lang="ja">のんで</span></td><td>3</td></tr>
-      <tr><td><span lang="ja" class="ja">いく</span></td><td>v1 (<span lang="ja">う</span>)</td><td><span lang="ja">いきます</span></td><td><span lang="ja">いきません</span></td><td><span lang="ja">いきました</span></td><td><span lang="ja">いきませんでした</span></td><td style="background:rgba(212,168,67,0.12);font-weight:bold"><span lang="ja">いって</span> &#9888;&#65039;</td><td>3</td></tr>
+      <tr><td><span lang="ja" class="ja">いく</span></td><td>v1 (<span lang="ja">う</span>)</td><td><span lang="ja">いきます</span></td><td><span lang="ja">いきません</span></td><td><span lang="ja">いきました</span></td><td><span lang="ja">いきませんでした</span></td><td style="background:rgba(232,90,42,0.12);font-weight:bold"><span lang="ja">いって</span> &#9888;&#65039;</td><td>3</td></tr>
       <tr><td><span lang="ja" class="ja">くる</span></td><td>v3 (irr)</td><td><span lang="ja">きます</span></td><td><span lang="ja">きません</span></td><td><span lang="ja">きました</span></td><td><span lang="ja">きませんでした</span></td><td><span lang="ja">きて</span></td><td>3</td></tr>
       <tr><td><span lang="ja" class="ja">かえる</span></td><td>v1 (<span lang="ja">う</span>)</td><td><span lang="ja">かえります</span></td><td><span lang="ja">かえりません</span></td><td><span lang="ja">かえりました</span></td><td><span lang="ja">かえりませんでした</span></td><td><span lang="ja">かえって</span></td><td>3</td></tr>
       <tr><td><span lang="ja" class="ja">よむ</span></td><td>v1 (<span lang="ja">う</span>)</td><td><span lang="ja">よみます</span></td><td><span lang="ja">よみません</span></td><td><span lang="ja">よみました</span></td><td><span lang="ja">よみませんでした</span></td><td><span lang="ja">よんで</span></td><td>3</td></tr>
@@ -9893,9 +9884,9 @@ body::before {
       <tr><td><span lang="ja" class="ja">あたらしい</span></td><td><span lang="ja">い</span>-adj</td><td><span lang="ja">あたらしいです</span></td><td><span lang="ja">あたらしくないです</span></td><td><span lang="ja">あたらしかったです</span></td><td><span lang="ja">あたらしくなかったです</span></td><td><span lang="ja">あたらしくて</span></td><td>4</td></tr>
       <tr><td><span lang="ja" class="ja">たかい</span></td><td><span lang="ja">い</span>-adj</td><td><span lang="ja">たかいです</span></td><td><span lang="ja">たかくないです</span></td><td><span lang="ja">たかかったです</span></td><td><span lang="ja">たかくなかったです</span></td><td><span lang="ja">たかくて</span></td><td>4</td></tr>
       <tr><td><span lang="ja" class="ja">やすい</span></td><td><span lang="ja">い</span>-adj</td><td><span lang="ja">やすいです</span></td><td><span lang="ja">やすくないです</span></td><td><span lang="ja">やすかったです</span></td><td><span lang="ja">やすくなかったです</span></td><td><span lang="ja">やすくて</span></td><td>4</td></tr>
-      <tr style="background:rgba(212,168,67,0.12)"><td><span lang="ja" class="ja">いい</span> &#9888;&#65039;</td><td><span lang="ja">い</span>-adj</td><td><span lang="ja">いいです</span></td><td><span lang="ja">よくないです</span></td><td><span lang="ja">よかったです</span></td><td><span lang="ja">よくなかったです</span></td><td><span lang="ja">よくて</span></td><td>4</td></tr>
+      <tr style="background:rgba(232,90,42,0.12)"><td><span lang="ja" class="ja">いい</span> &#9888;&#65039;</td><td><span lang="ja">い</span>-adj</td><td><span lang="ja">いいです</span></td><td><span lang="ja">よくないです</span></td><td><span lang="ja">よかったです</span></td><td><span lang="ja">よくなかったです</span></td><td><span lang="ja">よくて</span></td><td>4</td></tr>
       <tr><td><span lang="ja" class="ja">たのしい</span></td><td><span lang="ja">い</span>-adj</td><td><span lang="ja">たのしいです</span></td><td><span lang="ja">たのしくないです</span></td><td><span lang="ja">たのしかったです</span></td><td><span lang="ja">たのしくなかったです</span></td><td><span lang="ja">たのしくて</span></td><td>6</td></tr>
-      <tr style="background:rgba(212,168,67,0.12)"><td><span lang="ja" class="ja">きれい（な）</span> &#9888;&#65039;</td><td><span lang="ja">な</span>-adj</td><td><span lang="ja">きれいです</span></td><td><span lang="ja">きれいじゃありません</span></td><td><span lang="ja">きれいでした</span></td><td><span lang="ja">きれいじゃありませんでした</span></td><td><span lang="ja">きれいで</span></td><td>4</td></tr>
+      <tr style="background:rgba(232,90,42,0.12)"><td><span lang="ja" class="ja">きれい（な）</span> &#9888;&#65039;</td><td><span lang="ja">な</span>-adj</td><td><span lang="ja">きれいです</span></td><td><span lang="ja">きれいじゃありません</span></td><td><span lang="ja">きれいでした</span></td><td><span lang="ja">きれいじゃありませんでした</span></td><td><span lang="ja">きれいで</span></td><td>4</td></tr>
       <tr><td><span lang="ja" class="ja">しずか（な）</span></td><td><span lang="ja">な</span>-adj</td><td><span lang="ja">しずかです</span></td><td><span lang="ja">しずかじゃありません</span></td><td><span lang="ja">しずかでした</span></td><td><span lang="ja">しずかじゃありませんでした</span></td><td><span lang="ja">しずかで</span></td><td>4</td></tr>
       <tr><td><span lang="ja" class="ja">ゆうめい（な）</span></td><td><span lang="ja">な</span>-adj</td><td><span lang="ja">ゆうめいです</span></td><td><span lang="ja">ゆうめいじゃありません</span></td><td><span lang="ja">ゆうめいでした</span></td><td><span lang="ja">ゆうめいじゃありませんでした</span></td><td><span lang="ja">ゆうめいで</span></td><td>4</td></tr>
     </table>
@@ -9964,8 +9955,8 @@ body::before {
       <tr><td><span lang="ja" class="ja">たいてい</span></td><td>taitei</td><td>usually</td><td>~90%</td><td>affirmative (<span lang="ja">ます</span>)</td><td>3</td></tr>
       <tr><td><span lang="ja" class="ja">よく</span></td><td>yoku</td><td>often</td><td>~70%</td><td>affirmative (<span lang="ja">ます</span>)</td><td>3</td></tr>
       <tr><td><span lang="ja" class="ja">ときどき</span></td><td>tokidoki</td><td>sometimes</td><td>~30%</td><td>affirmative (<span lang="ja">ます</span>)</td><td>3</td></tr>
-      <tr style="background:rgba(212,168,67,0.12)"><td><span lang="ja" class="ja">あまり</span></td><td>amari</td><td>not very often</td><td>~10%</td><td>NEGATIVE (<span lang="ja">ません</span>) &#9888;&#65039;</td><td>3</td></tr>
-      <tr style="background:rgba(212,168,67,0.12)"><td><span lang="ja" class="ja">ぜんぜん</span></td><td>zenzen</td><td>never / not at all</td><td>0%</td><td>NEGATIVE (<span lang="ja">ません</span>) &#9888;&#65039;</td><td>3</td></tr>
+      <tr style="background:rgba(232,90,42,0.12)"><td><span lang="ja" class="ja">あまり</span></td><td>amari</td><td>not very often</td><td>~10%</td><td>NEGATIVE (<span lang="ja">ません</span>) &#9888;&#65039;</td><td>3</td></tr>
+      <tr style="background:rgba(232,90,42,0.12)"><td><span lang="ja" class="ja">ぜんぜん</span></td><td>zenzen</td><td>never / not at all</td><td>0%</td><td>NEGATIVE (<span lang="ja">ません</span>) &#9888;&#65039;</td><td>3</td></tr>
     </table>
     <div class="trap">&#9888;&#65039; <span lang="ja">あまり</span> and <span lang="ja">ぜんぜん</span> ALWAYS require negative verb — never use with <span lang="ja">ます</span></div>
   </div>
@@ -9979,7 +9970,7 @@ body::before {
     <h3 style="color:var(--gold);margin:14px 0 6px 0;font-size:14px;">Relative Time (NO <span lang="ja">に</span>)</h3>
     <table>
       <tr><th>JP</th><th>Romaji</th><th>EN</th><th>Particle <span lang="ja">に</span> needed?</th><th>Ch</th></tr>
-      <tr><td><span lang="ja" class="ja">きょう</span></td><td>kyou</td><td>today</td><td style="background:rgba(212,168,67,0.12);font-weight:bold">NO &#9888;&#65039;</td><td>3</td></tr>
+      <tr><td><span lang="ja" class="ja">きょう</span></td><td>kyou</td><td>today</td><td style="background:rgba(232,90,42,0.12);font-weight:bold">NO &#9888;&#65039;</td><td>3</td></tr>
       <tr><td><span lang="ja" class="ja">あした</span></td><td>ashita</td><td>tomorrow</td><td>NO</td><td>3</td></tr>
       <tr><td><span lang="ja" class="ja">きのう</span></td><td>kinou</td><td>yesterday</td><td>NO</td><td>3</td></tr>
       <tr><td><span lang="ja" class="ja">おととい</span></td><td>ototoi</td><td>day before yesterday</td><td>NO</td><td>3</td></tr>
@@ -10022,7 +10013,7 @@ body::before {
       <tr><td><span lang="ja" class="ja">ひだり</span></td><td>hidari</td><td>left side</td><td>[reference]<span lang="ja">の ひだりに</span></td><td>5</td></tr>
       <tr><td><span lang="ja" class="ja">なか</span></td><td>naka</td><td>inside</td><td>[reference]<span lang="ja">の なかに</span></td><td>5</td></tr>
       <tr><td><span lang="ja" class="ja">そと</span></td><td>soto</td><td>outside</td><td>[reference]<span lang="ja">の そとに</span></td><td>5</td></tr>
-      <tr style="background:rgba(212,168,67,0.12)"><td><span lang="ja" class="ja">となり</span></td><td>tonari</td><td>next to (SAME type)</td><td>same category items only &#9888;&#65039;</td><td>5</td></tr>
+      <tr style="background:rgba(232,90,42,0.12)"><td><span lang="ja" class="ja">となり</span></td><td>tonari</td><td>next to (SAME type)</td><td>same category items only &#9888;&#65039;</td><td>5</td></tr>
       <tr><td><span lang="ja" class="ja">よこ</span></td><td>yoko</td><td>next to (DIFFERENT type)</td><td>different category items</td><td>5</td></tr>
       <tr><td><span lang="ja" class="ja">ちかく</span></td><td>chikaku</td><td>nearby</td><td>[reference]<span lang="ja">の ちかくに</span></td><td>5</td></tr>
     </table>
@@ -10084,13 +10075,13 @@ body::before {
 <div class="oe-score-bar">
 <div style="width:10%;background:#b088f9;"></div>
 <div style="width:20%;background:#5ba8e8;"></div>
-<div style="width:50%;background:#d4a843;"></div>
+<div style="width:50%;background:#e85a2a;"></div>
 <div style="width:20%;background:#4ecf7a;"></div>
 </div>
 <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;font-size:11px;margin-bottom:14px;">
 <span style="color:#b088f9;">■ Self-Intro 10pts</span>
 <span style="color:#5ba8e8;">■ Dialogue 20pts</span>
-<span style="color:#d4a843;">■ Locations 50pts</span>
+<span style="color:#e85a2a;">■ Locations 50pts</span>
 <span style="color:#4ecf7a;">■ Q&A 20pts</span>
 </div>
 
@@ -10522,10 +10513,10 @@ body::before {
 <div style="overflow-x:auto;">
 <table style="width:100%;border-collapse:collapse;font-size:13px;">
 <thead><tr>
-<th style="background:linear-gradient(135deg,var(--gold-dark),#6b5518);color:var(--white);padding:8px;border:1px solid var(--border);">Polite</th>
-<th style="background:linear-gradient(135deg,var(--gold-dark),#6b5518);color:var(--white);padding:8px;border:1px solid var(--border);">Past</th>
+<th style="background:linear-gradient(135deg,var(--gold-dark),#a83218);color:var(--white);padding:8px;border:1px solid var(--border);">Polite</th>
+<th style="background:linear-gradient(135deg,var(--gold-dark),#a83218);color:var(--white);padding:8px;border:1px solid var(--border);">Past</th>
 <th style="background:linear-gradient(135deg,#1a6b3a,#2d8a4e);color:var(--white);padding:8px;border:1px solid var(--border);">て-form</th>
-<th style="background:linear-gradient(135deg,var(--gold-dark),#6b5518);color:var(--white);padding:8px;border:1px solid var(--border);">English</th>
+<th style="background:linear-gradient(135deg,var(--gold-dark),#a83218);color:var(--white);padding:8px;border:1px solid var(--border);">English</th>
 </tr></thead>
 <tbody>
 <tr><td style="padding:6px;border:1px solid var(--border);">たべます</td><td style="padding:6px;border:1px solid var(--border);">たべました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">たべて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">eat</td></tr>
@@ -12548,7 +12539,7 @@ function loadStrokeOrderSVGs(text) {
           .replace(/stroke="#?000(000)?"/gi, 'stroke="#e0ddd5"')
           .replace(/fill\s*:\s*#?000(000)?/gi, 'fill:#e0ddd5')
           .replace(/fill="#?000(000)?"/gi, 'fill="#e0ddd5"');
-        s = s.replace(/<text([^>]*)>/gi, '<text$1 fill="#d4a843" style="fill:#d4a843;font-weight:bold">');
+        s = s.replace(/<text([^>]*)>/gi, '<text$1 fill="#e85a2a" style="fill:#e85a2a;font-weight:bold">');
         s = s.replace(/<svg/, '<svg style="width:100%;height:100%"');
         container.innerHTML = s;
       })
@@ -13024,7 +13015,7 @@ function initDrawCanvas(canvasId, checkBtnId) {
     ctx.restore();
     ctx.fillStyle = '#050508';
     ctx.fillRect(0, 0, rect.width, rect.height);
-    ctx.fillStyle = '#d4a843';
+    ctx.fillStyle = '#e85a2a';
     // Draw completed strokes
     for (const pts of state.strokes) {
       const outline = PF.getStroke(pts, strokeOpts);
@@ -14674,7 +14665,7 @@ document.addEventListener('keydown', function(e) {
 <style>
 .streak-bar{position:fixed;bottom:0;left:0;right:0;background:#111;border-top:1px solid #2a2a2a;display:flex;align-items:center;justify-content:center;gap:18px;padding:8px 16px;z-index:999;font-family:'DM Sans',sans-serif;font-size:12px}
 .streak-bar .sb-item{display:flex;align-items:center;gap:5px;color:#999}
-.streak-bar .sb-val{color:#f0c85a;font-weight:700;font-size:14px}
+.streak-bar .sb-val{color:#e85a2a;font-weight:700;font-size:14px}
 .streak-bar .sb-fire{font-size:16px}
 @media(max-width:480px){.streak-bar{gap:10px;font-size:11px}.streak-bar .sb-val{font-size:12px}}
 </style>
@@ -15216,18 +15207,25 @@ document.addEventListener('keydown', function(e) {
     const cs = getCardState(card);
     const intervals = previewIntervals(cs);
 
-    // Each script row is individually clickable — tap to hear that specific form.
-    // data-speak attribute holds the text to send to speakJP; event delegation
-    // catches the click on any .fc-script-row inside the card area.
+    // Featured display: show the most prominent Japanese form large at the top.
+    // Kanji takes priority as the canonical written form; fall back to katakana, then hiragana.
+    const featuredText = card.kanji || card.katakana || card.hiragana || '';
+    const featuredClass = card.kanji ? 'fc-featured' : card.katakana ? 'fc-featured fc-featured-kata' : 'fc-featured fc-featured-hira';
+    const featuredBlock = featuredText
+      ? `<div class="${featuredClass}" data-speak="${escAttr(featuredText)}" role="button" tabindex="0" aria-label="Play pronunciation">${escHTML(featuredText)}</div>`
+      : '';
+
+    // Secondary script rows: show any forms NOT used as the featured display.
     let scriptRows = '';
-    if (card.hiragana) {
-      scriptRows += `<div class="fc-script-row" data-speak="${escAttr(card.hiragana)}" role="button" tabindex="0" aria-label="Play hiragana pronunciation"><span class="fc-script-lbl">Hiragana</span><span class="fc-script-val">${escHTML(card.hiragana)}</span><span class="fc-tap-hint">tap to hear</span></div>`;
+    if (card.hiragana && card.kanji) {
+      scriptRows += `<div class="fc-script-row" data-speak="${escAttr(card.hiragana)}" role="button" tabindex="0" aria-label="Play hiragana pronunciation"><span class="fc-script-lbl">読み</span><span class="fc-script-val">${escHTML(card.hiragana)}</span></div>`;
+    } else if (card.hiragana && !card.kanji && card.katakana && card.katakana !== card.hiragana) {
+      scriptRows += `<div class="fc-script-row" data-speak="${escAttr(card.hiragana)}" role="button" tabindex="0" aria-label="Play hiragana pronunciation"><span class="fc-script-lbl">ひらがな</span><span class="fc-script-val">${escHTML(card.hiragana)}</span></div>`;
     }
-    if (card.katakana && card.katakana !== card.hiragana) {
-      scriptRows += `<div class="fc-script-row kata" data-speak="${escAttr(card.katakana)}" role="button" tabindex="0" aria-label="Play katakana pronunciation"><span class="fc-script-lbl">Katakana</span><span class="fc-script-val">${escHTML(card.katakana)}</span><span class="fc-tap-hint">tap to hear</span></div>`;
-    }
-    if (card.kanji) {
-      scriptRows += `<div class="fc-script-row kanji" data-speak="${escAttr(card.kanji)}" role="button" tabindex="0" aria-label="Play kanji pronunciation"><span class="fc-script-lbl">Kanji</span><span class="fc-script-val">${escHTML(card.kanji)}</span><span class="fc-tap-hint">tap to hear</span></div>`;
+    if (card.katakana && card.katakana !== card.hiragana && !card.kanji) {
+      // katakana IS the featured — no secondary row needed
+    } else if (card.katakana && card.katakana !== card.hiragana && card.kanji) {
+      scriptRows += `<div class="fc-script-row kata" data-speak="${escAttr(card.katakana)}" role="button" tabindex="0" aria-label="Play katakana pronunciation"><span class="fc-script-lbl">カタカナ</span><span class="fc-script-val">${escHTML(card.katakana)}</span></div>`;
     }
 
     const chapterBadge = card.chapter ? `<div class="fc-chapter-badge">Ch ${escHTML(card.chapter)}</div>` : '';
@@ -15246,10 +15244,11 @@ document.addEventListener('keydown', function(e) {
       <div class="fc-card fc-back">
         ${chapterBadge}
         <div class="fc-prompt">Answer · ${escHTML(card.source)}</div>
+        ${featuredBlock}
+        <div class="fc-en-confirm">${escHTML(card.english)}</div>
+        ${card.romaji ? `<div class="fc-romaji">${escHTML(card.romaji)}</div>` : ''}
         ${posBadge}
         ${scriptRows}
-        ${card.romaji ? `<div class="fc-romaji">${escHTML(card.romaji)}</div>` : ''}
-        <div class="fc-en-confirm">${escHTML(card.english)}</div>
         ${mnemonicBlock}
         ${exampleBlock}
         <button class="ut-speak" style="margin-top:14px" data-speak="${escAttr(speakable)}" id="fc-listen-btn">🔊 Listen</button>
