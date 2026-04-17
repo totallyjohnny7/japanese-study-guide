@@ -13226,7 +13226,12 @@ function globalSearchHandler(query) {
   if (!searchIdx.length) buildSearchIndex();
   
   // Search across all fields — works for English, romaji, hiragana, katakana, kanji
+  // Cards: only match jp (kana/kanji extracted from card) + title — not body text (causes false positives)
   const matches = searchIdx.filter(item => {
+    if (item.type === 'card') {
+      return (item.jp && item.jp.toLowerCase().includes(q)) ||
+             (item.title && item.title.toLowerCase().includes(q));
+    }
     return (item.jp && item.jp.toLowerCase().includes(q)) ||
            (item.en && item.en.toLowerCase().includes(q)) ||
            (item.reading && item.reading.toLowerCase().includes(q)) ||
@@ -14077,9 +14082,11 @@ function floatSearchHandler(query) {
     else if (enClean.includes(q)) score += 30;
     else if ((item.title || '').toLowerCase().includes(q)) score += 15;
 
-    // Boost vocab over cards
-    if (item.type === 'vocab') score += 5;
-    else if (item.type === 'dialogue') score += 2;
+    // Boost vocab over cards (tie-breaker — only when there's an actual match)
+    if (score > 0) {
+      if (item.type === 'vocab') score += 5;
+      else if (item.type === 'dialogue') score += 2;
+    }
 
     return { item, score };
   }).filter(s => s.score > 0).sort((a, b) => b.score - a.score);
@@ -14094,7 +14101,7 @@ function floatSearchHandler(query) {
     return;
   }
 
-  const chNames = {ch1:'Ch 1',ch2:'Ch 2',ch3:'Ch 3',ch4:'Ch 4',ch5:'Ch 5',ch6:'Ch 6','oral-exam':'Oral Exam','ref-vocab':'Vocab Atlas'};
+  const chNames = {ch1:'Ch 1',ch2:'Ch 2',ch3:'Ch 3',ch4:'Ch 4',ch5:'Ch 5',ch6:'Ch 6','oral-exam':'Oral Exam','ref-vocab':'Vocab Atlas','ref-numbers':'Numbers & Time','ref-patterns':'Patterns','ref-conv':'Conversations','ref-struct':'Structure'};
 
   let h = '';
   shown.forEach(({item: m}) => {
