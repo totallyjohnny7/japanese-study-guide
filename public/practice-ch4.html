@@ -117,14 +117,22 @@ textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,
 .match-timer{font-size:28px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;}
 @media(hover:none){.btn:hover{transform:none;filter:none}.kana-key:hover,.kana-key:active{background:var(--card);color:var(--text);border-color:var(--border)}.match-card:hover{border-color:var(--border);background:var(--surface)}}
 
-/* ═══ SWIPE v3 ═══ */
+/* ═══ SWIPE v4 ═══ */
 .swipe-ov{position:absolute;top:0;right:0;bottom:0;left:0;border-radius:inherit;opacity:0;pointer-events:none;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;font-size:36px;font-weight:900;letter-spacing:2px;-webkit-user-select:none;user-select:none;}
 .swipe-pass{background:rgba(46,204,113,.3);color:#2ecc71;}
 .swipe-fail{background:rgba(231,76,60,.3);color:#e74c3c;}
 .swipe-hint{display:none;position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:11px;color:var(--dim,#555);letter-spacing:1.5px;pointer-events:none;-webkit-user-select:none;user-select:none;}
 @media(hover:none){
   .swipe-hint{display:block;}
-  #mainArea .card.center{min-height:62vh;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:pan-y;-webkit-user-select:none;user-select:none;}
+  #mainArea .card.center{
+    min-height:62vh;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+    -webkit-user-select:none;
+    user-select:none;
+    will-change:transform;
+  }
 }
 
 </style>
@@ -1135,64 +1143,63 @@ setTimeout(injectIMEBar,200);
 
 
 
-// ═══ SWIPE GESTURES v3 ═══
+// ═══ SWIPE GESTURES v4 ═══
 (function(){
-  var THR=60,MIN=8;
+  var THR=60, MOVE=5;
+
   function attachSwipe(card){
-    if(card._sw)return;card._sw=true;
-    card.style.position='relative';card.style.overflow='hidden';
-    var ov=document.createElement('div');ov.className='swipe-ov';card.appendChild(ov);
-    var hint=document.createElement('div');hint.className='swipe-hint';card.appendChild(hint);
-    function isBack(){return!!document.querySelector('#mainArea .btn[onclick*="flashGrade"]');}
-    hint.textContent=isBack()?'← miss  ·  pass →':'tap to reveal';
+    if(card._sw)return; card._sw=true;
+    card.style.position='relative';
 
-    // tap reveals answer on front card
-    card.addEventListener('click',function(e){
-      if(e.target.closest&&e.target.closest('button'))return;
-      if(!isBack()&&typeof showFlashBack==='function')showFlashBack(document.getElementById('mainArea'));
-    });
+    var ov=document.createElement('div'); ov.className='swipe-ov'; card.appendChild(ov);
+    var hint=document.createElement('div'); hint.className='swipe-hint'; card.appendChild(hint);
 
-    var sx=0,sy=0,dx=0,dy=0,dir=null,live=false;
+    // Capture once — won't change while this card is in DOM
+    var back=!!document.querySelector('#mainArea .btn[onclick*="flashGrade"]');
+    hint.textContent=back?'← miss  ·  pass →':'tap to reveal';
+
+    if(!back){
+      // Front card: tap anywhere to reveal answer
+      card.addEventListener('click',function(e){
+        if(e.target.closest&&e.target.closest('button'))return;
+        if(typeof showFlashBack==='function')showFlashBack(document.getElementById('mainArea'));
+      });
+      return; // no swipe on front
+    }
+
+    // Back card: horizontal swipe to grade (right=pass, left=miss)
+    var sx=0, dx=0, active=false;
 
     card.addEventListener('touchstart',function(e){
-      var t=e.touches[0];sx=t.clientX;sy=t.clientY;dx=0;dy=0;dir=null;live=true;
-    },{passive:true});
+      sx=e.touches[0].clientX; dx=0; active=true;
+    },{passive:false});
 
-    // NON-PASSIVE so we can preventDefault for horizontal swipe on iOS Safari
     card.addEventListener('touchmove',function(e){
-      if(!live)return;
-      var t=e.touches[0];
-      dx=t.clientX-sx;dy=t.clientY-sy;
-      var adx=Math.abs(dx),ady=Math.abs(dy);
-      if(!dir&&(adx>MIN||ady>MIN))dir=adx>=ady?'h':'v';
-      if(dir==='v')return; // let browser scroll vertically
-      if(dir==='h'){
-        e.preventDefault(); // block vertical scroll during horizontal swipe
-        if(!isBack())return; // front card — no swipe effect, handled by click
-        card.style.webkitTransform='translateX('+dx+'px) rotate('+(dx*0.04)+'deg)';
-        card.style.transform='translateX('+dx+'px) rotate('+(dx*0.04)+'deg)';
-        var p=Math.min(adx/THR,1);ov.style.opacity=p;
-        if(dx>0){ov.className='swipe-ov swipe-pass';ov.textContent='✓ PASS';}
-        else{ov.className='swipe-ov swipe-fail';ov.textContent='✗ MISS';}
-      }
-    },{passive:false,capture:false});
+      if(!active)return;
+      dx=e.touches[0].clientX-sx;
+      if(Math.abs(dx)<MOVE)return; // wait for clear horizontal intent
+      e.preventDefault(); // prevent iOS scroll as soon as we see horizontal motion
+      var t='translateX('+dx+'px) rotate('+(dx*0.04)+'deg)';
+      card.style.webkitTransform=t; card.style.transform=t;
+      var p=Math.min(Math.abs(dx)/THR,1); ov.style.opacity=p;
+      if(dx>0){ov.className='swipe-ov swipe-pass';ov.textContent='✓ PASS';}
+      else{ov.className='swipe-ov swipe-fail';ov.textContent='✗ MISS';}
+    },{passive:false});
 
     card.addEventListener('touchend',function(){
-      if(!live)return;live=false;
-      var adx=Math.abs(dx);
-      if(dir==='h'&&isBack()&&adx>=THR){
+      if(!active)return; active=false;
+      if(Math.abs(dx)>=THR){
         var grade=dx>0;
-        card.style.webkitTransition='transform .18s ease';card.style.transition='transform .18s ease';
-        card.style.webkitTransform='translateX('+(grade?500:-500)+'px) rotate('+(grade?25:-25)+'deg)';
-        card.style.transform='translateX('+(grade?500:-500)+'px) rotate('+(grade?25:-25)+'deg)';
+        var fly='translateX('+(grade?500:-500)+'px) rotate('+(grade?25:-25)+'deg)';
+        card.style.webkitTransition='transform .18s ease'; card.style.transition='transform .18s ease';
+        card.style.webkitTransform=fly; card.style.transform=fly;
         setTimeout(function(){flashGrade(grade);},180);
       } else {
-        card.style.webkitTransition='transform .22s ease';card.style.transition='transform .22s ease';
-        card.style.webkitTransform='';card.style.transform='';
-        ov.style.opacity=0;
+        card.style.webkitTransition='transform .22s ease'; card.style.transition='transform .22s ease';
+        card.style.webkitTransform=''; card.style.transform=''; ov.style.opacity=0;
         setTimeout(function(){if(card.style){card.style.webkitTransition='';card.style.transition='';}},230);
       }
-      dx=0;dy=0;dir=null;
+      dx=0;
     },{passive:true});
   }
 
@@ -1202,11 +1209,15 @@ setTimeout(injectIMEBar,200);
   });
   function init(){
     var m=document.getElementById('mainArea');
-    if(m){obs.observe(m,{childList:true,subtree:true});var c=document.querySelector('#mainArea .card.center');if(c)attachSwipe(c);}
+    if(!m)return;
+    obs.observe(m,{childList:true,subtree:true});
+    var c=document.querySelector('#mainArea .card.center');
+    if(c)attachSwipe(c);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
   else init();
 })();
+
 
 
 
