@@ -118,13 +118,17 @@ textarea.imp-area:focus{border-color:var(--accent);box-shadow:0 0 10px rgba(212,
 .cring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--text);}
 @media(max-width:600px){.autoplay-bar{gap:8px;padding:8px 12px;}.ap-hint{display:none;}}
 
-/* ═══ SWIPE ═══ */
-.swipe-ov{position:absolute;inset:0;border-radius:12px;opacity:0;pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;letter-spacing:2px;user-select:none;transition:opacity .05s;}
+/* ═══ SWIPE v2 ═══ */
+.swipe-ov{position:absolute;inset:0;border-radius:inherit;opacity:0;pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;letter-spacing:2px;user-select:none;}
 .swipe-pass{background:rgba(46,204,113,.28);color:#2ecc71;}
 .swipe-fail{background:rgba(231,76,60,.28);color:#e74c3c;}
+.swipe-hint{display:none;position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:11px;color:var(--dim,#555);letter-spacing:1.5px;pointer-events:none;}
 @media(hover:none){
-  .card.center{touch-action:pan-y;user-select:none;}
-  .swipe-hint{display:block!important;}
+  .swipe-hint{display:block;}
+  #mainArea.flash-active{position:fixed;inset:0;z-index:50;overflow-y:auto;background:var(--bg,#0d0d14);padding:12px 16px;box-sizing:border-box;}
+  #mainArea.flash-active .card.center{min-height:58vh;cursor:pointer;border-radius:16px;}
+}
+
 }
 .swipe-hint{display:none;position:absolute;bottom:7px;left:0;right:0;text-align:center;font-size:10px;color:var(--dim,#555);letter-spacing:1.5px;pointer-events:none;}
 
@@ -951,7 +955,7 @@ setTimeout(injectIMEBar,200);
 // 🃏 FLASHCARD + AUTOPLAY
 // ═══════════════════════════
 let autoPlay={on:false,speed:4.0,timer:null,phase:'front',elapsed:0};
-let fCards=[],fIdx=0,fScore=0,fResults=[];
+let fCards=[],fIdx=0,fScore=0,fResults=[],fRound=1;
 
 function getAutoplayBarHTML(){
   return `<div class="autoplay-bar">
@@ -964,7 +968,7 @@ function getAutoplayBarHTML(){
   </div>`;
 }
 
-function renderFlash(el){fCards=shuffle(DATA.vocab);fIdx=0;fScore=0;fResults=[];showFlashFront(el);}
+function renderFlash(el){fCards=shuffle(DATA.vocab);fIdx=0;fScore=0;fResults=[];fRound=1;showFlashFront(el);}
 
 function showFlashFront(el){
   if(fIdx>=fCards.length)return showFlashResults(el);
@@ -1025,18 +1029,19 @@ function showFlashResults(el){
   const missed=fResults.filter(r=>!r.correct);
   el.innerHTML=`
     <div class="center" style="margin-bottom:20px">
-      <div style="font-size:48px">${pct>=80?'🎉':pct>=50?'📝':'💪'}</div>
-      <div style="font-size:32px;font-weight:700">${fScore}/${fCards.length}</div>
+      <div style="font-size:48px">${fRound>1&&!missed.length?'🏆':pct>=80?'🎉':pct>=50?'📝':'💪'}</div>
+      ${fRound>1?'<div style="color:var(--muted);font-size:11px;margin-bottom:2px">Round '+fRound+'</div>':''}<div style="font-size:32px;font-weight:700">${fScore}/${fCards.length}</div>
       <div style="color:var(--muted);font-size:14px">${pct}%</div>
+      ${fRound>1&&!missed.length?'<div style="color:var(--green);font-weight:700;margin-top:6px">All mastered ✓</div>':''}
     </div>
     ${fResults.map(r=>`<div class="result-row" style="border-left:3px solid ${r.correct?'var(--green)':'var(--red)'}"><div><span style="color:#fff;font-size:13px">${esc(r.english)}</span><span style="color:var(--dim);font-size:11px;margin-left:8px">→ ${r.japanese}</span></div><div style="color:${r.correct?'var(--green)':'var(--red)'}">${r.correct?'✓':'✗'}</div></div>`).join('')}
-    ${missed.length?`<button class="btn w100 mt8" style="background:var(--red)" onclick="reReviewMissed($('mainArea'))">🔁 Re-review Missed (${missed.length})</button>`:''}
+    ${missed.length?`<button class="btn w100 mt8" style="background:var(--red)" onclick="reReviewMissed($('mainArea'))">🔁 Redo Missed (${missed.length})</button>`:''}
     <button class="btn w100 mt8" style="background:linear-gradient(135deg,#8b6d1e,var(--accent))" onclick="renderFlash($('mainArea'))">🔄 Restart All</button>`;
 }
 
 function reReviewMissed(el){
   const missed=fResults.filter(r=>!r.correct).map(r=>({english:r.english,japanese:r.japanese,reading:r.reading}));
-  fCards=shuffle(missed);fIdx=0;fScore=0;fResults=[];
+  fCards=shuffle(missed);fIdx=0;fScore=0;fResults=[];fRound++;
   showFlashFront(el);
 }
 
@@ -1071,62 +1076,44 @@ document.addEventListener('keydown',e=>{
 
 
 
-// ═══ SWIPE GESTURES ═══
+// ═══ SWIPE GESTURES v2 ═══
 (function(){
-  const THR=80;
+  const THR=75;
   function attachSwipe(card){
-    if(card._sw)return;
-    card._sw=true;
-    card.style.position='relative';
-    card.style.overflow='hidden';
-    // overlay
-    const ov=document.createElement('div');
-    ov.className='swipe-ov';
-    card.appendChild(ov);
-    // mobile hint
-    const hint=document.createElement('div');
-    hint.className='swipe-hint';
-    hint.textContent='← miss · pass →';
-    card.appendChild(hint);
+    if(card._sw)return;card._sw=true;
+    card.style.position='relative';card.style.overflow='hidden';
+    const ov=document.createElement('div');ov.className='swipe-ov';card.appendChild(ov);
+    const hint=document.createElement('div');hint.className='swipe-hint';card.appendChild(hint);
+    const isBack=()=>!!document.querySelector('#mainArea .btn[onclick*="flashGrade"]');
+    hint.textContent=isBack()?'← miss · pass →':'tap to reveal';
+
+    // tap-to-reveal on front card
+    card.addEventListener('click',e=>{
+      if(e.target.closest('button'))return;
+      if(!isBack()&&typeof showFlashBack==='function')showFlashBack(document.getElementById('mainArea'));
+    });
 
     let sx=0,sy=0,dx=0,live=false;
-
-    card.addEventListener('touchstart',e=>{
-      sx=e.touches[0].clientX;sy=e.touches[0].clientY;dx=0;live=true;
-    },{passive:true});
-
+    card.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;dx=0;live=true;},{passive:true});
     card.addEventListener('touchmove',e=>{
       if(!live)return;
       dx=e.touches[0].clientX-sx;
       const dy=Math.abs(e.touches[0].clientY-sy);
-      if(dy>Math.abs(dx)*1.5){live=false;card.style.transform='';ov.style.opacity=0;return;}
+      if(dy>Math.abs(dx)*1.3){live=false;card.style.transform='';ov.style.opacity=0;return;}
+      if(!isBack()){live=false;return;} // front: tap only, no swipe
       card.style.transform='translateX('+dx+'px) rotate('+(dx*0.04)+'deg)';
-      const p=Math.min(Math.abs(dx)/THR,1);
-      ov.style.opacity=p;
+      const p=Math.min(Math.abs(dx)/THR,1);ov.style.opacity=p;
       if(dx>0){ov.className='swipe-ov swipe-pass';ov.textContent='✓ PASS';}
       else{ov.className='swipe-ov swipe-fail';ov.textContent='✗ MISS';}
     },{passive:true});
-
     card.addEventListener('touchend',()=>{
-      if(!live){dx=0;return;}
-      live=false;
-      if(Math.abs(dx)>=THR){
-        const isBack=!!document.querySelector('#mainArea .btn[onclick*="flashGrade"]');
-        if(isBack){
-          // fly off screen, then grade
-          card.style.transition='transform .18s ease';
-          card.style.transform='translateX('+(dx>0?500:-500)+'px) rotate('+(dx>0?25:-25)+'deg)';
-          const grade=dx>0;
-          setTimeout(()=>flashGrade(grade),180);
-        } else {
-          // front side — swipe reveals answer regardless of direction
-          card.style.transform='';ov.style.opacity=0;
-          if(typeof showFlashBack==='function')showFlashBack(document.getElementById('mainArea'));
-        }
+      if(!live){dx=0;return;}live=false;
+      if(isBack()&&Math.abs(dx)>=THR){
+        card.style.transition='transform .18s ease';
+        card.style.transform='translateX('+(dx>0?500:-500)+'px) rotate('+(dx>0?25:-25)+'deg)';
+        const grade=dx>0;setTimeout(()=>flashGrade(grade),180);
       } else {
-        card.style.transition='transform .22s ease';
-        card.style.transform='';
-        ov.style.opacity=0;
+        card.style.transition='transform .22s ease';card.style.transform='';ov.style.opacity=0;
         setTimeout(()=>{if(card.style)card.style.transition='';},230);
       }
       dx=0;
@@ -1135,16 +1122,20 @@ document.addEventListener('keydown',e=>{
 
   const obs=new MutationObserver(()=>{
     const c=document.querySelector('#mainArea .card.center');
-    if(c)attachSwipe(c);
+    const m=document.getElementById('mainArea');
+    if(c){attachSwipe(c);if(m)m.classList.add('flash-active');}
+    else{if(m)m.classList.remove('flash-active');}
   });
   document.addEventListener('DOMContentLoaded',()=>{
     const m=document.getElementById('mainArea');
-    if(m)obs.observe(m,{childList:true,subtree:true});
-    // also try immediately in case card is already rendered
-    const c=document.querySelector('#mainArea .card.center');
-    if(c)attachSwipe(c);
+    if(m){
+      obs.observe(m,{childList:true,subtree:true});
+      const c=document.querySelector('#mainArea .card.center');
+      if(c){attachSwipe(c);m.classList.add('flash-active');}
+    }
   });
 })();
+
 
 </script>
 </body>
