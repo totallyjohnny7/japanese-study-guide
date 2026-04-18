@@ -2094,8 +2094,10 @@ body::before {
 .fc-sw-lbl{display:inline-block;-webkit-animation:fc-sw-pop .22s cubic-bezier(.34,1.56,.64,1) both;animation:fc-sw-pop .22s cubic-bezier(.34,1.56,.64,1) both;}
 .fc-sw-gp{-webkit-animation:fc-sw-gp .14s ease forwards;animation:fc-sw-gp .14s ease forwards;}
 .fc-sw-gf{-webkit-animation:fc-sw-gf .14s ease forwards;animation:fc-sw-gf .14s ease forwards;}
+.fc-swipe-dir-hint{display:none;text-align:center;font-size:10px;letter-spacing:1.5px;color:var(--muted,#555);margin-top:10px;pointer-events:none;-webkit-user-select:none;user-select:none;}
 @media(hover:none){
   #fc-card-area .fc-card{touch-action:manipulation;-webkit-user-select:none;user-select:none;will-change:transform;-webkit-tap-highlight-color:transparent;}
+  .fc-swipe-dir-hint{display:block;}
 }
 </style>
 </head>
@@ -15283,6 +15285,7 @@ document.addEventListener('keydown', function(e) {
           <button class="fc-rate-btn good"  onclick="fcGrade(3)">Good<span class="fc-key">[3]</span><span class="fc-interval">${intervals[3]}</span></button>
           <button class="fc-rate-btn easy"  onclick="fcGrade(4)">Easy<span class="fc-key">[4]</span><span class="fc-interval">${intervals[4]}</span></button>
         </div>
+        <div class="fc-swipe-dir-hint">← again &nbsp;·&nbsp; good →</div>
       </div>
     `;
 
@@ -15340,9 +15343,7 @@ document.addEventListener('keydown', function(e) {
         const reviewMissedBtn = missedCount > 0
           ? `<button class="fc-complete-btn danger" onclick="fcReviewMissed()">🔁 Review ${missedCount} Missed</button>`
           : '';
-        const studyAllBtn = hasMore
-          ? `<button class="fc-complete-btn${missedCount === 0 ? ' primary' : ''}" onclick="fcStudyAll()">📚 Study All ${total} Cards</button>`
-          : '';
+        const studyAllBtn = `<button class="fc-complete-btn${missedCount === 0 ? ' primary' : ''}" onclick="fcStudyAll()">📚 Study All ${total} Cards</button>`;
         const missedSummary = missedCount > 0
           ? ` <span style="color:var(--red)">${missedCount} marked Again.</span>`
           : '';
@@ -15350,7 +15351,7 @@ document.addEventListener('keydown', function(e) {
           <div class="fc-empty">
             <div class="fc-empty-icon">🎉</div>
             <div class="fc-empty-msg">Session complete!</div>
-            <div class="fc-empty-sub">${sessionRated} cards reviewed from ${escHTML(chapLabel)}.${missedSummary}${hasMore ? ` There are <b>${total}</b> total cards available.` : ''}</div>
+            <div class="fc-empty-sub">${sessionRated} cards reviewed from ${escHTML(chapLabel)}.${missedSummary}</div>
             <div class="fc-complete-actions">
               ${reviewMissedBtn}
               ${studyAllBtn}
