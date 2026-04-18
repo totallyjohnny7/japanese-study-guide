@@ -2080,6 +2080,23 @@ body::before {
   .view-btn:hover{color:var(--muted);background:none}
   .mode-btn:hover{color:var(--muted);background:var(--surface);border-color:var(--border)}
 }
+/* ── Flashcard swipe overlay ── */
+.fc-swipe-ov{position:absolute;top:0;right:0;bottom:0;left:0;border-radius:inherit;opacity:0;pointer-events:none;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;font-size:38px;font-weight:900;letter-spacing:3px;-webkit-user-select:none;user-select:none;}
+.fc-swipe-good{background:linear-gradient(135deg,rgba(46,204,113,.45) 0%,rgba(39,174,96,.3) 100%);color:#2ecc71;text-shadow:0 0 20px rgba(46,204,113,.8);}
+.fc-swipe-again{background:linear-gradient(135deg,rgba(231,76,60,.45) 0%,rgba(192,57,43,.3) 100%);color:#e74c3c;text-shadow:0 0 20px rgba(231,76,60,.8);}
+.fc-swipe-flip{background:rgba(168,130,255,.2);color:#a882ff;}
+@-webkit-keyframes fc-sw-pop{0%{-webkit-transform:scale(0.4);transform:scale(0.4);opacity:0;}65%{-webkit-transform:scale(1.25);transform:scale(1.25);}100%{-webkit-transform:scale(1);transform:scale(1);opacity:1;}}
+@keyframes fc-sw-pop{0%{transform:scale(0.4);opacity:0;}65%{transform:scale(1.25);}100%{transform:scale(1);opacity:1;}}
+@-webkit-keyframes fc-sw-gp{to{box-shadow:0 0 0 2px #2ecc71,0 0 28px rgba(46,204,113,.5);}}
+@keyframes fc-sw-gp{to{box-shadow:0 0 0 2px #2ecc71,0 0 28px rgba(46,204,113,.5);}}
+@-webkit-keyframes fc-sw-gf{to{box-shadow:0 0 0 2px #e74c3c,0 0 28px rgba(231,76,60,.5);}}
+@keyframes fc-sw-gf{to{box-shadow:0 0 0 2px #e74c3c,0 0 28px rgba(231,76,60,.5);}}
+.fc-sw-lbl{display:inline-block;-webkit-animation:fc-sw-pop .22s cubic-bezier(.34,1.56,.64,1) both;animation:fc-sw-pop .22s cubic-bezier(.34,1.56,.64,1) both;}
+.fc-sw-gp{-webkit-animation:fc-sw-gp .14s ease forwards;animation:fc-sw-gp .14s ease forwards;}
+.fc-sw-gf{-webkit-animation:fc-sw-gf .14s ease forwards;animation:fc-sw-gf .14s ease forwards;}
+@media(hover:none){
+  #fc-card-area .fc-card{touch-action:manipulation;-webkit-user-select:none;user-select:none;will-change:transform;-webkit-tap-highlight-color:transparent;}
+}
 </style>
 </head>
 <body>
@@ -15714,34 +15731,84 @@ document.addEventListener('keydown', function(e) {
 
   // ── Flashcard swipe (touch) ──────────────────────
   (function(){
-    const area = document.getElementById('fc-card-area');
+    var area = document.getElementById('fc-card-area');
     if (!area) return;
-    let startX = 0, startY = 0, dx = 0, swiping = false;
-    const THRESHOLD = 50;
-    area.addEventListener('touchstart', function(e) {
+    var THR = 60, MOVE = 8;
+    var sx = 0, sy = 0, dx = 0, active = false, lastDir = '';
+
+    function getCard(){ return area.querySelector('.fc-card'); }
+    function getOv(card){
+      var ov = card.querySelector('.fc-swipe-ov');
+      if (!ov){ ov = document.createElement('div'); ov.className = 'fc-swipe-ov'; card.appendChild(ov); }
+      return ov;
+    }
+
+    area.addEventListener('touchstart', function(e){
       if (e.touches.length !== 1) return;
-      startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-      dx = 0; swiping = false;
-    }, { passive: true });
-    area.addEventListener('touchmove', function(e) {
-      if (e.touches.length !== 1) return;
-      dx = e.touches[0].clientX - startX;
-      const dy = Math.abs(e.touches[0].clientY - startY);
-      if (Math.abs(dx) > dy && Math.abs(dx) > 10) { swiping = true; e.preventDefault(); }
+      var card = getCard(); if (!card) return;
+      card.style.webkitTransition = ''; card.style.transition = '';
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+      dx = 0; active = true; lastDir = '';
     }, { passive: false });
-    area.addEventListener('touchend', function() {
-      if (!swiping) return;
-      if (!currentCard) return;
-      if (!isFlipped) {
-        // Swipe on front = flip
-        window.fcFlip();
-      } else {
-        // Swipe left = Again (1), swipe right = Good (3)
-        if (dx < -THRESHOLD) window.fcGrade(1);
-        else if (dx > THRESHOLD) window.fcGrade(3);
+
+    area.addEventListener('touchmove', function(e){
+      if (!active || e.touches.length !== 1) return;
+      dx = e.touches[0].clientX - sx;
+      var dy = Math.abs(e.touches[0].clientY - sy);
+      if (dy > Math.abs(dx) * 1.5 && Math.abs(dx) < MOVE){ active = false; return; }
+      if (Math.abs(dx) < MOVE) return;
+      e.preventDefault();
+      var card = getCard(); if (!card) return;
+      var t = 'translateX('+dx+'px) rotate('+(dx*0.03)+'deg)';
+      card.style.webkitTransform = t; card.style.transform = t;
+      if (!isFlipped){
+        var ov = getOv(card);
+        ov.className = 'fc-swipe-ov fc-swipe-flip';
+        ov.innerHTML = '<span class="fc-sw-lbl">↻ FLIP</span>';
+        ov.style.opacity = Math.min(Math.abs(dx)/THR, 0.7);
+        return;
       }
+      var dir = dx > 0 ? 'good' : 'again';
+      var ov = getOv(card);
+      ov.style.opacity = Math.min(Math.abs(dx)/THR, 1);
+      if (dir !== lastDir){
+        lastDir = dir;
+        ov.className = 'fc-swipe-ov fc-swipe-'+dir;
+        ov.innerHTML = '<span class="fc-sw-lbl">'+(dir==='good'?'✓ GOOD':'✗ AGAIN')+'</span>';
+        card.classList.remove('fc-sw-gp','fc-sw-gf');
+        void card.offsetWidth;
+        card.classList.add(dir==='good'?'fc-sw-gp':'fc-sw-gf');
+      }
+    }, { passive: false });
+
+    area.addEventListener('touchend', function(){
+      if (!active) return; active = false;
+      var card = getCard(); if (!card) return;
+      card.classList.remove('fc-sw-gp','fc-sw-gf');
+      var ov = card.querySelector('.fc-swipe-ov');
+      if (!isFlipped){
+        card.style.webkitTransition = 'transform .2s ease'; card.style.transition = 'transform .2s ease';
+        card.style.webkitTransform = ''; card.style.transform = '';
+        if (ov) ov.style.opacity = 0;
+        if (Math.abs(dx) >= THR) setTimeout(function(){ window.fcFlip(); }, 180);
+        else setTimeout(function(){ if(card.style){card.style.webkitTransition='';card.style.transition='';} }, 220);
+        dx = 0; return;
+      }
+      if (Math.abs(dx) >= THR){
+        var grade = dx > 0 ? 3 : 1;
+        if (ov) ov.style.opacity = 1;
+        var fly = 'translateX('+(dx>0?500:-500)+'px) rotate('+(dx>0?20:-20)+'deg)';
+        card.style.webkitTransition = 'transform .18s ease'; card.style.transition = 'transform .18s ease';
+        card.style.webkitTransform = fly; card.style.transform = fly;
+        setTimeout(function(){ window.fcGrade(grade); }, 180);
+      } else {
+        card.style.webkitTransition = 'transform .22s ease'; card.style.transition = 'transform .22s ease';
+        card.style.webkitTransform = ''; card.style.transform = '';
+        if (ov){ ov.style.opacity = 0; } lastDir = '';
+        setTimeout(function(){ if(card.style){card.style.webkitTransition='';card.style.transition='';} }, 230);
+      }
+      dx = 0;
     }, { passive: true });
-    area.style.touchAction = 'pan-y';
   })();
 })();
 </script>
