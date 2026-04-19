@@ -1617,19 +1617,49 @@ body::before {
 .fc-stat.new .fc-stat-num { color: var(--blue); }
 .fc-stat.mastered .fc-stat-num { color: var(--green); }
 
-.fc-progress {
-  height: 6px;
+#fc-session-bar {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 18px;
+  border-radius: 10px;
+  padding: 10px 14px 8px;
+  margin-bottom: 14px;
 }
-.fc-progress-fill {
+.fc-sess-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.fc-sess-count {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--white);
+}
+.fc-sess-sep { color: var(--muted); font-weight: 400; margin: 0 3px; }
+.fc-sess-pct { font-size: 12px; font-weight: 700; color: var(--gold); }
+.fc-sess-track {
+  height: 10px;
+  background: var(--bg);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 7px;
+}
+.fc-sess-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--gold-dark), var(--gold));
-  transition: width 250ms ease-out;
+  border-radius: 6px;
+  transition: width 300ms ease-out;
 }
+.fc-sess-mini {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  letter-spacing: .5px;
+}
+.fc-sess-good { color: var(--green); font-weight: 600; }
+.fc-sess-again { color: var(--red); font-weight: 600; }
+.fc-sess-left { color: var(--muted); }
 
 .fc-card {
   background: linear-gradient(180deg, var(--card), var(--card-alt));
@@ -11505,7 +11535,18 @@ body::before {
     <div class="fc-stat mastered"><div class="fc-stat-num" id="fc-stat-mastered">—</div><div class="fc-stat-lbl">Mastered</div></div>
   </div>
 
-  <div class="fc-progress"><div class="fc-progress-fill" id="fc-progress-fill" style="width:0%"></div></div>
+  <div id="fc-session-bar">
+    <div class="fc-sess-row">
+      <span class="fc-sess-count"><span id="fc-sess-done">0</span><span class="fc-sess-sep">/</span><span id="fc-sess-total">—</span></span>
+      <span id="fc-sess-pct" class="fc-sess-pct">—</span>
+    </div>
+    <div class="fc-sess-track"><div id="fc-sess-fill" class="fc-sess-fill" style="width:0%"></div></div>
+    <div class="fc-sess-mini">
+      <span id="fc-sess-good" class="fc-sess-good">✓ 0</span>
+      <span id="fc-sess-again" class="fc-sess-again">✗ 0</span>
+      <span id="fc-sess-left" class="fc-sess-left">0 left</span>
+    </div>
+  </div>
 
   <div id="fc-card-area">
     <div class="fc-empty"><div class="fc-empty-icon">⏳</div><div class="fc-empty-msg">Loading vocabulary…</div></div>
@@ -15143,6 +15184,7 @@ document.addEventListener('keydown', function(e) {
   let isFlipped = false;
   let sessionStarted = 0;
   let sessionRated = 0;
+  let sessionCorrect = 0;
   let sessionMissed = []; // cards graded "Again" (1) this session — drives Review Missed button
   let selectedChapter = 'all'; // 'all' | '1'..'6'
   const CHAPTER_STORAGE_KEY = 'nakama_fc_chapter_v1';
@@ -15203,10 +15245,19 @@ document.addEventListener('keydown', function(e) {
     if ($('fc-stat-due')) $('fc-stat-due').textContent = s.due;
     if ($('fc-stat-new')) $('fc-stat-new').textContent = s.new;
     if ($('fc-stat-mastered')) $('fc-stat-mastered').textContent = s.mastered;
-    // Progress bar = rated this session / queue total
-    const total = sessionStarted || 1;
-    const pct = Math.min(100, Math.round((sessionRated / total) * 100));
-    if ($('fc-progress-fill')) $('fc-progress-fill').style.width = pct + '%';
+    // Session progress tracker
+    const total = sessionStarted || 0;
+    const rated = sessionRated;
+    const pct = total > 0 ? Math.min(100, Math.round((rated / total) * 100)) : 0;
+    const left = Math.max(0, total - rated);
+    const again = sessionMissed.length;
+    if ($('fc-sess-done')) $('fc-sess-done').textContent = rated;
+    if ($('fc-sess-total')) $('fc-sess-total').textContent = total || '—';
+    if ($('fc-sess-pct')) $('fc-sess-pct').textContent = total > 0 ? pct + '%' : '—';
+    if ($('fc-sess-fill')) $('fc-sess-fill').style.width = pct + '%';
+    if ($('fc-sess-good')) $('fc-sess-good').textContent = '✓ ' + sessionCorrect;
+    if ($('fc-sess-again')) $('fc-sess-again').textContent = '✗ ' + again;
+    if ($('fc-sess-left')) $('fc-sess-left').textContent = left + ' left';
   }
 
   // Choose the best text for TTS: prefer hiragana (unambiguous), fall back to kanji, then katakana
@@ -15388,9 +15439,8 @@ document.addEventListener('keydown', function(e) {
     state[currentCard.id] = updated;
     saveState(state);
     sessionRated++;
-    // Track misses (Again = grade 1) so the session-complete screen can
-    // offer a focused drill of just the cards the user got wrong.
     if (grade === 1) sessionMissed.push(currentCard);
+    else sessionCorrect++;
     nextCard();
   };
 
@@ -15403,6 +15453,7 @@ document.addEventListener('keydown', function(e) {
   window.fcResetSession = function() {
     sessionStarted = 0;
     sessionRated = 0;
+    sessionCorrect = 0;
     sessionMissed = [];
     isFlipped = false;
     initFlashcards();
@@ -15417,6 +15468,7 @@ document.addEventListener('keydown', function(e) {
     sessionMissed = [];
     sessionStarted = queue.length;
     sessionRated = 0;
+    sessionCorrect = 0;
     isFlipped = false;
     currentCard = null;
     nextCard();
@@ -15522,6 +15574,7 @@ document.addEventListener('keydown', function(e) {
     state = {};
     sessionStarted = 0;
     sessionRated = 0;
+    sessionCorrect = 0;
     sessionMissed = [];
     initFlashcards();
   };
@@ -15583,6 +15636,7 @@ document.addEventListener('keydown', function(e) {
     // Rebuild queue and restart session for the new chapter
     sessionStarted = 0;
     sessionRated = 0;
+    sessionCorrect = 0;
     sessionMissed = [];
     isFlipped = false;
     currentCard = null;
