@@ -483,9 +483,39 @@ const DIALOGUES = {
 };
 
 const PICTURES = [
-  { id: 1, src: "./oral_pic1.png", label: "Picture ①", note: "Living room scene — describe what you see!" },
-  { id: 2, src: "./oral_pic2.png", label: "Picture ②", note: "Classroom/office scene — use location words carefully." },
-  { id: 3, src: "./oral_pic3.png", label: "Picture ③", note: "〒 = post office (ゆうびんきょく)" }
+  { id: 1, src: "./oral_pic1.png", label: "Picture ①", note: "リビング / いま — Living room",
+    vocab: [
+      {jp:"ソファ",en:"sofa/couch"},{jp:"いす",en:"chair"},{jp:"つくえ",en:"desk"},
+      {jp:"テーブル",en:"coffee table"},{jp:"ほんだな",en:"bookshelf"},
+      {jp:"テレビ",en:"TV"},{jp:"パソコン",en:"computer"},{jp:"でんわ",en:"telephone"},
+      {jp:"ドア",en:"door"},{jp:"まど",en:"window"},{jp:"カーテン",en:"curtains"},
+      {jp:"とけい",en:"clock"},{jp:"え",en:"picture/painting"},{jp:"ほん",en:"books"},
+      {jp:"カップ",en:"cup/mug"},{jp:"たんす",en:"dresser"},
+      {jp:"ねこ",en:"cat on sofa (います)"},{jp:"ねこ",en:"cat by window (います)"}
+    ]
+  },
+  { id: 2, src: "./oral_pic2.png", label: "Picture ②", note: "きょうしつ — Classroom",
+    vocab: [
+      {jp:"こくばん",en:"blackboard"},{jp:"きょうたく",en:"teacher's desk"},
+      {jp:"つくえ",en:"student desk"},{jp:"いす",en:"chair"},
+      {jp:"パソコン",en:"computer"},{jp:"テレビ",en:"TV/monitor"},
+      {jp:"はさみ",en:"scissors"},{jp:"ほん",en:"books"},{jp:"ノート",en:"notebook"},
+      {jp:"かばん",en:"bag/backpack"},{jp:"まど",en:"window"},{jp:"ドア",en:"door"},
+      {jp:"とけい",en:"clock"},{jp:"え",en:"picture/painting"},{jp:"カーテン",en:"curtains"},
+      {jp:"せんせい",en:"teacher (います)"},{jp:"ねこ",en:"cat outside window (います)"}
+    ]
+  },
+  { id: 3, src: "./oral_pic3.png", label: "Picture ③", note: "まちのちず — City Map  ·  〒 = ゆうびんきょく",
+    vocab: [
+      {jp:"ぎんこう",en:"bank"},{jp:"カフェ",en:"cafe"},{jp:"レストラン",en:"restaurant"},
+      {jp:"スーパーマーケット",en:"supermarket"},{jp:"としょかん",en:"library"},
+      {jp:"ホテル",en:"hotel"},{jp:"ゆうびんきょく",en:"post office 〒"},
+      {jp:"びょういん",en:"hospital ✚"},{jp:"バス",en:"bus (あります)"},
+      {jp:"くるま",en:"car (あります)"},{jp:"ひと",en:"person (います)"},
+      {jp:"いぬ",en:"dog (います)"},{jp:"ねこ",en:"cat (います)"},
+      {jp:"みち",en:"road/street"},{jp:"き",en:"tree (あります)"},{jp:"たてもの",en:"building"}
+    ]
+  }
 ];
 
 const LOCATION_WORDS = [
@@ -766,12 +796,24 @@ function buildSection1() {
     </div>
   </div>
 
+  <div class="card highlight">
+    <div class="card-title">あなたのテンプレート (Your template)</div>
+    <div class="dialogue-lines">
+      <div class="dl-row"><div class="dl-speaker gold small">①</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">おはようございます。</div><div class="dl-en">Good morning.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker gold small">②</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">じょにー・るーです。</div><div class="dl-en">I'm Johnny Luu.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker gold small">③</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">ねぶらすかだいがくのさんねんせいです。</div><div class="dl-en">I'm a junior at the University of Nebraska.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker gold small">④</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">せんこうはかがくです。</div><div class="dl-en">My major is science.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker gold small">⑤</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">しゅっしんはおまはです。</div><div class="dl-en">I'm from Omaha.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker gold small">⑥</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">どうぞよろしくおねがいします。</div><div class="dl-en">Nice to meet you.</div></div></div>
+    </div>
+  </div>
+
   <div class="card">
     <div class="card-title">Useful patterns</div>
     <div class="dialogue-lines">
-      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">○○大学の○○学部の一年生です。</div><div class="dl-en">I am a first-year in the ___ department at ___ University.</div></div></div>
-      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">出身は〔City〕です。</div><div class="dl-en">I am from [City].</div></div></div>
-      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">せんこうは〔Major〕です。</div><div class="dl-en">My major is [Major].</div></div></div>
+      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">ねぶらすかだいがくのさんねんせいです。</div><div class="dl-en">I'm a 3rd-year at the University of Nebraska.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">しゅっしんはおまはです。</div><div class="dl-en">I'm from Omaha.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">せんこうはかがくです。</div><div class="dl-en">My major is science.</div></div></div>
     </div>
   </div>
 
@@ -866,6 +908,18 @@ function buildSection3() {
       <button class="card-draw-btn" onclick="drawCard()" style="margin:0 auto 12px;display:flex;font-size:12px;padding:8px 18px;background:var(--bg4);color:var(--text2);box-shadow:none;" title="Redraw">↺ Redraw Card</button>`;
   }
 
+  const vocabCard = selectedPicture && selectedPicture.vocab ? `
+  <div class="card">
+    <div class="card-title">📦 Objects in this picture (ものの なまえ)</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;margin-top:8px;">
+      ${selectedPicture.vocab.map(v=>`
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;">
+          <div class="jp speak" style="font-size:16px;font-weight:700;color:var(--gold);cursor:pointer;" onclick="speakJP(this.textContent)">${v.jp}</div>
+          <div style="font-size:11px;color:var(--text2);">${v.en}</div>
+        </div>`).join('')}
+    </div>
+  </div>` : '';
+
   return `
   <div class="section-header">
     <h2 class="jp">セクション 3: 絵の説明</h2>
@@ -876,6 +930,8 @@ function buildSection3() {
   <div class="card highlight">
     ${picContent}
   </div>
+
+  ${vocabCard}
 
   <div class="card">
     <div class="card-title">📍 Location words (ばしょのことば)</div>
