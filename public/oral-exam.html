@@ -423,15 +423,29 @@ h1,h2,h3{font-weight:700;}
 const DIALOGUES = {
   ch4: {
     chapter: 4,
-    title: "このへんにぎんこうがありますか",
+    title: "このへんに ぎんこうが ありますか",
     titleEn: "Is there a bank around here?",
     lines: [
-      {sp:"上田", jp:"すみません。このへんにぎんこうがありますか。", en:"Excuse me. Is there a bank around here?"},
-      {sp:"ひと", jp:"ぎんこうですか。ええ、ありますよ。あそこにおおきいたてものがありますね。", en:"A bank? Yes, there is. Do you see that big building over there?"},
-      {sp:"上田", jp:"ええ。", en:"Yes."},
-      {sp:"ひと", jp:"あのたてものがぎんこうです。", en:"That building is the bank."},
-      {sp:"上田", jp:"そうですか。どうもありがとうございます。", en:"I see. Thank you very much."},
-      {sp:"ひと", jp:"いいえ。", en:"You're welcome."}
+      {type:"section", label:"Outside the station (えきのまえ)"},
+      {sp:"うえだ",      jp:"あのう、すみませんが。", en:"Um, excuse me."},
+      {sp:"つうこうにんA", jp:"はい。", en:"Yes?"},
+      {sp:"うえだ",      jp:"このへんに ぎんこうが ありますか。", en:"Is there a bank around here?"},
+      {sp:"つうこうにんA", jp:"ええ、ありますよ。あそこに たかい ビルが ありますね。", en:"Yes, there is. You see that tall building over there?"},
+      {sp:"うえだ",      jp:"ええ。", en:"Yes."},
+      {sp:"つうこうにんA", jp:"あれですよ。", en:"That's it."},
+      {sp:"うえだ",      jp:"あ、そうですか。どうも ありがとう ございます。", en:"Oh, I see. Thank you very much."},
+      {sp:"つうこうにんA", jp:"いいえ。", en:"You're welcome."},
+      {type:"section", label:"In the building (ビルの中で)"},
+      {sp:"うえだ",      jp:"あのう、すみません。", en:"Um, excuse me."},
+      {sp:"つうこうにんB", jp:"はい。", en:"Yes?"},
+      {sp:"うえだ",      jp:"ぎんこうは どこに ありますか。", en:"Where is the bank?"},
+      {sp:"つうこうにんB", jp:"あ、ぎんこうは それですよ。", en:"Oh, the bank is right there."},
+      {sp:"うえだ",      jp:"ああ、どうも。", en:"Ah, thanks."},
+      {sp:"つうこうにんB", jp:"いいえ。", en:"You're welcome."},
+      {type:"section", label:"At the entrance of the bank (ぎんこうのまえで)"},
+      {sp:"うえだ",      jp:"あのう、すみませんが、ATMは どこですか。", en:"Um, excuse me, where is the ATM?"},
+      {sp:"こういん",    jp:"そこに ございます。", en:"It's right there. (polite)"},
+      {sp:"うえだ",      jp:"ああ、どうも。", en:"Ah, thanks."}
     ]
   },
   ch5: {
@@ -829,14 +843,18 @@ function buildSection2() {
     selectedDialogue = chKeys[Math.floor(Math.random() * 3)];
   }
   const dlg = DIALOGUES[selectedDialogue];
-  const lines = dlg.lines.map(l => `
+  const lines = dlg.lines.map(l => {
+    if (l.type === 'section') return `
+    <div style="margin:10px 0 4px;padding:4px 8px;background:rgba(212,175,55,0.1);border-left:2px solid var(--gold);border-radius:0 4px 4px 0;font-size:11px;color:var(--gold);letter-spacing:0.5px;">${l.label}</div>`;
+    return `
     <div class="dl-row">
       <div class="dl-speaker">${l.sp}</div>
       <div>
         <div class="dl-jp speak" onclick="speakJP(this.textContent)">${l.jp}</div>
-        <div class="dl-en dim small">${l.en}</div>
+        <div class="dl-en dim small">${l.en || ''}</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   const chBtns = chKeys.map(k => {
     const d = DIALOGUES[k];
