@@ -15106,6 +15106,7 @@ document.addEventListener('keydown', function(e) {
       const pos = detectPOS(jp, en, rm);
       seen.set(key, {
         id: key,
+        ttsKey: jp,
         hiragana, katakana, kanji,
         romaji: rm,
         english: en,
@@ -15262,7 +15263,7 @@ document.addEventListener('keydown', function(e) {
 
   // Choose the best text for TTS: prefer hiragana (unambiguous), fall back to kanji, then katakana
   function getSpeakableText(card) {
-    return card.hiragana || card.kanji || card.katakana || '';
+    return card.ttsKey || card.hiragana || card.kanji || card.katakana || '';
   }
 
   function renderCardFront(card) {
