@@ -641,22 +641,25 @@ if (window.speechSynthesis) {
 
 function speakJP(text) {
   if (!window.speechSynthesis) return;
-  speechSynthesis.cancel();
-  if (!voicesLoaded) loadVoices();
   const clean = text.replace(/🔊/g, '').trim();
   if (!clean) return;
-  const utt = new SpeechSynthesisUtterance(clean);
-  utt.lang = 'ja-JP';
-  utt.rate = 0.82;
-  if (jpVoice) utt.voice = jpVoice;
-  // Chrome bug: synthesis stalls after ~15s — kick it
-  const fix = setInterval(() => {
-    if (!speechSynthesis.speaking) { clearInterval(fix); return; }
-    speechSynthesis.pause(); speechSynthesis.resume();
-  }, 10000);
-  utt.onend = () => clearInterval(fix);
-  utt.onerror = () => clearInterval(fix);
-  speechSynthesis.speak(utt);
+  if (!voicesLoaded) loadVoices();
+  speechSynthesis.cancel();
+  // Chrome requires a tick after cancel or the next utterance starts clipped
+  setTimeout(() => {
+    const utt = new SpeechSynthesisUtterance(clean);
+    utt.lang = 'ja-JP';
+    utt.rate = 0.82;
+    if (jpVoice) utt.voice = jpVoice;
+    // Chrome bug: synthesis stalls after ~15s — kick it
+    const fix = setInterval(() => {
+      if (!speechSynthesis.speaking) { clearInterval(fix); return; }
+      speechSynthesis.pause(); speechSynthesis.resume();
+    }, 10000);
+    utt.onend = () => clearInterval(fix);
+    utt.onerror = () => clearInterval(fix);
+    speechSynthesis.speak(utt);
+  }, 50);
 }
 
 // ══════════════════════════════════════════
@@ -816,7 +819,7 @@ function buildSection1() {
       <div class="dl-row"><div class="dl-speaker gold small">①</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">おはようございます。</div><div class="dl-en">Good morning.</div></div></div>
       <div class="dl-row"><div class="dl-speaker gold small">②</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">じょにー・るーです。</div><div class="dl-en">I'm Johnny Luu.</div></div></div>
       <div class="dl-row"><div class="dl-speaker gold small">③</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">ねぶらすかだいがくのさんねんせいです。</div><div class="dl-en">I'm a junior at the University of Nebraska.</div></div></div>
-      <div class="dl-row"><div class="dl-speaker gold small">④</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">せんこうはかがくです。</div><div class="dl-en">My major is science.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker gold small">④</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">せんこうはかがくです。</div><div class="dl-en">My major is かがく (science).</div></div></div>
       <div class="dl-row"><div class="dl-speaker gold small">⑤</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">しゅっしんはおまはです。</div><div class="dl-en">I'm from Omaha.</div></div></div>
       <div class="dl-row"><div class="dl-speaker gold small">⑥</div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">どうぞよろしくおねがいします。</div><div class="dl-en">Nice to meet you.</div></div></div>
     </div>
@@ -827,7 +830,7 @@ function buildSection1() {
     <div class="dialogue-lines">
       <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">ねぶらすかだいがくのさんねんせいです。</div><div class="dl-en">I'm a 3rd-year at the University of Nebraska.</div></div></div>
       <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">しゅっしんはおまはです。</div><div class="dl-en">I'm from Omaha.</div></div></div>
-      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">せんこうはかがくです。</div><div class="dl-en">My major is science.</div></div></div>
+      <div class="dl-row"><div class="dl-speaker"></div><div><div class="dl-jp speak" onclick="speakJP(this.textContent)">せんこうはかがくです。</div><div class="dl-en">My major is かがく (science).</div></div></div>
     </div>
   </div>
 
