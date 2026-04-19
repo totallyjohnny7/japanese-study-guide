@@ -15145,7 +15145,6 @@ document.addEventListener('keydown', function(e) {
   let sessionRated = 0;
   let sessionMissed = []; // cards graded "Again" (1) this session — drives Review Missed button
   let selectedChapter = 'all'; // 'all' | '1'..'6'
-  const NEW_CARDS_PER_DAY = 20;
   const CHAPTER_STORAGE_KEY = 'nakama_fc_chapter_v1';
 
   function getCardState(card) {
@@ -15164,11 +15163,10 @@ document.addEventListener('keydown', function(e) {
   function buildQueue() {
     const today = todayISO();
     const due = [], newCards = [];
-    let newCount = 0;
     filteredPool.forEach(card => {
       const cs = getCardState(card);
       if (cs.state === 'new') {
-        if (newCount < NEW_CARDS_PER_DAY) { newCards.push(card); newCount++; }
+        newCards.push(card);
       } else if (cs.due && cs.due <= today) {
         due.push({ card, due: cs.due });
       }
@@ -15186,11 +15184,10 @@ document.addEventListener('keydown', function(e) {
   function computeStats() {
     const today = todayISO();
     let total = filteredPool.length, due = 0, newToday = 0, mastered = 0;
-    let newCount = 0;
     filteredPool.forEach(card => {
       const cs = getCardState(card);
       if (cs.state === 'new') {
-        if (newCount < NEW_CARDS_PER_DAY) { newToday++; newCount++; }
+        newToday++;
       } else if (cs.due && cs.due <= today) {
         due++;
       }
