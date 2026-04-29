@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Particle Finder · Japanese Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0a;--surface:#111;--card:#161616;--card-alt:#1a1a1a;
+  --border:#2a2a2a;--gold:#d4a843;--gold-bright:#f0c85a;--gold-dim:#7a6320;
+  --gold-glow:rgba(212,168,67,0.15);
+  --green:#4ecf7a;--red:#e85454;--blue:#5ba8e8;--purple:#c8a2ff;
+  --text:#e0ddd5;--text-dim:#8a8578;--muted:#5a5548;--white:#f5f2ea;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'DM Sans',system-ui,sans-serif;
+  font-size:15px;line-height:1.5;
+  min-height:100dvh;min-height:100vh;
+  padding-bottom:60px;
+}
+.ja{font-family:'Noto Sans JP','Klee One',sans-serif;}
+
+/* Back bar */
+.back-bar{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 18px;border-bottom:1px solid var(--border);
+  background:var(--surface);position:sticky;top:0;z-index:50;
+  box-shadow:0 4px 16px rgba(0,0,0,0.4);
+}
+.back-btn{
+  background:none;border:1px solid var(--border);
+  color:var(--text-dim);padding:5px 12px;border-radius:6px;
+  cursor:pointer;font-size:12px;font-family:inherit;
+  text-decoration:none;transition:all 0.15s;
+}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+.back-bar-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;color:var(--gold);letter-spacing:0.05em;
+}
+
+/* Hero */
+.hero{
+  text-align:center;padding:30px 18px 18px;
+  background:linear-gradient(180deg,#0e0e12 0%,#0a0a0a 100%);
+  border-bottom:1px solid var(--border);position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(212,168,67,0.1) 0%,transparent 60%);
+  pointer-events:none;
+}
+.hero h1{
+  font-family:'Klee One',serif;font-weight:600;
+  font-size:38px;color:var(--gold-bright);letter-spacing:3px;
+  text-shadow:0 0 20px rgba(212,168,67,0.3);
+  position:relative;
+}
+.hero .sub{
+  color:var(--text-dim);font-size:11.5px;letter-spacing:3px;
+  text-transform:uppercase;margin-top:6px;position:relative;
+}
+
+/* Container */
+.container{max-width:1100px;margin:0 auto;padding:18px 14px;}
+
+/* Input panel */
+.input-panel{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:14px 16px;margin-bottom:18px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+}
+.input-grid{
+  display:grid;
+  grid-template-columns:1fr 100px 1fr;
+  gap:8px;align-items:center;
+}
+@media(max-width:680px){
+  .input-grid{grid-template-columns:1fr;gap:8px}
+  .input-grid .arrow{display:none}
+}
+.input-grid label{
+  display:block;font-size:10.5px;color:var(--gold);
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:4px;font-weight:600;
+}
+.input-grid input{
+  width:100%;background:var(--surface);
+  border:1.5px solid var(--border);border-radius:8px;
+  color:var(--white);padding:10px 12px;font-size:15px;
+  font-family:'Noto Sans JP','DM Sans',sans-serif;
+  outline:none;transition:all 0.15s;
+}
+.input-grid input:focus{
+  border-color:var(--gold-dim);
+  box-shadow:0 0 14px rgba(212,168,67,0.15);
+}
+.input-grid .arrow{
+  text-align:center;color:var(--gold-dim);font-size:24px;
+  display:flex;align-items:center;justify-content:center;
+}
+.input-grid .arrow .p-input{
+  width:80px;background:var(--surface);
+  border:1.5px dashed var(--gold-dim);border-radius:8px;
+  color:var(--gold-bright);text-align:center;
+  font-size:18px;padding:8px 4px;
+  font-family:'Noto Sans JP',sans-serif;
+  outline:none;transition:all 0.15s;
+}
+.input-grid .arrow .p-input:focus{border-style:solid;}
+.input-grid .arrow .p-input::placeholder{color:var(--muted);font-size:14px;}
+
+.input-help{
+  margin-top:10px;font-size:11px;color:var(--text-dim);
+  display:flex;flex-wrap:wrap;gap:14px;line-height:1.4;
+}
+.input-help span{display:inline-flex;align-items:center;gap:4px;}
+.input-help b{color:var(--gold);}
+
+.detected{
+  margin-top:10px;padding:8px 12px;background:var(--card-alt);
+  border-radius:6px;font-size:12px;color:var(--text-dim);
+  border:1px solid var(--border);min-height:30px;
+}
+.detected .matched{color:var(--green);font-weight:600;}
+.detected .unmatched{color:var(--red);font-weight:600;}
+
+/* Particle grid */
+.particle-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:10px;margin-bottom:24px;
+}
+.p-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;transition:all 0.15s;
+  position:relative;
+}
+.p-card.valid{border-color:rgba(78,207,122,0.5);background:linear-gradient(180deg,rgba(78,207,122,0.04) 0%,var(--card) 100%);}
+.p-card.invalid{opacity:0.55;}
+.p-card .p-head{
+  display:flex;align-items:center;gap:10px;margin-bottom:6px;
+}
+.p-card .p-symbol{
+  font-family:'Noto Sans JP',sans-serif;
+  font-size:32px;font-weight:700;color:var(--gold-bright);
+  line-height:1;width:40px;text-align:center;
+}
+.p-card.valid .p-symbol{color:var(--green);}
+.p-card.invalid .p-symbol{color:var(--muted);}
+.p-card .p-name{
+  flex:1;font-size:11px;letter-spacing:1.5px;
+  color:var(--gold);text-transform:uppercase;font-weight:600;
+}
+.p-card .p-status{
+  font-size:18px;font-weight:700;
+}
+.p-card.valid .p-status{color:var(--green);}
+.p-card.invalid .p-status{color:var(--red);}
+.p-card .p-rule{
+  font-size:12px;color:var(--text-dim);margin-bottom:6px;
+  line-height:1.4;
+}
+.p-card .p-example{
+  font-family:'Noto Sans JP',sans-serif;
+  font-size:14.5px;color:var(--white);
+  background:var(--surface);padding:8px 10px;
+  border-radius:6px;margin-top:6px;border-left:2px solid var(--gold-dim);
+}
+.p-card.invalid .p-example{
+  font-style:italic;color:var(--text-dim);
+  border-left-color:var(--red);
+}
+.p-card .p-trans{
+  font-size:11.5px;color:var(--text-dim);
+  font-style:italic;margin-top:3px;line-height:1.4;
+}
+.p-card .p-mean{
+  font-size:11.5px;color:var(--text-dim);margin-top:3px;
+}
+.p-card .p-mean b{color:var(--gold);}
+
+/* Section header */
+.sec-head{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;color:var(--gold-bright);
+  letter-spacing:0.05em;margin:18px 0 10px;
+  border-left:3px solid var(--gold);padding-left:10px;
+}
+.sec-sub{font-size:12px;color:var(--text-dim);margin-bottom:12px;}
+
+/* Verify result */
+.verify-box{
+  background:var(--card);border:2px solid var(--border);
+  border-radius:10px;padding:14px;margin-bottom:18px;
+}
+.verify-box.valid{border-color:var(--green);background:rgba(78,207,122,0.04);}
+.verify-box.invalid{border-color:var(--red);background:rgba(232,84,84,0.04);}
+.verify-box .v-head{
+  display:flex;align-items:center;gap:10px;font-size:18px;font-weight:600;margin-bottom:6px;
+}
+.verify-box.valid .v-head{color:var(--green);}
+.verify-box.invalid .v-head{color:var(--red);}
+.verify-box .v-sentence{
+  font-family:'Noto Sans JP',sans-serif;font-size:18px;
+  color:var(--white);padding:8px 0;
+}
+.verify-box .v-explain{font-size:13px;color:var(--text-dim);line-height:1.6;}
+
+/* Reference cards */
+.ref-section{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:18px;margin-bottom:18px;
+}
+.ref-section h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;color:var(--gold-bright);
+  margin-bottom:12px;letter-spacing:0.04em;
+}
+.ref-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;
+}
+.ref-particle{
+  background:var(--card-alt);border:1px solid var(--border);
+  border-radius:8px;padding:10px 12px;
+  cursor:pointer;transition:all 0.15s;
+}
+.ref-particle:hover{border-color:var(--gold-dim);}
+.ref-particle .rp-head{display:flex;align-items:center;gap:8px;}
+.ref-particle .rp-sym{
+  font-family:'Noto Sans JP',sans-serif;
+  font-size:24px;color:var(--gold-bright);
+  line-height:1;width:32px;text-align:center;
+}
+.ref-particle .rp-name{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;font-weight:600;flex:1;}
+.ref-particle .rp-fn{font-size:12px;color:var(--text-dim);margin-top:6px;line-height:1.4;}
+
+/* Empty state */
+.empty{
+  text-align:center;padding:40px 20px;color:var(--muted);
+  font-size:13px;border:1px dashed var(--border);
+  border-radius:10px;margin-bottom:18px;
+}
+.empty .em-big{
+  font-size:42px;margin-bottom:10px;
+  font-family:'Noto Sans JP',sans-serif;
+  color:var(--gold-dim);
+}
+
+/* Footer */
+.footer{
+  text-align:center;color:var(--muted);
+  font-size:11px;padding:24px 14px 0;
+  border-top:1px solid var(--border);margin-top:24px;
+}
+</style>
+</head>
+<body>
+
+<div class="back-bar">
+  <a href="index.html" class="back-btn">← Back</a>
+  <span class="back-bar-title">Particle Finder · 助詞</span>
+</div>
+
+<div class="hero">
+  <h1>助詞 Particle Finder</h1>
+  <div class="sub">11 Particles · Live Verification · All Scripts Accepted</div>
+</div>
+
+<div class="container">
+
+  <!-- Input panel -->
+  <div class="input-panel">
+    <div class="input-grid">
+      <div>
+        <label>Word 1 (subject/topic/place)</label>
+        <input type="text" id="w1" placeholder="e.g. 私 / watashi / I / がくせい" autocomplete="off">
+      </div>
+      <div class="arrow">
+        <input type="text" id="ptest" class="p-input" placeholder="は" maxlength="3" autocomplete="off">
+      </div>
+      <div>
+        <label>Word 2 (predicate/verb/place)</label>
+        <input type="text" id="w2" placeholder="e.g. 学生 / iku / book / としょかん" autocomplete="off">
+      </div>
+    </div>
+    <div class="input-help">
+      <span>📝 <b>Accepts:</b> Kanji · Hiragana · Katakana · Romaji · English</span>
+      <span>⚡ <b>Live results</b> as you type</span>
+      <span>✏️ <b>Particle slot:</b> optional — leave blank to see ALL options</span>
+    </div>
+    <div class="detected" id="detected">Type two words to see which particles can connect them...</div>
+  </div>
+
+  <!-- Verify result (only when particle is entered) -->
+  <div id="verifyContainer"></div>
+
+  <!-- Live results -->
+  <div id="results"></div>
+
+  <!-- Reference: All particles -->
+  <div class="ref-section">
+    <h2>📋 All 11 Particle Reference</h2>
+    <p class="sec-sub">Click any particle to auto-fill the test slot above.</p>
+    <div class="ref-grid" id="refGrid"></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Particle Finder · Japanese Study Guide · <a href="index.html" style="color:var(--gold)">Main Site</a>
+</div>
+
+<script>
+/* ============================================================
+   VOCABULARY DATABASE — categorized by type for particle matching
+   ============================================================ */
+// Type tags drive particle rules:
+//   noun-person | noun-place | noun-thing | noun-food | noun-time
+//   noun-abstract | noun-language | noun-means
+//   verb-motion | verb-trans | verb-exist | verb-emotion | verb-cog
+//   verb-comm | verb-intrans | verb-stem-purpose
+//   adj-i | adj-na
+const W = [
+  // ─── PEOPLE ──────────────────────────────────────
+  {k:'私',h:'わたし',r:'watashi',e:'i',t:'noun-person',pron:1},
+  {k:'学生',h:'がくせい',r:'gakusei',e:'student',t:'noun-person'},
+  {k:'大学生',h:'だいがくせい',r:'daigakusei',e:'university student',t:'noun-person'},
+  {k:'先生',h:'せんせい',r:'sensei',e:'teacher',t:'noun-person'},
+  {k:'田中さん',h:'たなかさん',r:'tanaka-san',e:'tanaka',t:'noun-person',name:1},
+  {k:'山田さん',h:'やまださん',r:'yamada-san',e:'yamada',t:'noun-person',name:1},
+  {k:'ともだち',h:'ともだち',r:'tomodachi',e:'friend',t:'noun-person',cantake:'ni'},
+  {k:'人',h:'ひと',r:'hito',e:'person',t:'noun-person'},
+  {k:'日本人',h:'にほんじん',r:'nihonjin',e:'japanese (person)',t:'noun-person'},
+  {k:'子',h:'こ',r:'ko',e:'child',t:'noun-person'},
+  // ─── PLACES ──────────────────────────────────────
+  {k:'学校',h:'がっこう',r:'gakkou',e:'school',t:'noun-place'},
+  {k:'大学',h:'だいがく',r:'daigaku',e:'university',t:'noun-place'},
+  {k:'としょかん',h:'としょかん',r:'toshokan',e:'library',t:'noun-place'},
+  {k:'ぎんこう',h:'ぎんこう',r:'ginkou',e:'bank',t:'noun-place'},
+  {k:'こうえん',h:'こうえん',r:'kouen',e:'park',t:'noun-place'},
+  {k:'うち',h:'うち',r:'uchi',e:'home',t:'noun-place'},
+  {k:'家',h:'いえ',r:'ie',e:'house',t:'noun-place'},
+  {k:'へや',h:'へや',r:'heya',e:'room',t:'noun-place'},
+  {k:'日本',h:'にほん',r:'nihon',e:'japan',t:'noun-place'},
+  {k:'東京',h:'とうきょう',r:'toukyou',e:'tokyo',t:'noun-place'},
+  {k:'たいいくかん',h:'たいいくかん',r:'taiikukan',e:'gym',t:'noun-place'},
+  {k:'デパート',h:'デパート',r:'depaato',e:'department store',t:'noun-place'},
+  {k:'レストラン',h:'レストラン',r:'resutoran',e:'restaurant',t:'noun-place'},
+  {k:'コンビニ',h:'コンビニ',r:'konbini',e:'convenience store',t:'noun-place'},
+  {k:'アパート',h:'アパート',r:'apaato',e:'apartment',t:'noun-place'},
+  {k:'ホテル',h:'ホテル',r:'hoteru',e:'hotel',t:'noun-place'},
+  {k:'山',h:'やま',r:'yama',e:'mountain',t:'noun-place'},
+  {k:'川',h:'かわ',r:'kawa',e:'river',t:'noun-place'},
+  // ─── THINGS ──────────────────────────────────────
+  {k:'本',h:'ほん',r:'hon',e:'book',t:'noun-thing'},
+  {k:'ペン',h:'ペン',r:'pen',e:'pen',t:'noun-thing',means:1},
+  {k:'えんぴつ',h:'えんぴつ',r:'enpitsu',e:'pencil',t:'noun-thing',means:1},
+  {k:'ノート',h:'ノート',r:'nooto',e:'notebook',t:'noun-thing'},
+  {k:'つくえ',h:'つくえ',r:'tsukue',e:'desk',t:'noun-thing'},
+  {k:'いす',h:'いす',r:'isu',e:'chair',t:'noun-thing'},
+  {k:'テレビ',h:'テレビ',r:'terebi',e:'tv',t:'noun-thing'},
+  {k:'でんわ',h:'でんわ',r:'denwa',e:'telephone',t:'noun-thing'},
+  {k:'とけい',h:'とけい',r:'tokei',e:'clock',t:'noun-thing'},
+  {k:'ねこ',h:'ねこ',r:'neko',e:'cat',t:'noun-person',animal:1},
+  {k:'いぬ',h:'いぬ',r:'inu',e:'dog',t:'noun-person',animal:1},
+  {k:'花',h:'はな',r:'hana',e:'flower',t:'noun-thing'},
+  // ─── FOOD ────────────────────────────────────────
+  {k:'コーヒー',h:'コーヒー',r:'koohii',e:'coffee',t:'noun-food'},
+  {k:'お茶',h:'おちゃ',r:'ocha',e:'tea',t:'noun-food'},
+  {k:'水',h:'みず',r:'mizu',e:'water',t:'noun-food'},
+  {k:'あさごはん',h:'あさごはん',r:'asagohan',e:'breakfast',t:'noun-food'},
+  {k:'ひるごはん',h:'ひるごはん',r:'hirugohan',e:'lunch',t:'noun-food'},
+  {k:'ばんごはん',h:'ばんごはん',r:'bangohan',e:'dinner',t:'noun-food'},
+  {k:'ごはん',h:'ごはん',r:'gohan',e:'rice/meal',t:'noun-food'},
+  // ─── TIME ────────────────────────────────────────
+  {k:'今日',h:'きょう',r:'kyou',e:'today',t:'noun-time',daypoint:1},
+  {k:'あした',h:'あした',r:'ashita',e:'tomorrow',t:'noun-time',daypoint:1},
+  {k:'きのう',h:'きのう',r:'kinou',e:'yesterday',t:'noun-time',daypoint:1},
+  {k:'今週',h:'こんしゅう',r:'konshuu',e:'this week',t:'noun-time',daypoint:1},
+  {k:'先週',h:'せんしゅう',r:'senshuu',e:'last week',t:'noun-time',daypoint:1},
+  {k:'らいしゅう',h:'らいしゅう',r:'raishuu',e:'next week',t:'noun-time',daypoint:1},
+  {k:'まいにち',h:'まいにち',r:'mainichi',e:'every day',t:'noun-time',freq:1},
+  {k:'まいあさ',h:'まいあさ',r:'maiasa',e:'every morning',t:'noun-time',freq:1},
+  {k:'7じ',h:'しちじ',r:'shichiji',e:'7 o\'clock',t:'noun-time',clock:1},
+  {k:'9じ',h:'くじ',r:'kuji',e:'9 o\'clock',t:'noun-time',clock:1},
+  {k:'5じ',h:'ごじ',r:'goji',e:'5 o\'clock',t:'noun-time',clock:1},
+  {k:'月曜日',h:'げつようび',r:'getsuyoubi',e:'monday',t:'noun-time',clock:1},
+  {k:'火曜日',h:'かようび',r:'kayoubi',e:'tuesday',t:'noun-time',clock:1},
+  {k:'水曜日',h:'すいようび',r:'suiyoubi',e:'wednesday',t:'noun-time',clock:1},
+  {k:'木曜日',h:'もくようび',r:'mokuyoubi',e:'thursday',t:'noun-time',clock:1},
+  {k:'金曜日',h:'きんようび',r:'kin\'youbi',e:'friday',t:'noun-time',clock:1},
+  {k:'土曜日',h:'どようび',r:'doyoubi',e:'saturday',t:'noun-time',clock:1},
+  {k:'日曜日',h:'にちようび',r:'nichiyoubi',e:'sunday',t:'noun-time',clock:1},
+  {k:'週末',h:'しゅうまつ',r:'shuumatsu',e:'weekend',t:'noun-time',daypoint:1},
+  {k:'あさ',h:'あさ',r:'asa',e:'morning',t:'noun-time',daypoint:1},
+  {k:'ばん',h:'ばん',r:'ban',e:'evening',t:'noun-time',daypoint:1},
+  {k:'よる',h:'よる',r:'yoru',e:'night',t:'noun-time',daypoint:1},
+  // ─── ABSTRACT / LANGUAGE / SUBJECTS ─────────────
+  {k:'にほんご',h:'にほんご',r:'nihongo',e:'japanese language',t:'noun-language'},
+  {k:'えいご',h:'えいご',r:'eigo',e:'english',t:'noun-language'},
+  {k:'べんきょう',h:'べんきょう',r:'benkyou',e:'study',t:'noun-abstract'},
+  {k:'しゅくだい',h:'しゅくだい',r:'shukudai',e:'homework',t:'noun-abstract'},
+  {k:'じゅぎょう',h:'じゅぎょう',r:'jugyou',e:'class',t:'noun-abstract'},
+  {k:'しつもん',h:'しつもん',r:'shitsumon',e:'question',t:'noun-abstract'},
+  {k:'えいが',h:'えいが',r:'eiga',e:'movie',t:'noun-thing'},
+  {k:'おんがく',h:'おんがく',r:'ongaku',e:'music',t:'noun-thing'},
+  {k:'てがみ',h:'てがみ',r:'tegami',e:'letter',t:'noun-thing'},
+  {k:'かいもの',h:'かいもの',r:'kaimono',e:'shopping',t:'noun-abstract'},
+  {k:'りょうり',h:'りょうり',r:'ryouri',e:'cooking',t:'noun-abstract'},
+  {k:'テニス',h:'テニス',r:'tenisu',e:'tennis',t:'noun-abstract'},
+  // ─── MEANS / TRANSPORT ───────────────────────────
+  {k:'バス',h:'バス',r:'basu',e:'bus',t:'noun-means'},
+  {k:'車',h:'くるま',r:'kuruma',e:'car',t:'noun-means'},
+  {k:'でんしゃ',h:'でんしゃ',r:'densha',e:'train',t:'noun-means'},
+  {k:'じてんしゃ',h:'じてんしゃ',r:'jitensha',e:'bicycle',t:'noun-means'},
+  // ─── VERBS — motion (に/へ destination) ─────────
+  {k:'いく',h:'いく',r:'iku',e:'go',t:'verb-motion'},
+  {k:'いきます',h:'いきます',r:'ikimasu',e:'go (polite)',t:'verb-motion'},
+  {k:'くる',h:'くる',r:'kuru',e:'come',t:'verb-motion'},
+  {k:'きます',h:'きます',r:'kimasu',e:'come (polite)',t:'verb-motion'},
+  {k:'かえる',h:'かえる',r:'kaeru',e:'return',t:'verb-motion'},
+  {k:'かえります',h:'かえります',r:'kaerimasu',e:'return (polite)',t:'verb-motion'},
+  {k:'あるく',h:'あるく',r:'aruku',e:'walk',t:'verb-motion'},
+  // ─── VERBS — transitive action (を) ─────────────
+  {k:'たべる',h:'たべる',r:'taberu',e:'eat',t:'verb-trans'},
+  {k:'たべます',h:'たべます',r:'tabemasu',e:'eat (polite)',t:'verb-trans'},
+  {k:'のむ',h:'のむ',r:'nomu',e:'drink',t:'verb-trans'},
+  {k:'のみます',h:'のみます',r:'nomimasu',e:'drink (polite)',t:'verb-trans'},
+  {k:'よむ',h:'よむ',r:'yomu',e:'read',t:'verb-trans'},
+  {k:'よみます',h:'よみます',r:'yomimasu',e:'read (polite)',t:'verb-trans'},
+  {k:'かく',h:'かく',r:'kaku',e:'write',t:'verb-trans'},
+  {k:'かきます',h:'かきます',r:'kakimasu',e:'write (polite)',t:'verb-trans'},
+  {k:'みる',h:'みる',r:'miru',e:'see/watch',t:'verb-trans'},
+  {k:'みます',h:'みます',r:'mimasu',e:'see/watch (polite)',t:'verb-trans'},
+  {k:'きく',h:'きく',r:'kiku',e:'listen/ask',t:'verb-trans'},
+  {k:'ききます',h:'ききます',r:'kikimasu',e:'listen/ask (polite)',t:'verb-trans'},
+  {k:'かう',h:'かう',r:'kau',e:'buy',t:'verb-trans'},
+  {k:'かいます',h:'かいます',r:'kaimasu',e:'buy (polite)',t:'verb-trans'},
+  {k:'まつ',h:'まつ',r:'matsu',e:'wait',t:'verb-trans'},
+  {k:'まちます',h:'まちます',r:'machimasu',e:'wait (polite)',t:'verb-trans'},
+  {k:'べんきょうする',h:'べんきょうする',r:'benkyousuru',e:'study',t:'verb-trans'},
+  {k:'べんきょうします',h:'べんきょうします',r:'benkyoushimasu',e:'study (polite)',t:'verb-trans'},
+  // ─── VERBS — communication (に person) ──────────
+  {k:'はなす',h:'はなす',r:'hanasu',e:'speak',t:'verb-comm'},
+  {k:'はなします',h:'はなします',r:'hanashimasu',e:'speak (polite)',t:'verb-comm'},
+  {k:'おしえる',h:'おしえる',r:'oshieru',e:'teach',t:'verb-comm'},
+  {k:'おしえます',h:'おしえます',r:'oshiemasu',e:'teach (polite)',t:'verb-comm'},
+  {k:'あう',h:'あう',r:'au',e:'meet',t:'verb-comm'},
+  {k:'あいます',h:'あいます',r:'aimasu',e:'meet (polite)',t:'verb-comm'},
+  // ─── VERBS — existence (が, location に) ────────
+  {k:'ある',h:'ある',r:'aru',e:'exist (inanimate)',t:'verb-exist',inanimate:1},
+  {k:'あります',h:'あります',r:'arimasu',e:'exist (inanimate, polite)',t:'verb-exist',inanimate:1},
+  {k:'いる',h:'いる',r:'iru',e:'exist (animate)',t:'verb-exist',animate:1},
+  {k:'います',h:'います',r:'imasu',e:'exist (animate, polite)',t:'verb-exist',animate:1},
+  // ─── VERBS — emotion / cognition (が) ───────────
+  {k:'好き',h:'すき',r:'suki',e:'like',t:'adj-na',ga:1},
+  {k:'すき',h:'すき',r:'suki',e:'like',t:'adj-na',ga:1},
+  {k:'きらい',h:'きらい',r:'kirai',e:'dislike',t:'adj-na',ga:1},
+  {k:'わかる',h:'わかる',r:'wakaru',e:'understand',t:'verb-cog',ga:1},
+  {k:'わかります',h:'わかります',r:'wakarimasu',e:'understand (polite)',t:'verb-cog',ga:1},
+  {k:'できる',h:'できる',r:'dekiru',e:'be able',t:'verb-cog',ga:1},
+  {k:'ほしい',h:'ほしい',r:'hoshii',e:'want',t:'adj-i',ga:1},
+  // ─── VERBS — intransitive ────────────────────────
+  {k:'おきる',h:'おきる',r:'okiru',e:'wake up',t:'verb-intrans'},
+  {k:'おきます',h:'おきます',r:'okimasu',e:'wake up (polite)',t:'verb-intrans'},
+  {k:'ねる',h:'ねる',r:'neru',e:'sleep',t:'verb-intrans'},
+  {k:'ねます',h:'ねます',r:'nemasu',e:'sleep (polite)',t:'verb-intrans'},
+  {k:'はいる',h:'はいる',r:'hairu',e:'enter',t:'verb-intrans'},
+  {k:'およぐ',h:'およぐ',r:'oyogu',e:'swim',t:'verb-intrans'},
+  {k:'はしる',h:'はしる',r:'hashiru',e:'run',t:'verb-intrans'},
+  {k:'あそぶ',h:'あそぶ',r:'asobu',e:'play',t:'verb-intrans'},
+  {k:'する',h:'する',r:'suru',e:'do',t:'verb-trans'},
+  {k:'します',h:'します',r:'shimasu',e:'do (polite)',t:'verb-trans'},
+  // ─── ADJECTIVES — i ─────────────────────────────
+  {k:'大きい',h:'おおきい',r:'ookii',e:'big',t:'adj-i'},
+  {k:'小さい',h:'ちいさい',r:'chiisai',e:'small',t:'adj-i'},
+  {k:'たかい',h:'たかい',r:'takai',e:'expensive/tall',t:'adj-i'},
+  {k:'やすい',h:'やすい',r:'yasui',e:'cheap',t:'adj-i'},
+  {k:'あたらしい',h:'あたらしい',r:'atarashii',e:'new',t:'adj-i'},
+  {k:'ふるい',h:'ふるい',r:'furui',e:'old',t:'adj-i'},
+  {k:'たのしい',h:'たのしい',r:'tanoshii',e:'fun',t:'adj-i'},
+  {k:'おもしろい',h:'おもしろい',r:'omoshiroi',e:'interesting',t:'adj-i'},
+  {k:'むずかしい',h:'むずかしい',r:'muzukashii',e:'difficult',t:'adj-i'},
+  {k:'いい',h:'いい',r:'ii',e:'good',t:'adj-i'},
+  {k:'あつい',h:'あつい',r:'atsui',e:'hot',t:'adj-i'},
+  {k:'さむい',h:'さむい',r:'samui',e:'cold',t:'adj-i'},
+  // ─── ADJECTIVES — na ────────────────────────────
+  {k:'げんき',h:'げんき',r:'genki',e:'energetic',t:'adj-na'},
+  {k:'しずか',h:'しずか',r:'shizuka',e:'quiet',t:'adj-na'},
+  {k:'にぎやか',h:'にぎやか',r:'nigiyaka',e:'lively',t:'adj-na'},
+  {k:'ゆうめい',h:'ゆうめい',r:'yuumei',e:'famous',t:'adj-na'},
+  {k:'きれい',h:'きれい',r:'kirei',e:'pretty',t:'adj-na'},
+  {k:'たいへん',h:'たいへん',r:'taihen',e:'tough',t:'adj-na'},
+  {k:'かんたん',h:'かんたん',r:'kantan',e:'easy',t:'adj-na'}
+];
+
+/* Build lookup index — supports kanji, hiragana, katakana, romaji, English, and combinations */
+function norm(s){ return (s||'').trim().toLowerCase().replace(/\s+/g,''); }
+const idx = new Map();
+W.forEach(w=>{
+  [w.k, w.h, w.r, w.e].forEach(key=>{
+    if(!key) return;
+    const n = norm(key);
+    if(!idx.has(n)) idx.set(n, w);
+  });
+});
+
+function findWord(input){
+  if(!input) return null;
+  const n = norm(input);
+  if(idx.has(n)) return idx.get(n);
+  // Loose match: starts-with on any field
+  for(const w of W){
+    const fields = [w.k, w.h, w.r, w.e].filter(Boolean).map(norm);
+    if(fields.some(f => f === n)) return w;
+  }
+  // Substring match (last resort)
+  for(const w of W){
+    const fields = [w.k, w.h, w.r, w.e].filter(Boolean).map(norm);
+    if(fields.some(f => f.startsWith(n) && n.length >= 2)) return w;
+  }
+  return null;
+}
+
+/* Get the polite (masu) form of a verb. Looks up paired entries by English meaning. */
+function getPol(v){
+  if(!v) return '';
+  if(v.k.endsWith('ます')||v.k.endsWith('です')) return v.k;
+  if(!v.t.startsWith('verb')) return v.k;
+  // Find polite counterpart by matching English meaning
+  const polite = W.find(w => w !== v && w.t === v.t && w.e === v.e + ' (polite)');
+  if(polite) return polite.k;
+  // Fallback: rule-based conjugation for u-verbs and ru-verbs
+  const k = v.k;
+  // Irregular
+  if(k === 'する') return 'します';
+  if(k === 'くる') return 'きます';
+  // Compound する verbs
+  if(k.endsWith('する')) return k.slice(0,-2) + 'します';
+  // ru-verb: ends in iru/eru (last hiragana is い/え row + る)
+  const lastChar = k.charAt(k.length-1);
+  const secondLast = k.charAt(k.length-2);
+  const eRow = ['え','け','せ','て','ね','へ','め','れ','げ','ぜ','で','べ','ぺ'];
+  const iRow = ['い','き','し','ち','に','ひ','み','り','ぎ','じ','び','ぴ'];
+  // u-verb conjugation (most reliable: known verbs in dictionary)
+  if(lastChar === 'く') return k.slice(0,-1) + 'きます';
+  if(lastChar === 'ぐ') return k.slice(0,-1) + 'ぎます';
+  if(lastChar === 'す') return k.slice(0,-1) + 'します';
+  if(lastChar === 'つ') return k.slice(0,-1) + 'ちます';
+  if(lastChar === 'む') return k.slice(0,-1) + 'みます';
+  if(lastChar === 'ぶ') return k.slice(0,-1) + 'びます';
+  if(lastChar === 'ぬ') return k.slice(0,-1) + 'にます';
+  if(lastChar === 'う') return k.slice(0,-1) + 'います';
+  if(lastChar === 'る'){
+    // Could be ru-verb (drop る + ます) or u-verb impostor
+    const impostors = ['かえる','はいる','しる','きる','はしる'];
+    if(impostors.includes(k)) return k.slice(0,-1) + 'ります';
+    // Default: ru-verb if previous char is e/i row
+    if(eRow.includes(secondLast) || iRow.includes(secondLast)) return k.slice(0,-1) + 'ます';
+    return k.slice(0,-1) + 'ります'; // u-verb fallback
+  }
+  return k + 'ます';
+}
+
+/* ============================================================
+   PARTICLE RULES — for each particle, precise applicability check
+   ============================================================ */
+const PARTICLES = [
+  {
+    p:'は', name:'wa', fn:'Topic marker — "as for X..."',
+    test:(a,b)=>{
+      // N + は + (predicate noun / adj / verb)
+      if(!a || !b) return false;
+      if(!a.t.startsWith('noun')) return {ok:false, why:'は marks the topic — requires a noun before it.'};
+      // valid predicate: noun, adj, or verb
+      if(b.t.startsWith('noun')||b.t.startsWith('adj')||b.t.startsWith('verb'))
+        return {ok:true, mean:`Topic — introduces "${a.e}" as what the sentence is about.`};
+      return false;
+    },
+    ex:(a,b)=>{
+      if(b.t==='verb-motion'||b.t==='verb-trans'||b.t==='verb-intrans'||b.t==='verb-comm'||b.t==='verb-exist'||b.t==='verb-cog')
+        return {jp:`${a.k}は${getPol(b)}。`, en:`${cap(a.e)} ${b.e}.`};
+      if(b.t==='adj-i') return {jp:`${a.k}は${b.k}です。`, en:`${cap(a.e)} is ${b.e}.`};
+      if(b.t==='adj-na') return {jp:`${a.k}は${b.k}です。`, en:`${cap(a.e)} is ${b.e}.`};
+      return {jp:`${a.k}は${b.k}です。`, en:`${cap(a.e)} is a ${b.e}.`};
+    }
+  },
+  {
+    p:'が', name:'ga', fn:'Subject marker — for existence, desire, ability, Q-words, 好き/嫌い/わかる',
+    test:(a,b)=>{
+      if(!a || !b) return false;
+      if(!a.t.startsWith('noun')) return {ok:false, why:'が marks a subject — requires a noun before it.'};
+      // が is correct with: existence, 好き/嫌い, わかる/できる, ほしい
+      if(b.t==='verb-exist') return {ok:true, mean:`Subject of existence — "${a.e}" exists / is here.`};
+      if(b.ga) return {ok:true, mean:`Object of liking/understanding/wanting — Japanese marks this with が, not を.`};
+      if(b.t==='verb-cog') return {ok:true, mean:`が pairs with cognition verbs (わかる/できる).`};
+      // Question words always take が — but no q-words in our list, so general subject reading
+      return {ok:false, why:`が is used in specific cases (existence, 好き/嫌い, わかる, Q-words). For "${a.e} is a ${b.e||''}" use は.`};
+    },
+    ex:(a,b)=>{
+      if(b.t==='verb-exist') return {jp:`${a.k}が${getPol(b)}。`, en:`There is/are ${a.e}.`};
+      if(b.ga) return {jp:`${a.k}が${b.k}です。`, en:`I ${b.e} ${a.e}.`};
+      return {jp:`${a.k}が…`, en:`(restricted use)`};
+    }
+  },
+  {
+    p:'を', name:'wo (o)', fn:'Direct object — what the action is done TO',
+    test:(a,b)=>{
+      if(!a || !b) return false;
+      if(!a.t.startsWith('noun')) return {ok:false, why:'を marks an object — requires a noun before it.'};
+      if(b.t==='verb-trans') return {ok:true, mean:`Direct object — "${a.e}" is what gets ${b.e}n.`};
+      if(b.t==='verb-comm' && a.t.startsWith('noun') && !a.t.includes('person'))
+        return {ok:true, mean:`Direct object of communication verb.`};
+      return {ok:false, why:`を only marks the object of a transitive verb. ${b.e || 'Word 2'} is ${b.t==='verb-motion'?'a motion verb (use に/へ for destination)':b.t==='verb-exist'?'an existence verb (use が)':'not transitive'}.`};
+    },
+    ex:(a,b)=>{
+      return {jp:`${a.k}を${getPol(b)}。`, en:`I ${b.e} ${a.e}.`};
+    }
+  },
+  {
+    p:'に', name:'ni', fn:'Time / Destination / Existence-location / Target',
+    test:(a,b)=>{
+      if(!a || !b) return false;
+      if(!a.t.startsWith('noun')) return {ok:false, why:'に attaches to a noun.'};
+      // Time + verb
+      if(a.t==='noun-time' && a.clock && b.t.startsWith('verb'))
+        return {ok:true, mean:`Specific time point — "at ${a.e}".`};
+      // Place + motion verb (destination)
+      if(a.t==='noun-place' && b.t==='verb-motion')
+        return {ok:true, mean:`Destination — "to ${a.e}".`};
+      // Place + existence verb (location of being)
+      if(a.t==='noun-place' && b.t==='verb-exist')
+        return {ok:true, mean:`Location of existence — "${a.e}" is where something is.`};
+      // Person + communication verb (one-way target)
+      if(a.t==='noun-person' && b.t==='verb-comm')
+        return {ok:true, mean:`Target of action — speak/teach/meet TO this person.`};
+      // Time daypoint usually doesn't take に in Japanese (今日, きのう are bare)
+      if(a.t==='noun-time' && a.daypoint)
+        return {ok:false, why:`Daypoint times (today/tomorrow/yesterday) don't take に — they go bare. Use only with specific clock times or days.`};
+      // Frequency adverbs don't take に either
+      if(a.t==='noun-time' && a.freq)
+        return {ok:false, why:`Frequency adverbs (毎日/毎朝) don't take に — they go bare.`};
+      return {ok:false, why:`に doesn't fit here. に is for: specific time, destination of motion, location of existence, or target of communication.`};
+    },
+    ex:(a,b)=>{
+      if(a.t==='noun-time' && a.clock) return {jp:`${a.k}に${getPol(b)}。`, en:`I ${b.e} at ${a.e}.`};
+      if(a.t==='noun-place' && b.t==='verb-motion') return {jp:`${a.k}に${getPol(b)}。`, en:`I go to ${a.e}.`};
+      if(a.t==='noun-place' && b.t==='verb-exist') return {jp:`${a.k}に${b.k}。`, en:`There is ... in ${a.e}.`};
+      if(a.t==='noun-person' && b.t==='verb-comm') return {jp:`${a.k}に${getPol(b)}。`, en:`I ${b.e} to ${a.e}.`};
+      return {jp:`${a.k}に…`, en:`...`};
+    }
+  },
+  {
+    p:'で', name:'de', fn:'Action location / Means / Language',
+    test:(a,b)=>{
+      if(!a || !b) return false;
+      if(!a.t.startsWith('noun')) return {ok:false, why:'で attaches to a noun.'};
+      // Place + action verb (NOT existence)
+      if(a.t==='noun-place' && (b.t==='verb-trans' || b.t==='verb-intrans' || b.t==='verb-comm'))
+        return {ok:true, mean:`Location of action — "${a.e}" is where the action happens.`};
+      // Means + any verb
+      if((a.t==='noun-means' || a.means) && b.t.startsWith('verb'))
+        return {ok:true, mean:`Means / by — using ${a.e} to do something.`};
+      // Language + communication verb
+      if(a.t==='noun-language' && (b.t==='verb-comm' || b.t==='verb-trans'))
+        return {ok:true, mean:`Means/language — "in ${a.e}".`};
+      // Place + existence is wrong (use に)
+      if(a.t==='noun-place' && b.t==='verb-exist')
+        return {ok:false, why:`で marks WHERE an action happens. For existence (ある/いる), use に instead.`};
+      return {ok:false, why:`で marks action location, means, or language. ${a.e || 'Word 1'} is ${a.t}, ${b.e || 'Word 2'} is ${b.t} — combo not standard.`};
+    },
+    ex:(a,b)=>{
+      if(a.t==='noun-place') return {jp:`${a.k}で${getPol(b)}。`, en:`I ${b.e} at ${a.e}.`};
+      if(a.t==='noun-means'||a.means) return {jp:`${a.k}で${getPol(b)}。`, en:`I ${b.e} by ${a.e}.`};
+      if(a.t==='noun-language') return {jp:`${a.k}で${getPol(b)}。`, en:`I ${b.e} in ${a.e}.`};
+      return {jp:`${a.k}で…`, en:`...`};
+    }
+  },
+  {
+    p:'へ', name:'e', fn:'Direction toward (mostly interchangeable with に for destinations)',
+    test:(a,b)=>{
+      if(!a || !b) return false;
+      if(a.t==='noun-place' && b.t==='verb-motion')
+        return {ok:true, mean:`Direction — "toward ${a.e}". Largely interchangeable with に for destinations.`};
+      return {ok:false, why:`へ marks the direction of movement. Need: place + motion verb.`};
+    },
+    ex:(a,b)=>({jp:`${a.k}へ${getPol(b)}。`, en:`I head toward ${a.e}.`})
+  },
+  {
+    p:'と', name:'to', fn:'And (between nouns) / With (mutual action)',
+    test:(a,b)=>{
+      if(!a || !b) return false;
+      // N + と + N (listing)
+      if(a.t.startsWith('noun') && b.t.startsWith('noun'))
+        return {ok:true, mean:`"And" — listing two nouns: ${a.e} and ${b.e}.`};
+      // Person + と + verb (mutual)
+      if(a.t==='noun-person' && (b.t==='verb-comm' || b.t==='verb-trans' || b.t==='verb-intrans'))
+        return {ok:true, mean:`"With" — doing the action together with ${a.e}.`};
+      return {ok:false, why:`と links nouns ("and") or marks a person you do something WITH. Word combo doesn't fit.`};
+    },
+    ex:(a,b)=>{
+      if(a.t.startsWith('noun') && b.t.startsWith('noun')) return {jp:`${a.k}と${b.k}`, en:`${cap(a.e)} and ${b.e}`};
+      return {jp:`${a.k}と${getPol(b)}。`, en:`I ${b.e} with ${a.e}.`};
+    }
+  },
+  {
+    p:'も', name:'mo', fn:'Also/too — replaces は or が',
+    test:(a,b)=>{
+      if(!a || !b) return false;
+      if(!a.t.startsWith('noun')) return {ok:false, why:'も attaches to a noun.'};
+      // Almost any predicate works (since it's just replacing は/が)
+      if(b.t.startsWith('noun')||b.t.startsWith('adj')||b.t.startsWith('verb'))
+        return {ok:true, mean:`"${cap(a.e)} too / also" — implies a parallel statement.`};
+      return false;
+    },
+    ex:(a,b)=>{
+      if(b.t.startsWith('verb')) return {jp:`${a.k}も${getPol(b)}。`, en:`${cap(a.e)} also ${b.e}s.`};
+      if(b.t.startsWith('adj')) return {jp:`${a.k}も${b.k}です。`, en:`${cap(a.e)} is also ${b.e}.`};
+      return {jp:`${a.k}も${b.k}です。`, en:`${cap(a.e)} is also a ${b.e}.`};
+    }
+  },
+  {
+    p:'の', name:'no', fn:'Possession / "of" — links two nouns',
+    test:(a,b)=>{
+      if(!a || !b) return false;
+      if(a.t.startsWith('noun') && b.t.startsWith('noun'))
+        return {ok:true, mean:`"${cap(a.e)}'s ${b.e}" / "${cap(b.e)} of ${a.e}".`};
+      return {ok:false, why:`の links two nouns (possession or "of"). Both words must be nouns.`};
+    },
+    ex:(a,b)=>({jp:`${a.k}の${b.k}`, en:`${cap(a.e)}'s ${b.e}`})
+  },
+  {
+    p:'から', name:'kara', fn:'From — starting point (time or place)',
+    test:(a,b)=>{
+      if(!a || !b) return false;
+      if((a.t==='noun-time'||a.t==='noun-place') && (b.t.startsWith('verb')||b.t.startsWith('noun')))
+        return {ok:true, mean:`Starting point — "from ${a.e}".`};
+      return {ok:false, why:`から marks a starting point — needs a time or place noun before it.`};
+    },
+    ex:(a,b)=>{
+      if(b.t.startsWith('verb')) return {jp:`${a.k}から${getPol(b)}。`, en:`(...) from ${a.e}.`};
+      return {jp:`${a.k}から${b.k}まで`, en:`from ${a.e} to ${b.e}`};
+    }
+  },
+  {
+    p:'まで', name:'made', fn:'Until/to — endpoint (time or place)',
+    test:(a,b)=>{
+      if(!a || !b) return false;
+      if((a.t==='noun-time'||a.t==='noun-place') && (b.t.startsWith('verb')||b.t.startsWith('noun')))
+        return {ok:true, mean:`Endpoint — "until/to ${a.e}".`};
+      return {ok:false, why:`まで marks an endpoint — needs a time or place noun before it.`};
+    },
+    ex:(a,b)=>{
+      if(b.t.startsWith('verb')) return {jp:`${a.k}まで${getPol(b)}。`, en:`(...) until ${a.e}.`};
+      return {jp:`${a.k}から${b.k}まで`, en:`from ${a.e} to ${b.e}`};
+    }
+  }
+];
+
+function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : ''; }
+
+/* ============================================================
+   UI / EVENT HANDLERS
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const w1in = $('w1'), w2in = $('w2'), pin = $('ptest');
+const detected = $('detected'), results = $('results'), verifyContainer = $('verifyContainer');
+
+function render(){
+  const w1 = findWord(w1in.value);
+  const w2 = findWord(w2in.value);
+  const pTest = pin.value.trim();
+
+  // Detected display
+  let detTxt = '';
+  if(w1in.value || w2in.value){
+    detTxt += '<b>Detected:</b> ';
+    detTxt += w1in.value ? (w1 ? `<span class="matched">[Word 1] ${w1.k} (${w1.h}, ${w1.e}) [${w1.t}]</span>` : `<span class="unmatched">[Word 1] "${w1in.value}" — not in vocabulary</span>`) : '';
+    if(w1in.value && w2in.value) detTxt += ' &nbsp; ';
+    detTxt += w2in.value ? (w2 ? `<span class="matched">[Word 2] ${w2.k} (${w2.h}, ${w2.e}) [${w2.t}]</span>` : `<span class="unmatched">[Word 2] "${w2in.value}" — not in vocabulary</span>`) : '';
+  } else {
+    detTxt = 'Type two words to see which particles can connect them...';
+  }
+  detected.innerHTML = detTxt;
+
+  // Verify mode (particle entered)
+  if(w1 && w2 && pTest){
+    const matchPart = PARTICLES.find(P => P.p === pTest || P.name === pTest.toLowerCase());
+    if(matchPart){
+      const result = matchPart.test(w1, w2);
+      const ok = result === true ? {ok:true} : (result || {ok:false, why:'No applicable rule.'});
+      const ex = matchPart.ex(w1, w2);
+      const valid = ok.ok;
+      verifyContainer.innerHTML = `
+        <div class="verify-box ${valid?'valid':'invalid'}">
+          <div class="v-head">${valid?'✓ Valid':'✗ Not valid'} — ${matchPart.p} (${matchPart.name})</div>
+          <div class="v-sentence">${valid ? ex.jp : `<span style="text-decoration:line-through">${ex.jp}</span>`}</div>
+          <div class="v-explain"><b>${valid?'Why it works:':'Why it doesn\'t:'}</b> ${valid ? (ok.mean||matchPart.fn) : ok.why}</div>
+        </div>`;
+    } else {
+      verifyContainer.innerHTML = `<div class="verify-box invalid"><div class="v-head">⚠ Unknown particle: "${pTest}"</div><div class="v-explain">Try one of: ${PARTICLES.map(p=>p.p).join(' · ')}</div></div>`;
+    }
+  } else {
+    verifyContainer.innerHTML = '';
+  }
+
+  // ALL particles status (if both words present)
+  if(w1 && w2){
+    let html = `<div class="sec-head">Particle Compatibility for "${w1.k}" + "${w2.k}"</div>`;
+    html += `<div class="sec-sub">All 11 particles checked. ✓ = grammatical · ✗ = not used here</div>`;
+    html += '<div class="particle-grid">';
+    PARTICLES.forEach(P=>{
+      const r = P.test(w1, w2);
+      const ok = r === true ? {ok:true, mean:P.fn} : (r || {ok:false, why:'No applicable rule.'});
+      const valid = ok.ok;
+      const ex = P.ex(w1, w2);
+      html += `<div class="p-card ${valid?'valid':'invalid'}">
+        <div class="p-head">
+          <div class="p-symbol">${P.p}</div>
+          <div class="p-name">${P.name} · ${P.fn.split('—')[0].trim()}</div>
+          <div class="p-status">${valid?'✓':'✗'}</div>
+        </div>
+        <div class="p-rule">${P.fn}</div>
+        <div class="p-example">${valid ? ex.jp : `<span style="text-decoration:line-through;color:var(--muted)">${ex.jp}</span>`}</div>
+        <div class="p-trans">${valid ? ex.en : 'Not grammatical'}</div>
+        <div class="p-mean"><b>${valid?'Meaning:':'Why ✗:'}</b> ${valid ? (ok.mean||P.fn) : ok.why}</div>
+      </div>`;
+    });
+    html += '</div>';
+    results.innerHTML = html;
+  } else {
+    results.innerHTML = `
+      <div class="empty">
+        <div class="em-big">は · が · を · に · で · へ · と · も · の · から · まで</div>
+        <p>Enter two words above to see particle compatibility.<br>
+        All 11 particles will be checked, with ✓ or ✗ for each, plus example sentences and meanings.</p>
+        <p style="margin-top:14px;color:var(--text-dim)"><b>Try:</b> 私 + 学生 · としょかん + いく · 本 + よむ · ともだち + はなす · 7じ + おきる</p>
+      </div>`;
+  }
+}
+
+/* Reference grid */
+function renderRefs(){
+  const refGrid = $('refGrid');
+  refGrid.innerHTML = PARTICLES.map(P=>`
+    <div class="ref-particle" onclick="setParticle('${P.p}')">
+      <div class="rp-head">
+        <div class="rp-sym">${P.p}</div>
+        <div class="rp-name">${P.name}</div>
+      </div>
+      <div class="rp-fn">${P.fn}</div>
+    </div>
+  `).join('');
+}
+function setParticle(p){ pin.value = p; render(); pin.focus(); }
+
+[w1in, w2in, pin].forEach(el => {
+  el.addEventListener('input', render);
+  el.addEventListener('change', render);
+});
+renderRefs();
+render();
+</script>
+
+</body>
+</html>

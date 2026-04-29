@@ -1,0 +1,148 @@
+/* ═══════════════════════════════════════════════════════════
+   Shared responsive enhancements for japanese-study-guide
+   Layered on top of each page's own styles. Additive only —
+   does not override page-specific layout decisions.
+   ═══════════════════════════════════════════════════════════ */
+
+/* iOS safe area + prevent horizontal page scroll */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Long words / Japanese strings shouldn't blow out narrow screens */
+p, li, td, th, dd, dt, span, a, label, h1, h2, h3, h4, h5, h6, .card, .vocab-cell, .note {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Make tables horizontally scrollable on small screens.
+   Strategy: wrap each table in a scroll container via JS (see scroll-tables.js),
+   plus give cells minimum widths so text doesn't squash to one char per line. */
+@media (max-width: 720px) {
+  .table-scroll {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    border-radius: inherit;
+  }
+  .table-scroll > table {
+    width: max-content;
+    min-width: 100%;
+    table-layout: auto;
+  }
+  .table-scroll th, .table-scroll td {
+    white-space: normal;
+    min-width: 90px;
+    word-break: keep-all;
+  }
+  /* English / Notes columns get more breathing room */
+  .table-scroll td:nth-last-child(-n+2),
+  .table-scroll th:nth-last-child(-n+2) { min-width: 140px; }
+  /* Subtle indication that the table scrolls */
+  .table-scroll {
+    background:
+      linear-gradient(to right, var(--card, #161616) 30%, transparent),
+      linear-gradient(to right, transparent, var(--card, #161616) 70%) 100% 0,
+      radial-gradient(farthest-side at 0 50%, rgba(0,0,0,0.4), transparent),
+      radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,0.4), transparent) 100% 0;
+    background-repeat: no-repeat;
+    background-size: 24px 100%, 24px 100%, 12px 100%, 12px 100%;
+    background-attachment: local, local, scroll, scroll;
+  }
+}
+
+/* Images and embeds scale to container */
+img, video, canvas, svg, iframe { max-width: 100%; height: auto; }
+
+/* Buttons & inputs: tap-target friendly, never narrower than the screen */
+button, .btn, input, select, textarea {
+  max-width: 100%;
+}
+@media (max-width: 720px) {
+  button, .btn, .mode-btn, .view-btn, .nav-tab, .filter-btn, .answer-option, .quiz-btn {
+    min-height: 40px;
+  }
+  input, select, textarea {
+    font-size: 16px; /* prevent iOS auto-zoom on focus */
+  }
+}
+
+/* IME / quiz control row: wrap gracefully at very narrow widths */
+@media (max-width: 480px) {
+  .ime-bar, .quiz-controls, .controls-row, .modes, .filters {
+    flex-wrap: wrap !important;
+    row-gap: 8px;
+  }
+}
+
+/* Floating action buttons / overlays — don't sit on top of content edges */
+@media (max-width: 480px) {
+  .fab, .floating-btn, .floating-action, .fab-search, .fab-trans,
+  [class*="floating"], [class*="fab-"] {
+    transform: scale(0.9);
+  }
+}
+
+/* Sticky nav rows that scroll horizontally — keep them swipeable */
+.nav-scroll, .chapter-tabs, .tabs-row {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+/* Containers shouldn't push past viewport */
+.main-container, .container, .wrapper, .content, main, section {
+  max-width: 100%;
+}
+
+/* Reduce oversized headings on phones */
+@media (max-width: 480px) {
+  h1 { font-size: clamp(24px, 7vw, 36px) !important; }
+  h2 { font-size: clamp(20px, 5.5vw, 28px) !important; }
+  h3 { font-size: clamp(17px, 4.5vw, 22px) !important; }
+}
+
+/* Modal / overlay panels: never overflow viewport */
+.modal, .modal-content, .overlay-panel, [role="dialog"] {
+  max-width: min(100vw - 16px, 720px);
+  max-height: calc(100dvh - 16px);
+  overflow: auto;
+}
+
+/* Card grids: collapse to one column on phones if not already */
+@media (max-width: 480px) {
+  .card-grid, .grid, .kanji-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Form fields full-width on small screens */
+@media (max-width: 480px) {
+  input[type="text"], input[type="search"], input[type="number"], textarea {
+    width: 100%;
+  }
+}
+
+/* Honour reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print: hide floating UI */
+@media print {
+  .fab, .floating-btn, .nav-wrap, [class*="floating"], button { display: none !important; }
+  body { background: white; color: black; }
+}

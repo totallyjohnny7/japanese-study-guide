@@ -574,7 +574,6 @@ body::before {
 .nav-tab.practice-tab.active { color: var(--green); border-bottom-color: var(--green); }
 .nav-tab.practice-tab .kanji { color: var(--green); }
 /* Oral Exam Tab */
-#tab_oral-exam.active { color: #e85454; border-bottom-color: #e85454; }
 .oe-weight { display:inline-block;background:linear-gradient(135deg,#8b6d1e,#6b5518);color:#f5f2ea;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:10px; }
 .oe-weight.big { background:linear-gradient(135deg,#a82020,#d44); }
 .oe-intro { background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin:20px 0; }
@@ -625,16 +624,6 @@ body::before {
 .oe-toggle-btn.active .oe-toggle-dot { background:var(--red); }
 
 /* Hide states */
-#panel_oral-exam.hide-english .oe-en,
-#panel_oral-exam.hide-english .oe-loc-en { visibility:hidden; }
-#panel_oral-exam.hide-romaji .oe-rm,
-#panel_oral-exam.hide-romaji .oe-loc-rm,
-#panel_oral-exam.hide-romaji .oe-d-line .oe-rm { visibility:hidden; }
-#panel_oral-exam.hide-english .oe-en:hover,
-#panel_oral-exam.hide-romaji .oe-rm:hover,
-#panel_oral-exam.hide-english .oe-loc-en:hover,
-#panel_oral-exam.hide-romaji .oe-loc-rm:hover,
-#panel_oral-exam.hide-romaji .oe-d-line .oe-rm:hover { visibility:visible;opacity:0.5; }
 
 /* Vocab Atlas example blocks */
 .va-ex { background:rgba(158,204,255,0.05);border-left:3px solid #9eccff;border-radius:6px;padding:10px 12px;margin-top:12px;font-size:12px;line-height:1.7; }
@@ -2129,7 +2118,123 @@ body::before {
   #fc-card-area .fc-card{touch-action:manipulation;-webkit-user-select:none;user-select:none;will-change:transform;-webkit-tap-highlight-color:transparent;}
   .fc-swipe-dir-hint{display:block;}
 }
+
+/* ═══ MOBILE-FRIENDLY REFINEMENTS ═══ */
+@media (max-width: 600px) {
+  /* Main container: tighter side padding, extra room for streak bar + FABs */
+  .main-container { padding: 0 10px 96px; }
+
+  /* Masthead: tighter */
+  .masthead { padding: 28px 16px 12px; }
+  .masthead h1 { font-size: 32px; letter-spacing: 2px; }
+  .masthead .sub { font-size: 10px; letter-spacing: 3px; }
+  .masthead .line { margin: 10px auto; }
+
+  /* Chapter title inside panels */
+  .ch-title { font-size: 20px; letter-spacing: 1px; margin: 16px 0 4px; }
+  .ch-subtitle { font-size: 10px; letter-spacing: 2px; margin-bottom: 14px; }
+
+  /* Nav tabs: smaller + edge fade to hint horizontal scroll */
+  .nav-wrap { padding: 0 6px; position: relative; }
+  .nav-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 1px;
+    width: 22px;
+    background: linear-gradient(90deg, transparent, var(--bg));
+    pointer-events: none;
+  }
+  .nav-tab { padding: 10px 10px 8px; font-size: 10px; letter-spacing: 0.5px; }
+  .nav-tab .kanji { font-size: 14px; margin-bottom: 1px; }
+  .nav-tab.ref-tab { font-size: 9px; }
+
+  /* Search container */
+  .search-container { margin: 0 4px; }
+
+  /* Tables: tighter, allow breaking, horizontal scroll fade */
+  .study-content table { font-size: 12px; }
+  .study-content th, .study-content td {
+    padding: 6px 7px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  .study-content th { font-size: 10px; letter-spacing: 0.2px; padding: 6px 7px; }
+  .study-content td { font-size: 12px; }
+  .study-content .ja { font-size: 14px; }
+
+  /* Any wrapper with horizontal scroll gets a right-edge fade hint */
+  div[style*="overflow-x:auto"],
+  div[style*="overflow-x: auto"] {
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+  }
+  div[style*="overflow-x:auto"]::after,
+  div[style*="overflow-x: auto"]::after {
+    content: '';
+    position: sticky;
+    float: right;
+    top: 0; right: 0;
+    width: 28px;
+    height: 100%;
+    margin-left: -28px;
+    background: linear-gradient(90deg, transparent, var(--card));
+    pointer-events: none;
+  }
+
+  /* Card layout (Japanese + English sides) gets tighter padding */
+  .study-content .pl, .study-content .pv { padding: 10px 12px; font-size: 13px; }
+  .study-content .card { margin-bottom: 12px; }
+  .study-content .card-header { font-size: 11px; padding: 7px 12px; letter-spacing: 1px; }
+
+  /* Rich body + expansion tighter */
+  .rich-body { padding: 12px 12px; font-size: 12.5px; }
+  .rich-body h3 { font-size: 12px; padding: 6px 10px; }
+  .rich-body h4 { font-size: 11px; }
+  .expansion { padding: 10px 12px; }
+  .expansion h4 { font-size: 11.5px; }
+
+  /* Mode switcher + buttons */
+  .view-toggle { margin: 16px 0 14px; }
+  .view-btn { padding: 10px 6px; font-size: 11px; }
+  .mode-btn { padding: 8px 11px; font-size: 10px; }
+
+  /* Practice cards */
+  .pcard { padding: 14px; margin-bottom: 10px; }
+  .handwritten { font-size: 44px; padding: 10px; min-height: 76px; }
+  .draw-canvas { height: 200px; }
+  .answer-input { font-size: 16px; padding: 10px; }
+
+  /* FABs: stack cleanly ABOVE the 40px streak bar so they never overlap */
+  .voice-fab { bottom: 54px; left: 10px; width: 40px; height: 40px; font-size: 18px; }
+  .float-search-btn { bottom: 54px; right: 10px; width: 44px; height: 44px; font-size: 18px; }
+  .tx-fab { bottom: 104px; left: 10px; width: 40px; height: 40px; font-size: 17px; }
+
+  /* Streak bar: tighter so three items fit without crowding */
+  .streak-bar { gap: 12px; padding: 7px 10px; font-size: 11px; }
+  .streak-bar .sb-val { font-size: 12px; }
+  .streak-bar .sb-fire { font-size: 14px; }
+}
+
+@media (max-width: 420px) {
+  .masthead h1 { font-size: 26px; letter-spacing: 1.5px; }
+  .masthead .sub { font-size: 9px; letter-spacing: 2px; }
+  .ch-title { font-size: 18px; }
+
+  .study-content th, .study-content td { padding: 5px 5px; }
+  .study-content table { font-size: 11.5px; }
+  .study-content .ja { font-size: 13px; }
+  .study-content td { font-size: 11.5px; }
+  .study-content th { font-size: 9.5px; }
+
+  .nav-tab { padding: 9px 8px 7px; font-size: 9px; letter-spacing: 0.3px; }
+  .nav-tab .kanji { font-size: 13px; }
+
+  .streak-bar { gap: 8px; font-size: 10.5px; padding: 6px 8px; }
+  .streak-bar .sb-item { gap: 3px; }
+}
 </style>
+<link rel="stylesheet" href="responsive.css">
+<script src="responsive.js" defer></script>
 </head>
 <body>
 
@@ -2153,7 +2258,7 @@ body::before {
   <div id="searchResults" class="hidden" style="position:absolute;left:16px;right:16px;top:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;max-height:420px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.6);z-index:200;margin-top:4px;"></div>
 </div>
 
-<div class="nav-wrap"><div class="nav-scroll"><button class="nav-tab" onclick="showChapter('ch1')" id="tab_ch1"><span class="kanji">第一章</span>Ch 1: Sounds & Hiragana</button><button class="nav-tab" onclick="showChapter('ch2')" id="tab_ch2"><span class="kanji">第二章</span>Ch 2: Introductions</button><button class="nav-tab" onclick="showChapter('ch3')" id="tab_ch3"><span class="kanji">第三章</span>Ch 3: Daily Routines</button><button class="nav-tab" onclick="showChapter('ch4')" id="tab_ch4"><span class="kanji">第四章</span>Ch 4: Japanese Cities</button><button class="nav-tab" onclick="showChapter('ch5')" id="tab_ch5"><span class="kanji">第五章</span>Ch 5: Japanese Homes</button><button class="nav-tab" onclick="showChapter('ch6')" id="tab_ch6"><span class="kanji">第六章</span>Ch 6: Leisure Time</button><button class="nav-tab practice-tab" onclick="showChapter('practice-lab')" id="tab_practice-lab"><span class="kanji">練</span>Practice Lab</button><button class="nav-tab" style="color:#e85454" onclick="window.location.href='oral-exam.html'" id="tab_oral-exam"><span class="kanji" style="color:#e85454">🎤</span>Oral Exam</button><button class="nav-tab" style="color:#f0c85a" onclick="window.location.href='exam-ch456.html'" id="tab_exam-sim"><span class="kanji" style="color:#f0c85a">📝</span>Exam Sim</button><button class="nav-tab" style="color:#5ba8e8;border-bottom-color:transparent" onclick="window.location.href='reading.html'" id="tab_reading"><span class="kanji" style="color:#5ba8e8">読</span>Reading</button><button class="nav-tab" style="color:var(--gold-bright);border-bottom-color:transparent" onclick="window.location.href='kanji.html'" id="tab_kanji"><span class="kanji" style="color:var(--gold-bright)">&#28450;&#23383;</span>Kanji</button><button class="nav-tab ref-tab" onclick="showChapter('ref-numbers')" id="tab_ref-numbers"><span class="kanji">数</span>Numbers & Time</button><button class="nav-tab ref-tab" onclick="showChapter('ref-patterns')" id="tab_ref-patterns"><span class="kanji">文</span>Patterns</button><button class="nav-tab ref-tab" onclick="showChapter('ref-conv')" id="tab_ref-conv"><span class="kanji">話</span>Conversations</button><button class="nav-tab ref-tab" onclick="showChapter('ref-struct')" id="tab_ref-struct"><span class="kanji">構</span>Structure</button><button class="nav-tab ref-tab" style="color:#9eccff;border-bottom-color:transparent" onclick="showChapter('ref-vocab')" id="tab_ref-vocab"><span class="kanji" style="color:#9eccff">語</span>Vocab Atlas</button><button class="nav-tab" style="color:#c8a2ff;border-bottom-color:transparent" onclick="showChapter('flashcards')" id="tab_flashcards"><span class="kanji" style="color:#c8a2ff">札</span>Flashcards</button><button class="nav-tab ref-tab" style="color:#e8b84c" onclick="showChapter('cheatsheet')" id="tab_cheatsheet"><span class="kanji" style="color:#e8b84c">📋</span>Cheat Sheet</button></div></div><div class="main-container">
+<div class="nav-wrap"><div class="nav-scroll"><button class="nav-tab" onclick="showChapter('ch1')" id="tab_ch1"><span class="kanji">第一章</span>Ch 1: Sounds & Hiragana</button><button class="nav-tab" onclick="showChapter('ch2')" id="tab_ch2"><span class="kanji">第二章</span>Ch 2: Introductions</button><button class="nav-tab" onclick="showChapter('ch3')" id="tab_ch3"><span class="kanji">第三章</span>Ch 3: Daily Routines</button><button class="nav-tab" onclick="showChapter('ch4')" id="tab_ch4"><span class="kanji">第四章</span>Ch 4: Japanese Cities</button><button class="nav-tab" onclick="showChapter('ch5')" id="tab_ch5"><span class="kanji">第五章</span>Ch 5: Japanese Homes</button><button class="nav-tab" onclick="showChapter('ch6')" id="tab_ch6"><span class="kanji">第六章</span>Ch 6: Leisure Time</button><button class="nav-tab practice-tab" onclick="showChapter('practice-lab')" id="tab_practice-lab"><span class="kanji">練</span>Practice Lab</button><button class="nav-tab" style="color:#f0c85a" onclick="window.location.href='exam-ch456.html'" id="tab_exam-sim"><span class="kanji" style="color:#f0c85a">📝</span>Exam Sim</button><button class="nav-tab" style="color:#5ba8e8;border-bottom-color:transparent" onclick="window.location.href='reading.html'" id="tab_reading"><span class="kanji" style="color:#5ba8e8">読</span>Reading</button><button class="nav-tab" style="color:var(--gold-bright);border-bottom-color:transparent" onclick="window.location.href='kanji.html'" id="tab_kanji"><span class="kanji" style="color:var(--gold-bright)">&#28450;&#23383;</span>Kanji</button><button class="nav-tab ref-tab" onclick="showChapter('ref-numbers')" id="tab_ref-numbers"><span class="kanji">数</span>Numbers & Time</button><button class="nav-tab ref-tab" onclick="showChapter('ref-patterns')" id="tab_ref-patterns"><span class="kanji">文</span>Patterns</button><button class="nav-tab ref-tab" onclick="showChapter('ref-conv')" id="tab_ref-conv"><span class="kanji">話</span>Conversations</button><button class="nav-tab ref-tab" onclick="showChapter('ref-struct')" id="tab_ref-struct"><span class="kanji">構</span>Structure</button><button class="nav-tab ref-tab" style="color:#9eccff;border-bottom-color:transparent" onclick="showChapter('ref-vocab')" id="tab_ref-vocab"><span class="kanji" style="color:#9eccff">語</span>Vocab Atlas</button><button class="nav-tab" style="color:#c8a2ff;border-bottom-color:transparent" onclick="showChapter('flashcards')" id="tab_flashcards"><span class="kanji" style="color:#c8a2ff">札</span>Flashcards</button><button class="nav-tab ref-tab" style="color:#e8b84c" onclick="showChapter('cheatsheet')" id="tab_cheatsheet"><span class="kanji" style="color:#e8b84c">📋</span>Cheat Sheet</button></div></div><div class="main-container">
 <div class="chapter-panel" id="panel_ch1">
   <div class="ch-title">第一章 — THE JAPANESE SOUND SYSTEM</div>
   <div class="ch-subtitle">Ch 1: Sounds & Hiragana · 42 vocabulary items</div>
@@ -10127,737 +10232,6 @@ body::before {
   </div>
 </div>
 
-<div class="chapter-panel hide-english hide-romaji" id="panel_oral-exam">
-<div class="ch-title" style="color:#e85454">🎤 ORAL EXAM PREP — Spring 2026</div>
-<div class="ch-subtitle">13 minutes · 100 points · Individual test · Chapters 1–6</div>
-<div class="oe-score-bar">
-<div style="width:10%;background:#b088f9;"></div>
-<div style="width:20%;background:#5ba8e8;"></div>
-<div style="width:50%;background:#d4a843;"></div>
-<div style="width:20%;background:#4ecf7a;"></div>
-</div>
-<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;font-size:11px;margin-bottom:14px;">
-<span style="color:#b088f9;">■ Self-Intro 10pts</span>
-<span style="color:#5ba8e8;">■ Dialogue 20pts</span>
-<span style="color:#d4a843;">■ Locations 50pts</span>
-<span style="color:#4ecf7a;">■ Q&A 20pts</span>
-</div>
-
-<div class="oe-tabs">
-<button class="oe-tab-btn active" onclick="showOEsec(0)">SELF-INTRO</button>
-<button class="oe-tab-btn" onclick="showOEsec(1)">DIALOGUE</button>
-<button class="oe-tab-btn" onclick="showOEsec(2)">LOCATIONS</button>
-<button class="oe-tab-btn" onclick="showOEsec(3)">Q &amp; A</button>
-<button class="oe-tab-btn" onclick="showOEsec(4)">CHEATSHEET</button>
-</div>
-
-<div class="oe-toolbar">
-<button class="oe-toggle-btn active" id="oeHideEn" onclick="toggleOEhide('english')"><span class="oe-toggle-dot"></span>Hide English</button>
-<button class="oe-toggle-btn active" id="oeHideRm" onclick="toggleOEhide('romaji')"><span class="oe-toggle-dot"></span>Hide Romaji</button>
-<button class="oe-toggle-btn" onclick="speakAllOE()" id="oeSpeakAll">🔊 Speak All</button>
-<button class="oe-toggle-btn" onclick="stopOEspeak()">⏹ Stop</button>
-</div>
-
-<!-- ═══ SELF-INTRO ═══ -->
-<div class="oe-sec active" id="oesec0">
-<div class="oe-intro">
-<span class="oe-weight">10 POINTS</span>
-<h2>Section 1: Self-Introduction</h2>
-<p>Introduce yourself: name, school, year, major, hometown. Use patterns from Ch 1–2. Speak naturally — aim for ~30 seconds.</p>
-</div>
-<div class="oe-tip"><b>STRATEGY:</b> Memorize as one smooth flow. Practice aloud 10+ times. The instructor wants confident, natural delivery.</div>
-<div class="card"><div class="card-header">YOUR INTRODUCTION TEMPLATE</div><div class="card-body">
-<div class="oe-template">
-<div class="oe-ja oe-ja-lg" style="line-height:2.2;">
-おはようございます。じょにー・るーです。<br>
-ねぶらすかだいがくのさんねんせいです。<br>
-せんこうはかがくです。<br>
-しゅっしんはおまはです。<br>
-どうぞよろしくおねがいします。
-</div>
-</div>
-<h4 style="color:var(--gold);font-size:12px;letter-spacing:1px;margin:16px 0 10px;">EXAMPLE</h4>
-<div style="background:var(--surface);border-radius:10px;padding:16px;">
-<div class="oe-ja" style="line-height:2.4;">おはようございます。じょにー・るーです。<br>ねぶらすかだいがくのさんねんせいです。<br>せんこうはかがくです。<br>しゅっしんはおまはです。<br>どうぞよろしくおねがいします。</div>
-<div class="oe-rm" style="margin-top:10px;">Ohayoo gozaimasu. Jonii Ruu desu. / Neburasuka daigaku no san-nensei desu. / Senkoo wa kagaku desu. / Shusshin wa Omaha desu. / Doozo yoroshiku onegaishimasu.</div>
-<div class="oe-en" style="margin-top:8px;">Good morning. I'm Johnny Luu. / I'm a junior (3rd year) at the University of Nebraska. / My major is Science. / I'm from Omaha. / Nice to meet you.</div>
-</div>
-</div></div>
-<div class="oe-warn"><b>COMMON MISTAKES:</b> Don't say わたしは at the start — it's implied. End with どうぞよろしくおねがいします (polite — safer for exam).</div>
-<div class="card"><div class="card-header">YEAR IN SCHOOL VOCAB</div><div class="card-body">
-<div class="oe-loc-grid">
-<div class="oe-loc-item"><div class="oe-loc-jp">いちねんせい</div><div class="oe-loc-rm">ichi-nensei</div><div class="oe-loc-en">freshman</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">にねんせい</div><div class="oe-loc-rm">ni-nensei</div><div class="oe-loc-en">sophomore</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">さんねんせい</div><div class="oe-loc-rm">san-nensei</div><div class="oe-loc-en">junior</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">よねんせい</div><div class="oe-loc-rm">yo-nensei</div><div class="oe-loc-en">senior</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">だいがくいんせい</div><div class="oe-loc-rm">daigakuinsei</div><div class="oe-loc-en">graduate student</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">せんこう</div><div class="oe-loc-rm">senkoo</div><div class="oe-loc-en">major</div></div>
-</div>
-</div></div>
-
-<div class="card"><div class="card-header">SENTENCE PATTERN BANK — すべてのパターン</div><div class="card-body">
-<div class="oe-tip"><b>HOW TO USE:</b> Memorize the structure, swap <span class="oe-hl">[ ]</span> for your own details. Each pattern below is exam-ready hiragana.</div>
-
-<div style="margin-bottom:14px;padding:12px;background:var(--surface);border-radius:8px;">
-<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px;">パターン 1 — あいさつ + なまえ</div>
-<div class="oe-template"><div class="oe-ja" style="font-size:15px;line-height:2.2;">はじめまして。<span class="oe-hl">[ なまえ ]</span> です。</div></div>
-<div class="oe-en" style="margin-top:4px;font-size:12px;">How do you do? I'm [name].</div>
-<div style="font-size:12px;color:var(--muted);margin-top:4px;">→ はじめまして。ジョニー・ルー です。</div>
-</div>
-
-<div style="margin-bottom:14px;padding:12px;background:var(--surface);border-radius:8px;">
-<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px;">パターン 2 — がっこう ・ ねんせい</div>
-<div class="oe-template"><div class="oe-ja" style="font-size:15px;line-height:2.2;"><span class="oe-hl">[ だいがく ]</span> の <span class="oe-hl">[ ねんせい ]</span> です。</div></div>
-<div class="oe-en" style="margin-top:4px;font-size:12px;">I am a [year] at [university].</div>
-<div style="font-size:12px;color:var(--muted);margin-top:4px;">→ ネブラスカだいがく の さんねんせい です。</div>
-</div>
-
-<div style="margin-bottom:14px;padding:12px;background:var(--surface);border-radius:8px;">
-<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px;">パターン 3 — せんこう (Major)</div>
-<div class="oe-template"><div class="oe-ja" style="font-size:15px;line-height:2.2;">せんこうは <span class="oe-hl">[ せんこう ]</span> です。</div></div>
-<div class="oe-en" style="margin-top:4px;font-size:12px;">My major is [major].</div>
-<div style="font-size:12px;color:var(--muted);margin-top:4px;">→ せんこうは かがく です。</div>
-</div>
-
-<div style="margin-bottom:14px;padding:12px;background:var(--surface);border-radius:8px;">
-<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px;">パターン 4 — しゅっしん (Hometown)</div>
-<div class="oe-template"><div class="oe-ja" style="font-size:15px;line-height:2.2;"><span class="oe-hl">[ まち ]</span> から きました。</div></div>
-<div class="oe-en" style="margin-top:4px;font-size:12px;">I came from [city].</div>
-<div style="font-size:12px;color:var(--muted);margin-top:4px;">→ オマハ から きました。</div>
-</div>
-
-<div style="margin-bottom:14px;padding:12px;background:var(--surface);border-radius:8px;">
-<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px;">パターン 5 — しめくくり (Closing)</div>
-<div class="oe-template"><div class="oe-ja" style="font-size:15px;line-height:2.2;">どうぞ よろしく おねがいします。</div></div>
-<div class="oe-en" style="margin-top:4px;font-size:12px;">Nice to meet you / I look forward to your acquaintance.</div>
-</div>
-
-<div style="margin-top:4px;">
-<div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">せんこう SWAP LIST</div>
-<div class="oe-loc-grid">
-<div class="oe-loc-item"><div class="oe-loc-jp">せいぶつがく</div><div class="oe-loc-rm">seibutsugaku</div><div class="oe-loc-en">biology</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">けいざいがく</div><div class="oe-loc-rm">keizaigaku</div><div class="oe-loc-en">economics</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">えいご</div><div class="oe-loc-rm">eigo</div><div class="oe-loc-en">English</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">れきし</div><div class="oe-loc-rm">rekishi</div><div class="oe-loc-en">history</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">しんりがく</div><div class="oe-loc-rm">shinrigaku</div><div class="oe-loc-en">psychology</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">こうがく</div><div class="oe-loc-rm">koogaku</div><div class="oe-loc-en">engineering</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ほうがく</div><div class="oe-loc-rm">hoogaku</div><div class="oe-loc-en">law</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">コンピューターサイエンス</div><div class="oe-loc-rm">konpyuutaa saiensu</div><div class="oe-loc-en">CS</div></div>
-</div>
-</div>
-</div></div>
-
-</div>
-
-<!-- ═══ DIALOGUE ═══ -->
-<div class="oe-sec" id="oesec1">
-<div class="oe-intro">
-<span class="oe-weight">20 POINTS</span>
-<h2>Section 2: Dialogue Reading</h2>
-<p>Read aloud a dialogue from Ch 4, 5, or 6. The instructor picks which one. Practice ALL three. Focus on pronunciation, natural flow, and pitch.</p>
-</div>
-<div class="oe-tip"><b>HOW TO PRACTICE:</b> 1) Read aloud slowly. 2) Listen to MindTap audio and mimic rhythm. 3) Record yourself and compare. 4) Focus on natural pauses between phrases.</div>
-
-<div class="card"><div class="card-header">CH 4 — このへんに ぎんこうが ありますか <span style="font-size:9px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;">CITY</span></div><div class="card-body">
-<p class="oe-en" style="margin-bottom:12px;font-style:italic;">Ueda is meeting a friend in Shibuya. After getting off the train she realizes she needs cash and asks a passerby in front of Shibuya Station (しぶやえき).</p>
-<div style="background:var(--surface);border-radius:10px;padding:16px;">
-<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px;">PART 1 — OUTSIDE THE STATION</div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">あのう、すみませんが。</div><div class="oe-rm">Anoo, sumimasen ga.</div><div class="oe-en">Um, excuse me.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">つうこうにんA</div><div class="oe-ja">はい。</div><div class="oe-rm">Hai.</div><div class="oe-en">Yes?</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">このへんに ぎんこうが ありますか。</div><div class="oe-rm">Kono hen ni ginkoo ga arimasu ka.</div><div class="oe-en">Is there a bank around here?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">つうこうにんA</div><div class="oe-ja">ええ、ありますよ。あそこに たかい ビルが ありますね。</div><div class="oe-rm">Ee, arimasu yo. Asoko ni takai biru ga arimasu ne.</div><div class="oe-en">Yes, there is. See that tall building over there?</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">ええ。</div><div class="oe-rm">Ee.</div><div class="oe-en">Yes.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">つうこうにんA</div><div class="oe-ja">あれですよ。</div><div class="oe-rm">Are desu yo.</div><div class="oe-en">That's it.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">あ、そうですか。どうも ありがとう ございます。</div><div class="oe-rm">A, soo desu ka. Doomo arigatoo gozaimasu.</div><div class="oe-en">Oh, I see. Thank you very much.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">つうこうにんA</div><div class="oe-ja">いいえ。</div><div class="oe-rm">Iie.</div><div class="oe-en">You're welcome.</div></div>
-
-<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin:14px 0 8px;">PART 2 — INSIDE THE BUILDING</div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">あのう、すみません。</div><div class="oe-rm">Anoo, sumimasen.</div><div class="oe-en">Um, excuse me.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">つうこうにんB</div><div class="oe-ja">はい。</div><div class="oe-rm">Hai.</div><div class="oe-en">Yes?</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">ぎんこうは どこに ありますか。</div><div class="oe-rm">Ginkoo wa doko ni arimasu ka.</div><div class="oe-en">Where is the bank?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">つうこうにんB</div><div class="oe-ja">あ、ぎんこうは それですよ。</div><div class="oe-rm">A, ginkoo wa sore desu yo.</div><div class="oe-en">Oh, the bank is right there.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">ああ、どうも。</div><div class="oe-rm">Aa, doomo.</div><div class="oe-en">Ah, thanks.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">つうこうにんB</div><div class="oe-ja">いいえ。</div><div class="oe-rm">Iie.</div><div class="oe-en">You're welcome.</div></div>
-
-<div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1px;margin:14px 0 8px;">PART 3 — AT THE BANK ENTRANCE</div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">あのう、すみませんが、ATM は どこですか。</div><div class="oe-rm">Anoo, sumimasen ga, ATM wa doko desu ka.</div><div class="oe-en">Um, excuse me, where is the ATM?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">こういん</div><div class="oe-ja">そこに ございます。</div><div class="oe-rm">Soko ni gozaimasu.</div><div class="oe-en">It's right there. (very polite)</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">ああ、どうも。</div><div class="oe-rm">Aa, doomo.</div><div class="oe-en">Ah, thanks.</div></div>
-</div>
-</div></div>
-
-<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#1a4a6b,#2d6b8a);">CH 4 — 読んだ後で COMPREHENSION (Dialogue)</div><div class="card-body">
-<div class="oe-tip"><b>Practice answering aloud in Japanese.</b> Tap a question to see the model answer.</div>
-<details class="oe-qa"><summary><span class="oe-ja">1. うえださんは どこに いましたか。</span> <span class="oe-en">— Where was Ueda?</span></summary>
-<div class="oe-ja" style="margin-top:8px;">うえださんは しぶやえきの まえに いました。</div>
-<div class="oe-rm">Ueda-san wa Shibuya-eki no mae ni imashita.</div>
-<div class="oe-en">Ueda was in front of Shibuya Station.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">2. うえださんは 何を さがしていましたか。</span> <span class="oe-en">— What was Ueda looking for?</span></summary>
-<div class="oe-ja" style="margin-top:8px;">うえださんは ぎんこうを さがしていました。</div>
-<div class="oe-rm">Ueda-san wa ginkoo o sagashite imashita.</div>
-<div class="oe-en">Ueda was looking for a bank.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">3. ぎんこうは どこに ありましたか。</span> <span class="oe-en">— Where was the bank?</span></summary>
-<div class="oe-ja" style="margin-top:8px;">ぎんこうは たかい ビルの 中に ありました。</div>
-<div class="oe-rm">Ginkoo wa takai biru no naka ni arimashita.</div>
-<div class="oe-en">The bank was inside the tall building.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">4. うえださんは ATM を さがしましたか。</span> <span class="oe-en">— Did Ueda look for the ATM?</span></summary>
-<div class="oe-ja" style="margin-top:8px;">はい、ぎんこうの 中で こういんに ききました。</div>
-<div class="oe-rm">Hai, ginkoo no naka de kooin ni kikimashita.</div>
-<div class="oe-en">Yes — she asked the clerk inside the bank.</div></details>
-</div></div>
-
-<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#2d4a1a,#4a6b2d);">CH 4 — READING: 城東大学 (じょうとうだいがく)</div><div class="card-body">
-<div style="background:var(--surface);border-radius:10px;padding:16px;">
-<div class="oe-ja" style="line-height:2;">城東大学は 東京に あります。学生は 三万人ぐらい いますが、教授は 千人ぐらいです。とても 古い 大学です。キャンパスは あまり 大きくありませんが、きれいな 建物が たくさん あります。公園も あります。それから、大学の 図書館は とても 有名です。城東大学には 経済学部と 文学部と 商学部と 法学部が あります。留学生センターも あります。アメリカと オーストラリアから たくさん 留学生が 来ます。</div>
-</div>
-<details class="oe-qa" style="margin-top:14px;"><summary><span class="oe-ja">1. 城東大学は どこに ありますか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">東京に あります。</div>
-<div class="oe-en">It's in Tokyo.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">2. 城東大学は あたらしい 大学ですか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">いいえ、あたらしくありません。とても 古い 大学です。</div>
-<div class="oe-en">No, it's not new. It's a very old university.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">3. 城東大学の キャンパスは どんな キャンパスですか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">あまり 大きくありませんが、きれいな 建物が たくさん あります。公園も あります。</div>
-<div class="oe-en">It's not very big, but there are many beautiful buildings and a park too.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">4. 城東大学には ゆうめいな たてものが ありますか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">はい、図書館が とても ゆうめいです。</div>
-<div class="oe-en">Yes — the library is very famous.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">5. 城東大学には どんな 学生が たくさん いますか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">アメリカと オーストラリアからの 留学生が たくさん います。</div>
-<div class="oe-en">There are many international students from America and Australia.</div></details>
-</div></div>
-
-<div class="card"><div class="card-header">CH 5 — リーさんの アパート <span style="font-size:9px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;">HOME</span></div><div class="card-body">
-<p class="oe-en" style="margin-bottom:12px;font-style:italic;">Ueda visits Li's apartment and they discuss the view and commute.</p>
-<div style="background:var(--surface);border-radius:10px;padding:16px;">
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">ごめんください。</div><div class="oe-rm">Gomen kudasai.</div><div class="oe-en">Is anyone home?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">あ、上田さん。いらっしゃい。どうぞ あがってください。</div><div class="oe-rm">A, Ueda-san. Irasshai. Doozo agatte kudasai.</div><div class="oe-en">Oh, Ueda! Welcome. Please come in.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">おじゃまします。</div><div class="oe-rm">Ojama shimasu.</div><div class="oe-en">Thank you (for having me).</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">わあ、とても あかるいですね。</div><div class="oe-rm">Waa, totemo akarui desu ne.</div><div class="oe-en">Wow, it's very bright!</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">ええ。この アパートは たかい ところに ありますから。</div><div class="oe-rm">Ee. Kono apaato wa takai tokoro ni arimasu kara.</div><div class="oe-en">It's because this apartment is up high.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">あそこに りっぱな たてものが ありますね。あれは 大学ですか。</div><div class="oe-rm">Asoko ni rippana tatemono ga arimasu ne. Are wa daigaku desu ka.</div><div class="oe-en">There's a splendid building over there. Is that the university?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">ええ、あれは じょうとう大学の たいいくかんですよ。</div><div class="oe-rm">Ee, are wa Jootoo daigaku no taiikukan desu yo.</div><div class="oe-en">Yes, that's Joto University's gym.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">え、じゃあ、たいいくかんの となりの ちゃいろい ビルは なんですか。</div><div class="oe-rm">E, jaa, taiikukan no tonari no chairoi biru wa nan desu ka.</div><div class="oe-en">Oh? Then what's that brown building next to the gym?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">あれは としょかんです。そして、その まえのが 学生会館（かいかん）です。</div><div class="oe-rm">Are wa toshokan desu. Soshite, sono mae no ga gakusei kaikan desu.</div><div class="oe-en">That's the library. And the one in front of it is the student union.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">そうですか。ここから 大学まで どのくらい かかりますか。</div><div class="oe-rm">Soo desu ka. Koko kara daigaku made dono kurai kakarimasu ka.</div><div class="oe-en">How long does it take from here to university?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">バスで にじゅっぷんぐらい かかります。でも、ぼくは たいてい じてんしゃで いきますよ。</div><div class="oe-rm">Basu de nijuppun gurai kakarimasu. Demo, boku wa taitei jitensha de ikimasu yo.</div><div class="oe-en">About 20 min by bus. But I usually go by bicycle.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">じてんしゃでは どのくらい かかりますか。</div><div class="oe-rm">Jitensha de wa dono kurai kakarimasu ka.</div><div class="oe-en">How long by bicycle?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">じゅうごふんぐらいです。</div><div class="oe-rm">Juugofun gurai desu.</div><div class="oe-en">About 15 minutes.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">へえ、はやいですね。</div><div class="oe-rm">Hee, hayai desu ne.</div><div class="oe-en">Wow, that's fast!</div></div>
-</div>
-</div></div>
-
-<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#1a4a6b,#2d6b8a);">CH 5 — 読んだ後で COMPREHENSION (Dialogue)</div><div class="card-body">
-<details class="oe-qa"><summary><span class="oe-ja">1. リーさんの アパートは どんな ところですか。</span> <span class="oe-en">— What kind of place is Li's apartment?</span></summary>
-<div class="oe-ja" style="margin-top:8px;">リーさんの アパートは たかい ところに あって、とても あかるいです。</div>
-<div class="oe-rm">Rii-san no apaato wa takai tokoro ni atte, totemo akarui desu.</div>
-<div class="oe-en">Li's apartment is in a high place and is very bright.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">2. リーさんの アパートから 大学まで じてんしゃで どのくらい かかりますか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">じてんしゃで じゅうごふんぐらい かかります。</div>
-<div class="oe-rm">Jitensha de juugofun gurai kakarimasu.</div>
-<div class="oe-en">It takes about 15 minutes by bicycle.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">3. たいいくかんは どんな たてものですか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">たいいくかんは りっぱな たてものです。</div>
-<div class="oe-rm">Taiikukan wa rippana tatemono desu.</div>
-<div class="oe-en">The gym is a splendid (impressive) building.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">4. としょかんは どこに ありますか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">としょかんは たいいくかんの となりに あります。学生会館の うしろに あります。</div>
-<div class="oe-rm">Toshokan wa taiikukan no tonari ni arimasu. Gakusei kaikan no ushiro ni arimasu.</div>
-<div class="oe-en">The library is next to the gym, behind the student union.</div></details>
-</div></div>
-
-<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#2d4a1a,#4a6b2d);">CH 5 — READING: 田中先生の研究室 (たなかせんせいの けんきゅうしつ)</div><div class="card-body">
-<div style="background:var(--surface);border-radius:10px;padding:16px;">
-<div class="oe-ja" style="line-height:2;">田中先生の 研究室は とても 広いです。部屋の 右には 大きい 本棚が あります。本棚には 本が たくさん あります。本棚の 横には 窓が あります。窓は 部屋の 右に あります。窓の 外には 小さい 鉢植（はちうえ）が あります。そして、窓の 近くには 先生の 机が あります。机の 上には 本が たくさん あります。机は 部屋の 左側に あります。机の 上には コンピュータと 電話が あります。部屋の 手前には 小さい ソファが あります。ソファの 上にも 本が たくさん あります。ソファの 横に 小さい 椅子が あります。ソファの 下に ねこが います。</div>
-</div>
-<div class="oe-tip" style="margin-top:12px;"><b>TASK:</b> Find <b>4 discrepancies</b> between the description and the picture (if shown by your instructor). Pay close attention to <span class="oe-hl">left/right (左/右)</span> and <span class="oe-hl">on/under/next-to</span>.</div>
-<div class="oe-warn"><b>CONTRADICTION HINT:</b> The text first says the bookshelf is on the <b>right</b> of the room, then says the window is on the <b>right</b> of the room — but also says the window is <b>next to</b> the bookshelf. The desk is described as on the <b>left</b>, but ALSO near the window (which is on the right). These internal contradictions are exactly what you flag as "discrepancies."</div>
-<div style="margin-top:12px;"><b style="color:var(--gold);font-size:11px;">KEY VOCAB:</b>
-<div class="oe-loc-grid" style="margin-top:8px;">
-<div class="oe-loc-item"><div class="oe-loc-jp">奥（おく）</div><div class="oe-loc-rm">oku</div><div class="oe-loc-en">inner part</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">手前（てまえ）</div><div class="oe-loc-rm">temae</div><div class="oe-loc-en">this side / closer</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">鉢植（はちうえ）</div><div class="oe-loc-rm">hachiue</div><div class="oe-loc-en">potted plant</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">本棚（ほんだな）</div><div class="oe-loc-rm">hondana</div><div class="oe-loc-en">bookshelf</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">研究室</div><div class="oe-loc-rm">kenkyuushitsu</div><div class="oe-loc-en">professor's office</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">たくさん</div><div class="oe-loc-rm">takusan</div><div class="oe-loc-en">many / a lot</div></div>
-</div>
-</div>
-</div></div>
-
-<div class="card"><div class="card-header">CH 6 — 週末は どうでしたか <span style="font-size:9px;background:rgba(255,255,255,0.15);padding:2px 8px;border-radius:4px;">LEISURE</span></div><div class="card-body">
-<p class="oe-en" style="margin-bottom:12px;font-style:italic;">Ueda and Li meet Monday morning and talk about their weekends.</p>
-<div style="background:var(--surface);border-radius:10px;padding:16px;">
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">リーさん、おはようございます。</div><div class="oe-rm">Rii-san, ohayoo gozaimasu.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">あ、上田さん、おはようございます。週末は どうでしたか。</div><div class="oe-rm">A, Ueda-san, ohayoo gozaimasu. Shuumatsu wa doo deshita ka.</div><div class="oe-en">How was your weekend?</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">とても たのしかったです。</div><div class="oe-rm">Totemo tanoshikatta desu.</div><div class="oe-en">It was really fun.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">それは よかったですね。</div><div class="oe-rm">Sore wa yokatta desu ne.</div><div class="oe-en">That's great!</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">ええ、みちこさんと しぶやに かいものに <span class="oe-te">いって</span>、コンサートへ いきました。</div><div class="oe-rm">Ee, Michiko-san to Shibuya ni kaimono ni itte, konsaato e ikimashita.</div><div class="oe-en">I went shopping in Shibuya with Michiko and went to a concert.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">そうですか。いいですね。</div><div class="oe-rm">Soo desu ka. Ii desu ne.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">リーさんの 週末は どうでしたか。</div><div class="oe-rm">Rii-san no shuumatsu wa doo deshita ka.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">先週は しゅくだいが たくさん <span class="oe-te">あって</span>、週末は ずっと うちで べんきょうしました。</div><div class="oe-rm">Senshuu wa shukudai ga takusan atte, shuumatsu wa zutto uchi de benkyoo shimashita.</div><div class="oe-en">I had a lot of homework so I studied at home all weekend.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">それは 大変でしたね。</div><div class="oe-rm">Sore wa taihen deshita ne.</div><div class="oe-en">That sounds tough.</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">ええ。だから、<span class="oe-te">いそがしくて</span>、ぜんぜん おもしろくなかったです。</div><div class="oe-rm">Ee. Dakara, isogashikute, zenzen omoshiroku nakatta desu.</div><div class="oe-en">Yeah. So it was busy and not interesting at all.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">じゃあ、来週の 週末は どうですか。</div><div class="oe-rm">Jaa, raishuu no shuumatsu wa doo desu ka.</div><div class="oe-en">Well then, how about next weekend?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">来週は あまり いそがしくありません。</div><div class="oe-rm">Raishuu wa amari isogashiku arimasen.</div><div class="oe-en">Next week I'm not very busy.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">じゃあ、うちに あそびに きませんか。</div><div class="oe-rm">Jaa, uchi ni asobi ni kimasen ka.</div><div class="oe-en">Then, would you like to come hang out at my place?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">えっ、いいんですか。</div><div class="oe-rm">E, ii n desu ka.</div><div class="oe-en">Really? Are you sure?</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">ええ。土曜日は どうですか。</div><div class="oe-rm">Ee. Doyoobi wa doo desu ka.</div><div class="oe-en">Yes. How about Saturday?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">ええ、大丈夫です。</div><div class="oe-rm">Ee, daijoobu desu.</div><div class="oe-en">Sure, that works.</div></div>
-<div class="oe-d-line oe-d-a"><div class="oe-d-name">うえだ</div><div class="oe-ja">じゃあ、くるとき、でんわしてくれませんか。</div><div class="oe-rm">Jaa, kuru toki, denwa shite kuremasen ka.</div><div class="oe-en">Then, when you come, could you give me a call?</div></div>
-<div class="oe-d-line oe-d-b"><div class="oe-d-name">リー</div><div class="oe-ja">わかりました。じゃあ、土曜日に。</div><div class="oe-rm">Wakarimashita. Jaa, doyoobi ni.</div><div class="oe-en">Got it. See you Saturday, then.</div></div>
-</div>
-</div></div>
-
-<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#1a4a6b,#2d6b8a);">CH 6 — 読んだ後で COMPREHENSION (Dialogue)</div><div class="card-body">
-<div class="oe-tip"><b>True / False section first, then short answer.</b> Tap each to reveal.</div>
-<details class="oe-qa"><summary><span class="oe-ja">1. リーさんは 日曜日に べんきょうしましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">はい、リーさんは 週末 ずっと うちで べんきょうしました。</div>
-<div class="oe-en">YES — Li studied at home all weekend (including Sunday).</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">2. リーさんは 土曜日に でかけましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">いいえ、でかけませんでした。うちで べんきょうしました。</div>
-<div class="oe-en">NO — Li did not go out. He studied at home.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">3. リーさんは おもしろい えいがを みましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">いいえ、みませんでした。週末は ぜんぜん おもしろくなかったです。</div>
-<div class="oe-en">NO — Li didn't watch any movie. The weekend was not interesting at all.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">4. 上田さんは キムさんと コンサートに いきましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">いいえ、みちこさんと いきました。</div>
-<div class="oe-en">NO — Ueda went with Michiko, not Kim.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">5. 上田さんは 先週の 週末に かいものを しましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">はい、しぶやで みちこさんと かいものを しました。</div>
-<div class="oe-en">YES — Ueda went shopping in Shibuya with Michiko.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">6. 上田さんは 先週 何を しましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">みちこさんと しぶやに かいものに <span class="oe-te">いって</span>、コンサートへ いきました。</div>
-<div class="oe-en">She went shopping in Shibuya with Michiko and went to a concert.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">7. リーさんは 週末 何を しましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">しゅくだいが たくさん <span class="oe-te">あって</span>、週末は ずっと うちで べんきょうしました。</div>
-<div class="oe-en">He had lots of homework, so he studied at home all weekend.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">8. リーさんは 来週の 週末 いそがしいですか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">いいえ、あまり いそがしくありません。</div>
-<div class="oe-en">No, he's not very busy.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">9. リーさんは 来週 何を しますか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">土曜日に 上田さんの うちへ あそびに 行きます。</div>
-<div class="oe-en">On Saturday, he's going to Ueda's house to hang out.</div></details>
-</div></div>
-
-<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#2d4a1a,#4a6b2d);">CH 6 — READING: 大川さんの しゅうまつ (Parents Visit)</div><div class="card-body">
-<div style="background:var(--surface);border-radius:10px;padding:16px;">
-<div class="oe-ja" style="line-height:2;">先週の 土曜日に 両親が 私に 会いに 来ました。とても うれしかったですが、いそがしくて 大変でした。木曜日と 金曜日に テストが <span class="oe-te">あって</span> 時間が なかったから、アパートは とても きたなかったです。ですから、土曜日の 朝 はやく 起きて、そうじと せんたくを しました。それから、スーパーに 買い物に 行きました。<br><br>12時ごろに 両親が 私の アパートに 来ました。少し 話を <span class="oe-te">して</span>、アパートの 近くの ショッピング・センターに 行って、昼ご飯を 食べました。その 後、買い物を <span class="oe-te">して</span>、キャンパスに 行きました。図書館で 上田さんに 会いましたから、いっしょに 図書館の カフェに <span class="oe-te">行って</span>、コーヒーを 飲んで 話を しました。両親は 5時ごろ 帰りました。</div>
-</div>
-<div class="oe-tip" style="margin-top:12px;"><b>NOTE the て-form chains</b> — this passage is a goldmine of て-form examples. Underline every て-form you can find.</div>
-<details class="oe-qa" style="margin-top:8px;"><summary><span class="oe-ja">1. 大川さんの 週末は どうでしたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">うれしかったですが、いそがしくて 大変でした。</div>
-<div class="oe-en">Happy but busy and tough.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">2. 大川さんは 金曜日に 何を しましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">テストが ありました。だから 時間が なかったです。</div>
-<div class="oe-en">Took a test (so didn't have time to clean).</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">3. 大川さんは 土曜日の あさ 何を しましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">はやく 起きて、そうじと せんたくを <span class="oe-te">して</span>、スーパーに 買い物に 行きました。</div>
-<div class="oe-en">Woke up early, cleaned, did laundry, and went grocery shopping.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">4. 大川さんは だれと 昼ご飯を 食べましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">両親と いっしょに 食べました。</div>
-<div class="oe-en">With his/her parents.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">5. どこで 食べましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">アパートの 近くの ショッピング・センターで 食べました。</div>
-<div class="oe-en">At the shopping center near the apartment.</div></details>
-<details class="oe-qa"><summary><span class="oe-ja">6. 土曜日の ごご、キャンパスで 何を しましたか。</span></summary>
-<div class="oe-ja" style="margin-top:8px;">図書館で 上田さんに 会って、いっしょに カフェで コーヒーを 飲んで 話を しました。</div>
-<div class="oe-en">Met Ueda at the library, went to the café, drank coffee and chatted.</div></details>
-<div class="oe-warn" style="margin-top:12px;"><b>VOCAB:</b> 〜から (because) · きたない (dirty) · ですから (so/therefore) · はやく (early) · 両親（りょうしん）(parents) · そうじ (cleaning) · せんたく (laundry)</div>
-</div></div>
-</div>
-
-<!-- ═══ LOCATIONS ═══ -->
-<div class="oe-sec" id="oesec2">
-<div class="oe-intro">
-<span class="oe-weight big">50 POINTS — HALF YOUR GRADE</span>
-<h2>Section 3: Picture Description</h2>
-<p>Describe <b>5 locations</b> of objects in a picture using location words + あります／います. You MUST use at least <b>2 connected phrases</b> with て-form.</p>
-</div>
-<div class="oe-warn"><b>CRITICAL:</b> At least 2 of your 5 sentences MUST connect two ideas using て-form. Without this, you lose major points.<br><span class="oe-ja" style="font-size:14px;">つくえの 下に ねこが<span class="oe-te">いて</span>、まどの そとに きが あります。</span></div>
-
-<div class="card"><div class="card-header">LOCATION WORDS — MEMORIZE THESE</div><div class="card-body">
-<div class="oe-loc-grid">
-<div class="oe-loc-item"><div class="oe-loc-jp">上（うえ）</div><div class="oe-loc-rm">ue</div><div class="oe-loc-en">on / above</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">下（した）</div><div class="oe-loc-rm">shita</div><div class="oe-loc-en">under / below</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">まえ</div><div class="oe-loc-rm">mae</div><div class="oe-loc-en">in front of</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">うしろ</div><div class="oe-loc-rm">ushiro</div><div class="oe-loc-en">behind</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">みぎ</div><div class="oe-loc-rm">migi</div><div class="oe-loc-en">right</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ひだり</div><div class="oe-loc-rm">hidari</div><div class="oe-loc-en">left</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">となり</div><div class="oe-loc-rm">tonari</div><div class="oe-loc-en">next to</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">よこ</div><div class="oe-loc-rm">yoko</div><div class="oe-loc-en">beside</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ちかく</div><div class="oe-loc-rm">chikaku</div><div class="oe-loc-en">near</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">中（なか）</div><div class="oe-loc-rm">naka</div><div class="oe-loc-en">inside</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">そと</div><div class="oe-loc-rm">soto</div><div class="oe-loc-en">outside</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">あいだ</div><div class="oe-loc-rm">aida</div><div class="oe-loc-en">between</div></div>
-</div>
-</div></div>
-
-<div class="card"><div class="card-header">THE SENTENCE PATTERN</div><div class="card-body">
-<div class="oe-template"><div class="oe-ja" style="font-size:16px;line-height:2;"><span class="oe-hl">PLACE</span> の <span class="oe-hl">LOCATION</span> に <span class="oe-hl">OBJECT</span> が <span class="oe-hl">あります／います</span></div>
-<div class="oe-rm" style="margin-top:8px;">[PLACE] no [LOCATION] ni [OBJECT] ga arimasu / imasu</div></div>
-<div class="oe-tip" style="margin-top:14px;"><b>あります vs います:</b> あります = non-living things (books, phones, buildings, trees). います = living things (people, animals, insects).</div>
-</div></div>
-
-<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#1a6b3a,#2d8a4e);">て-FORM CONNECTOR — YOU NEED THIS</div><div class="card-body">
-<div class="oe-template" style="border-color:var(--green);">
-<div class="oe-ja" style="font-size:16px;line-height:2;">[place] に [object] が <span class="oe-te">あって／いて</span>、[place] に [object] が あります／います。</div>
-<div class="oe-en" style="margin-top:8px;">There is [X] at [place], and there is [Y] at [place].</div>
-</div>
-<div class="oe-loc-grid" style="margin-top:12px;">
-<div class="oe-loc-item" style="border-color:rgba(78,207,122,0.3);"><div class="oe-loc-jp" style="color:var(--green);">あります → <span class="oe-te">あって</span></div><div class="oe-loc-en">there is (non-living) &amp; ...</div></div>
-<div class="oe-loc-item" style="border-color:rgba(78,207,122,0.3);"><div class="oe-loc-jp" style="color:var(--green);">います → <span class="oe-te">いて</span></div><div class="oe-loc-en">there is (living) &amp; ...</div></div>
-</div>
-</div></div>
-
-<div class="card"><div class="card-header">5 EXAMPLE SENTENCES (EXAM-READY)</div><div class="card-body">
-<div style="margin-bottom:12px;padding:12px;background:var(--surface);border-radius:8px;"><div style="color:#b088f9;font-size:10px;font-weight:700;letter-spacing:1px;">SENTENCE 1 — SIMPLE</div><div class="oe-ja" style="margin:6px 0;">つくえの 上に ホセさんの でんわが あります。</div><div class="oe-rm">Tsukue no ue ni Hose-san no denwa ga arimasu.</div><div class="oe-en">On the desk, there is Jose's phone.</div></div>
-<div style="margin-bottom:12px;padding:12px;background:var(--surface);border-radius:8px;"><div style="color:#b088f9;font-size:10px;font-weight:700;letter-spacing:1px;">SENTENCE 2 — WITH ADJECTIVE</div><div class="oe-ja" style="margin:6px 0;">つくえの ひだりに <span class="oe-hl">くろくて 大きい</span> かばんが あります。</div><div class="oe-rm">Tsukue no hidari ni kurokute ookii kaban ga arimasu.</div><div class="oe-en">To the left of the desk, there is a black, big bag.</div></div>
-<div style="margin-bottom:12px;padding:12px;background:var(--surface);border-radius:8px;"><div style="color:#b088f9;font-size:10px;font-weight:700;letter-spacing:1px;">SENTENCE 3 — SIMPLE</div><div class="oe-ja" style="margin:6px 0;">まどの よこに とけいが あります。</div><div class="oe-rm">Mado no yoko ni tokei ga arimasu.</div><div class="oe-en">Next to the window, there is a clock.</div></div>
-<div style="margin-bottom:12px;padding:12px;background:var(--surface);border-radius:8px;"><div style="color:#b088f9;font-size:10px;font-weight:700;letter-spacing:1px;">SENTENCE 4 — SIMPLE</div><div class="oe-ja" style="margin:6px 0;">まどの そとに くるまが あります。</div><div class="oe-rm">Mado no soto ni kuruma ga arimasu.</div></div>
-<div style="margin-bottom:12px;padding:12px;background:rgba(78,207,122,0.06);border:1px solid rgba(78,207,122,0.2);border-radius:8px;"><div style="color:var(--green);font-size:10px;font-weight:700;letter-spacing:1px;">SENTENCE 5 — て-FORM ★</div><div class="oe-ja" style="margin:6px 0;">つくえの 下に ねこが <span class="oe-te">いて</span>、まどの そとに きが あります。</div><div class="oe-rm">Tsukue no shita ni neko ga ite, mado no soto ni ki ga arimasu.</div><div class="oe-en">Under the desk there is a cat, and outside the window there is a tree.</div></div>
-</div></div>
-
-<div class="card"><div class="card-header">OBJECTS YOU MIGHT SEE IN THE PICTURE</div><div class="card-body">
-<div class="oe-loc-grid">
-<div class="oe-loc-item"><div class="oe-loc-jp">つくえ</div><div class="oe-loc-rm">tsukue</div><div class="oe-loc-en">desk</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">いす</div><div class="oe-loc-rm">isu</div><div class="oe-loc-en">chair</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ベッド</div><div class="oe-loc-rm">beddo</div><div class="oe-loc-en">bed</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">まど</div><div class="oe-loc-rm">mado</div><div class="oe-loc-en">window</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ドア</div><div class="oe-loc-rm">doa</div><div class="oe-loc-en">door</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">テレビ</div><div class="oe-loc-rm">terebi</div><div class="oe-loc-en">TV</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">でんわ</div><div class="oe-loc-rm">denwa</div><div class="oe-loc-en">phone</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ほん</div><div class="oe-loc-rm">hon</div><div class="oe-loc-en">book</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">とけい</div><div class="oe-loc-rm">tokei</div><div class="oe-loc-en">clock</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">かばん</div><div class="oe-loc-rm">kaban</div><div class="oe-loc-en">bag</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ねこ</div><div class="oe-loc-rm">neko</div><div class="oe-loc-en">cat</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">いぬ</div><div class="oe-loc-rm">inu</div><div class="oe-loc-en">dog</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">くるま</div><div class="oe-loc-rm">kuruma</div><div class="oe-loc-en">car</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">き</div><div class="oe-loc-rm">ki</div><div class="oe-loc-en">tree</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">コンピューター</div><div class="oe-loc-rm">konpyuutaa</div><div class="oe-loc-en">computer</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ぎんこう</div><div class="oe-loc-rm">ginkoo</div><div class="oe-loc-en">bank</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ゆうびんきょく</div><div class="oe-loc-rm">yuubinkyoku</div><div class="oe-loc-en">post office</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">レストラン</div><div class="oe-loc-rm">resutoran</div><div class="oe-loc-en">restaurant</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">スーパー</div><div class="oe-loc-rm">suupaa</div><div class="oe-loc-en">supermarket</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">としょかん</div><div class="oe-loc-rm">toshokan</div><div class="oe-loc-en">library</div></div>
-</div>
-</div></div>
-
-<div class="card"><div class="card-header" style="background:linear-gradient(135deg,#3a1a6b,#5a2d8a);">📸 3 PICTURE CARDS — カードのもの一覧 (hiragana + english)</div><div class="card-body">
-<div class="oe-tip"><b>STRATEGY:</b> For EACH card: name 5 objects + use at least 2 て-form sentences. The example descriptions below are exam-ready — adapt to what you actually see in the card.</div>
-
-<div style="margin-bottom:20px;">
-<div style="background:linear-gradient(135deg,#1a3a6b,#2d5a8a);padding:8px 14px;border-radius:8px 8px 0 0;font-size:12px;font-weight:700;letter-spacing:1px;">カード A — リビング / いま (Living Room) ①</div>
-<div style="background:var(--surface);border-radius:0 0 8px 8px;padding:14px;">
-<div class="oe-loc-grid">
-<div class="oe-loc-item"><div class="oe-loc-jp">ソファ</div><div class="oe-loc-rm">sofa</div><div class="oe-loc-en" style="visibility:visible;">sofa/couch</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">いす</div><div class="oe-loc-rm">isu</div><div class="oe-loc-en" style="visibility:visible;">chair</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">つくえ</div><div class="oe-loc-rm">tsukue</div><div class="oe-loc-en" style="visibility:visible;">desk</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">テーブル</div><div class="oe-loc-rm">tēburu</div><div class="oe-loc-en" style="visibility:visible;">coffee table</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ほんだな</div><div class="oe-loc-rm">hondana</div><div class="oe-loc-en" style="visibility:visible;">bookshelf ★ほん+たな</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">テレビ</div><div class="oe-loc-rm">terebi</div><div class="oe-loc-en" style="visibility:visible;">TV</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">パソコン</div><div class="oe-loc-rm">pasokon</div><div class="oe-loc-en" style="visibility:visible;">computer/laptop</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">でんわ</div><div class="oe-loc-rm">denwa</div><div class="oe-loc-en" style="visibility:visible;">telephone ★でん+わ</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ドア</div><div class="oe-loc-rm">doa</div><div class="oe-loc-en" style="visibility:visible;">door</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">まど</div><div class="oe-loc-rm">mado</div><div class="oe-loc-en" style="visibility:visible;">window</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">カーテン</div><div class="oe-loc-rm">kāten</div><div class="oe-loc-en" style="visibility:visible;">curtains</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">とけい</div><div class="oe-loc-rm">tokei</div><div class="oe-loc-en" style="visibility:visible;">clock</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">え</div><div class="oe-loc-rm">e</div><div class="oe-loc-en" style="visibility:visible;">picture/painting</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ほん</div><div class="oe-loc-rm">hon</div><div class="oe-loc-en" style="visibility:visible;">books</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">カップ</div><div class="oe-loc-rm">kappu</div><div class="oe-loc-en" style="visibility:visible;">cup/mug</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">たんす</div><div class="oe-loc-rm">tansu</div><div class="oe-loc-en" style="visibility:visible;">dresser/drawers</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ねこ</div><div class="oe-loc-rm">neko</div><div class="oe-loc-en" style="visibility:visible;">cat on sofa (います)</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ねこ</div><div class="oe-loc-rm">neko</div><div class="oe-loc-en" style="visibility:visible;">cat by window (います)</div></div>
-</div>
-<div style="margin-top:12px;background:rgba(100,80,200,0.08);border:1px solid rgba(100,80,200,0.2);border-radius:8px;padding:12px;">
-<div style="font-size:10px;font-weight:700;color:#b088f9;letter-spacing:1px;margin-bottom:8px;">EXAMPLE 5-SENTENCE DESCRIPTION</div>
-<div class="oe-ja" style="line-height:2.4;font-size:13px;">
-ソファの 上に ねこが います。<br>
-テーブルの 上に カップが あります。<br>
-まどの よこに とけいが あります。<br>
-つくえの 上に パソコンと でんわが あります。<br>
-ほんだなに ほんが <span class="oe-te">あって</span>、テレビは ほんだなの となりに あります。
-</div>
-</div>
-</div>
-</div>
-
-<div style="margin-bottom:20px;">
-<div style="background:linear-gradient(135deg,#1a6b3a,#2d8a50);padding:8px 14px;border-radius:8px 8px 0 0;font-size:12px;font-weight:700;letter-spacing:1px;">カード B — きょうしつ (Classroom) ②</div>
-<div style="background:var(--surface);border-radius:0 0 8px 8px;padding:14px;">
-<div class="oe-loc-grid">
-<div class="oe-loc-item"><div class="oe-loc-jp">こくばん</div><div class="oe-loc-rm">kokuban</div><div class="oe-loc-en" style="visibility:visible;">blackboard</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">きょうたく</div><div class="oe-loc-rm">kyootaku</div><div class="oe-loc-en" style="visibility:visible;">teacher's desk</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">つくえ</div><div class="oe-loc-rm">tsukue</div><div class="oe-loc-en" style="visibility:visible;">student desk</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">いす</div><div class="oe-loc-rm">isu</div><div class="oe-loc-en" style="visibility:visible;">chair</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">パソコン</div><div class="oe-loc-rm">pasokon</div><div class="oe-loc-en" style="visibility:visible;">computer/laptop</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">テレビ</div><div class="oe-loc-rm">terebi</div><div class="oe-loc-en" style="visibility:visible;">TV/monitor</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">はさみ</div><div class="oe-loc-rm">hasami</div><div class="oe-loc-en" style="visibility:visible;">scissors</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ほん</div><div class="oe-loc-rm">hon</div><div class="oe-loc-en" style="visibility:visible;">books</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ノート</div><div class="oe-loc-rm">nōto</div><div class="oe-loc-en" style="visibility:visible;">notebook</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">かばん</div><div class="oe-loc-rm">kaban</div><div class="oe-loc-en" style="visibility:visible;">bag/backpack</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">まど</div><div class="oe-loc-rm">mado</div><div class="oe-loc-en" style="visibility:visible;">window</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ドア</div><div class="oe-loc-rm">doa</div><div class="oe-loc-en" style="visibility:visible;">door</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">とけい</div><div class="oe-loc-rm">tokei</div><div class="oe-loc-en" style="visibility:visible;">clock</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">え</div><div class="oe-loc-rm">e</div><div class="oe-loc-en" style="visibility:visible;">picture/painting</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">カーテン</div><div class="oe-loc-rm">kāten</div><div class="oe-loc-en" style="visibility:visible;">curtains</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">せんせい</div><div class="oe-loc-rm">sensei</div><div class="oe-loc-en" style="visibility:visible;">teacher (います)</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ねこ</div><div class="oe-loc-rm">neko</div><div class="oe-loc-en" style="visibility:visible;">cat outside window (います)</div></div>
-</div>
-<div style="margin-top:12px;background:rgba(46,207,122,0.06);border:1px solid rgba(46,207,122,0.2);border-radius:8px;padding:12px;">
-<div style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:1px;margin-bottom:8px;">EXAMPLE 5-SENTENCE DESCRIPTION</div>
-<div class="oe-ja" style="line-height:2.4;font-size:13px;">
-きょうしつの まえに こくばんが あります。<br>
-こくばんの まえに せんせいの きょうたくが あります。<br>
-きょうたくの 上に パソコンが あります。<br>
-まどの そとに ねこが います。<br>
-つくえの 上に ほんと ノートが <span class="oe-te">あって</span>、つくえの よこに いすが あります。
-</div>
-</div>
-</div>
-</div>
-
-<div style="margin-bottom:8px;">
-<div style="background:linear-gradient(135deg,#6b3a1a,#8a5a2d);padding:8px 14px;border-radius:8px 8px 0 0;font-size:12px;font-weight:700;letter-spacing:1px;">カード C — まちの ちず (City Map) ③</div>
-<div style="background:var(--surface);border-radius:0 0 8px 8px;padding:14px;">
-<div class="oe-loc-grid">
-<div class="oe-loc-item"><div class="oe-loc-jp">ぎんこう</div><div class="oe-loc-rm">ginkoo</div><div class="oe-loc-en" style="visibility:visible;">bank</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">カフェ</div><div class="oe-loc-rm">kafe</div><div class="oe-loc-en" style="visibility:visible;">cafe</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">レストラン</div><div class="oe-loc-rm">resutoran</div><div class="oe-loc-en" style="visibility:visible;">restaurant</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">スーパーマーケット</div><div class="oe-loc-rm">suupaa maaketto</div><div class="oe-loc-en" style="visibility:visible;">supermarket</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">としょかん</div><div class="oe-loc-rm">toshokan</div><div class="oe-loc-en" style="visibility:visible;">library</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ホテル</div><div class="oe-loc-rm">hoteru</div><div class="oe-loc-en" style="visibility:visible;">hotel</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ゆうびんきょく〒</div><div class="oe-loc-rm">yuubinkyoku</div><div class="oe-loc-en" style="visibility:visible;">post office</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">びょういん✚</div><div class="oe-loc-rm">byooin</div><div class="oe-loc-en" style="visibility:visible;">hospital</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">バス</div><div class="oe-loc-rm">basu</div><div class="oe-loc-en" style="visibility:visible;">bus (あります)</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">くるま</div><div class="oe-loc-rm">kuruma</div><div class="oe-loc-en" style="visibility:visible;">car (あります)</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ひと</div><div class="oe-loc-rm">hito</div><div class="oe-loc-en" style="visibility:visible;">person (います)</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">いぬ</div><div class="oe-loc-rm">inu</div><div class="oe-loc-en" style="visibility:visible;">dog (います)</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">ねこ</div><div class="oe-loc-rm">neko</div><div class="oe-loc-en" style="visibility:visible;">cat (います)</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">みち</div><div class="oe-loc-rm">michi</div><div class="oe-loc-en" style="visibility:visible;">road/street</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">き</div><div class="oe-loc-rm">ki</div><div class="oe-loc-en" style="visibility:visible;">tree (あります)</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">たてもの</div><div class="oe-loc-rm">tatemono</div><div class="oe-loc-en" style="visibility:visible;">building</div></div>
-</div>
-<div style="margin-top:12px;background:rgba(232,170,84,0.06);border:1px solid rgba(232,170,84,0.2);border-radius:8px;padding:12px;">
-<div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">EXAMPLE 5-SENTENCE DESCRIPTION</div>
-<div class="oe-ja" style="line-height:2.4;font-size:13px;">
-ぎんこうの となりに カフェが あります。<br>
-カフェの うしろに びょういんが あります。<br>
-レストランの となりに スーパーマーケットが あります。<br>
-みちに バスと くるまが あります。<br>
-ホテルの まえに ひとが <span class="oe-te">いて</span>、ゆうびんきょくの ちかくに きが あります。
-</div>
-</div>
-</div>
-</div>
-
-<div class="oe-warn"><b>NOTE:</b> Cards match your actual exam pictures — ① Living Room, ② Classroom, ③ City Map. The 田中先生の研究室 passage (DIALOGUE tab) gives extra location-word practice using the same grammar.</div>
-</div></div>
-
-</div>
-
-<!-- ═══ Q&A — ALL QUESTIONS FROM EXAM PDF ═══ -->
-<div class="oe-sec" id="oesec3">
-<div class="oe-intro">
-<span class="oe-weight">20 POINTS</span>
-<h2>Section 4: Q &amp; A with Instructor</h2>
-<p>Random questions from the list below. If you don't understand, say: <span class="oe-ja" style="font-size:14px;">もういちど いってください。</span> — do NOT ask in English.</p>
-</div>
-<div class="oe-tip"><b>SURVIVAL PHRASES:</b><br><span class="oe-ja">もういちど いってください。</span> — Please say it again<br><span class="oe-ja">ゆっくり いってください。</span> — Please say it slowly</div>
-<p style="font-size:11px;color:var(--text-dim);margin:10px 0;">Click any question to reveal a sample answer. Adapt to your own life!</p>
-
-<div class="card"><div class="card-header">DAILY LIFE &amp; MEALS</div><div class="card-body" style="padding:10px;">
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">なんじに おきますか。</span><br><span class="oe-rm">Nanji ni okimasu ka.</span><br><span class="oe-en">What time do you wake up?</span></div><div class="oe-a"><div class="oe-ja">しちじに おきます。</div><div class="oe-rm">Shichi-ji ni okimasu.</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">いつも あさごはんを たべますか。なんじごろ たべますか。</span><br><span class="oe-en">Do you always eat breakfast? Around what time?</span></div><div class="oe-a"><div class="oe-ja">はい、たべます。はちじごろ たべます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">なんじに ひるごはんを たべますか。だれと たべますか。</span><br><span class="oe-en">What time do you eat lunch? Who do you eat with?</span></div><div class="oe-a"><div class="oe-ja">じゅうにじに ひるごはんを たべます。ともだちと たべます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">なんじに ばんごはんを たべますか。どこで たべますか。</span><br><span class="oe-en">What time do you eat dinner? Where?</span></div><div class="oe-a"><div class="oe-ja">ろくじに ばんごはんを たべます。うちで たべます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">まいにち シャワーを あびますか。</span><br><span class="oe-en">Do you take a shower every day?</span></div><div class="oe-a"><div class="oe-ja">はい、まいにち シャワーを あびます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">きのう シャワーを あびましたか。</span><br><span class="oe-en">Did you take a shower yesterday?</span></div><div class="oe-a"><div class="oe-ja">はい、あびました。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">なんじに いえに かえりますか。</span><br><span class="oe-en">What time do you go home?</span></div><div class="oe-a"><div class="oe-ja">ごじに いえに かえります。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">レストランで よく 何を たべますか。</span><br><span class="oe-en">What do you often eat at restaurants?</span></div><div class="oe-a"><div class="oe-ja">ハンバーガーを たべます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">よく りょうりしますか。</span><br><span class="oe-en">Do you often cook?</span></div><div class="oe-a"><div class="oe-ja">いいえ、あまり りょうりしません。</div></div></div>
-</div></div>
-
-<div class="card"><div class="card-header">SCHOOL &amp; CLASSES</div><div class="card-body" style="padding:10px;">
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">おなまえは 何ですか。</span><br><span class="oe-en">What is your name?</span></div><div class="oe-a"><div class="oe-ja">ジョニー・ルーです。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">せんこうは 何ですか。</span><br><span class="oe-en">What is your major?</span></div><div class="oe-a"><div class="oe-ja">せんこうは かがくです。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">きょう、なんのじゅぎょうが ありますか。</span><br><span class="oe-en">What classes do you have today?</span></div><div class="oe-a"><div class="oe-ja">きょう、にほんごの じゅぎょうが あります。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">日本語の じゅぎょうは なんじから なんじまで ですか。</span><br><span class="oe-en">What time is Japanese class from and to?</span></div><div class="oe-a"><div class="oe-ja">くじから くじごじゅっぷんまでです。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">日本語の じゅぎょうは どうですか。</span><br><span class="oe-en">How is Japanese class?</span></div><div class="oe-a"><div class="oe-ja">たのしいですが、むずかしいです。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">どこで しゅくだいを しますか。だれと しますか。</span><br><span class="oe-en">Where do you do homework? With whom?</span></div><div class="oe-a"><div class="oe-ja">うちで しゅくだいを します。ひとりで します。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">いつも どこで べんきょうしますか。</span><br><span class="oe-en">Where do you usually study?</span></div><div class="oe-a"><div class="oe-ja">としょかんで べんきょうします。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">ネブラスカだいがく はどんな大学ですか。新しいですか。</span><br><span class="oe-en">What kind of university is the University of Nebraska? Is it new?</span></div><div class="oe-a"><div class="oe-ja">ネブラスカだいがく は 大きい 大学です。あまり あたらしくありません。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">ASHビルは あたらしいですか。</span><br><span class="oe-en">Is the ASH building new?</span></div><div class="oe-a"><div class="oe-ja">いいえ、あまり あたらしくありません。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">よく 本を よみますか。</span><br><span class="oe-en">Do you often read books?</span></div><div class="oe-a"><div class="oe-ja">いいえ、あまり よみません。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">アルバイトを しますか。 どこで しますか。</span><br><span class="oe-en">Do you have a part-time job? Where?</span></div><div class="oe-a"><div class="oe-ja">はい、します。レストランで します。</div></div></div>
-</div></div>
-
-<div class="card"><div class="card-header">TRANSPORTATION &amp; HOME</div><div class="card-body" style="padding:10px;">
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">バスで 学校に きますか。</span><br><span class="oe-en">Do you come to school by bus?</span></div><div class="oe-a"><div class="oe-ja">いいえ、くるまで 学校に きます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">きょう、なんで 学校に きましたか。</span><br><span class="oe-en">How did you come to school today?</span></div><div class="oe-a"><div class="oe-ja">くるまで きました。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">まいにち、なんじごろ がっこうに きますか。</span><br><span class="oe-en">What time do you usually come to school?</span></div><div class="oe-a"><div class="oe-ja">はちじごろ がっこうに きます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">うちから 学校まで どのぐらい かかりますか。</span><br><span class="oe-en">How long does it take from home to school?</span></div><div class="oe-a"><div class="oe-ja">にじゅっぷんぐらい かかります。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">うちから 学校まで じてんしゃで きますか。</span><br><span class="oe-en">Do you come to school by bicycle?</span></div><div class="oe-a"><div class="oe-ja">いいえ、くるまで きます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">ここから としょかんまで あるいて どのぐらい かかりますか。</span><br><span class="oe-en">How long does it take to walk to the library from here?</span></div><div class="oe-a"><div class="oe-ja">ごふんぐらい かかります。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">オマハはどんなまちですか。大きいですか。</span><br><span class="oe-en">What kind of city is Omaha? Is it big?</span></div><div class="oe-a"><div class="oe-ja">オマハは しずかな まちです。あまり 大きくありません。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">いま、どんな ところに すんでいますか。</span><br><span class="oe-en">What kind of place do you live in now?</span></div><div class="oe-a"><div class="oe-ja">アパートに すんでいます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">○○さんのうちは どんな うちですか。</span><br><span class="oe-en">What kind of house is your house?</span></div><div class="oe-a"><div class="oe-ja">ちいさい アパートです。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">うちに ペットが いますか。</span><br><span class="oe-en">Do you have pets at home?</span></div><div class="oe-a"><div class="oe-ja">いいえ、いません。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">○○さんの へやに どんなものが ありますか。</span><br><span class="oe-en">What kind of things are in your room?</span></div><div class="oe-a"><div class="oe-ja">ベッドと つくえと コンピューターが あります。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">ドアは どこに ありますか。</span><br><span class="oe-en">Where is the door?</span></div><div class="oe-a"><div class="oe-ja">うしろに あります。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">このへんでは どのカフェが いいですか。</span><br><span class="oe-en">Which cafe around here is good?</span></div><div class="oe-a"><div class="oe-ja">スターバックスが いいです。</div></div></div>
-</div></div>
-
-<div class="card"><div class="card-header">PAST, FUTURE &amp; WEEKENDS</div><div class="card-body" style="padding:10px;">
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">こんばん、何をしますか。</span><br><span class="oe-en">What will you do tonight?</span></div><div class="oe-a"><div class="oe-ja">うちで テレビを みます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">あした、何を しますか。</span><br><span class="oe-en">What will you do tomorrow?</span></div><div class="oe-a"><div class="oe-ja">あした、がっこうに いきます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">きのう、どこに いきましたか。</span><br><span class="oe-en">Where did you go yesterday?</span></div><div class="oe-a"><div class="oe-ja">スーパーに いきました。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">きのうの ばん、何をしましたか。</span><br><span class="oe-en">What did you do last night?</span></div><div class="oe-a"><div class="oe-ja">しゅくだいを しました。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">週末、よく どこに いきますか。</span><br><span class="oe-en">Where do you often go on weekends?</span></div><div class="oe-a"><div class="oe-ja">ともだちの うちに いきます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">休みの日に よく 何をしますか。</span><br><span class="oe-en">What do you often do on days off?</span></div><div class="oe-a"><div class="oe-ja">ゲームを します。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">○○さんの こうこうせいかつは どうでしたか。</span><br><span class="oe-en">How was your high school life?</span></div><div class="oe-a"><div class="oe-ja">たのしかったです。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">これは 日本語で なんと いいますか。</span><br><span class="oe-en">(Points at something) What is this called in Japanese?</span></div><div class="oe-a"><div class="oe-ja">(Try your best! If you don't know: すみません、わかりません。)</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">よく だれに テキストしますか。一日に どれぐらい しますか。</span><br><span class="oe-en">Who do you often text? How much per day?</span></div><div class="oe-a"><div class="oe-ja">ともだちに テキストします。一日に じゅっかいぐらい します。</div></div></div>
-</div></div>
-
-<div class="card"><div class="card-header">て-FORM SEQUENCE QUESTIONS</div><div class="card-body" style="padding:10px;">
-<div class="oe-tip" style="margin:0 0 10px;"><b>CRITICAL:</b> These questions REQUIRE you to answer using て-form to connect actions!</div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">学校から うちに かえって 何をしますか。</span><br><span class="oe-en">What do you do after going home from school? (answer with て-form)</span></div><div class="oe-a"><div class="oe-ja">うちに <span class="oe-te">かえって</span>、ばんごはんを たべます。</div><div class="oe-rm">Uchi ni kaette, bangohan o tabemasu.</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">あさ おきて、何をしますか。</span><br><span class="oe-en">After waking up, what do you do?</span></div><div class="oe-a"><div class="oe-ja">あさ <span class="oe-te">おきて</span>、シャワーを あびます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">あさごはんを たべて、何をしますか。</span><br><span class="oe-en">After eating breakfast, what do you do?</span></div><div class="oe-a"><div class="oe-ja">あさごはんを <span class="oe-te">たべて</span>、がっこうに いきます。</div></div></div>
-<div class="oe-subsec" onclick="this.classList.toggle('open')"><div class="oe-q"><span class="oe-ja">いつも シャワーを あびて、何を しますか。</span><br><span class="oe-en">After showering, what do you usually do?</span></div><div class="oe-a"><div class="oe-ja">シャワーを <span class="oe-te">あびて</span>、ふくを きます。</div></div></div>
-</div></div>
-
-<div class="card"><div class="card-header">ANSWER TEMPLATE BANK — こたえのパターン</div><div class="card-body">
-<div class="oe-tip"><b>HOW TO USE:</b> Match the question to its pattern type. Swap <span class="oe-hl">[ ]</span> for your real answers. Answer in hiragana — natural and confident.</div>
-
-<div style="margin-bottom:14px;">
-<div style="color:#5ba8e8;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px;padding:4px 10px;background:rgba(91,168,232,0.1);border-radius:4px;">⏰ なんじに〜ますか — TIME QUESTIONS</div>
-<div style="padding:12px;background:var(--surface);border-radius:8px;">
-<div class="oe-template"><div class="oe-ja" style="font-size:15px;line-height:2.2;"><span class="oe-hl">[ じかん ]</span> に <span class="oe-hl">[ どうし ]</span>。</div></div>
-<div class="oe-en" style="font-size:12px;margin-top:4px;">At [time], I [verb].</div>
-<div style="font-size:12px;color:var(--muted);margin-top:6px;">→ しちじに おきます。&emsp;→ ろくじごろ ばんごはんを たべます。</div>
-</div>
-</div>
-
-<div style="margin-bottom:14px;">
-<div style="color:#4ecf7a;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px;padding:4px 10px;background:rgba(78,207,122,0.1);border-radius:4px;">📍 どこで〜ますか — PLACE QUESTIONS</div>
-<div style="padding:12px;background:var(--surface);border-radius:8px;">
-<div class="oe-template"><div class="oe-ja" style="font-size:15px;line-height:2.2;"><span class="oe-hl">[ ばしょ ]</span> で <span class="oe-hl">[ どうし ]</span>。</div></div>
-<div class="oe-en" style="font-size:12px;margin-top:4px;">At/in [place], I [verb].</div>
-<div style="font-size:12px;color:var(--muted);margin-top:6px;">→ としょかんで べんきょうします。&emsp;→ うちで ばんごはんを たべます。</div>
-</div>
-</div>
-
-<div style="margin-bottom:14px;">
-<div style="color:#d4a843;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px;padding:4px 10px;background:rgba(212,168,67,0.1);border-radius:4px;">👥 だれと〜ますか — WITH WHOM</div>
-<div style="padding:12px;background:var(--surface);border-radius:8px;">
-<div class="oe-template"><div class="oe-ja" style="font-size:15px;line-height:2.2;"><span class="oe-hl">[ ひと ]</span> と <span class="oe-hl">[ どうし ]</span>。</div></div>
-<div class="oe-en" style="font-size:12px;margin-top:4px;">With [person], I [verb].</div>
-<div style="font-size:12px;color:var(--muted);margin-top:6px;">→ ともだちと たべます。&emsp;→ ひとりで します。(alone)</div>
-</div>
-</div>
-
-<div style="margin-bottom:14px;">
-<div style="color:#e85454;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px;padding:4px 10px;background:rgba(232,84,84,0.1);border-radius:4px;">⏱ どのぐらいかかりますか — HOW LONG</div>
-<div style="padding:12px;background:var(--surface);border-radius:8px;">
-<div class="oe-template"><div class="oe-ja" style="font-size:15px;line-height:2.2;"><span class="oe-hl">[ のりもの ]</span> で <span class="oe-hl">[ じかん ]</span> ぐらい かかります。</div></div>
-<div class="oe-en" style="font-size:12px;margin-top:4px;">By [transport] it takes about [time].</div>
-<div style="font-size:12px;color:var(--muted);margin-top:6px;">→ くるまで にじゅっぷんぐらい かかります。&emsp;→ あるいて ごふんぐらい かかります。</div>
-</div>
-</div>
-
-<div style="margin-bottom:14px;">
-<div style="color:#c8a2ff;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px;padding:4px 10px;background:rgba(200,162,255,0.1);border-radius:4px;">✓✗ YES / NO QUESTIONS</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-<div style="padding:12px;background:rgba(46,204,113,0.08);border-radius:8px;border-left:3px solid var(--green);">
-<div class="oe-ja" style="font-size:14px;">はい、<span class="oe-hl">[ ます ]</span>。</div>
-<div class="oe-en" style="font-size:11px;margin-top:4px;">Yes, I [verb].</div>
-</div>
-<div style="padding:12px;background:rgba(231,76,60,0.08);border-radius:8px;border-left:3px solid #e74c3c;">
-<div class="oe-ja" style="font-size:14px;">いいえ、<span class="oe-hl">[ ません ]</span>。</div>
-<div class="oe-en" style="font-size:11px;margin-top:4px;">No, I don't [verb].</div>
-</div>
-</div>
-<div style="margin-top:8px;font-size:12px;color:var(--muted);padding:8px;background:var(--surface);border-radius:6px;">Soften with: いいえ、<b>あまり</b>〜ません (not very much) &ensp;|&ensp; いいえ、<b>ぜんぜん</b>〜ません (not at all)</div>
-</div>
-
-<div style="margin-bottom:14px;">
-<div style="color:var(--green);font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px;padding:4px 10px;background:rgba(78,207,122,0.1);border-radius:4px;">🔗 て-FORM SEQUENCE — 必須 (REQUIRED FOR FULL POINTS)</div>
-<div style="padding:12px;background:var(--surface);border-radius:8px;">
-<div class="oe-template"><div class="oe-ja" style="font-size:15px;line-height:2.4;"><span class="oe-hl">[ V1・<span class="oe-te">て</span> ]</span>、<span class="oe-hl">[ V2・<span class="oe-te">て</span> ]</span>、<span class="oe-hl">[ V3・ます ]</span>。</div></div>
-<div class="oe-en" style="font-size:12px;margin-top:4px;">Do [action 1], then [action 2], then [action 3].</div>
-<div style="margin-top:8px;font-size:12px;color:var(--muted);">→ あさ <span class="oe-te">おきて</span>、シャワーを <span class="oe-te">あびて</span>、がっこうに いきます。<br>→ うちに <span class="oe-te">かえって</span>、ばんごはんを <span class="oe-te">たべて</span>、テレビを みます。</div>
-</div>
-</div>
-
-<div>
-<div style="color:#5bc8e8;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:8px;padding:4px 10px;background:rgba(91,200,232,0.1);border-radius:4px;">🆘 SURVIVAL PHRASES — わからないとき</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-<div style="padding:10px;background:var(--surface);border-radius:8px;">
-<div class="oe-ja" style="font-size:13px;">もういちど いってください。</div>
-<div class="oe-en" style="font-size:11px;margin-top:4px;">Please say it again.</div>
-</div>
-<div style="padding:10px;background:var(--surface);border-radius:8px;">
-<div class="oe-ja" style="font-size:13px;">ゆっくり いってください。</div>
-<div class="oe-en" style="font-size:11px;margin-top:4px;">Please say it slowly.</div>
-</div>
-<div style="padding:10px;background:var(--surface);border-radius:8px;">
-<div class="oe-ja" style="font-size:13px;">すみません、わかりません。</div>
-<div class="oe-en" style="font-size:11px;margin-top:4px;">Sorry, I don't understand.</div>
-</div>
-<div style="padding:10px;background:var(--surface);border-radius:8px;">
-<div class="oe-ja" style="font-size:13px;">ちょっと まってください。</div>
-<div class="oe-en" style="font-size:11px;margin-top:4px;">Please wait a moment.</div>
-</div>
-</div>
-</div>
-</div></div>
-
-</div>
-
-<!-- ═══ CHEATSHEET ═══ -->
-<div class="oe-sec" id="oesec4">
-<div class="oe-intro"><h2>Quick Reference Cheatsheet</h2><p>Last-minute review. Keep open while practicing.</p></div>
-
-<div class="card"><div class="card-header">KEY VERB FORMS</div><div class="card-body">
-<div style="overflow-x:auto;">
-<table style="width:100%;border-collapse:collapse;font-size:13px;">
-<thead><tr>
-<th style="background:linear-gradient(135deg,var(--gold-dark),#6b5518);color:var(--white);padding:8px;border:1px solid var(--border);">Polite</th>
-<th style="background:linear-gradient(135deg,var(--gold-dark),#6b5518);color:var(--white);padding:8px;border:1px solid var(--border);">Past</th>
-<th style="background:linear-gradient(135deg,#1a6b3a,#2d8a4e);color:var(--white);padding:8px;border:1px solid var(--border);">て-form</th>
-<th style="background:linear-gradient(135deg,var(--gold-dark),#6b5518);color:var(--white);padding:8px;border:1px solid var(--border);">English</th>
-</tr></thead>
-<tbody>
-<tr><td style="padding:6px;border:1px solid var(--border);">たべます</td><td style="padding:6px;border:1px solid var(--border);">たべました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">たべて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">eat</td></tr>
-<tr><td style="padding:6px;border:1px solid var(--border);">いきます</td><td style="padding:6px;border:1px solid var(--border);">いきました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">いって</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">go</td></tr>
-<tr><td style="padding:6px;border:1px solid var(--border);">きます</td><td style="padding:6px;border:1px solid var(--border);">きました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">きて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">come</td></tr>
-<tr><td style="padding:6px;border:1px solid var(--border);">します</td><td style="padding:6px;border:1px solid var(--border);">しました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">して</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">do</td></tr>
-<tr><td style="padding:6px;border:1px solid var(--border);">みます</td><td style="padding:6px;border:1px solid var(--border);">みました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">みて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">watch</td></tr>
-<tr><td style="padding:6px;border:1px solid var(--border);">おきます</td><td style="padding:6px;border:1px solid var(--border);">おきました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">おきて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">wake up</td></tr>
-<tr><td style="padding:6px;border:1px solid var(--border);">かえります</td><td style="padding:6px;border:1px solid var(--border);">かえりました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">かえって</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">return</td></tr>
-<tr><td style="padding:6px;border:1px solid var(--border);">あびます</td><td style="padding:6px;border:1px solid var(--border);">あびました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">あびて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">shower</td></tr>
-<tr><td style="padding:6px;border:1px solid var(--border);">よみます</td><td style="padding:6px;border:1px solid var(--border);">よみました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">よんで</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">read</td></tr>
-<tr><td style="padding:6px;border:1px solid var(--border);">あります</td><td style="padding:6px;border:1px solid var(--border);">ありました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">あって</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">exist (thing)</td></tr>
-<tr><td style="padding:6px;border:1px solid var(--border);">います</td><td style="padding:6px;border:1px solid var(--border);">いました</td><td style="padding:6px;border:1px solid var(--border);color:var(--green);">いて</td><td style="padding:6px;border:1px solid var(--border);font-size:11px;">exist (living)</td></tr>
-</tbody></table>
-</div>
-</div></div>
-
-<div class="card"><div class="card-header">PARTICLES QUICK REF</div><div class="card-body">
-<div class="oe-loc-grid">
-<div class="oe-loc-item"><div class="oe-loc-jp">に</div><div class="oe-loc-en">time / location / goal<br>7じ<b>に</b> · うち<b>に</b></div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">で</div><div class="oe-loc-en">means / action place<br>バス<b>で</b> · うち<b>で</b></div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">を</div><div class="oe-loc-en">object marker<br>ほん<b>を</b> よみます</div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">と</div><div class="oe-loc-en">with / and<br>ともだち<b>と</b></div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">から〜まで</div><div class="oe-loc-en">from ~ to ~<br>9じ<b>から</b>5じ<b>まで</b></div></div>
-<div class="oe-loc-item"><div class="oe-loc-jp">が</div><div class="oe-loc-en">subject (new info)<br>ねこ<b>が</b> います</div></div>
-</div>
-</div></div>
-
-<div class="oe-warn"><b>EXAM DAY REMINDERS:</b><br>• Arrive 15 min early<br>• If you mess up, correct yourself — it's allowed!<br>• NEVER speak English during the exam<br>• Use もういちど いってください if you don't understand<br>• Speak at a natural pace</div>
-</div>
-</div>
 
 <div class="chapter-panel" id="panel_practice-lab">
   <div class="ch-title">練習ラボ — PRACTICE LAB</div>
@@ -10946,17 +10320,26 @@ body::before {
       <div class="plab-desc">Verb and adjective conjugation practice: present, past, negative, and &#12390;-form.</div>
       <div class="plab-tag">DRILL</div>
     </a>
-    <a class="plab-card" href="oral-exam.html" style="text-decoration:none;color:inherit;display:block;border-color:#e74c3c;">
-      <div class="plab-icon" style="color:#e74c3c;">🎤</div>
-      <div class="plab-title" style="color:#e74c3c;">Oral Exam Simulator</div>
-      <div class="plab-desc">13-minute timed simulation of the real oral exam — all 4 sections, random picture draw, Q&amp;A practice, and voice recorder with audio download.</div>
-      <div class="plab-tag" style="background:#e74c3c;">ORAL EXAM</div>
-    </a>
+    
     <a class="plab-card" href="exam-ch456.html" style="text-decoration:none;color:inherit;display:block;border-color:#e85454;">
       <div class="plab-icon" style="color:#e85454;">&#128221;</div>
       <div class="plab-title" style="color:#e85454;">Ch 4-5-6 Exam Simulator</div>
       <div class="plab-desc">Full &#12405;&#12367;&#12375;&#12421;&#12358; &#12503;&#12522;&#12531;&#12488; — dictation, vocab, particles, sentence translation. Randomized variants, self-grading, printable.</div>
       <div class="plab-tag" style="background:#e85454;">EXAM</div>
+    </a>
+
+    <a class="plab-card" href="nakama1-deck.html" style="text-decoration:none;color:inherit;display:block;border-color:#d4af37;">
+      <div class="plab-icon" style="color:#d4af37;">&#127948;</div>
+      <div class="plab-title" style="color:#d4af37;">Nakama 1 &mdash; 32-Card MVP Deck</div>
+      <div class="plab-desc">Minimum-viable flashcard deck covering ALL Ch 1&ndash;6 + Katakana grammar in 32 cards. Particles, verbs, adjectives, demonstratives, time, kana traps. Each card replaces 5&ndash;10 micro-cards.</div>
+      <div class="plab-tag" style="background:#d4af37;color:#000;">DECK</div>
+    </a>
+
+    <a class="plab-card" href="quiz-past-adjectives.html" style="text-decoration:none;color:inherit;display:block;border-color:#4ecf7a;">
+      <div class="plab-icon" style="color:#4ecf7a;">&#28201;</div>
+      <div class="plab-title" style="color:#4ecf7a;">Past Adjective Quiz (+/&minus;)</div>
+      <div class="plab-desc">Cover-and-reveal flashcards for past&nbsp;+ and past&nbsp;&minus; conjugations. 8 adjectives (i-adj, na-adj, irregular いい, NA-ninja きれい). Type-to-check mode included with romaji&rarr;kana IME.</div>
+      <div class="plab-tag" style="background:#4ecf7a;color:#000;">QUIZ</div>
     </a>
   </div>
 </div>
@@ -13431,28 +12814,8 @@ function buildSearchIndex() {
     if (jp) searchIdx.push({ jp: jp, en: en, reading: rm, ch: 'ref-vocab', chLabel: 'Vocab Atlas', type: 'vocab' });
   });
 
-  // Index oral exam Q&A, dialogues, and vocab for search
-  document.querySelectorAll('#panel_oral-exam .oe-subsec').forEach(item => {
-    const qEl = item.querySelector('.oe-q');
-    const aEl = item.querySelector('.oe-a');
-    if (!qEl) return;
-    const jp = Array.from(qEl.querySelectorAll('.oe-ja')).map(e => e.textContent).join(' ');
-    const en = Array.from(qEl.querySelectorAll('.oe-en')).map(e => e.textContent).join(' ');
-    const ansJp = aEl ? (aEl.querySelector('.oe-ja')?.textContent || '') : '';
-    searchIdx.push({ jp: jp + ' ' + ansJp, en: en, reading: '', ch: 'oral-exam', chLabel: 'Oral Exam', type: 'vocab', title: 'Q&A' });
-  });
-  document.querySelectorAll('#panel_oral-exam .oe-d-line').forEach(line => {
-    const jpEl = line.querySelector('.oe-ja');
-    const enEl = line.querySelector('.oe-en');
-    if (!jpEl) return;
-    searchIdx.push({ jp: jpEl.textContent, en: enEl ? enEl.textContent : '', reading: '', ch: 'oral-exam', chLabel: 'Oral Exam', type: 'dialogue', title: 'Exam Dialogue' });
-  });
-  document.querySelectorAll('#panel_oral-exam .oe-loc-item').forEach(item => {
-    const jp = item.querySelector('.oe-loc-jp')?.textContent || '';
-    const rm = item.querySelector('.oe-loc-rm')?.textContent || '';
-    const en = item.querySelector('.oe-loc-en')?.textContent || '';
-    if (jp) searchIdx.push({ jp: jp, en: en, reading: rm, ch: 'oral-exam', chLabel: 'Oral Exam', type: 'vocab' });
-  });
+  // Oral-exam search indexing was removed when the oral-exam page was deleted.
+  // Previous selectors (.oe-qa-item, .oe-dialogue-line, .oe-content-vocab) no longer exist.
 
   for (const [ch, data] of Object.entries(CHAPTER_DATA)) {
     if (!data.vocab) continue;
@@ -16117,5 +15480,8 @@ document.addEventListener('keydown', function(e) {
   })();
 })();
 </script>
+
+<script src="/tweaks.js" defer></script>
+<script src="/particle-finder-widget.js" defer></script>
 
 </body></html>
