@@ -438,7 +438,99 @@ const V = [
 {jp:'まで',h:'まで',r:'made',e:'until/to',ch:5,t:'particle',ex_jp:'5じまではたらきます。',ex_en:'I work until 5.'},
 {jp:'か',h:'か',r:'ka',e:'question marker',ch:1,t:'particle',ex_jp:'がくせいですか。',ex_en:'Are you a student?'},
 {jp:'ね',h:'ね',r:'ne',e:'agreement-seeking',ch:4,t:'particle',ex_jp:'いいてんきですね。',ex_en:'Nice weather, isn’t it?'},
-{jp:'よ',h:'よ',r:'yo',e:'new info / FYI',ch:4,t:'particle',ex_jp:'あそこにぎんこうがありますよ。',ex_en:'There’s a bank over there, FYI.'}
+{jp:'よ',h:'よ',r:'yo',e:'new info / FYI',ch:4,t:'particle',ex_jp:'あそこにぎんこうがありますよ。',ex_en:'There’s a bank over there, FYI.'},
+/* ─── NUMBERS 1–10 ─────────────────────────────────────── */
+{jp:'いち',h:'いち',r:'ichi',e:'one (1)',ch:2,t:'counter',ex_jp:'いちじにあいましょう。',ex_en:'Let’s meet at 1.'},
+{jp:'に',h:'に',r:'ni',e:'two (2)',ch:2,t:'counter',ex_jp:'にじかんかかります。',ex_en:'It takes 2 hours.'},
+{jp:'さん',h:'さん',r:'san',e:'three (3)',ch:2,t:'counter',ex_jp:'さんがついです。',ex_en:'It is March.'},
+{jp:'よん',h:'よん',r:'yon',e:'four (4)',ch:2,t:'counter',ex_jp:'よんねんせいです。',ex_en:'I am a 4th-year.'},
+{jp:'し',h:'し',r:'shi',e:'four (4, alt)',ch:2,t:'counter',ex_jp:'しがつにはじまります。',ex_en:'It starts in April.'},
+{jp:'ご',h:'ご',r:'go',e:'five (5)',ch:2,t:'counter',ex_jp:'ごじにかえります。',ex_en:'I return at 5.'},
+{jp:'ろく',h:'ろく',r:'roku',e:'six (6)',ch:2,t:'counter',ex_jp:'ろくじにおきます。',ex_en:'I wake up at 6.'},
+{jp:'なな',h:'なな',r:'nana',e:'seven (7)',ch:2,t:'counter',ex_jp:'ななひゃくえんです。',ex_en:'It is 700 yen.'},
+{jp:'はち',h:'はち',r:'hachi',e:'eight (8)',ch:2,t:'counter',ex_jp:'はちじにじゅぎょうです。',ex_en:'Class is at 8.'},
+{jp:'きゅう',h:'きゅう',r:'kyuu',e:'nine (9)',ch:2,t:'counter',ex_jp:'きゅうじからはじまります。',ex_en:'It starts at 9.'},
+{jp:'く',h:'く',r:'ku',e:'nine (9, alt)',ch:2,t:'counter',ex_jp:'くじにあいます。',ex_en:'We meet at 9.'},
+{jp:'じゅう',h:'じゅう',r:'juu',e:'ten (10)',ch:2,t:'counter',ex_jp:'じゅうじにねます。',ex_en:'I sleep at 10.'},
+{jp:'ひゃく',h:'ひゃく',r:'hyaku',e:'hundred',ch:2,t:'counter',ex_jp:'ひゃくえんです。',ex_en:'It is 100 yen.'},
+{jp:'せん',h:'せん',r:'sen',e:'thousand',ch:2,t:'counter',ex_jp:'せんえんかります。',ex_en:'I borrow 1000 yen.'},
+{jp:'まん',h:'まん',r:'man',e:'ten thousand',ch:2,t:'counter',ex_jp:'いちまんえんです。',ex_en:'It is 10,000 yen.'},
+{jp:'ゼロ',h:'ぜろ',r:'zero',e:'zero',ch:3,t:'counter',ex_jp:'ゼロからはじめます。',ex_en:'I start from zero.'},
+{jp:'れい',h:'れい',r:'rei',e:'zero (alt)',ch:3,t:'counter',ex_jp:'れいてんごです。',ex_en:'It is 0.5.'},
+/* ─── COUNTERS ─────────────────────────────────────── */
+{jp:'～にん',h:'～にん',r:'~nin',e:'~ people',ch:5,t:'counter',ex_jp:'4にんかぞくです。',ex_en:'My family has 4 people.'},
+{jp:'～まい',h:'～まい',r:'~mai',e:'~ flat objects',ch:5,t:'counter',ex_jp:'きっぷを2まいかいました。',ex_en:'I bought 2 tickets.'},
+{jp:'～ほん',h:'～ほん',r:'~hon',e:'~ long objects',ch:5,t:'counter',ex_jp:'ペンが3ぼんあります。',ex_en:'There are 3 pens.'},
+{jp:'～さつ',h:'～さつ',r:'~satsu',e:'~ books / volumes',ch:5,t:'counter',ex_jp:'本を5さつかいました。',ex_en:'I bought 5 books.'},
+{jp:'～えん',h:'～えん',r:'~en',e:'~ yen (currency)',ch:4,t:'counter',ex_jp:'500えんです。',ex_en:'It is 500 yen.'},
+{jp:'～さい',h:'～さい',r:'~sai',e:'~ years old',ch:5,t:'counter',ex_jp:'いもうとは10さいです。',ex_en:'My sister is 10 years old.'},
+{jp:'～ご',h:'～ご',r:'~go-time',e:'~ later (time)',ch:5,t:'counter',ex_jp:'10ぷんごにきます。',ex_en:'I will come in 10 minutes.'},
+{jp:'～ごろ',h:'～ごろ',r:'~goro',e:'around (time point)',ch:5,t:'suffix',ex_jp:'3じごろにあいましょう。',ex_en:'Let’s meet around 3.'},
+{jp:'あさって',h:'あさって',r:'asatte',e:'day after tomorrow',ch:3,t:'noun-time',daypoint:1,ex_jp:'あさってじゅぎょうがあります。',ex_en:'I have class the day after tomorrow.'},
+/* ─── EXPRESSIONS — meals, polite ─────────────────────────────────────── */
+{jp:'いただきます',h:'いただきます',r:'itadakimasu',e:'(before eating)',ch:3,t:'expr',ex_jp:'いただきます！',ex_en:'(Said before a meal.)'},
+{jp:'ごちそうさまでした',h:'ごちそうさまでした',r:'gochisousama-deshita',e:'(after eating)',ch:3,t:'expr',ex_jp:'ごちそうさまでした。',ex_en:'(Said after a meal.)'},
+{jp:'ごめんください',h:'ごめんください',r:'gomenkudasai',e:'(at someone’s door)',ch:5,t:'expr',ex_jp:'ごめんください、たなかさんいますか。',ex_en:'Hello, is Tanaka home?'},
+{jp:'からきました',h:'からきました',r:'kara-kimashita',e:'I came from ~',ch:2,t:'expr',ex_jp:'アメリカからきました。',ex_en:'I came from America.'},
+{jp:'どこからきましたか',h:'どこからきましたか',r:'doko-kara-kimashita-ka',e:'Where are you from?',ch:2,t:'expr',ex_jp:'どこからきましたか。',ex_en:'Where are you from?'},
+{jp:'どちらからいらっしゃいましたか',h:'どちらからいらっしゃいましたか',r:'dochira-kara-irasshaimashita-ka',e:'Where are you from? (polite)',ch:2,t:'expr',ex_jp:'どちらからいらっしゃいましたか。',ex_en:'Where are you from? (polite)'},
+{jp:'もういちどおねがいします',h:'もういちどおねがいします',r:'mou-ichido-onegai-shimasu',e:'Please say it again (student)',ch:1,t:'expr',ex_jp:'もういちどおねがいします。',ex_en:'Please say it again.'},
+{jp:'おおきいこえでいってください',h:'おおきいこえでいってください',r:'ookii-koe-de-itte-kudasai',e:'Please speak loudly (instructor)',ch:1,t:'expr',ex_jp:'おおきいこえでいってください。',ex_en:'Please speak loudly.'},
+{jp:'おおきいこえでおねがいします',h:'おおきいこえでおねがいします',r:'ookii-koe-de-onegai-shimasu',e:'Please speak loudly (student)',ch:1,t:'expr',ex_jp:'おおきいこえでおねがいします。',ex_en:'Please speak loudly.'},
+{jp:'わかりましたか',h:'わかりましたか',r:'wakarimashita-ka',e:'Do you understand?',ch:1,t:'expr',ex_jp:'わかりましたか。',ex_en:'Do you understand?'},
+{jp:'これはにほんごでなんといいますか',h:'これはにほんごでなんといいますか',r:'kore-wa-nihongo-de-nan-to-iimasu-ka',e:'How do you say this in Japanese?',ch:1,t:'expr',ex_jp:'これはにほんごでなんといいますか。',ex_en:'How do you say this in Japanese?'},
+/* ─── Q-WORDS ─────────────────────────────────────── */
+{jp:'なに',h:'なに',r:'nani',e:'what',ch:2,t:'qword',ex_jp:'なにをたべますか。',ex_en:'What will you eat?'},
+{jp:'なん',h:'なん',r:'nan',e:'what (alt)',ch:2,t:'qword',ex_jp:'なんですか。',ex_en:'What is it?'},
+{jp:'だれ',h:'だれ',r:'dare',e:'who',ch:2,t:'qword',ex_jp:'だれがきましたか。',ex_en:'Who came?'},
+{jp:'いつ',h:'いつ',r:'itsu',e:'when',ch:3,t:'qword',ex_jp:'いつ いきますか。',ex_en:'When will you go?'},
+{jp:'どうして',h:'どうして',r:'doushite',e:'why',ch:6,t:'qword',ex_jp:'どうしてですか。',ex_en:'Why?'},
+{jp:'いくら',h:'いくら',r:'ikura',e:'how much',ch:4,t:'qword',ex_jp:'これはいくらですか。',ex_en:'How much is this?'},
+{jp:'いくつ',h:'いくつ',r:'ikutsu',e:'how many',ch:5,t:'qword',ex_jp:'いくつありますか。',ex_en:'How many are there?'},
+{jp:'どんな',h:'どんな',r:'donna',e:'what kind of',ch:5,t:'qword',ex_jp:'どんな本がすきですか。',ex_en:'What kind of books do you like?'},
+/* ─── ADVERBS ─────────────────────────────────────── */
+{jp:'ちょっと',h:'ちょっと',r:'chotto',e:'a little',ch:6,t:'adv',ex_jp:'ちょっとまってください。',ex_en:'Please wait a moment.'},
+{jp:'すこし',h:'すこし',r:'sukoshi',e:'a little',ch:6,t:'adv',ex_jp:'すこしわかります。',ex_en:'I understand a little.'},
+{jp:'いつも',h:'いつも',r:'itsumo',e:'always',ch:3,t:'adv',ex_jp:'いつもコーヒーをのみます。',ex_en:'I always drink coffee.'},
+{jp:'ときどき',h:'ときどき',r:'tokidoki',e:'sometimes',ch:3,t:'adv',ex_jp:'ときどき えいがをみます。',ex_en:'I sometimes watch a movie.'},
+{jp:'よく',h:'よく',r:'yoku',e:'often',ch:3,t:'adv',ex_jp:'よくとしょかんへ行きます。',ex_en:'I often go to the library.'},
+{jp:'あまり',h:'あまり',r:'amari',e:'not much',ch:3,t:'adv',ex_jp:'あまりたべません。',ex_en:'I don’t eat much.'},
+{jp:'ぜんぜん',h:'ぜんぜん',r:'zenzen',e:'not at all',ch:3,t:'adv',ex_jp:'ぜんぜんわかりません。',ex_en:'I don’t understand at all.'},
+{jp:'ゆっくり',h:'ゆっくり',r:'yukkuri',e:'slowly',ch:1,t:'adv',ex_jp:'ゆっくりはなしてください。',ex_en:'Please speak slowly.'},
+{jp:'はやく',h:'はやく',r:'hayaku',e:'quickly, early',ch:5,t:'adv',ex_jp:'はやくおきます。',ex_en:'I wake up early.'},
+{jp:'おそく',h:'おそく',r:'osoku',e:'late',ch:5,t:'adv',ex_jp:'おそくねます。',ex_en:'I sleep late.'},
+/* ─── HONORIFIC PREFIXES / SUFFIXES ─────────────────────────────────────── */
+{jp:'お',h:'お',r:'o-',e:'(honorific prefix)',ch:1,t:'suffix',ex_jp:'おなまえはなんですか。',ex_en:'What is your name?'},
+{jp:'ご',h:'ご',r:'go-',e:'(honorific prefix)',ch:1,t:'suffix',ex_jp:'ごりょうしんはおげんきですか。',ex_en:'Are your parents well?'},
+{jp:'～さん',h:'～さん',r:'~san',e:'Mr/Ms (suffix)',ch:1,t:'suffix',ex_jp:'たなかさんはがくせいです。',ex_en:'Tanaka is a student.'},
+{jp:'～せんせい',h:'～せんせい',r:'~sensei',e:'Professor ~',ch:1,t:'suffix',ex_jp:'やまだせんせいはやさしいです。',ex_en:'Professor Yamada is kind.'},
+{jp:'～くん',h:'～くん',r:'~kun',e:'~ (boy/junior)',ch:1,t:'suffix',ex_jp:'たろうくんはともだちです。',ex_en:'Tarou is my friend.'},
+{jp:'～ちゃん',h:'～ちゃん',r:'~chan',e:'~ (cute/child)',ch:1,t:'suffix',ex_jp:'はなちゃんはかわいいです。',ex_en:'Hana-chan is cute.'},
+{jp:'～たち',h:'～たち',r:'~tachi',e:'plural marker (people)',ch:5,t:'suffix',ex_jp:'がくせいたちは こうえんに います。',ex_en:'The students are in the park.'},
+/* ─── ADDITIONAL ADJECTIVES ─────────────────────────────────────── */
+{jp:'きたない',h:'きたない',r:'kitanai',e:'dirty',ch:5,t:'adj-i',ex_jp:'このへやはきたないです。',ex_en:'This room is dirty.'},
+{jp:'りっぱ',h:'りっぱ',r:'rippa',e:'splendid',ch:5,t:'adj-na',ex_jp:'りっぱなビルですね。',ex_en:'It is a splendid building.'},
+{jp:'ひま',h:'ひま',r:'hima',e:'free (time)',ch:6,t:'adj-na',ex_jp:'こんしゅうはひまです。',ex_en:'I am free this week.'},
+{jp:'べんり',h:'べんり',r:'benri',e:'convenient',ch:6,t:'adj-na',ex_jp:'コンビニはべんりです。',ex_en:'Convenience stores are convenient.'},
+/* ─── CONJUNCTIONS ─────────────────────────────────────── */
+{jp:'それから',h:'それから',r:'sorekara',e:'and then',ch:6,t:'expr',ex_jp:'あさごはんをたべます。それからがっこうへ行きます。',ex_en:'I eat breakfast. Then I go to school.'},
+{jp:'しかし',h:'しかし',r:'shikashi',e:'however',ch:6,t:'expr',ex_jp:'にほんごはむずかしいです。しかし、おもしろいです。',ex_en:'Japanese is difficult. However, it is interesting.'},
+{jp:'じゃあ',h:'じゃあ',r:'jaa',e:'well then',ch:6,t:'expr',ex_jp:'じゃあ、また あした。',ex_en:'Well then, see you tomorrow.'},
+{jp:'では',h:'では',r:'dewa',e:'well then (formal)',ch:6,t:'expr',ex_jp:'では、はじめましょう。',ex_en:'Well then, let’s begin.'},
+{jp:'だから',h:'だから',r:'dakara',e:'so / therefore',ch:6,t:'expr',ex_jp:'いそがしいです。だから、いきません。',ex_en:'I am busy. So I will not go.'},
+{jp:'ですから',h:'ですから',r:'desukara',e:'so / therefore (polite)',ch:6,t:'expr',ex_jp:'たかいです。ですから、かいません。',ex_en:'It is expensive. So I will not buy it.'},
+/* ─── FILLER / HESITATION ─────────────────────────────────────── */
+{jp:'あのう',h:'あのう',r:'anou',e:'um, excuse me',ch:1,t:'expr',ex_jp:'あのう、すみません。',ex_en:'Um, excuse me.'},
+{jp:'あの',h:'あの',r:'ano',e:'um (filler)',ch:1,t:'expr',ex_jp:'あの、ちょっとしつもんがあります。',ex_en:'Um, I have a question.'},
+{jp:'えーと',h:'えーと',r:'eeto',e:'um, let me think',ch:1,t:'expr',ex_jp:'えーと、なんでしたっけ。',ex_en:'Um, what was it again?'},
+/* ─── DEMONSTRATIVE PREFIXES ─────────────────────────────────────── */
+{jp:'この',h:'この',r:'kono',e:'this (+ noun)',ch:2,t:'demonstr',ex_jp:'このほんはおもしろいです。',ex_en:'This book is interesting.'},
+{jp:'その',h:'その',r:'sono',e:'that (+ noun)',ch:2,t:'demonstr',ex_jp:'そのペンはあなたのですか。',ex_en:'Is that pen yours?'},
+{jp:'あの',h:'あの-d',r:'ano-d',e:'that over there (+ noun)',ch:2,t:'demonstr',ex_jp:'あのひとはだれですか。',ex_en:'Who is that person over there?'},
+{jp:'どの',h:'どの',r:'dono',e:'which (+ noun)',ch:2,t:'demonstr',ex_jp:'どのほんがいいですか。',ex_en:'Which book is good?'},
+{jp:'そちら',h:'そちら',r:'sochira',e:'that way (polite)',ch:2,t:'demonstr',ex_jp:'そちらはどなたですか。',ex_en:'Who is that (you)?'},
+{jp:'あちら',h:'あちら',r:'achira',e:'that way (far, polite)',ch:2,t:'demonstr',ex_jp:'あちらにございます。',ex_en:'It is over there.'},
+{jp:'どちら',h:'どちら',r:'dochira',e:'which way / where',ch:2,t:'demonstr',ex_jp:'どちらからきましたか。',ex_en:'Where are you from?'}
 ];
 
 window.VOCAB_DB = V;
@@ -480,15 +572,39 @@ function installFindExamplePatch(){
   }
   const original = window.findExample;
   window.findExample = function(jp){
-    const ex = window.lookupVocabExample(jp);
+    if(!jp) return '';
+    // 1. Direct lookup
+    let ex = window.lookupVocabExample(jp);
     if(ex) return ex;
-    // Strip ⚠️/parenthetical chapter labels and try again
-    const cleaned = (jp||'').replace(/⚠️/g,'').replace(/\([^)]*\)/g,'').trim();
+
+    // 2. Strip ⚠️ + parenthetical chapter labels
+    const cleaned = jp.replace(/⚠️/g,'').replace(/\([^)]*\)/g,'').replace(/\s+/g,'').trim();
     if(cleaned !== jp){
-      const ex2 = window.lookupVocabExample(cleaned);
-      if(ex2) return ex2;
+      ex = window.lookupVocabExample(cleaned);
+      if(ex) return ex;
     }
-    // Fall through to the original (CHAPTER_DATA dialogue search)
+
+    // 3. Compound headwords — try each part split by / ／ ・ → 、 ,
+    //    e.g. 'たべる → たべます' → ['たべる','たべます']
+    //    e.g. 'これ／それ／あれ／どれ' → ['これ','それ','あれ','どれ']
+    //    e.g. 'おおきい / ちいさい' → ['おおきい','ちいさい']
+    const parts = jp.split(/[\s　]*[\/／・→、,]+[\s　]*/).map(s=>s.replace(/⚠️/g,'').replace(/\([^)]*\)/g,'').trim()).filter(Boolean);
+    for(const p of parts){
+      ex = window.lookupVocabExample(p);
+      if(ex) return ex;
+    }
+
+    // 4. Strip leading/trailing tildes (suffix headwords ～さん etc.)
+    const tildeStripped = jp.replace(/[～~]/g,'').trim();
+    if(tildeStripped && tildeStripped !== jp){
+      ex = window.lookupVocabExample(tildeStripped);
+      if(ex) return ex;
+      // also try with ～ added back to either end
+      ex = window.lookupVocabExample('～'+tildeStripped) || window.lookupVocabExample(tildeStripped+'～');
+      if(ex) return ex;
+    }
+
+    // 5. Fall through to the original (CHAPTER_DATA dialogue search)
     return original(jp);
   };
 }
