@@ -46,7 +46,7 @@ const V = [
 {jp:'かのじょ',h:'かのじょ',r:'kanojo',e:'she / girlfriend',ch:2,t:'noun-person',ex_jp:'かのじょはがくせいです。',ex_en:'She is a student.'},
 {jp:'こちら',h:'こちら',r:'kochira',e:'this person, this way',ch:2,t:'noun-person',ex_jp:'こちらはたなかさんです。',ex_en:'This is Tanaka-san.'},
 /* ─── PROPER NAMES ─────────────────────────────────────── */
-{jp:'たなかさん',h:'たなかさん',r:'tanaka-san',e:'Tanaka',ch:2,t:'noun-person',ex_jp:'たなかさんはにほん人です。',ex_en:'Tanaka is Japanese.'},
+{jp:'たなかさん',h:'たなかさん',r:'tanaka-san',e:'Tanaka',ch:2,t:'noun-person',ex_jp:'たなかさんは日本人です。',ex_en:'Tanaka is Japanese.'},
 {jp:'スミスさん',h:'スミスさん',r:'sumisu-san',e:'Mr/Ms Smith',ch:2,t:'noun-person',ex_jp:'スミスさんはアメリカからきました。',ex_en:'Smith came from America.'},
 {jp:'うえださん',h:'うえださん',r:'ueda-san',e:'Ms Ueda',ch:2,t:'noun-person',ex_jp:'うえださんはしぶやでまっています。',ex_en:'Ueda is waiting in Shibuya.'},
 {jp:'リーさん',h:'リーさん',r:'rii-san',e:'Mr Li',ch:2,t:'noun-person',ex_jp:'リーさんはちゅうごくのりゅうがくせいです。',ex_en:'Lee is an international student from China.'},
@@ -57,7 +57,7 @@ const V = [
 {jp:'カナダ',h:'カナダ',r:'kanada',e:'Canada',ch:2,t:'noun-place',ex_jp:'かれはカナダ人です。',ex_en:'He is Canadian.'},
 {jp:'メキシコ',h:'メキシコ',r:'mekishiko',e:'Mexico',ch:2,t:'noun-place',ex_jp:'メキシコのりょうりがすきです。',ex_en:'I like Mexican cuisine.'},
 {jp:'イギリス',h:'イギリス',r:'igirisu',e:'England',ch:2,t:'noun-place',ex_jp:'イギリスにすんでいます。',ex_en:'I live in England.'},
-{jp:'フランス',h:'フランス',r:'furansu',e:'France',ch:2,t:'noun-place',ex_jp:'フランスご(語)をべんきょうします。',ex_en:'I study French.'},
+{jp:'フランス',h:'フランス',r:'furansu',e:'France',ch:2,t:'noun-place',ex_jp:'フランスごをべんきょうします。',ex_en:'I study French.'},
 {jp:'スペイン',h:'スペイン',r:'supein',e:'Spain',ch:2,t:'noun-place',ex_jp:'スペインへ行きました。',ex_en:'I went to Spain.'},
 {jp:'オーストラリア',h:'オーストラリア',r:'oosutoraria',e:'Australia',ch:2,t:'noun-place',ex_jp:'オーストラリアはおおきいです。',ex_en:'Australia is big.'},
 {jp:'ちゅうごく',h:'ちゅうごく',r:'chuugoku',e:'China',ch:2,t:'noun-place',ex_jp:'ちゅうごくのりゅうがくせいです。',ex_en:"I'm an international student from China."},
@@ -290,7 +290,7 @@ const V = [
 {jp:'かける',h:'かける',r:'kakeru',e:'make a phone call',ch:6,t:'verb-comm',ex_jp:'りょうしんにでんわをかける。',ex_en:'I call my parents.'},
 /* ─── VERBS — existence / cognition / emotion ─────────────────────────────────────── */
 {jp:'あります',h:'あります',r:'arimasu',e:'exist (inanimate, polite)',ch:4,t:'verb-exist',ex_jp:'つくえの上に本があります。',ex_en:'There is a book on the desk.'},
-{jp:'ある',h:'ある',r:'aru',e:'exist (inanimate)',ch:4,t:'verb-exist',ex_jp:'いえにねこがある。',ex_en:'(used for objects only)'},
+{jp:'ある',h:'ある',r:'aru',e:'exist (inanimate)',ch:4,t:'verb-exist',ex_jp:'つくえの上に本がある。',ex_en:'There is a book on the desk. (ある = inanimate; for animals/people use いる)'},
 {jp:'います',h:'います',r:'imasu',e:'exist (animate, polite)',ch:4,t:'verb-exist',ex_jp:'こうえんにいぬがいます。',ex_en:'There is a dog in the park.'},
 {jp:'いる',h:'いる',r:'iru',e:'exist (animate)',ch:4,t:'verb-exist',ex_jp:'へやにねこがいる。',ex_en:'There is a cat in the room.'},
 {jp:'わかります',h:'わかります',r:'wakarimasu',e:'understand (polite)',ch:1,t:'verb-cog',ga:1,ex_jp:'にほんごがわかります。',ex_en:'I understand Japanese.'},
