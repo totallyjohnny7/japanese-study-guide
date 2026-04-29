@@ -399,6 +399,36 @@
     }
   ];
 
+  /* Merge any external VOCAB_DB (vocab-examples.js) into our W array */
+  function mergeExternalVocab(){
+    const ext = window.VOCAB_DB;
+    if(!Array.isArray(ext)) return;
+    ext.forEach(v=>{
+      if(!v.jp || !v.t) return;
+      // Skip if already in W (by hira match)
+      if(W.some(w => w.h === (v.h||v.jp) || w.k === v.jp)) return;
+      const entry = {
+        k: v.jp,
+        h: v.h || v.jp,
+        r: (v.r||'').replace(/^~/, '').replace(/-/g, ''),
+        e: (v.e||'').toLowerCase(),
+        t: v.t
+      };
+      if(v.ga) entry.ga = 1;
+      if(v.means) entry.means = 1;
+      if(v.daypoint) entry.daypoint = 1;
+      if(v.freq) entry.freq = 1;
+      if(v.clock) entry.clock = 1;
+      W.push(entry);
+      // Update lookup index
+      [entry.k, entry.h, entry.r, entry.e].forEach(key=>{
+        if(!key) return;
+        const n = norm(key);
+        if(!idx.has(n)) idx.set(n, entry);
+      });
+    });
+  }
+
   /* =========================================
      CSS — injected once
      ========================================= */
@@ -419,6 +449,32 @@
   }
   #pf-toggle .pf-tg-jp{font-size:16px;font-weight:600;}
   #pf-toggle .pf-tg-en{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#4ecf7a;opacity:0.85}
+
+  /* Floating Action Button — visible while scrolling, mirrors the global search FAB pattern */
+  #pf-fab{
+    position:fixed;
+    right:14px;
+    bottom:104px;
+    width:54px;height:54px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#4ecf7a 0%,#2a9d8f 100%);
+    color:#0a0a0a;
+    border:none;cursor:pointer;
+    z-index:480;
+    box-shadow:0 6px 20px rgba(78,207,122,0.45),0 0 0 1px rgba(0,0,0,0.6);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:'Klee One','Noto Sans JP',sans-serif;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  #pf-fab:hover{transform:scale(1.08);box-shadow:0 8px 28px rgba(78,207,122,0.6),0 0 0 1px rgba(0,0,0,0.6);}
+  #pf-fab:active{transform:scale(0.96);}
+  #pf-fab .pf-fab-jp{font-size:18px;font-weight:700;line-height:1;}
+  #pf-fab .pf-fab-en{font-size:7.5px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;line-height:1;margin-top:2px;}
+  @media(max-width:540px){
+    #pf-fab{width:48px;height:48px;right:10px;bottom:96px;}
+    #pf-fab .pf-fab-jp{font-size:16px;}
+    #pf-fab .pf-fab-en{font-size:6.5px;}
+  }
 
   #pf-launch-row{
     display:flex;justify-content:center;
@@ -659,8 +715,10 @@
   }
 
   /* =========================================
-     Inject toggle button BELOW the global search
-     (avoids overlapping it; mirrors search-bar look)
+     Inject toggle chip BELOW the global search
+     PLUS a floating-action button (FAB) that
+     stays visible while scrolling — works like
+     the global-search FAB.
      ========================================= */
   function injectToggle(){
     const btn = document.createElement('button');
@@ -671,31 +729,39 @@
 
     const searchWrap = document.getElementById('searchWrap');
     if(searchWrap){
-      // Wrap the toggle in a row so it sits centered under the search bar.
       const row = document.createElement('div');
       row.id = 'pf-launch-row';
       row.appendChild(btn);
-      // Insert AFTER the search wrap so it doesn't disturb the search input layout
       searchWrap.parentNode.insertBefore(row, searchWrap.nextSibling);
-    } else {
-      // Fallback for pages without #searchWrap — fixed top-right
-      btn.style.position = 'fixed';
-      btn.style.top = '12px';
-      btn.style.right = '12px';
-      btn.style.zIndex = '500';
-      btn.style.margin = '0';
-      document.body.appendChild(btn);
     }
+
+    // Always inject the floating FAB so the widget is reachable while scrolling
+    const fab = document.createElement('button');
+    fab.id = 'pf-fab';
+    fab.title = 'Particle Finder — open from anywhere';
+    fab.setAttribute('aria-label','Open Particle Finder');
+    fab.innerHTML = '<span class="pf-fab-jp">助詞</span><span class="pf-fab-en">PARTICLE</span>';
+    fab.addEventListener('click', openModal);
+    document.body.appendChild(fab);
   }
 
   /* =========================================
      INIT
      ========================================= */
   function init(){
+    mergeExternalVocab();
     injectToggle();
-    // Build modal lazily on first open to keep page load light, but pre-build
-    // so the keyboard shortcut works even before the user clicks.
     buildModal();
+    // Re-merge any vocab-examples.js that loads later
+    if(!window.VOCAB_DB){
+      const retry = setInterval(()=>{
+        if(window.VOCAB_DB){
+          mergeExternalVocab();
+          clearInterval(retry);
+        }
+      }, 200);
+      setTimeout(()=>clearInterval(retry), 5000);
+    }
   }
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', init);
