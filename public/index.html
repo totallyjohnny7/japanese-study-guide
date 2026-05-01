@@ -13863,15 +13863,21 @@ lookupWord = function(text) {
     }
   }
 
-  // Try all vocab for best substring match
+  // Try left-anchored matching only — prevents false positives like
+  // "～ませんか" matching せんせい via the substring "せん".
+  // - clean.startsWith(key): conjugation case (たべました starts with たべる-stem)
+  // - key.startsWith(clean): user typed a shorter form than dict (clean="たべ" → key="たべる")
+  // We require both sides to be ≥2 chars and the matched key to be at
+  // least 60% of clean's length so that 2-char fragments like "せん"
+  // don't dominate longer hovered text like "ませんか".
   let bestMatch = null;
   let bestLen = 0;
   for (const key in vocabDict) {
-    if (clean.includes(key) && key.length > bestLen) {
+    if (key.length < 2) continue;
+    if (clean.startsWith(key) && key.length > bestLen && key.length >= clean.length * 0.6) {
       bestMatch = vocabDict[key];
       bestLen = key.length;
-    }
-    if (key.includes(clean) && clean.length > bestLen) {
+    } else if (key.startsWith(clean) && clean.length >= 2 && clean.length > bestLen) {
       bestMatch = vocabDict[key];
       bestLen = clean.length;
     }
