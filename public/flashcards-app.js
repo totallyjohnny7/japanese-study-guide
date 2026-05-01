@@ -477,7 +477,13 @@ function startSession(resume){
     }
 
     // Cap initial queue at a reasonable size for the timer budget
-    const cap = state.durationMin === 10 ? 80 : state.durationMin === 20 ? 140 : 200;
+    // Queue cap by duration. ~7 cards/min target so 30 min → 200. Supports 15/25 min from plan presets.
+    const cap = state.durationMin <= 10 ? 80 :
+                state.durationMin <= 15 ? 110 :
+                state.durationMin <= 20 ? 140 :
+                state.durationMin <= 25 ? 170 :
+                state.durationMin <= 30 ? 200 :
+                Math.round(state.durationMin * 7);
     pool = pool.slice(0, cap);
 
     if(pool.length === 0){
