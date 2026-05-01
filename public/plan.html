@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Exam Plan — Nakama 1 (Mon)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:#0a0a0a; --bg2:#111; --bg3:#1a1a1a; --bg4:#222; --bg5:#2a2a2a;
+    --text:#f5f5f5; --text2:#aaa; --text3:#777;
+    --gold:#d4af37; --gold-dim:#a8892a; --gold-glow:rgba(212,175,55,0.25);
+    --red:#c0392b; --red-soft:#e57373;
+    --green:#27ae60; --green-soft:#66bb6a;
+    --amber:#f0a040; --amber-soft:#ffb74d;
+    --blue:#5b9bd5; --purple:#b08fd4;
+    --border:rgba(212,175,55,0.2); --border-soft:rgba(255,255,255,0.08);
+    --font-jp:'Noto Sans JP',sans-serif; --font-en:'DM Sans',sans-serif; --font-mono:'JetBrains Mono',monospace;
+  }
+  html, body { height:100%; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font-en); font-size:15px; line-height:1.5; }
+
+  #topbar {
+    position: sticky; top: 0;
+    background: rgba(10,10,10,0.97);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border-soft);
+    padding: 8px 14px;
+    display: flex; align-items: center; gap: 10px;
+    z-index: 100;
+    min-height: 52px;
+  }
+  #topbar .brand { font-family:var(--font-jp); color:var(--gold); font-weight:700; font-size:13px; margin-right:auto; }
+  #topbar a.back { font-size:11px; color:var(--text2); text-decoration:none; padding:4px 10px; border-radius:6px; border:1px solid var(--border-soft); }
+  #topbar a.back:hover { color:var(--gold); border-color:var(--gold); }
+  #topbar .iconbtn { background:transparent; border:1px solid var(--border-soft); color:var(--text2); width:32px; height:32px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; font-size:13px; }
+  #topbar .iconbtn:hover { color:var(--gold); border-color:var(--gold); }
+
+  main { max-width: 920px; margin: 0 auto; padding: 18px 14px 80px; }
+
+  /* ── Hero clock + countdown ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .hero-tile {
+    background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hero-tile .label {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text2); margin-bottom: 6px; font-weight: 700;
+  }
+  .clock-wrap .time { font-family: var(--font-mono); font-size: 36px; font-weight: 700; color: var(--gold); line-height: 1; font-variant-numeric: tabular-nums; }
+  .clock-wrap .date { font-size: 13px; color: var(--text); margin-top: 6px; }
+  .clock-wrap .seconds { color: var(--text3); font-size: 28px; }
+
+  .countdown-wrap.crit { animation: critPulse 1.5s infinite; }
+  @keyframes critPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(192,57,43,0); } 50% { box-shadow: 0 0 0 6px rgba(192,57,43,0.15); } }
+  .countdown-wrap .num { font-family: var(--font-mono); font-size: 32px; font-weight: 700; color: var(--text); line-height: 1; font-variant-numeric: tabular-nums; }
+  .countdown-wrap .num.urgent { color: var(--amber); }
+  .countdown-wrap .num.crit { color: var(--red-soft); }
+  .countdown-wrap .num strong { color: var(--gold); }
+  .countdown-wrap .target { font-size: 12.5px; color: var(--text2); margin-top: 6px; cursor: pointer; }
+  .countdown-wrap .target:hover { color: var(--gold); }
+  .countdown-wrap .target .edit { color: var(--text3); font-size: 11px; margin-left: 6px; }
+
+  /* ── DO NOW card ── */
+  .do-now {
+    background: linear-gradient(135deg, rgba(212,175,55,0.18) 0%, rgba(212,175,55,0.05) 100%);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 24px rgba(212,175,55,0.12);
+    position: relative;
+    overflow: hidden;
+  }
+  .do-now.idle { background: linear-gradient(135deg, rgba(91,155,213,0.10) 0%, rgba(91,155,213,0.03) 100%); border-color: var(--blue); box-shadow: none; }
+  .do-now.upcoming { background: linear-gradient(135deg, rgba(176,143,212,0.10) 0%, rgba(176,143,212,0.03) 100%); border-color: var(--purple); box-shadow: none; }
+  .do-now.done { background: linear-gradient(135deg, rgba(39,174,96,0.10) 0%, rgba(39,174,96,0.03) 100%); border-color: var(--green); box-shadow: none; }
+
+  .do-now .badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: var(--gold);
+    color: #000;
+    margin-bottom: 8px;
+  }
+  .do-now.idle .badge { background: var(--blue); color: #000; }
+  .do-now.upcoming .badge { background: var(--purple); color: #000; }
+  .do-now.done .badge { background: var(--green); color: #000; }
+  .do-now h2 { font-size: 22px; color: var(--text); margin-bottom: 6px; line-height: 1.25; font-weight: 700; }
+  .do-now .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; font-size: 12px; color: var(--text2); }
+  .do-now .meta-row .meta-tag {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 4px 10px;
+    font-size: 11.5px;
+  }
+  .do-now .meta-row .meta-tag.carry { background: rgba(231,76,60,0.12); border-color: var(--red-soft); color: var(--red-soft); font-weight: 700; }
+  .do-now .progressbar {
+    height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px;
+    overflow: hidden; margin: 8px 0 14px;
+  }
+  .do-now .progressbar .fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), #f0c95a);
+    transition: width 0.4s ease-out;
+  }
+  .do-now .progressbar .fill.done { background: var(--green); }
+  .do-now .progress-label { font-size: 12px; color: var(--text); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+  .do-now .cta {
+    display: inline-block;
+    padding: 12px 22px;
+    background: var(--gold);
+    color: #000;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    transition: 0.15s;
+  }
+  .do-now .cta:hover { filter: brightness(1.1); }
+  .do-now .cta.alt {
+    background: transparent; color: var(--text); border: 1px solid var(--border-soft);
+    margin-left: 8px;
+  }
+  .do-now .cta.alt:hover { border-color: var(--gold); color: var(--gold); }
+  .do-now .live-bubble {
+    position: absolute; top: 14px; right: 14px;
+    font-size: 10px; padding: 4px 10px; border-radius: 12px;
+    background: rgba(39,174,96,0.18); color: var(--green-soft);
+    border: 1px solid var(--green); display: none;
+  }
+  .do-now.live .live-bubble { display: inline-block; animation: greenPulse 2s infinite; }
+  @keyframes greenPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  /* ── Day section ── */
+  .day-section { margin-bottom: 22px; }
+  .day-header {
+    display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border-soft);
+  }
+  .day-header h3 { font-family: var(--font-jp); font-size: 17px; color: var(--gold); font-weight: 700; letter-spacing: 0.02em; }
+  .day-header .day-sub { font-size: 11px; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; }
+  .day-header .day-stat { font-size: 11px; color: var(--text3); margin-left: auto; font-variant-numeric: tabular-nums; }
+
+  .blocks { display: flex; flex-direction: column; gap: 8px; }
+  .block {
+    display: grid;
+    grid-template-columns: 92px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    background: var(--bg2);
+    border: 1px solid var(--border-soft);
+    border-left: 4px solid var(--text3);
+    border-radius: 10px;
+    padding: 12px 14px;
+    transition: 0.18s;
+    position: relative;
+  }
+  .block:hover { background: var(--bg3); }
+  .block.now { border-color: var(--gold); border-left-color: var(--gold); background: linear-gradient(90deg, rgba(212,175,55,0.06), transparent 60%); }
+  .block.done { border-left-color: var(--green); }
+  .block.done .block-title { color: var(--text2); text-decoration: line-through; }
+  .block.missed { border-left-color: var(--red); background: linear-gradient(90deg, rgba(192,57,43,0.04), transparent 60%); }
+  .block.upcoming { opacity: 0.85; }
+  .block.live { border-color: var(--green); border-left-color: var(--green); box-shadow: 0 0 0 1px var(--green); }
+
+  .block .time { font-family: var(--font-mono); font-size: 13px; color: var(--text2); font-variant-numeric: tabular-nums; line-height: 1.3; }
+  .block .time .start { color: var(--text); font-weight: 700; }
+  .block .time .end { color: var(--text3); font-size: 11px; }
+  .block .time .dur { color: var(--text3); font-size: 10px; }
+  .block .time .status-tag { font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; padding: 2px 6px; border-radius: 8px; display: inline-block; margin-top: 4px; }
+  .block.now .time .status-tag { background: var(--gold); color: #000; }
+  .block.live .time .status-tag { background: var(--green); color: #000; }
+  .block.done .time .status-tag { background: var(--green); color: #000; }
+  .block.missed .time .status-tag { background: var(--red); color: #fff; }
+  .block.upcoming .time .status-tag { background: var(--bg4); color: var(--text2); }
+
+  .block-content .block-title { font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .block-content .block-detail { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .block-content .carry-bubble {
+    display: inline-block;
+    font-size: 10px;
+    background: rgba(231,76,60,0.18);
+    color: var(--red-soft);
+    border: 1px solid var(--red-soft);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
+    font-weight: 700;
+  }
+  .block-content .live-bubble {
+    display: inline-block;
+    font-size: 10px;
+    background: rgba(39,174,96,0.20);
+    color: var(--green-soft);
+    border: 1px solid var(--green);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
+    font-weight: 700;
+    animation: greenPulse 2s infinite;
+  }
+
+  .block .actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+  .block .open-btn {
+    background: var(--bg3);
+    color: var(--text);
+    border: 1px solid var(--border-soft);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.12s;
+    white-space: nowrap;
+  }
+  .block .open-btn:hover { background: var(--bg4); border-color: var(--gold); color: var(--gold); }
+  .block.now .open-btn { background: var(--gold); color: #000; border-color: var(--gold); }
+  .block .mini-prog { font-size: 10px; color: var(--text3); font-variant-numeric: tabular-nums; }
+
+  /* ── Stats strip ── */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .stat-tile {
+    background: var(--bg2);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .stat-tile .lbl { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text2); margin-bottom: 4px; }
+  .stat-tile .val { font-size: 22px; color: var(--gold); font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat-tile .sub { font-size: 10px; color: var(--text3); margin-top: 2px; }
+  .stat-tile.warn .val { color: var(--amber); }
+  .stat-tile.crit .val { color: var(--red-soft); }
+  .stat-tile.good .val { color: var(--green-soft); }
+
+  /* ── Settings dialog ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(10,10,10,0.85); backdrop-filter: blur(4px);
+    z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: var(--bg2); border: 1px solid var(--gold); border-radius: 14px;
+    padding: 22px 24px; max-width: 420px; width: 100%;
+  }
+  .modal h3 { color: var(--gold); margin-bottom: 12px; }
+  .modal label { display: block; font-size: 12px; color: var(--text2); margin: 10px 0 4px; }
+  .modal input[type=date], .modal input[type=time] {
+    width: 100%; padding: 10px 12px; background: var(--bg3); color: var(--text);
+    border: 1px solid var(--border-soft); border-radius: 6px;
+    font-family: var(--font-mono); font-size: 14px;
+  }
+  .modal .btnrow { display: flex; gap: 8px; margin-top: 16px; }
+  .modal .btnrow button {
+    flex: 1; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 700;
+    border: 1px solid var(--border-soft); background: var(--bg3); color: var(--text);
+  }
+  .modal .btnrow button.primary { background: var(--gold); color: #000; border-color: var(--gold); }
+
+  @media (max-width: 600px) {
+    .hero { grid-template-columns: 1fr; }
+    .stats-strip { grid-template-columns: repeat(2, 1fr); }
+    .clock-wrap .time { font-size: 30px; }
+    .clock-wrap .seconds { font-size: 22px; }
+    .countdown-wrap .num { font-size: 24px; }
+    .block { grid-template-columns: 80px 1fr; }
+    .block .actions { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; margin-top: 6px; }
+    .do-now h2 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <a href="index.html" class="back">← Study Guide</a>
+  <span class="brand">なかま1 ・ Exam Plan</span>
+  <button class="iconbtn" id="settingsBtn" title="Set exam date/time">⚙</button>
+</div>
+
+<main>
+  <!-- Hero: live clock + countdown -->
+  <div class="hero">
+    <div class="hero-tile clock-wrap">
+      <div class="label">Right now</div>
+      <div class="time"><span id="clockHM">00:00</span><span class="seconds" id="clockS">:00</span></div>
+      <div class="date" id="clockDate">—</div>
+    </div>
+    <div class="hero-tile countdown-wrap" id="countdownTile">
+      <div class="label">Exam in</div>
+      <div class="num" id="countdownNum">—</div>
+      <div class="target" id="examTarget">—</div>
+    </div>
+  </div>
+
+  <!-- Stats strip -->
+  <div class="stats-strip" id="statsStrip">
+    <div class="stat-tile" id="tileToday"><div class="lbl">Today's cards</div><div class="val">0</div><div class="sub">target 0</div></div>
+    <div class="stat-tile" id="tileWeek"><div class="lbl">Sessions</div><div class="val">0</div><div class="sub">last 4 days</div></div>
+    <div class="stat-tile" id="tileFt"><div class="lbl">First-try rate</div><div class="val">—</div><div class="sub">last 5 sessions</div></div>
+    <div class="stat-tile" id="tileMissed"><div class="lbl">Missed blocks</div><div class="val">0</div><div class="sub">cascading</div></div>
+  </div>
+
+  <!-- DO NOW widget -->
+  <div class="do-now" id="doNow">
+    <span class="badge" id="doNowBadge">DO NOW</span>
+    <span class="live-bubble">● LIVE — studying</span>
+    <h2 id="doNowTitle">Loading…</h2>
+    <div class="meta-row" id="doNowMeta"></div>
+    <div class="progress-label" id="doNowProgress"></div>
+    <div class="progressbar"><div class="fill" id="doNowFill" style="width:0%"></div></div>
+    <a class="cta" id="doNowCta" href="flashcards.html">Open flashcards →</a>
+    <a class="cta alt" id="doNowAlt" href="flashcards.html">Plain start</a>
+  </div>
+
+  <!-- Plan body -->
+  <div id="planBody"></div>
+</main>
+
+<div class="modal-overlay hidden" id="settingsModal">
+  <div class="modal">
+    <h3>Exam date &amp; time</h3>
+    <label>Date</label>
+    <input type="date" id="examDateInput">
+    <label>Time</label>
+    <input type="time" id="examTimeInput">
+    <div class="btnrow">
+      <button id="settingsCancel">Cancel</button>
+      <button class="primary" id="settingsSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="plan-shared.js"></script>
+<script>
+'use strict';
+
+// Pull shared logic
+const PC = window.PlanCore;
+const { pad, localDateKey, parseLocalDateKey, lsGet, lsSet, startOfDay, sameDay,
+  daysBetween, fmtTime, getExamDate, setExamDate, getLive, countCardsInWindow,
+  buildBlocks, pickDoNow, presetUrlFor, BLOCK_TYPES, TEMPLATES, DOW, DOW_LONG,
+  MONTHS, LS_PLAN_PREFS, LS_FC_LOG, LS_FC_LIVE, DEFAULT_EXAM_ISO } = PC;
+
+/* =========================================================
+   Renderers (use shared PlanCore for build/pick logic)
+   ========================================================= */
+function tickClock(){
+  const now = new Date();
+  document.getElementById('clockHM').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+  document.getElementById('clockS').textContent = ':' + pad(now.getSeconds());
+  document.getElementById('clockDate').textContent = DOW_LONG[now.getDay()] + ', ' + MONTHS[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+  // Countdown
+  const exam = getExamDate();
+  let diff = exam.getTime() - now.getTime();
+  const tile = document.getElementById('countdownTile');
+  const num = document.getElementById('countdownNum');
+  if(diff <= 0){
+    num.innerHTML = '<strong>EXAM TIME</strong>';
+    num.className = 'num crit';
+    tile.classList.add('crit');
+  } else {
+    const days = Math.floor(diff / 86400000); diff -= days * 86400000;
+    const hrs = Math.floor(diff / 3600000); diff -= hrs * 3600000;
+    const mins = Math.floor(diff / 60000); diff -= mins * 60000;
+    const secs = Math.floor(diff / 1000);
+    num.innerHTML = (days>0 ? '<strong>'+days+'</strong>d ' : '') +
+                    (days>0 || hrs>0 ? '<strong>'+pad(hrs)+'</strong>h ' : '') +
+                    '<strong>'+pad(mins)+'</strong>m ' +
+                    '<strong>'+pad(secs)+'</strong>s';
+    if(days < 1) num.className = 'num crit';
+    else if(days < 2) num.className = 'num urgent';
+    else num.className = 'num';
+    tile.classList.toggle('crit', days < 1);
+  }
+  // Exam target line
+  const examLabel = DOW_LONG[exam.getDay()] + ', ' + MONTHS[exam.getMonth()] + ' ' + exam.getDate() + ' · ' + pad(exam.getHours()) + ':' + pad(exam.getMinutes());
+  document.getElementById('examTarget').innerHTML = examLabel + '<span class="edit">click ⚙ to edit</span>';
+}
+
+function renderDoNow(blocks, now){
+  const pick = pickDoNow(blocks, now);
+  const el = document.getElementById('doNow');
+  el.classList.remove('idle','upcoming','done','live');
+  const titleEl = document.getElementById('doNowTitle');
+  const metaEl = document.getElementById('doNowMeta');
+  const progEl = document.getElementById('doNowProgress');
+  const fillEl = document.getElementById('doNowFill');
+  const ctaEl = document.getElementById('doNowCta');
+  const altEl = document.getElementById('doNowAlt');
+  const badgeEl = document.getElementById('doNowBadge');
+
+  if(pick.mode === 'live'){
+    el.classList.add('live');
+    badgeEl.textContent = 'STUDYING NOW';
+    // Find the block this live session falls within, if any
+    const liveStart = pick.live.startTs;
+    const inBlock = blocks.find(b => b.start.getTime() <= liveStart && liveStart < b.end.getTime());
+    if(inBlock){
+      titleEl.textContent = inBlock.label;
+      const target = inBlock.targetWithCarry || inBlock.count || 0;
+      const seen = pick.live.seen || 0;
+      const elapsedMin = Math.round((Date.now() - liveStart) / 60000);
+      const tags = [];
+      tags.push('<span class="meta-tag">' + fmtTime(inBlock.start) + '–' + fmtTime(inBlock.end) + '</span>');
+      tags.push('<span class="meta-tag">Started ' + elapsedMin + ' min ago</span>');
+      if(target) tags.push('<span class="meta-tag">' + seen + ' / ' + target + ' cards</span>');
+      else tags.push('<span class="meta-tag">' + seen + ' cards seen</span>');
+      metaEl.innerHTML = tags.join('');
+      if(target){
+        progEl.textContent = seen + ' / ' + target + ' cards (' + Math.min(100, Math.round(seen/target*100)) + '%)';
+        fillEl.style.width = Math.min(100, Math.round(seen/target*100)) + '%';
+        fillEl.classList.toggle('done', seen >= target);
+      } else {
+        progEl.textContent = seen + ' cards seen — heartbeat live.';
+        fillEl.style.width = Math.min(100, seen*2) + '%';
+        fillEl.classList.remove('done');
+      }
+    } else {
+      titleEl.textContent = 'Flashcard session in progress';
+      const elapsedMin = Math.round((Date.now() - liveStart) / 60000);
+      metaEl.innerHTML = '<span class="meta-tag">Started ' + elapsedMin + ' min ago</span>' +
+                         '<span class="meta-tag">' + (pick.live.seen || 0) + ' cards seen</span>';
+      progEl.textContent = 'Heartbeat detected — keep going.';
+      fillEl.style.width = Math.min(100, (pick.live.seen||0)*2) + '%';
+      fillEl.classList.remove('done');
+    }
+    ctaEl.textContent = 'Resume flashcards →';
+    ctaEl.href = 'flashcards.html';
+    altEl.style.display = 'none';
+    return;
+  }
+  if(pick.mode === 'idle'){
+    el.classList.add('done');
+    const exam = getExamDate();
+    const examPassed = exam.getTime() < now.getTime();
+    if(examPassed){
+      badgeEl.textContent = 'EXAM PASSED';
+      titleEl.textContent = 'Set a new exam date to rebuild the plan.';
+      metaEl.innerHTML = '<span class="meta-tag">Click ⚙ in the topbar to update</span>';
+    } else {
+      badgeEl.textContent = 'ALL CLEAR';
+      titleEl.textContent = 'No more blocks today. Rest well.';
+      metaEl.innerHTML = '';
+    }
+    progEl.textContent = '';
+    fillEl.style.width = '100%';
+    fillEl.classList.add('done');
+    ctaEl.textContent = examPassed ? 'Open flashcards' : 'Open flashcards anyway';
+    ctaEl.href = 'flashcards.html';
+    altEl.style.display = 'none';
+    return;
+  }
+  const b = pick.block;
+  if(pick.mode === 'now'){
+    badgeEl.textContent = 'DO NOW';
+    titleEl.textContent = b.label;
+  } else {
+    el.classList.add('upcoming');
+    badgeEl.textContent = sameDay(b.date, now) ? 'UP NEXT' : 'TOMORROW';
+    titleEl.textContent = b.label;
+  }
+  altEl.style.display = '';
+  const startStr = fmtTime(b.start) + '–' + fmtTime(b.end);
+  const target = b.targetWithCarry || b.count;
+  const tags = [];
+  tags.push('<span class="meta-tag">' + startStr + '</span>');
+  tags.push('<span class="meta-tag">' + b.dur + ' min</span>');
+  if(target) tags.push('<span class="meta-tag">' + target + ' cards target</span>');
+  if(b.carry > 0) tags.push('<span class="meta-tag carry">+' + b.carry + ' carryover</span>');
+  if(b.subtitle) tags.push('<span class="meta-tag">' + b.subtitle + '</span>');
+  metaEl.innerHTML = tags.join('');
+
+  if(target){
+    const done = b.cardsDone || 0;
+    progEl.textContent = done + ' / ' + target + ' cards (' + Math.min(100, Math.round(done/target*100)) + '%)';
+    fillEl.style.width = Math.min(100, Math.round(done/target*100)) + '%';
+    fillEl.classList.toggle('done', done >= target);
+  } else {
+    progEl.textContent = '';
+    fillEl.style.width = '0%';
+  }
+  ctaEl.href = presetUrlFor(b);
+  ctaEl.textContent = (b.link ? 'Open simulator →' : 'Open with this preset →');
+  altEl.href = 'flashcards.html';
+  altEl.textContent = 'Plain start';
+}
+
+function renderPlan(blocks, now){
+  const root = document.getElementById('planBody');
+  // Group by day (local-time keys, not UTC ISO)
+  const byDay = {};
+  blocks.forEach(b => {
+    const k = localDateKey(b.date);
+    (byDay[k] = byDay[k] || []).push(b);
+  });
+  const keys = Object.keys(byDay).sort();
+  let html = '';
+  keys.forEach(k => {
+    const dayBlocks = byDay[k];
+    const dayDate = parseLocalDateKey(k);
+    const isToday = sameDay(dayDate, now);
+    const isExamDay = sameDay(dayDate, getExamDate());
+    const totalTarget = dayBlocks.reduce((s,b)=>s+(b.targetWithCarry||b.count||0),0);
+    const totalDone = dayBlocks.reduce((s,b)=>s+(b.cardsDone||0),0);
+    const dayLabel = isToday ? 'Today' :
+                     sameDay(dayDate, new Date(now.getTime()+86400000)) ? 'Tomorrow' :
+                     DOW_LONG[dayDate.getDay()];
+    const dateLabel = MONTHS[dayDate.getMonth()] + ' ' + dayDate.getDate();
+    html += '<div class="day-section">';
+    html += '<div class="day-header">';
+    html += '<h3>' + dayLabel + '</h3>';
+    html += '<span class="day-sub">' + DOW[dayDate.getDay()] + ' · ' + dateLabel + (isExamDay ? ' · 🎯 EXAM DAY' : '') + '</span>';
+    if(totalTarget) html += '<span class="day-stat">' + totalDone + ' / ' + totalTarget + ' cards</span>';
+    html += '</div>';
+    html += '<div class="blocks">';
+    dayBlocks.forEach(b => {
+      const target = b.targetWithCarry || b.count;
+      const done = b.cardsDone || 0;
+      const cls = ['block', b.status];
+      // Live status takes precedence
+      if(getLive() && b.status === 'now') cls.push('live');
+      let statusTag = '';
+      if(b.status === 'now') statusTag = 'NOW';
+      else if(b.status === 'done') statusTag = 'DONE';
+      else if(b.status === 'missed') statusTag = 'MISSED';
+      else statusTag = 'UPCOMING';
+      const carryBubble = b.carry > 0 ? '<span class="carry-bubble">+' + b.carry + ' carried</span>' : '';
+      const liveBubble = (getLive() && b.status === 'now') ? '<span class="live-bubble">● LIVE</span>' : '';
+      const dur = (b.end - b.start) / 60000;
+      html += '<div class="' + cls.join(' ') + '">';
+      html += '<div class="time"><div><span class="start">' + fmtTime(b.start) + '</span></div>';
+      html += '<div class="end">→ ' + fmtTime(b.end) + '</div>';
+      html += '<div class="dur">' + dur + ' min</div>';
+      html += '<span class="status-tag">' + statusTag + '</span>';
+      html += '</div>';
+      html += '<div class="block-content">';
+      html += '<div class="block-title">' + escapeHtml(b.label) + carryBubble + liveBubble + '</div>';
+      html += '<div class="block-detail">' + escapeHtml(b.subtitle || '') + '</div>';
+      html += '</div>';
+      html += '<div class="actions">';
+      const url = presetUrlFor(b);
+      const ctaLabel = b.link ? 'Open' : (b.status === 'now' ? 'Start →' : (b.status === 'done' ? 'Open' : 'Preview'));
+      html += '<a class="open-btn" href="' + url + '">' + ctaLabel + '</a>';
+      if(target) html += '<div class="mini-prog">' + done + ' / ' + target + '</div>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '</div>';
+  });
+  root.innerHTML = html;
+}
+
+function renderStats(blocks, now){
+  // Today's cards (countCardsInWindow already includes the live session if its start is in-window)
+  const todayStart = startOfDay(now);
+  const todayEnd = new Date(todayStart.getTime() + 86400000);
+  const todayCards = countCardsInWindow(todayStart, todayEnd);
+  const live = getLive();
+  const todayTarget = blocks.filter(b => sameDay(b.date, now)).reduce((s,b)=>s+(b.count||0),0);
+  const subLabel = (live ? '+ live · ' : '') + 'target ' + todayTarget;
+  setStatTile('tileToday', todayCards, subLabel, todayCards >= todayTarget && todayTarget > 0 ? 'good' : (todayCards >= todayTarget*0.5 ? '' : 'warn'));
+  // Sessions in last 4 days
+  const log = lsGet(LS_FC_LOG) || [];
+  const fourDaysAgo = now.getTime() - 4 * 86400000;
+  const recent = log.filter(s => (s.startTs || s.endTs) >= fourDaysAgo);
+  setStatTile('tileWeek', recent.length, 'last 4 days', '');
+  // First-try rate (last 5 sessions)
+  const last5 = log.slice(-5);
+  const ftR = last5.reduce((s,x)=>s+(x.ftRight||0),0);
+  const ftT = last5.reduce((s,x)=>s+(x.ftTotal||0),0);
+  const ftPct = ftT > 0 ? Math.round(ftR/ftT*100) : null;
+  setStatTile('tileFt', ftPct === null ? '—' : ftPct + '%', last5.length + ' sessions', ftPct === null ? '' : (ftPct >= 70 ? 'good' : (ftPct >= 50 ? '' : 'warn')));
+  // Missed blocks
+  const missed = blocks.filter(b => b.status === 'missed').length;
+  setStatTile('tileMissed', missed, 'cascading', missed > 0 ? (missed >= 3 ? 'crit' : 'warn') : 'good');
+}
+function setStatTile(id, val, sub, modCls){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.querySelector('.val').textContent = val;
+  el.querySelector('.sub').textContent = sub;
+  el.classList.remove('warn','crit','good');
+  if(modCls) el.classList.add(modCls);
+}
+
+function escapeHtml(s){
+  if(s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+/* =========================================================
+   Main render loop
+   ========================================================= */
+let blockCache = [];
+function fullRender(){
+  const now = new Date();
+  blockCache = buildBlocks(now, getExamDate());
+  renderDoNow(blockCache, now);
+  renderPlan(blockCache, now);
+  renderStats(blockCache, now);
+}
+function lightRender(){
+  // Cheap: only DO NOW + stats. Block list updates on the minute.
+  const now = new Date();
+  // Refresh live from storage
+  renderDoNow(blockCache, now);
+  renderStats(blockCache, now);
+}
+
+/* =========================================================
+   Settings modal
+   ========================================================= */
+document.getElementById('settingsBtn').onclick = () => {
+  const exam = getExamDate();
+  // Use local-date string (toISOString gives UTC which can be off by a day)
+  document.getElementById('examDateInput').value = localDateKey(exam);
+  document.getElementById('examTimeInput').value = pad(exam.getHours()) + ':' + pad(exam.getMinutes());
+  document.getElementById('settingsModal').classList.remove('hidden');
+};
+document.getElementById('settingsCancel').onclick = () => {
+  document.getElementById('settingsModal').classList.add('hidden');
+};
+// Background-click closes the modal
+document.getElementById('settingsModal').addEventListener('click', e => {
+  if(e.target.id === 'settingsModal') document.getElementById('settingsModal').classList.add('hidden');
+});
+// ESC also closes
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && !document.getElementById('settingsModal').classList.contains('hidden')){
+    document.getElementById('settingsModal').classList.add('hidden');
+  }
+});
+document.getElementById('settingsSave').onclick = () => {
+  const d = document.getElementById('examDateInput').value;
+  const t = document.getElementById('examTimeInput').value || '09:00';
+  if(!d){ alert('Please pick a date.'); return; }
+  setExamDate(d + 'T' + t);
+  document.getElementById('settingsModal').classList.add('hidden');
+  fullRender();
+};
+document.getElementById('examTarget').onclick = () => document.getElementById('settingsBtn').click();
+
+/* =========================================================
+   Cross-tab live updates
+   ========================================================= */
+window.addEventListener('storage', e => {
+  if(!e.key) return;
+  // LS_FC_LIVE = heartbeat → light refresh. LS_FC_LOG = session ended → full
+  // rebuild so per-block cardsDone numbers update correctly.
+  if(e.key === LS_FC_LIVE) lightRender();
+  else if(e.key === LS_FC_LOG || e.key === LS_PLAN_PREFS) fullRender();
+});
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden) fullRender();
+});
+
+/* =========================================================
+   Boot
+   ========================================================= */
+tickClock();
+fullRender();
+setInterval(tickClock, 1000);     // 1s clock + countdown
+setInterval(lightRender, 5000);   // 5s light refresh (DO-NOW + stats)
+setInterval(fullRender, 60000);   // 60s full rebuild (block list + status)
+</script>
+</body>
+</html>

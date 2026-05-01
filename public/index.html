@@ -2242,7 +2242,42 @@ body::before {
   <h1>中本</h1>
   <div class="line"></div>
   <div class="sub">Nakama 1 · Chapters 1–6 · Complete Study Guide</div>
+  <a href="plan.html" id="examTicker" style="display:inline-flex;align-items:center;gap:10px;margin-top:10px;padding:8px 16px;background:linear-gradient(135deg,rgba(212,175,55,0.18),rgba(212,175,55,0.06));border:1px solid #d4af37;border-radius:24px;text-decoration:none;color:#f5f5f5;font-family:'JetBrains Mono',monospace;font-size:13px;font-variant-numeric:tabular-nums;transition:0.15s;">
+    <span style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#d4af37;font-weight:700;">EXAM IN</span>
+    <span id="examTickerCountdown" style="font-weight:700;">—</span>
+    <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#aaa;">·</span>
+    <span id="examTickerNow" style="color:#d4af37;font-weight:700;">--:--:--</span>
+    <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#aaa;">·</span>
+    <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:#d4af37;font-weight:600;">Plan →</span>
+  </a>
 </div>
+<script>
+(function(){
+  const LS_PLAN_PREFS = 'nakama_plan_prefs';
+  const DEFAULT_EXAM_ISO = '2026-05-04T09:00';
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function getExam(){
+    try { const p = JSON.parse(localStorage.getItem(LS_PLAN_PREFS) || 'null'); return new Date((p && p.examIso) || DEFAULT_EXAM_ISO); }
+    catch(e){ return new Date(DEFAULT_EXAM_ISO); }
+  }
+  function tick(){
+    const now = new Date();
+    const exam = getExam();
+    const diff = exam.getTime() - now.getTime();
+    const cd = document.getElementById('examTickerCountdown');
+    const nw = document.getElementById('examTickerNow');
+    if(!cd || !nw) return;
+    nw.textContent = pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
+    if(diff <= 0){ cd.textContent = 'EXAM TIME'; cd.style.color = '#e57373'; return; }
+    const days = Math.floor(diff/86400000);
+    const hrs = Math.floor((diff%86400000)/3600000);
+    const mins = Math.floor((diff%3600000)/60000);
+    cd.textContent = (days>0?days+'d ':'') + pad(hrs)+'h '+pad(mins)+'m';
+    cd.style.color = days < 1 ? '#e57373' : (days < 2 ? '#f0a040' : '#f5f5f5');
+  }
+  tick(); setInterval(tick, 1000);
+})();
+</script>
 
 <!-- GLOBAL SEARCH -->
 <div id="searchWrap" style="max-width:600px;margin:0 auto 8px;padding:0 16px;position:relative;z-index:101;">
@@ -2258,7 +2293,7 @@ body::before {
   <div id="searchResults" class="hidden" style="position:absolute;left:16px;right:16px;top:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;max-height:420px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.6);z-index:200;margin-top:4px;"></div>
 </div>
 
-<div class="nav-wrap"><div class="nav-scroll"><button class="nav-tab" onclick="showChapter('ch1')" id="tab_ch1"><span class="kanji">第一章</span>Ch 1: Sounds & Hiragana</button><button class="nav-tab" onclick="showChapter('ch2')" id="tab_ch2"><span class="kanji">第二章</span>Ch 2: Introductions</button><button class="nav-tab" onclick="showChapter('ch3')" id="tab_ch3"><span class="kanji">第三章</span>Ch 3: Daily Routines</button><button class="nav-tab" onclick="showChapter('ch4')" id="tab_ch4"><span class="kanji">第四章</span>Ch 4: Japanese Cities</button><button class="nav-tab" onclick="showChapter('ch5')" id="tab_ch5"><span class="kanji">第五章</span>Ch 5: Japanese Homes</button><button class="nav-tab" onclick="showChapter('ch6')" id="tab_ch6"><span class="kanji">第六章</span>Ch 6: Leisure Time</button><button class="nav-tab practice-tab" onclick="showChapter('practice-lab')" id="tab_practice-lab"><span class="kanji">練</span>Practice Lab</button><button class="nav-tab" style="color:#f0c85a" onclick="window.location.href='exam-ch456.html'" id="tab_exam-sim"><span class="kanji" style="color:#f0c85a">📝</span>Exam Sim</button><button class="nav-tab" style="color:#5ba8e8;border-bottom-color:transparent" onclick="window.location.href='reading.html'" id="tab_reading"><span class="kanji" style="color:#5ba8e8">読</span>Reading</button><button class="nav-tab" style="color:var(--gold-bright);border-bottom-color:transparent" onclick="window.location.href='kanji.html'" id="tab_kanji"><span class="kanji" style="color:var(--gold-bright)">&#28450;&#23383;</span>Kanji</button><button class="nav-tab ref-tab" onclick="showChapter('ref-numbers')" id="tab_ref-numbers"><span class="kanji">数</span>Numbers & Time</button><button class="nav-tab ref-tab" onclick="showChapter('ref-patterns')" id="tab_ref-patterns"><span class="kanji">文</span>Patterns</button><button class="nav-tab ref-tab" onclick="showChapter('ref-conv')" id="tab_ref-conv"><span class="kanji">話</span>Conversations</button><button class="nav-tab ref-tab" onclick="showChapter('ref-struct')" id="tab_ref-struct"><span class="kanji">構</span>Structure</button><button class="nav-tab ref-tab" style="color:#9eccff;border-bottom-color:transparent" onclick="showChapter('ref-vocab')" id="tab_ref-vocab"><span class="kanji" style="color:#9eccff">語</span>Vocab Atlas</button><button class="nav-tab" style="color:#c8a2ff;border-bottom-color:transparent" onclick="showChapter('flashcards')" id="tab_flashcards"><span class="kanji" style="color:#c8a2ff">札</span>Flashcards</button><button class="nav-tab ref-tab" style="color:#e8b84c" onclick="showChapter('cheatsheet')" id="tab_cheatsheet"><span class="kanji" style="color:#e8b84c">📋</span>Cheat Sheet</button></div></div><div class="main-container">
+<div class="nav-wrap"><div class="nav-scroll"><button class="nav-tab" onclick="showChapter('ch1')" id="tab_ch1"><span class="kanji">第一章</span>Ch 1: Sounds & Hiragana</button><button class="nav-tab" onclick="showChapter('ch2')" id="tab_ch2"><span class="kanji">第二章</span>Ch 2: Introductions</button><button class="nav-tab" onclick="showChapter('ch3')" id="tab_ch3"><span class="kanji">第三章</span>Ch 3: Daily Routines</button><button class="nav-tab" onclick="showChapter('ch4')" id="tab_ch4"><span class="kanji">第四章</span>Ch 4: Japanese Cities</button><button class="nav-tab" onclick="showChapter('ch5')" id="tab_ch5"><span class="kanji">第五章</span>Ch 5: Japanese Homes</button><button class="nav-tab" onclick="showChapter('ch6')" id="tab_ch6"><span class="kanji">第六章</span>Ch 6: Leisure Time</button><button class="nav-tab practice-tab" onclick="showChapter('practice-lab')" id="tab_practice-lab"><span class="kanji">練</span>Practice Lab</button><button class="nav-tab" style="color:#d4af37;border-bottom-color:transparent" onclick="window.location.href='plan.html'" id="tab_plan"><span class="kanji" style="color:#d4af37">⏱</span>Exam Plan</button><button class="nav-tab" style="color:#f0c85a" onclick="window.location.href='exam-ch456.html'" id="tab_exam-sim"><span class="kanji" style="color:#f0c85a">📝</span>Exam Sim</button><button class="nav-tab" style="color:#5ba8e8;border-bottom-color:transparent" onclick="window.location.href='reading.html'" id="tab_reading"><span class="kanji" style="color:#5ba8e8">読</span>Reading</button><button class="nav-tab" style="color:var(--gold-bright);border-bottom-color:transparent" onclick="window.location.href='kanji.html'" id="tab_kanji"><span class="kanji" style="color:var(--gold-bright)">&#28450;&#23383;</span>Kanji</button><button class="nav-tab ref-tab" onclick="showChapter('ref-numbers')" id="tab_ref-numbers"><span class="kanji">数</span>Numbers & Time</button><button class="nav-tab ref-tab" onclick="showChapter('ref-patterns')" id="tab_ref-patterns"><span class="kanji">文</span>Patterns</button><button class="nav-tab ref-tab" onclick="showChapter('ref-conv')" id="tab_ref-conv"><span class="kanji">話</span>Conversations</button><button class="nav-tab ref-tab" onclick="showChapter('ref-struct')" id="tab_ref-struct"><span class="kanji">構</span>Structure</button><button class="nav-tab ref-tab" style="color:#9eccff;border-bottom-color:transparent" onclick="showChapter('ref-vocab')" id="tab_ref-vocab"><span class="kanji" style="color:#9eccff">語</span>Vocab Atlas</button><button class="nav-tab" style="color:#c8a2ff;border-bottom-color:transparent" onclick="showChapter('flashcards')" id="tab_flashcards"><span class="kanji" style="color:#c8a2ff">札</span>Flashcards</button><button class="nav-tab ref-tab" style="color:#e8b84c" onclick="showChapter('cheatsheet')" id="tab_cheatsheet"><span class="kanji" style="color:#e8b84c">📋</span>Cheat Sheet</button></div></div><div class="main-container">
 <div class="chapter-panel" id="panel_ch1">
   <div class="ch-title">第一章 — THE JAPANESE SOUND SYSTEM</div>
   <div class="ch-subtitle">Ch 1: Sounds & Hiragana · 42 vocabulary items</div>
@@ -10328,11 +10363,25 @@ body::before {
       <div class="plab-tag" style="background:#e85454;">EXAM</div>
     </a>
 
-    <a class="plab-card" href="nakama1-deck.html" style="text-decoration:none;color:inherit;display:block;border-color:#d4af37;">
-      <div class="plab-icon" style="color:#d4af37;">&#127948;</div>
-      <div class="plab-title" style="color:#d4af37;">Nakama 1 &mdash; 32-Card MVP Deck</div>
-      <div class="plab-desc">Minimum-viable flashcard deck covering ALL Ch 1&ndash;6 + Katakana grammar in 32 cards. Particles, verbs, adjectives, demonstratives, time, kana traps. Each card replaces 5&ndash;10 micro-cards.</div>
-      <div class="plab-tag" style="background:#d4af37;color:#000;">DECK</div>
+    <a class="plab-card" href="plan.html" style="text-decoration:none;color:inherit;display:block;border-color:#d4af37;background:linear-gradient(135deg,rgba(212,175,55,0.14),rgba(212,175,55,0.04));">
+      <div class="plab-icon" style="color:#d4af37;">&#9201;</div>
+      <div class="plab-title" style="color:#d4af37;">Exam Plan &amp; Live Widget</div>
+      <div class="plab-desc">Live clock + countdown to Mon exam. Auto-suggests what to drill RIGHT NOW based on the time. Tracks your flashcard activity. Missed blocks cascade their card target into the next same-type block so workload can&rsquo;t escape you. Click &#9881; to set exam time.</div>
+      <div class="plab-tag" style="background:#d4af37;color:#000;">PLAN</div>
+    </a>
+
+    <a class="plab-card" href="flashcards.html" style="text-decoration:none;color:inherit;display:block;border-color:#d4af37;background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(212,175,55,0.02));">
+      <div class="plab-icon" style="color:#d4af37;">&#127919;</div>
+      <div class="plab-title" style="color:#d4af37;">Leitner Flashcards (Ch 1&ndash;6)</div>
+      <div class="plab-desc">In-session compressed Leitner with 3-button grading (Miss / Shaky / Got it). All Ch 1&ndash;6 card types: vocab recall, particles, &#12399;/&#12364; discrimination, conjugations, counters, kana, &#12390;-form, dialogue cloze, traps, more. Auto-trap injection on miss runs. Triple-miss rescue. Tomorrow's deck auto-built. 10/20/30-min timer.</div>
+      <div class="plab-tag" style="background:#d4af37;color:#000;">★ NEW</div>
+    </a>
+
+    <a class="plab-card" href="nakama1-deck.html" style="text-decoration:none;color:inherit;display:block;border-color:#a8892a;">
+      <div class="plab-icon" style="color:#a8892a;">&#127948;</div>
+      <div class="plab-title" style="color:#a8892a;">Nakama 1 &mdash; 32-Card MVP Deck</div>
+      <div class="plab-desc">Static reference: 32 high-leverage pattern cards covering all Ch 1&ndash;6 grammar. Use for quick review; use Leitner above for active drilling.</div>
+      <div class="plab-tag" style="background:#a8892a;color:#000;">REF</div>
     </a>
 
     <a class="plab-card" href="quiz-past-adjectives.html" style="text-decoration:none;color:inherit;display:block;border-color:#4ecf7a;">
