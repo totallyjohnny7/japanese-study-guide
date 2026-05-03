@@ -2062,7 +2062,7 @@ body::before {
   .main-container { max-width:none!important;padding:0!important;margin:0!important; }
   .chapter-panel:not(#panel_cheatsheet) { display:none!important; }
   #panel_cheatsheet { display:block!important; }
-  .cs-page { page-break-after:always;padding:0.25in 0.35in;margin:0;border:none;border-radius:0;background:#fff;box-sizing:border-box; }
+  .cs-page { page-break-after:always;padding:0;margin:0;border:none;border-radius:0;background:#fff;box-sizing:border-box;overflow:hidden; }
   .cs-page:last-child { page-break-after:auto; }
   .cs-page-header h2 { color:#222!important;font-size:15pt; }
   .cs-page-header .cs-sub { color:#666!important; }
@@ -2091,7 +2091,12 @@ body::before {
   .cs-ch4 .cs-section h3 { background:#fde8e8!important;color:#c03030!important;border-left-color:#c03030!important; }
   .cs-ch5 .cs-section h3 { background:#f3e8ff!important;color:#7a40cc!important;border-left-color:#7a40cc!important; }
   .cs-ch6 .cs-section h3 { background:#e8f7fa!important;color:#2a8da0!important;border-left-color:#2a8da0!important; }
-  @page { size:letter;margin:0; }
+  /* PRINT SAFETY — fit content within margin-safe area */
+  .cs-page { width:auto!important;max-width:100%!important; }
+  .cs-cols { gap:8px!important; }
+  .cs-table,.cs-conj,.cs-kana { max-width:100%!important;table-layout:auto!important; }
+  .cs-section { page-break-inside:avoid; }
+  @page { size:letter portrait;margin:0.4in 0.4in 0.45in 0.4in; }
 }
 /* ── Hover guard (touch devices) ── */
 @media(hover:none){
